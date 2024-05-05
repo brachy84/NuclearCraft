@@ -149,7 +149,7 @@ public class RadiationHelper {
 		double rawRadiation = 0D;
 		if (ModCheck.ic2Loaded()) {
 			if (provider instanceof IReactor) {
-				rawRadiation += ((IReactor) provider).getReactorEUEnergyOutput() * 0.00001D;
+				rawRadiation += ((IReactor) provider).getReactorEUEnergyOutput() * radiation_ic2_reactor_mult;
 			}
 		}
 		

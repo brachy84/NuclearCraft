@@ -50,16 +50,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileSaltFissionHeater extends TileFissionPart implements IProcessor<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket, SaltFissionHeaterContainerInfo>, ITileFilteredFluid, IFissionCoolingComponent, IFissionPortTarget<TileFissionHeaterPort, TileSaltFissionHeater> {
-	
+
 	public static class SaltFissionHeaterContainerInfo extends ProcessorContainerInfo<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket, SaltFissionHeaterContainerInfo> {
-		
-		public SaltFissionHeaterContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionHeater> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSaltFissionHeater> guiFunction, ContainerFunction<TileSaltFissionHeater> configContainerFunction, GuiFunction<TileSaltFissionHeater> configGuiFunction, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
+
+		public SaltFissionHeaterContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionHeater> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSaltFissionHeater> guiFunction, ContainerFunction<TileSaltFissionHeater> configContainerFunction, GuiFunction<TileSaltFissionHeater> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
+			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
 		}
 	}
-	
+
 	public static class SaltFissionHeaterContainerInfoBuilder extends ProcessorContainerInfoBuilder<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket, SaltFissionHeaterContainerInfo, SaltFissionHeaterContainerInfoBuilder> {
-		
+
 		public SaltFissionHeaterContainerInfoBuilder(String modId, String name, Class<TileSaltFissionHeater> tileClass, Supplier<TileSaltFissionHeater> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionHeater> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileSaltFissionHeater> guiFunction) {
 			super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
 			infoFunction = SaltFissionHeaterContainerInfo::new;
@@ -111,7 +111,7 @@ public class TileSaltFissionHeater extends TileFissionPart implements IProcessor
 	/** Don't use this constructor! */
 	public TileSaltFissionHeater() {
 		super(CuboidalPartPositionType.INTERIOR);
-		info = TileInfoHandler.getProcessorContainerInfo("coolant_heater");
+		info = TileInfoHandler.getProcessorContainerInfo("salt_fission_heater");
 		
 		inventoryName = Global.MOD_ID + ".container." + info.name;
 		
@@ -672,9 +672,19 @@ public class TileSaltFissionHeater extends TileFissionPart implements IProcessor
 	public double getPowerMultiplier() {
 		return 0D;
 	}
+
+	@Override
+	public boolean isProcessing() {
+		return isProcessing(true, true);
+	}
 	
 	public boolean isProcessing(boolean checkCluster, boolean checkValid) {
 		return readyToProcess(checkCluster, checkValid);
+	}
+
+	@Override
+	public boolean readyToProcess() {
+		return readyToProcess(true, true);
 	}
 	
 	public boolean readyToProcess(boolean checkCluster, boolean checkValid) {

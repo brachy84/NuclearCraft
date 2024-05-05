@@ -45,8 +45,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	
 	public static class FissionIrradiatorContainerInfo extends ProcessorContainerInfo<TileFissionIrradiator, FissionIrradiatorUpdatePacket, FissionIrradiatorContainerInfo> {
 		
-		public FissionIrradiatorContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileFissionIrradiator> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileFissionIrradiator> guiFunction, ContainerFunction<TileFissionIrradiator> configContainerFunction, GuiFunction<TileFissionIrradiator> configGuiFunction, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
+		public FissionIrradiatorContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileFissionIrradiator> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileFissionIrradiator> guiFunction, ContainerFunction<TileFissionIrradiator> configContainerFunction, GuiFunction<TileFissionIrradiator> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
+			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
 		}
 	}
 	
@@ -427,9 +427,19 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	public double getPowerMultiplier() {
 		return 0D;
 	}
+
+	@Override
+	public boolean isProcessing() {
+		return isProcessing(true);
+	}
 	
 	public boolean isProcessing(boolean checkCluster) {
 		return readyToProcess(checkCluster) && flux > 0;
+	}
+
+	@Override
+	public boolean readyToProcess() {
+		return readyToProcess(true);
 	}
 	
 	public boolean readyToProcess(boolean checkCluster) {
@@ -463,6 +473,11 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 				getMultiblock().refreshFlag = true;
 			}
 		}
+	}
+
+	@Override
+	public int getItemProductCapacity(int slot, ItemStack stack) {
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getItemProductCapacity(slot, stack);
 	}
 	
 	// ITileInventory
@@ -503,6 +518,11 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	@Override
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
 		return IProcessor.super.isItemValidForSlot(slot, stack);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getInventoryStackLimit();
 	}
 	
 	@Override

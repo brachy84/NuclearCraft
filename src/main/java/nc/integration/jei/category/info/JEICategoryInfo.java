@@ -1,39 +1,58 @@
 package nc.integration.jei.category.info;
 
-import java.util.List;
-
-import mezz.jei.api.*;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModRegistry;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import nc.integration.jei.category.*;
-import nc.integration.jei.wrapper.*;
-import nc.recipe.*;
+import nc.integration.jei.category.JEIRecipeCategory;
+import nc.integration.jei.category.JEIRecipeCategoryFunction;
+import nc.integration.jei.wrapper.JEIRecipeWrapper;
+import nc.integration.jei.wrapper.JEIRecipeWrapperFunction;
+import nc.recipe.BasicRecipe;
+import nc.recipe.BasicRecipeHandler;
 import nc.util.StackHelper;
 import nc.util.StreamHelper;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY extends JEIRecipeCategory<WRAPPER, CATEGORY, CATEGORY_INFO>, CATEGORY_INFO extends JEICategoryInfo<WRAPPER, CATEGORY, CATEGORY_INFO>> {
-	
+
+	public final String modId;
+	public final String name;
+
 	public final JEIRecipeCategoryFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiCategoryFunction;
 	
 	public final Class<WRAPPER> jeiRecipeClass;
 	public final JEIRecipeWrapperFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiRecipeWrapperFunction;
 	
 	public final List<Object> jeiCrafters;
+
+	public final List<JEIContainerConnection> jeiContainerConnections;
 	
-	protected JEICategoryInfo(JEIRecipeCategoryFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiCategoryFunction, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiRecipeWrapperFunction, List<Object> jeiCrafters) {
+	protected JEICategoryInfo(String modId, String name, JEIRecipeCategoryFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiCategoryFunction, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiRecipeWrapperFunction, List<Object> jeiCrafters, List<JEIContainerConnection> jeiContainerConnections) {
+		this.modId = modId;
+		this.name = name;
+
 		this.jeiCategoryFunction = jeiCategoryFunction;
 		
 		this.jeiRecipeClass = jeiRecipeClass;
 		this.jeiRecipeWrapperFunction = jeiRecipeWrapperFunction;
 		
 		this.jeiCrafters = jeiCrafters;
+
+		this.jeiContainerConnections = jeiContainerConnections;
 	}
-	
-	public abstract String getModId();
-	
-	public abstract String getName();
+
+	public String getModId() {
+		return modId;
+	}
+
+	public String getName() {
+		return name;
+	}
 	
 	public abstract boolean isJEICategoryEnabled();
 	
@@ -44,14 +63,6 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 	public abstract int getItemOutputSize();
 	
 	public abstract int getFluidOutputSize();
-	
-	public int getInventorySize() {
-		return getItemInputSize() + getItemOutputSize();
-	}
-	
-	public int getCombinedInventorySize() {
-		return 36 + getInventorySize();
-	}
 	
 	public abstract int[] getItemInputSlots();
 	
@@ -72,10 +83,8 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 	public abstract List<int[]> getItemInputStackXY();
 	
 	public abstract List<int[]> getItemOutputStackXY();
-	
-	public BasicRecipeHandler getRecipeHandler() {
-		return NCRecipes.getHandler(getName());
-	}
+
+	public abstract BasicRecipeHandler getRecipeHandler();
 	
 	public abstract String getJEICategoryUid();
 	
@@ -98,14 +107,6 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 	public abstract int getJEITooltipW();
 	
 	public abstract int getJEITooltipH();
-	
-	public abstract int getJEIClickAreaX();
-	
-	public abstract int getJEIClickAreaY();
-	
-	public abstract int getJEIClickAreaW();
-	
-	public abstract int getJEIClickAreaH();
 	
 	@SuppressWarnings("unchecked")
 	public CATEGORY getJEICategory(IGuiHelper guiHelper) {
@@ -145,19 +146,15 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 		}
 	}
 	
-	public abstract List<Class<? extends Container>> getContainerClasses();
-	
 	public void addRecipeTransferHandlers(IRecipeTransferRegistry transferRegistry) {
-		for (Class<? extends Container> clazz : getContainerClasses()) {
-			transferRegistry.addRecipeTransferHandler(clazz, getJEICategoryUid(), 0, getItemInputSize(), getInventorySize(), 36);
+		for (JEIContainerConnection connection : jeiContainerConnections) {
+			transferRegistry.addRecipeTransferHandler(connection.containerClass, getJEICategoryUid(), connection.itemInputStart, connection.itemInputEnd, connection.playerInventoryStart, 36);
 		}
 	}
 	
-	public abstract List<Class<? extends GuiContainer>> getGuiClasses();
-	
 	public void addRecipeClickAreas(IModRegistry registry) {
-		for (Class<? extends GuiContainer> clazz : getGuiClasses()) {
-			registry.addRecipeClickArea(clazz, getJEIClickAreaX(), getJEIClickAreaY(), getJEIClickAreaW(), getJEIClickAreaH(), getJEICategoryUid());
+		for (JEIContainerConnection connection : jeiContainerConnections) {
+			registry.addRecipeClickArea(connection.guiClass, connection.jeiClickAreaX, connection.jeiClickAreaY, connection.jeiClickAreaW, connection.jeiClickAreaH, getJEICategoryUid());
 		}
 	}
 }

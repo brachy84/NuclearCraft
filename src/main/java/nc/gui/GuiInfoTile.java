@@ -1,5 +1,6 @@
 package nc.gui;
 
+import nc.network.NCPacket;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.*;
 import nc.util.Lazy;
@@ -10,7 +11,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class GuiInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends NCGui {
+public abstract class GuiInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends NCPacket, INFO extends TileContainerInfo<TILE>> extends NCGui {
 	
 	protected final EntityPlayer player;
 	

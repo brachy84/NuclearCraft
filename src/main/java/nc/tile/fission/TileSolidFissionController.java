@@ -1,27 +1,34 @@
 package nc.tile.fission;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-
-import java.util.Iterator;
-
-import nc.container.multiblock.controller.ContainerSolidFissionController;
+import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
+import nc.tile.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import java.util.Iterator;
+
+import static nc.block.property.BlockProperties.FACING_ALL;
+
 public class TileSolidFissionController extends TileFissionPart implements IFissionController<TileSolidFissionController> {
-	
+
+	protected final TileContainerInfo<TileSolidFissionController> info = TileInfoHandler.getTileContainerInfo("solid_fission_controller");
+
 	public TileSolidFissionController() {
 		super(CuboidalPartPositionType.WALL);
 	}
-	
+
 	@Override
 	public String getLogicID() {
 		return "solid_fuel";
+	}
+
+	@Override
+	public TileContainerInfo<TileSolidFissionController> getContainerInfo() {
+		return info;
 	}
 	
 	@Override
@@ -36,11 +43,6 @@ public class TileSolidFissionController extends TileFissionPart implements IFiss
 	@Override
 	public void onMachineBroken() {
 		super.onMachineBroken();
-	}
-	
-	@Override
-	public ContainerSolidFissionController getContainer(EntityPlayer player) {
-		return new ContainerSolidFissionController(player, this);
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import java.util.List;
 
 import nc.gui.element.*;
 import nc.init.NCItems;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.gui.OpenTileGuiPacket;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.processor.IProcessor;

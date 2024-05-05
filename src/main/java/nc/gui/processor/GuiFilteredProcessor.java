@@ -3,7 +3,7 @@ package nc.gui.processor;
 import java.util.List;
 
 import nc.gui.element.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.gui.*;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.ITileFiltered;

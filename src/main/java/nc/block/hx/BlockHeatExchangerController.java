@@ -73,7 +73,7 @@ public class BlockHeatExchangerController extends BlockHeatExchangerPart impleme
 			if (tile instanceof TileHeatExchangerController controller) {
                 if (controller.isMultiblockAssembled()) {
 					NCCriterions.HEAT_EXCHANGER_ASSEMBLED.trigger((EntityPlayerMP) player);
-					player.openGui(NuclearCraft.instance, 103, world, pos.getX(), pos.getY(), pos.getZ());
+					controller.openGui(world, pos, player);
 					return true;
 				}
 			}

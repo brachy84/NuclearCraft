@@ -1,7 +1,7 @@
 package nc.render;
 
 import it.unimi.dsi.fastutil.longs.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.render.BlockHighlightUpdatePacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;

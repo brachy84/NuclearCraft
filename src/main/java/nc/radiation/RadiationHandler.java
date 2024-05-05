@@ -11,7 +11,7 @@ import nc.capability.radiation.entity.IEntityRads;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.entity.EntityFeralGhoul;
 import nc.init.NCSounds;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.radiation.PlayerRadsUpdatePacket;
 import nc.recipe.*;
 import nc.tile.radiation.ITileRadiationEnvironment;
@@ -419,8 +419,9 @@ public class RadiationHandler {
 		if (chunkProvider == null || chunk == null || !chunk.isLoaded()) {
 			return null;
 		}
-		int x = chunk.getPos().x;
-		int z = chunk.getPos().z;
+		ChunkPos chunkPos = chunk.getPos();
+		int x = chunkPos.x;
+		int z = chunkPos.z;
 		Collections.shuffle(ADJACENT_COORDS);
 		for (byte[] pos : ADJACENT_COORDS) {
 			if (chunkProvider.chunkExists(x + pos[0], z + pos[1])) {

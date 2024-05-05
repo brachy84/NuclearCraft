@@ -52,8 +52,8 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	
 	public static class SaltFissionVesselContainerInfo extends ProcessorContainerInfo<TileSaltFissionVessel, SaltFissionVesselUpdatePacket, SaltFissionVesselContainerInfo> {
 		
-		public SaltFissionVesselContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionVessel> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSaltFissionVessel> guiFunction, ContainerFunction<TileSaltFissionVessel> configContainerFunction, GuiFunction<TileSaltFissionVessel> configGuiFunction, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
+		public SaltFissionVesselContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionVessel> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSaltFissionVessel> guiFunction, ContainerFunction<TileSaltFissionVessel> configContainerFunction, GuiFunction<TileSaltFissionVessel> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
+			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	
 	public TileSaltFissionVessel() {
 		super(CuboidalPartPositionType.INTERIOR);
-		info = TileInfoHandler.getProcessorContainerInfo("salt_fission");
+		info = TileInfoHandler.getProcessorContainerInfo("salt_fission_vessel");
 		
 		inventoryName = Global.MOD_ID + ".container." + info.name;
 		
@@ -756,9 +756,19 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	public double getPowerMultiplier() {
 		return 0D;
 	}
+
+	@Override
+	public boolean isProcessing() {
+		return isProcessing(true);
+	}
 	
 	public boolean isProcessing(boolean checkCluster) {
 		return readyToProcess(checkCluster) && hasEnoughFlux();
+	}
+
+	@Override
+	public boolean readyToProcess() {
+		return readyToProcess(true);
 	}
 	
 	public boolean readyToProcess(boolean checkCluster) {

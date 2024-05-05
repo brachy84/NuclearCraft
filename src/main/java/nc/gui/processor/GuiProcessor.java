@@ -5,7 +5,7 @@ import java.util.List;
 
 import nc.gui.GuiInfoTile;
 import nc.gui.element.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.gui.*;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.internal.fluid.Tank;
@@ -13,7 +13,6 @@ import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;

@@ -51,6 +51,11 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 			pushStacksToSide(facing);
 		}
 	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : inventoryStackLimit;
+	}
 	
 	@Override
 	public void setInventoryStackLimit(int stackLimit) {
@@ -174,11 +179,6 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	@Override
 	public void setInventoryConnections(@Nonnull InventoryConnection[] connections) {
 		inventoryConnections = connections;
-	}
-	
-	@Override
-	public int getInventoryStackLimit() {
-		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : inventoryStackLimit;
 	}
 	
 	@Override

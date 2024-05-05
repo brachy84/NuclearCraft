@@ -2,6 +2,7 @@ package nc.network.multiblock;
 
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.hx.HeatExchanger;
+import nc.tile.TileContainerInfo;
 import nc.tile.hx.*;
 import net.minecraft.util.math.BlockPos;
 
@@ -42,7 +43,7 @@ public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {
 		buf.writeDouble(maxEfficiency);
 	}
 	
-	public static class Handler extends MultiblockUpdatePacket.Handler<HeatExchanger, IHeatExchangerPart, HeatExchangerUpdatePacket, TileHeatExchangerController, HeatExchangerUpdatePacket> {
+	public static class Handler extends MultiblockUpdatePacket.Handler<HeatExchanger, IHeatExchangerPart, HeatExchangerUpdatePacket, TileHeatExchangerController, TileContainerInfo<TileHeatExchangerController>, HeatExchangerUpdatePacket> {
 		
 		public Handler() {
 			super(TileHeatExchangerController.class);

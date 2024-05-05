@@ -2,16 +2,18 @@ package nc.tile.hx;
 
 import static nc.block.property.BlockProperties.FACING_ALL;
 
-import nc.container.multiblock.controller.ContainerHeatExchangerController;
+import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.HeatExchanger;
+import nc.tile.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TileHeatExchangerController extends TileHeatExchangerPart implements IHeatExchangerController<TileHeatExchangerController> {
-	
+
+	protected final TileContainerInfo<TileHeatExchangerController> info = TileInfoHandler.getTileContainerInfo("heat_exchanger_controller");
+
 	public TileHeatExchangerController() {
 		super(CuboidalPartPositionType.WALL);
 	}
@@ -20,7 +22,12 @@ public class TileHeatExchangerController extends TileHeatExchangerPart implement
 	public String getLogicID() {
 		return "heat_exchanger";
 	}
-	
+
+	@Override
+	public TileContainerInfo<TileHeatExchangerController> getContainerInfo() {
+		return info;
+	}
+
 	@Override
 	public void onMachineAssembled(HeatExchanger controller) {
 		doStandardNullControllerResponse(controller);
@@ -33,11 +40,6 @@ public class TileHeatExchangerController extends TileHeatExchangerPart implement
 	@Override
 	public void onMachineBroken() {
 		super.onMachineBroken();
-	}
-	
-	@Override
-	public ContainerHeatExchangerController getContainer(EntityPlayer player) {
-		return new ContainerHeatExchangerController(player, this);
 	}
 	
 	@Override

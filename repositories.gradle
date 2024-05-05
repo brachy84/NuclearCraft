@@ -29,4 +29,7 @@ repositories {
 		name = "ModMaven"
 		url = "https://modmaven.dev/"
 	}
+	maven {
+		url 'https://maven.cleanroommc.com'
+	}
 }

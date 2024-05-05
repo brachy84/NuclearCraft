@@ -1,39 +1,35 @@
 package nc.integration.jei.category.info;
 
-import java.util.*;
-
+import com.google.common.collect.Lists;
 import mezz.jei.api.IGuiHelper;
 import nc.handler.TileInfoHandler;
 import nc.integration.jei.category.JEIProcessorRecipeCategory;
-import nc.integration.jei.wrapper.*;
+import nc.integration.jei.wrapper.JEIProcessorRecipeWrapper;
+import nc.integration.jei.wrapper.JEIProcessorRecipeWrapperFunction;
 import nc.network.tile.processor.ProcessorUpdatePacket;
-import nc.recipe.*;
+import nc.recipe.BasicRecipe;
+import nc.recipe.BasicRecipeHandler;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.ProcessorContainerInfo;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.List;
 
 public class JEIProcessorCategoryInfo<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, WRAPPER extends JEIProcessorRecipeWrapper<TILE, PACKET, INFO, WRAPPER>> extends JEICategoryInfo<WRAPPER, JEIProcessorRecipeCategory<TILE, PACKET, INFO, WRAPPER>, JEIProcessorCategoryInfo<TILE, PACKET, INFO, WRAPPER>> {
 	
 	public final INFO containerInfo;
 	
 	public final JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction;
-	
+
 	public JEIProcessorCategoryInfo(String name, Class<WRAPPER> jeiRecipeClass, JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction, List<Object> jeiCrafters) {
-		super(JEIProcessorRecipeCategory::new, jeiRecipeClass, null, jeiCrafters);
-		this.containerInfo = TileInfoHandler.getProcessorContainerInfo(name);
+		this(TileInfoHandler.<TILE, PACKET, INFO>getProcessorContainerInfo(name), jeiRecipeClass, jeiRecipeWrapperFunction, jeiCrafters);
+	}
+
+	private JEIProcessorCategoryInfo(INFO containerInfo, Class<WRAPPER> jeiRecipeClass, JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction, List<Object> jeiCrafters) {
+		super(containerInfo.modId, containerInfo.recipeHandlerName, JEIProcessorRecipeCategory::new, jeiRecipeClass, null, jeiCrafters, Lists.newArrayList(containerInfo.getJEIContainerConnection()));
+
+		this.containerInfo = containerInfo;
 		this.jeiRecipeWrapperFunction = jeiRecipeWrapperFunction;
-	}
-	
-	@Override
-	public String getModId() {
-		return containerInfo.modId;
-	}
-	
-	@Override
-	public String getName() {
-		return containerInfo.name;
 	}
 	
 	@Override
@@ -172,37 +168,7 @@ public class JEIProcessorCategoryInfo<TILE extends TileEntity & IProcessor<TILE,
 	}
 	
 	@Override
-	public int getJEIClickAreaX() {
-		return containerInfo.jeiClickAreaX;
-	}
-	
-	@Override
-	public int getJEIClickAreaY() {
-		return containerInfo.jeiClickAreaY;
-	}
-	
-	@Override
-	public int getJEIClickAreaW() {
-		return containerInfo.jeiClickAreaW;
-	}
-	
-	@Override
-	public int getJEIClickAreaH() {
-		return containerInfo.jeiClickAreaH;
-	}
-	
-	@Override
 	public WRAPPER getJEIRecipe(IGuiHelper guiHelper, BasicRecipe recipe) {
 		return jeiRecipeWrapperFunction.apply(getName(), guiHelper, recipe);
-	}
-	
-	@Override
-	public List<Class<? extends Container>> getContainerClasses() {
-		return Arrays.asList(containerInfo.containerClass);
-	}
-	
-	@Override
-	public List<Class<? extends GuiContainer>> getGuiClasses() {
-		return Arrays.asList(containerInfo.guiClass);
 	}
 }

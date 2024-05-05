@@ -16,7 +16,7 @@ import nc.multiblock.IPacketMultiblock;
 import nc.multiblock.cuboidal.CuboidalMultiblock;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.ITurbineRotorBlade;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.multiblock.TurbineRenderPacket;
 import nc.network.multiblock.TurbineUpdatePacket;
 import nc.recipe.BasicRecipe;
@@ -398,7 +398,7 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 	@Override
 	public void syncDataFrom(NBTTagCompound data, SyncReason syncReason) {
 		readEnergy(energyStorage, data, "energyStorage");
-		readTanks(tanks, data, "turbineTanks");
+		readTanks(tanks, data, "tanks");
 		isTurbineOn = data.getBoolean("isTurbineOn");
 		computerActivated = data.getBoolean("computerActivated");
 		isProcessing = data.getBoolean("isProcessing");

@@ -1,4 +1,4 @@
-package nc.network;
+package nc.handler;
 
 import nc.network.config.ConfigUpdatePacket;
 import nc.network.gui.*;

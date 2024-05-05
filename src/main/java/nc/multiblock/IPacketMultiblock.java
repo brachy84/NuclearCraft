@@ -2,7 +2,7 @@ package nc.multiblock;
 
 import java.util.Set;
 
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.multiblock.MultiblockUpdatePacket;
 import nc.tile.multiblock.ITileMultiblockPart;
 import net.minecraft.entity.player.*;

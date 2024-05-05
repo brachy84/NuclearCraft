@@ -5,24 +5,26 @@ import java.util.*;
 import nc.Global;
 import nc.gui.element.MultiblockButton;
 import nc.multiblock.fission.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.multiblock.*;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.*;
 import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiSolidFissionController extends GuiLogicMultiblockController<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket, TileSolidFissionController, SolidFuelFissionLogic> {
+public class GuiSolidFissionController extends GuiLogicMultiblockController<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket, TileSolidFissionController, TileContainerInfo<TileSolidFissionController>, SolidFuelFissionLogic> {
 	
 	protected final ResourceLocation gui_texture;
 	
 	int outputRateWidth = 0;
 	
-	public GuiSolidFissionController(EntityPlayer player, TileSolidFissionController controller) {
-		super(player, controller);
+	public GuiSolidFissionController(Container inventory, EntityPlayer player, TileSolidFissionController controller, String textureLocation) {
+		super(inventory, player, controller, textureLocation);
 		gui_texture = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/" + "solid_fission_controller" + ".png");
 		xSize = 176;
 		ySize = 114;

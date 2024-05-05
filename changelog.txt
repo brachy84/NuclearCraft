@@ -1,10 +1,21 @@
-v2o.6.3
+v2o.7.1
 
-* Fixed crash when GTCEu is installed [thanks to DStrand1!]
+* Fixed turbine internal tanks not loading NBT correctly
 
+v2o.7.0
+
+* Updated
+
+* Fixed config localisation
+
+* Fixed fission ports not correctly handling more than 64 cells/irradiators
 * Attempted to prevent crashes caused by unexpected null multiblocks [thanks to thedeadferryman!]
 
 * Fixed rhodochrosite smelting info tooltip
+
++ Added config for IC2 reactor radiation multiplier
+
+* Moved from GTCE to GTCEu
 
 * Updated Chinese language file [thanks to WuzgXY and TheRealKamisama!]
 * Updated Russian language file [thanks to thedeadferryman!]

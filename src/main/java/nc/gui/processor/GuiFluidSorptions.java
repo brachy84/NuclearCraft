@@ -6,7 +6,7 @@ import nc.Global;
 import nc.container.processor.ContainerSorptions;
 import nc.gui.NCGui;
 import nc.gui.element.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.network.gui.*;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.*;

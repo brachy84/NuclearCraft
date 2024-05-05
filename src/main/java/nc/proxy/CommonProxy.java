@@ -18,7 +18,7 @@ import nc.integration.tconstruct.*;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
 import nc.multiblock.*;
-import nc.network.PacketHandler;
+import nc.handler.PacketHandler;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
 import nc.recipe.*;
