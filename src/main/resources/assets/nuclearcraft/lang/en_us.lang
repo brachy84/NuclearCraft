@@ -3489,7 +3489,7 @@ nc.guide_book.desc=NuclearCraft (NC) is a tech mod focused on nuclear power gene
 
 # String Formatting
 
-nc.sf.plural_rule=%d == 1 ? 0 : 1
+nc.sf.plural_rule=1,1:0
 
 nc.sf.zero=zero
 nc.sf.one=one

@@ -10,9 +10,9 @@ Add auto-outputting to machines
 
 Fix smart insertion for fluid recipes
 
-Refactor BasicRecipe and BasicRecipeHandler subclasses to make recipes easier for addons
-
 QMD feature merge: nitrogen collector -> air collector
+
+QMD feature merge: particles in recipe system
 
 Global fission radiation configs
 

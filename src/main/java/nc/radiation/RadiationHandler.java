@@ -9,10 +9,7 @@ import nc.init.NCSounds;
 import nc.network.radiation.PlayerRadsUpdatePacket;
 import nc.recipe.*;
 import nc.tile.radiation.ITileRadiationEnvironment;
-import nc.util.DamageSources;
-import nc.util.Lang;
-import nc.util.StackHelper;
-import nc.util.StructureHelper;
+import nc.util.*;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.RecipeItemHelper;
@@ -243,182 +240,178 @@ public class RadiationHandler {
 		}
 
         ChunkProviderServer chunkProvider = world.getChunkProvider();
-		Collection<Chunk> loadedChunks = chunkProvider.getLoadedChunks();
-		int chunkArrSize = loadedChunks.size();
-		Chunk[] chunkArray = null;
-		try {
-			chunkArray = loadedChunks.toArray(new Chunk[chunkArrSize]);
-		}
-		catch (Exception ignored) {}
-		
-		if (chunkArray == null) {
+		Collection<Chunk> chunks = chunkProvider.getLoadedChunks();
+
+		if (chunks.isEmpty()) {
 			return;
 		}
-		
-		int chunkStart = RAND.nextInt(chunkArrSize + 1);
-		int chunksPerTick = Math.min(radiation_world_chunks_per_tick, chunkArrSize);
-		int tickMult = chunkArrSize > 0 ? Math.max(1, chunkArrSize / chunksPerTick) : 1;
+
+		int chunkCount = chunks.size();
+		int chunkStart = RAND.nextInt(chunkCount);
+		int chunksPerTick = Math.min(radiation_world_chunks_per_tick, chunkCount);
+		double tickMult = Math.max(1D, (double) chunkCount / (double) chunksPerTick);
 		
 		BiomeProvider biomeProvider = world.getBiomeProvider();
 		int dimension = world.provider.getDimension();
 		BlockPos randomOffsetPos = newRandomOffsetPos(world);
 		String randomStructure = ModCheck.cubicChunksLoaded() || RadStructures.STRUCTURE_LIST.isEmpty() ? null : RadStructures.STRUCTURE_LIST.get(RAND.nextInt(RadStructures.STRUCTURE_LIST.size()));
-		
-		if (chunkArrSize > 0) {
-			for (int i = chunkStart; i < chunkStart + chunksPerTick; ++i) {
-				Chunk chunk = chunkArray[i % chunkArrSize];
-				if (!chunk.isLoaded()) {
-					continue;
-				}
-				
-				IRadiationSource chunkSource = RadiationHelper.getRadiationSource(chunk);
-				if (chunkSource == null) {
-					continue;
-				}
-				
-				ClassInheritanceMultiMap<Entity>[] entityListArray = chunk.getEntityLists();
-                for (ClassInheritanceMultiMap<Entity> entities : entityListArray) {
-                    Entity[] entityArray = entities.toArray(new Entity[0]);
-                    for (Entity entity : entityArray) {
-                        if (entity instanceof EntityPlayer) {
-                            RadiationHelper.transferRadsFromInventoryToChunkBuffer(((EntityPlayer) entity).inventory, chunkSource);
-                        } else if (radiation_dropped_items && entity instanceof EntityItem) {
-                            RadiationHelper.transferRadiationFromStackToChunkBuffer(((EntityItem) entity).getItem(), chunkSource, 1D);
-                        } else if (entity instanceof EntityLiving entityLiving) {
-                            IEntityRads entityRads = RadiationHelper.getEntityRadiation(entityLiving);
-                            if (entityRads == null) {
-                                continue;
-                            }
 
-                            entityRads.setExternalRadiationResistance(RadiationHelper.getEntityArmorRadResistance(entityLiving));
+		CollectionHelper.forEachIndexed(chunks, (chunk, i) -> {
+			if ((i - chunkStart) % chunkCount >= chunksPerTick) {
+				return;
+			}
 
-                            if (radiation_entity_decay_rate > 0D) {
-                                entityRads.setTotalRads(entityRads.getTotalRads() * Math.pow(1D - radiation_entity_decay_rate, tickMult), false);
-                            }
+			if (!chunk.isLoaded()) {
+				return;
+			}
 
-                            RadiationHelper.transferRadsFromSourceToEntity(chunkSource, entityRads, entityLiving, tickMult);
+			IRadiationSource chunkSource = RadiationHelper.getRadiationSource(chunk);
+			if (chunkSource == null) {
+				return;
+			}
 
-                            if (entityRads.getPoisonBuffer() > 0D) {
-                                double poisonRads = Math.min(entityRads.getPoisonBuffer(), entityRads.getRecentPoisonAddition() * tickMult / radiation_poison_time);
-                                entityRads.setTotalRads(entityRads.getTotalRads() + poisonRads, false);
-                                entityRads.setPoisonBuffer(entityRads.getPoisonBuffer() - poisonRads);
-                                if (entityRads.getPoisonBuffer() == 0D) {
-                                    entityRads.resetRecentPoisonAddition();
-                                }
-                            } else {
-                                entityRads.resetRecentPoisonAddition();
-                            }
-
-                            if (entityLiving instanceof IMob) {
-                                if (radiation_mob_rads_fatal && entityRads.isFatal()) {
-                                    entityLiving.attackEntityFrom(DamageSources.FATAL_RADS, Float.MAX_VALUE);
-                                } else {
-                                    RadiationHelper.applyPotionEffects(entityLiving, entityRads, tickMult, RadPotionEffects.MOB_RAD_LEVEL_LIST, RadPotionEffects.MOB_EFFECTS_LIST);
-                                }
-                            } else {
-                                if (entityRads.isFatal()) {
-                                    if (register_entity[0] && entityLiving instanceof INpc) {
-                                        spawnFeralGhoul(world, entityLiving);
-                                    } else if (radiation_passive_rads_fatal) {
-                                        entityLiving.attackEntityFrom(DamageSources.FATAL_RADS, Float.MAX_VALUE);
-                                    }
-                                } else {
-                                    RadiationHelper.applyPotionEffects(entityLiving, entityRads, tickMult, RadPotionEffects.ENTITY_RAD_LEVEL_LIST, RadPotionEffects.ENTITY_DEBUFF_LIST);
-                                }
-                            }
-                            entityRads.setRadiationLevel(entityRads.getRadiationLevel() * Math.pow(1D - radiation_decay_rate, tickMult));
-                        }
-                    }
-                }
-				
-				chunkSource.setScrubbingFraction(0D);
-				chunkSource.setEffectiveScrubberCount(0D);
-				
-				Collection<TileEntity> tileCollection = chunk.getTileEntityMap().values();
-				TileEntity[] tileArray = null;
-				try {
-					tileArray = tileCollection.toArray(new TileEntity[0]);
-				}
-				catch (Exception ignored) {}
-				
-				if (tileArray != null) {
-					for (TileEntity tile : tileArray) {
-						RadiationHelper.transferRadiationFromProviderToChunkBuffer(tile, tile_side, chunkSource);
+			ClassInheritanceMultiMap<Entity>[] entityListArray = chunk.getEntityLists();
+			for (ClassInheritanceMultiMap<Entity> entities : entityListArray) {
+				Entity[] entityArray = entities.toArray(new Entity[0]);
+				for (Entity entity : entityArray) {
+					if (entity instanceof EntityPlayer) {
+						RadiationHelper.transferRadsFromInventoryToChunkBuffer(((EntityPlayer) entity).inventory, chunkSource);
 					}
-				}
-				
-				if (RadWorlds.RAD_MAP.containsKey(dimension)) {
-					RadiationHelper.addToSourceBuffer(chunkSource, RadWorlds.RAD_MAP.get(dimension));
-				}
-				
-				if (!RadBiomes.DIM_BLACKLIST.contains(dimension)) {
-					Double biomeRadiation = RadBiomes.RAD_MAP.get(chunk.getBiome(randomOffsetPos, biomeProvider));
-					if (biomeRadiation != null) {
-						RadiationHelper.addToSourceBuffer(chunkSource, biomeRadiation);
+					else if (radiation_dropped_items && entity instanceof EntityItem) {
+						RadiationHelper.transferRadiationFromStackToChunkBuffer(((EntityItem) entity).getItem(), chunkSource, 1D);
 					}
-				}
-				
-				BlockPos randomChunkPos = newRandomPosInChunk(world, chunk);
-				if (randomStructure != null && StructureHelper.CACHE.isInStructure(world, randomStructure, randomChunkPos)) {
-					Double structureRadiation = RadStructures.RAD_MAP.get(randomStructure);
-					if (structureRadiation != null) {
-						RadiationHelper.addToSourceBuffer(chunkSource, structureRadiation);
-					}
-				}
-				
-				if (radiation_check_blocks && i == chunkStart) {
-					int packed = RecipeItemHelper.pack(StackHelper.blockStateToStack(world.getBlockState(randomChunkPos)));
-					if (RadSources.STACK_MAP.containsKey(packed)) {
-						RadiationHelper.addToSourceBuffer(chunkSource, RadSources.STACK_MAP.get(packed));
-					}
-				}
-				
-				double currentLevel = chunkSource.getRadiationLevel(), currentBuffer = chunkSource.getRadiationBuffer();
-				if (tileArray != null) {
-					for (TileEntity tile : tileArray) {
-						if (tile instanceof ITileRadiationEnvironment) {
-							((ITileRadiationEnvironment) tile).setCurrentChunkRadiationLevel(currentLevel);
-							((ITileRadiationEnvironment) tile).setCurrentChunkRadiationBuffer(currentBuffer);
-							RadiationHelper.addScrubbingFractionToChunk(RadiationHelper.getRadiationSource(chunk), (ITileRadiationEnvironment) tile);
+					else if (entity instanceof EntityLiving entityLiving) {
+						IEntityRads entityRads = RadiationHelper.getEntityRadiation(entityLiving);
+						if (entityRads == null) {
+							continue;
 						}
+
+						entityRads.setExternalRadiationResistance(RadiationHelper.getEntityArmorRadResistance(entityLiving));
+
+						if (radiation_entity_decay_rate > 0D) {
+							entityRads.setTotalRads(entityRads.getTotalRads() * Math.pow(1D - radiation_entity_decay_rate, tickMult), false);
+						}
+
+						RadiationHelper.transferRadsFromSourceToEntity(chunkSource, entityRads, entityLiving, tickMult);
+
+						if (entityRads.getPoisonBuffer() > 0D) {
+							double poisonRads = Math.min(entityRads.getPoisonBuffer(), entityRads.getRecentPoisonAddition() * tickMult / radiation_poison_time);
+							entityRads.setTotalRads(entityRads.getTotalRads() + poisonRads, false);
+							entityRads.setPoisonBuffer(entityRads.getPoisonBuffer() - poisonRads);
+							if (entityRads.getPoisonBuffer() == 0D) {
+								entityRads.resetRecentPoisonAddition();
+							}
+						}
+						else {
+							entityRads.resetRecentPoisonAddition();
+						}
+
+						if (entityLiving instanceof IMob) {
+							if (radiation_mob_rads_fatal && entityRads.isFatal()) {
+								entityLiving.attackEntityFrom(DamageSources.FATAL_RADS, Float.MAX_VALUE);
+							}
+							else {
+								RadiationHelper.applyPotionEffects(entityLiving, entityRads, (int) tickMult, RadPotionEffects.MOB_RAD_LEVEL_LIST, RadPotionEffects.MOB_EFFECTS_LIST);
+							}
+						}
+						else {
+							if (entityRads.isFatal()) {
+								if (register_entity[0] && entityLiving instanceof INpc) {
+									spawnFeralGhoul(world, entityLiving);
+								}
+								else if (radiation_passive_rads_fatal) {
+									entityLiving.attackEntityFrom(DamageSources.FATAL_RADS, Float.MAX_VALUE);
+								}
+							}
+							else {
+								RadiationHelper.applyPotionEffects(entityLiving, entityRads, (int) tickMult, RadPotionEffects.ENTITY_RAD_LEVEL_LIST, RadPotionEffects.ENTITY_DEBUFF_LIST);
+							}
+						}
+						entityRads.setRadiationLevel(entityRads.getRadiationLevel() * Math.pow(1D - radiation_decay_rate, tickMult));
 					}
 				}
-				
-				if (radiation_scrubber_non_linear) {
-					double scrubbers = chunkSource.getEffectiveScrubberCount();
-					double scrubbingFraction = RadiationHelper.getAltScrubbingFraction(scrubbers);
-					
-					RadiationHelper.addToSourceBuffer(chunkSource, -scrubbingFraction * chunkSource.getRadiationBuffer());
-					chunkSource.setScrubbingFraction(scrubbingFraction);
-				}
-				
-				double changeRate = chunkSource.getRadiationLevel() < chunkSource.getRadiationBuffer() ? radiation_spread_rate : radiation_decay_rate * (1D - chunkSource.getScrubbingFraction()) + radiation_spread_rate * chunkSource.getScrubbingFraction();
-				
-				double newLevel = Math.max(0D, chunkSource.getRadiationLevel() + (chunkSource.getRadiationBuffer() - chunkSource.getRadiationLevel()) * changeRate);
-				if (radiation_chunk_limit >= 0D) {
-					newLevel = Math.min(newLevel, radiation_chunk_limit);
-				}
-				Biome biome = chunk.getBiome(randomOffsetPos, biomeProvider);
-				if (RadBiomes.LIMIT_MAP.containsKey(biome)) {
-					newLevel = Math.min(newLevel, RadBiomes.LIMIT_MAP.get(biome));
-				}
-				if (RadWorlds.LIMIT_MAP.containsKey(dimension)) {
-					newLevel = Math.min(newLevel, RadWorlds.LIMIT_MAP.get(dimension));
-				}
-				
-				chunkSource.setRadiationLevel(newLevel);
-				
-				mutateTerrain(world, chunk, newLevel);
 			}
-		}
-		
-		if (chunkArrSize > 0) {
-			for (int i = chunkStart; i < chunkStart + chunksPerTick; ++i) {
-				Chunk chunk = chunkArray[i % chunkArrSize];
-				// Emptying buffers here too!
-				RadiationHelper.spreadRadiationFromChunk(chunk, getRandomAdjacentChunk(chunkProvider, chunk));
+
+			chunkSource.setScrubbingFraction(0D);
+			chunkSource.setEffectiveScrubberCount(0D);
+
+			Collection<TileEntity> tiles = chunk.getTileEntityMap().values();
+			
+			if (radiation_tile_entities) {
+				for (TileEntity tile : tiles) {
+					RadiationHelper.transferRadiationFromProviderToChunkBuffer(tile, tile_side, chunkSource);
+				}
 			}
-		}
+
+			if (RadWorlds.RAD_MAP.containsKey(dimension)) {
+				RadiationHelper.addToSourceBuffer(chunkSource, RadWorlds.RAD_MAP.get(dimension));
+			}
+
+			if (!RadBiomes.DIM_BLACKLIST.contains(dimension)) {
+				Double biomeRadiation = RadBiomes.RAD_MAP.get(chunk.getBiome(randomOffsetPos, biomeProvider));
+				if (biomeRadiation != null) {
+					RadiationHelper.addToSourceBuffer(chunkSource, biomeRadiation);
+				}
+			}
+
+			BlockPos randomChunkPos = newRandomPosInChunk(world, chunk);
+			if (randomStructure != null && StructureHelper.CACHE.isInStructure(world, randomStructure, randomChunkPos)) {
+				Double structureRadiation = RadStructures.RAD_MAP.get(randomStructure);
+				if (structureRadiation != null) {
+					RadiationHelper.addToSourceBuffer(chunkSource, structureRadiation);
+				}
+			}
+
+			if (radiation_check_blocks && i == chunkStart) {
+				int packed = RecipeItemHelper.pack(StackHelper.blockStateToStack(world.getBlockState(randomChunkPos)));
+				if (RadSources.STACK_MAP.containsKey(packed)) {
+					RadiationHelper.addToSourceBuffer(chunkSource, RadSources.STACK_MAP.get(packed));
+				}
+			}
+
+			double currentLevel = chunkSource.getRadiationLevel(), currentBuffer = chunkSource.getRadiationBuffer();
+			for (TileEntity tile : tiles) {
+				if (tile instanceof ITileRadiationEnvironment tileRadiationEnvironment) {
+					tileRadiationEnvironment.setCurrentChunkRadiationLevel(currentLevel);
+					tileRadiationEnvironment.setCurrentChunkRadiationBuffer(currentBuffer);
+					RadiationHelper.addScrubbingFractionToChunk(RadiationHelper.getRadiationSource(chunk), tileRadiationEnvironment);
+				}
+			}
+
+			if (radiation_scrubber_non_linear) {
+				double scrubbers = chunkSource.getEffectiveScrubberCount();
+				double scrubbingFraction = RadiationHelper.getAltScrubbingFraction(scrubbers);
+
+				RadiationHelper.addToSourceBuffer(chunkSource, -scrubbingFraction * chunkSource.getRadiationBuffer());
+				chunkSource.setScrubbingFraction(scrubbingFraction);
+			}
+
+			double changeRate = chunkSource.getRadiationLevel() < chunkSource.getRadiationBuffer() ? radiation_spread_rate : radiation_decay_rate * (1D - chunkSource.getScrubbingFraction()) + radiation_spread_rate * chunkSource.getScrubbingFraction();
+
+			double newLevel = Math.max(0D, chunkSource.getRadiationLevel() + (chunkSource.getRadiationBuffer() - chunkSource.getRadiationLevel()) * changeRate);
+			if (radiation_chunk_limit >= 0D) {
+				newLevel = Math.min(newLevel, radiation_chunk_limit);
+			}
+			Biome biome = chunk.getBiome(randomOffsetPos, biomeProvider);
+			if (RadBiomes.LIMIT_MAP.containsKey(biome)) {
+				newLevel = Math.min(newLevel, RadBiomes.LIMIT_MAP.get(biome));
+			}
+			if (RadWorlds.LIMIT_MAP.containsKey(dimension)) {
+				newLevel = Math.min(newLevel, RadWorlds.LIMIT_MAP.get(dimension));
+			}
+
+			chunkSource.setRadiationLevel(newLevel);
+
+			mutateTerrain(world, chunk, newLevel);
+		});
+
+		CollectionHelper.forEachIndexed(chunks, (chunk, i) -> {
+			if ((i - chunkStart) % chunkCount >= chunksPerTick) {
+				return;
+			}
+
+			RadiationHelper.spreadRadiationFromChunk(chunk, getRandomAdjacentChunk(chunkProvider, chunk));
+		});
 		
 		tile_side = EnumFacing.byIndex(tile_side.getIndex() + 1);
 	}

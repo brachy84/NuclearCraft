@@ -1,11 +1,8 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
 import baubles.api.BaubleType;
-import baubles.api.cap.*;
+import baubles.api.cap.BaublesCapabilities;
+import baubles.api.cap.IBaublesItemHandler;
 import ic2.api.reactor.IReactor;
 import nc.ModCheck;
 import nc.capability.radiation.IRadiation;
@@ -15,10 +12,14 @@ import nc.capability.radiation.source.IRadiationSource;
 import nc.init.NCItems;
 import nc.tile.dummy.TileDummy;
 import nc.tile.radiation.ITileRadiationEnvironment;
-import nc.util.*;
-import net.minecraft.entity.*;
+import nc.util.ArmorHelper;
+import nc.util.NCMath;
+import nc.util.UnitHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -28,8 +29,15 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.*;
-import net.minecraftforge.items.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+
+import java.util.List;
+
+import static nc.config.NCConfig.*;
 
 public class RadiationHelper {
 	
@@ -278,7 +286,7 @@ public class RadiationHelper {
 	
 	// Entity Radiation Resistance
 	
-	public static double addRadsToEntity(IEntityRads entityRads, EntityLivingBase entity, double rawRadiation, boolean ignoreResistance, boolean ignoreMultipliers, int updateRate) {
+	public static double addRadsToEntity(IEntityRads entityRads, EntityLivingBase entity, double rawRadiation, boolean ignoreResistance, boolean ignoreMultipliers, double updateRate) {
 		if (rawRadiation <= 0D) {
 			return 0D;
 		}
@@ -319,7 +327,7 @@ public class RadiationHelper {
 	
 	// Inventory -> Player
 	
-	public static double transferRadsFromInventoryToPlayer(IEntityRads playerRads, EntityPlayer player, int updateRate) {
+	public static double transferRadsFromInventoryToPlayer(IEntityRads playerRads, EntityPlayer player, double updateRate) {
 		double radiationLevel = 0D;
 		InventoryPlayer inventory = player.inventory;
 		for (ItemStack stack : inventory.mainInventory) {
@@ -340,7 +348,7 @@ public class RadiationHelper {
 		return radiationLevel;
 	}
 	
-	private static double transferRadsFromStackToPlayer(ItemStack stack, IEntityRads playerRads, EntityPlayer player, int updateRate) {
+	private static double transferRadsFromStackToPlayer(ItemStack stack, IEntityRads playerRads, EntityPlayer player, double updateRate) {
 		IRadiationSource stackSource = getRadiationSource(stack);
 		if (stackSource == null) {
 			return 0D;
@@ -350,7 +358,7 @@ public class RadiationHelper {
 	
 	// Source -> Player
 	
-	public static double transferRadsToPlayer(IRadiationSource source, IEntityRads playerRads, EntityPlayer player, int updateRate) {
+	public static double transferRadsToPlayer(IRadiationSource source, IEntityRads playerRads, EntityPlayer player, double updateRate) {
 		if (source == null) {
 			return 0D;
 		}
@@ -359,7 +367,7 @@ public class RadiationHelper {
 	
 	// Biome -> Player
 	
-	/*public static double transferBackgroundRadsToPlayer(Biome biome, IEntityRads playerRads, EntityPlayer player, int updateRate) {
+	/*public static double transferBackgroundRadsToPlayer(Biome biome, IEntityRads playerRads, EntityPlayer player, double updateRate) {
 		Double biomeRadiation = RadBiomes.RAD_MAP.get(biome);
 		if (biomeRadiation == null) {
 			return 0D;
@@ -369,7 +377,7 @@ public class RadiationHelper {
 	
 	// Source -> Entity
 	
-	public static void transferRadsFromSourceToEntity(IRadiationSource source, IEntityRads entityRads, EntityLivingBase entity, int updateRate) {
+	public static void transferRadsFromSourceToEntity(IRadiationSource source, IEntityRads entityRads, EntityLivingBase entity, double updateRate) {
 		if (source == null) {
 			return;
 		}
@@ -378,7 +386,7 @@ public class RadiationHelper {
 	
 	// Biome -> Entity
 	
-	/*public static void transferBackgroundRadsToEntity(Biome biome, IEntityRads entityRads, EntityLiving entityLiving, int updateRate) {
+	/*public static void transferBackgroundRadsToEntity(Biome biome, IEntityRads entityRads, EntityLiving entityLiving, double updateRate) {
 		Double biomeRadiation = RadBiomes.RAD_MAP.get(biome);
 		if (biomeRadiation != null) {
 			entityRads.setRadiationLevel(addRadsToEntity(entityRads, entityLiving, biomeRadiation, updateRate));

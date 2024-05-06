@@ -1,29 +1,35 @@
 package nc.config;
 
-import static nc.util.CollectionHelper.arrayCopies;
-
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import nc.*;
+import nc.Global;
+import nc.ModCheck;
 import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
-import nc.init.NCPackets;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
 import nc.recipe.BasicRecipeHandler;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.NCMath;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.*;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.*;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static nc.util.CollectionHelper.arrayCopies;
 
 public class NCConfig {
 	
@@ -75,6 +81,7 @@ public class NCConfig {
 	public static boolean enable_ic2_eu;
 	public static boolean enable_gtce_eu;
 	public static boolean enable_mek_gas;
+	public static boolean[] enable_fluid_recipe_expansion;
 	public static int machine_update_rate;
 	public static double[] processor_passive_rate;
 	public static boolean passive_push;
@@ -347,7 +354,8 @@ public class NCConfig {
 	public static String[] radiation_shielding_item_blacklist;
 	public static String[] radiation_shielding_custom_stacks;
 	public static String[] radiation_shielding_default_levels;
-	
+
+	public static boolean radiation_tile_entities;
 	public static boolean radiation_hardcore_stacks;
 	public static double radiation_hardcore_containers;
 	public static boolean radiation_dropped_items;
@@ -498,6 +506,7 @@ public class NCConfig {
 		enable_ic2_eu = sync(CATEGORY_PROCESSOR, "enable_ic2_eu", true);
 		enable_gtce_eu = sync(CATEGORY_PROCESSOR, "enable_gtce_eu", true);
 		enable_mek_gas = sync(CATEGORY_PROCESSOR, "enable_mek_gas", true);
+		enable_fluid_recipe_expansion = sync(CATEGORY_PROCESSOR, "enable_fluid_recipe_expansion", new boolean[] {true, true}, ARRAY);
 		machine_update_rate = sync(CATEGORY_PROCESSOR, "machine_update_rate", 20, 1, 1200);
 		processor_passive_rate = sync(CATEGORY_PROCESSOR, "processor_passive_rate", new double[] {0.125, 10, 5}, 0D, 4000D, ARRAY);
 		passive_push = sync(CATEGORY_PROCESSOR, "passive_push", true);
@@ -769,6 +778,7 @@ public class NCConfig {
 		radiation_shielding_custom_stacks = sync(CATEGORY_RADIATION, "radiation_shielding_custom_stacks", new String[] {}, LIST);
 		radiation_shielding_default_levels = sync(CATEGORY_RADIATION, "radiation_shielding_default_levels", new String[] {"nuclearcraft:helm_hazmat_2.0", "nuclearcraft:chest_hazmat_3.0", "nuclearcraft:legs_hazmat_2.0", "nuclearcraft:boots_hazmat_2.0", "ic2:hazmat_helmet_2.0", "ic2:hazmat_chestplate_3.0", "ic2:hazmat_leggings_2.0", "ic2:rubber_boots_2.0", "ic2:quantum_helmet_2.0", "ic2:quantum_chestplate_3.0", "ic2:quantum_leggings_2.0", "ic2:quantum_boots_2.0", "gravisuite:gravichestplate_3.0", "ic2:itemarmorquantumhelmet_2.0", "ic2:itemarmorquantumchestplate_3.0", "ic2:itemarmorquantumlegs_2.0", "ic2:itemarmorquantumboots_2.0", "gravisuit:gravisuit_3.0", "gravisuit:nucleargravisuit_3.0", "extraplanets:tier1_space_suit_helmet_1.0", "extraplanets:tier1_space_suit_chest_1.5", "extraplanets:tier1_space_suit_jetpack_chest_1.5", "extraplanets:tier1_space_suit_leggings_1.0", "extraplanets:tier1_space_suit_boots_1.0", "extraplanets:tier1_space_suit_gravity_boots_1.0", "extraplanets:tier2_space_suit_helmet_1.3", "extraplanets:tier2_space_suit_chest_1.95", "extraplanets:tier2_space_suit_jetpack_chest_1.95", "extraplanets:tier2_space_suit_leggings_1.3", "extraplanets:tier2_space_suit_boots_1.3", "extraplanets:tier2_space_suit_gravity_boots_1.3", "extraplanets:tier3_space_suit_helmet_1.6", "extraplanets:tier3_space_suit_chest_2.4", "extraplanets:tier3_space_suit_jetpack_chest_2.4", "extraplanets:tier3_space_suit_leggings_1.6", "extraplanets:tier3_space_suit_boots_1.6", "extraplanets:tier3_space_suit_gravity_boots_1.6", "extraplanets:tier4_space_suit_helmet_2.0", "extraplanets:tier4_space_suit_chest_3.0", "extraplanets:tier4_space_suit_jetpack_chest_3.0", "extraplanets:tier4_space_suit_leggings_2.0", "extraplanets:tier4_space_suit_boots_2.0", "extraplanets:tier4_space_suit_gravity_boots_2.0"}, LIST);
 		
+		radiation_tile_entities = sync(CATEGORY_RADIATION, "radiation_tile_entities", true);
 		radiation_hardcore_stacks = sync(CATEGORY_RADIATION, "radiation_hardcore_stacks", true);
 		radiation_hardcore_containers = sync(CATEGORY_RADIATION, "radiation_hardcore_containers", 0D, 0D, 1D);
 		radiation_dropped_items = sync(CATEGORY_RADIATION, "radiation_dropped_items", true);

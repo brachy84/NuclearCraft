@@ -3400,7 +3400,7 @@ nc.guide_book.desc=Le guide officiel pour NuclearCraft: Overhauled (WIP). Traduc
 
 # String Formatting# String Formatting
 
-nc.sf.plural_rule=%d > 1 ? 1 : 0
+nc.sf.plural_rule=1,1:0
 
 nc.sf.zero=zéro
 nc.sf.one=un

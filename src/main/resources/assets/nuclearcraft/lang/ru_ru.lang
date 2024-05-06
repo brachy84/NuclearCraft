@@ -3472,7 +3472,7 @@ nc.guide_book.desc=NuclearCraft (NC) - это технологический м�
 
 # String Formatting
 
-nc.sf.plural_rule=%d == 1 ? 0 : 1
+nc.sf.plural_rule=1,1:0
 
 nc.sf.zero=ноль
 nc.sf.one=один
