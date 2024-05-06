@@ -1,41 +1,51 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import nc.ModCheck;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.entity.EntityFeralGhoul;
 import nc.init.NCSounds;
-import nc.handler.PacketHandler;
 import nc.network.radiation.PlayerRadsUpdatePacket;
 import nc.recipe.*;
 import nc.tile.radiation.ITileRadiationEnvironment;
-import nc.util.*;
+import nc.util.DamageSources;
+import nc.util.Lang;
+import nc.util.StackHelper;
+import nc.util.StructureHelper;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.RecipeItemHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
-import net.minecraft.util.text.*;
-import net.minecraft.world.*;
-import net.minecraft.world.biome.*;
+import net.minecraft.util.ClassInheritanceMultiMap;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import vazkii.patchouli.common.item.ItemModBook;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class RadiationHandler {
 	
@@ -194,8 +204,8 @@ public class RadiationHandler {
 			if (playerRads.getRadXCooldown() > 0D) {
 				playerRads.setRadXCooldown(playerRads.getRadXCooldown() - radiation_player_tick_rate);
 			}
-			
-			PacketHandler.instance.sendTo(new PlayerRadsUpdatePacket(playerRads), player);
+
+			new PlayerRadsUpdatePacket(playerRads).sendTo(player);
 			
 			if (!player.isCreative() && !player.isSpectator() && !playerRads.isImmune()) {
 				RadiationHelper.applyPotionEffects(player, playerRads, 1, RadPotionEffects.PLAYER_RAD_LEVEL_LIST, RadPotionEffects.PLAYER_DEBUFF_LIST);

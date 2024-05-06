@@ -1,8 +1,7 @@
 package nc.tile;
 
-import nc.handler.PacketHandler;
 import nc.network.NCPacket;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface ITilePacket<PACKET extends NCPacket> extends ITile {
 	
@@ -12,11 +11,11 @@ public interface ITilePacket<PACKET extends NCPacket> extends ITile {
 	
 	default void sendTileUpdatePacketToPlayer(EntityPlayer player) {
 		if (!getTileWorld().isRemote) {
-			PacketHandler.instance.sendTo(getTileUpdatePacket(), (EntityPlayerMP) player);
+			getTileUpdatePacket().sendTo(player);
 		}
 	}
 	
 	default void sendTileUpdatePacketToAll() {
-		PacketHandler.instance.sendToAll(getTileUpdatePacket());
+		getTileUpdatePacket().sendToAll();
 	}
 }

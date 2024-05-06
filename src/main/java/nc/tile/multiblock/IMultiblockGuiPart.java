@@ -1,12 +1,11 @@
 package nc.tile.multiblock;
 
-import nc.handler.PacketHandler;
-import nc.multiblock.*;
+import nc.multiblock.IPacketMultiblock;
+import nc.multiblock.Multiblock;
 import nc.network.multiblock.MultiblockUpdatePacket;
 import nc.tile.ITileGui;
 import nc.tile.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.Set;
@@ -15,13 +14,13 @@ public interface IMultiblockGuiPart<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 
 	default void sendTileUpdatePacketToPlayer(EntityPlayer player) {
 		if (!getTileWorld().isRemote && getMultiblock() != null) {
-			PacketHandler.instance.sendTo(getTileUpdatePacket(), (EntityPlayerMP) player);
+			getTileUpdatePacket().sendTo(player);
 		}
 	}
 
 	default void sendTileUpdatePacketToAll() {
 		if (getMultiblock() != null) {
-			PacketHandler.instance.sendToAll(getTileUpdatePacket());
+			getTileUpdatePacket().sendToAll();
 		}
 	}
 
@@ -45,9 +44,7 @@ public interface IMultiblockGuiPart<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 
 	default void sendTileUpdatePacketToListeners() {
 		if (getMultiblock() != null) {
-			for (EntityPlayer player : getTileUpdatePacketListeners()) {
-				PacketHandler.instance.sendTo(getTileUpdatePacket(), (EntityPlayerMP) player);
-			}
+			getTileUpdatePacket().sendTo(getTileUpdatePacketListeners());
 		}
 	}
 }

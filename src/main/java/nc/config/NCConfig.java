@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import nc.*;
 import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
-import nc.handler.PacketHandler;
+import nc.init.NCPackets;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
 import nc.recipe.BasicRecipeHandler;
@@ -1072,16 +1072,10 @@ public class NCConfig {
 		
 		@SubscribeEvent
 		public void configOnWorldLoad(PlayerLoggedInEvent event) {
-			if (event.player instanceof EntityPlayerMP) {
-				PacketHandler.instance.sendTo(getConfigUpdatePacket(), (EntityPlayerMP) event.player);
-			}
+			new ConfigUpdatePacket(radiation_enabled, radiation_horse_armor).sendTo(event.player);
 		}
 	}
-	
-	public static ConfigUpdatePacket getConfigUpdatePacket() {
-		return new ConfigUpdatePacket(radiation_enabled, radiation_horse_armor);
-	}
-	
+
 	public static void onConfigPacket(ConfigUpdatePacket message) {
 		if (!radiation_enabled_public && message.radiation_enabled) {
 			String unloc = "message.nuclearcraft.radiation_config_info" + (ModCheck.jeiLoaded() ? "_jei" : "");

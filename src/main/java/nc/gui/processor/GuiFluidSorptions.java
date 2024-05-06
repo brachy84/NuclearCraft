@@ -1,24 +1,30 @@
 package nc.gui.processor;
 
-import java.io.IOException;
-
 import nc.Global;
 import nc.container.processor.ContainerSorptions;
 import nc.gui.NCGui;
-import nc.gui.element.*;
-import nc.handler.PacketHandler;
-import nc.network.gui.*;
+import nc.gui.element.GuiBlockRenderer;
+import nc.gui.element.NCEnumButton;
+import nc.network.gui.ResetTankSorptionsPacket;
+import nc.network.gui.ToggleTankOutputSettingPacket;
+import nc.network.gui.ToggleTankSorptionPacket;
 import nc.network.tile.TileUpdatePacket;
-import nc.tile.*;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.TankSorption;
-import nc.util.*;
+import nc.util.BlockHelper;
+import nc.util.Lang;
+import nc.util.NCUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.io.IOException;
 
 public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO> & ITileFluid, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends NCGui {
 	
@@ -97,11 +103,11 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 							tile.setTankSorption(dirs[j], slot, TankSorption.NON);
 							((NCEnumButton.TankSorption) buttonList.get(j)).set(TankSorption.NON);
 						}
-						PacketHandler.instance.sendToServer(new ResetTankSorptionsPacket(tile, slot, false));
+						new ResetTankSorptionsPacket(tile, slot, false).sendToServer();
 						return;
 					}
 					tile.toggleTankSorption(dirs[i], slot, sorptionType, false);
-					PacketHandler.instance.sendToServer(new ToggleTankSorptionPacket(tile, dirs[i], slot, tile.getTankSorption(dirs[i], slot)));
+					new ToggleTankSorptionPacket(tile, dirs[i], slot, tile.getTankSorption(dirs[i], slot)).sendToServer();
 					return;
 				}
 			}
@@ -119,11 +125,11 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 							tile.setTankSorption(dirs[j], slot, sorption);
 							((NCEnumButton.TankSorption) buttonList.get(j)).set(sorption);
 						}
-						PacketHandler.instance.sendToServer(new ResetTankSorptionsPacket(tile, slot, true));
+						new ResetTankSorptionsPacket(tile, slot, true).sendToServer();
 						return;
 					}
 					tile.toggleTankSorption(dirs[i], slot, sorptionType, true);
-					PacketHandler.instance.sendToServer(new ToggleTankSorptionPacket(tile, dirs[i], slot, tile.getTankSorption(dirs[i], slot)));
+					new ToggleTankSorptionPacket(tile, dirs[i], slot, tile.getTankSorption(dirs[i], slot)).sendToServer();
 				}
 			}
 		}
@@ -170,7 +176,7 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
 					tile.setTankOutputSetting(slot, tile.getTankOutputSetting(slot).next(false));
-					PacketHandler.instance.sendToServer(new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)));
+					new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)).sendToServer();
 				}
 			}
 		}
@@ -181,7 +187,7 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
 					tile.setTankOutputSetting(slot, tile.getTankOutputSetting(slot).next(true));
-					PacketHandler.instance.sendToServer(new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)));
+					new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)).sendToServer();
 				}
 			}
 		}

@@ -147,7 +147,7 @@ tile.nuclearcraft.fission_conductor.name=Fission Reactor Conductor
 tile.nuclearcraft.fission_monitor.name=Fission Reactor Monitor (WIP)
 tile.nuclearcraft.fission_power_port.name=Fission Reactor Power Port
 tile.nuclearcraft.fission_vent.name=Fission Reactor Vent
-tile.nuclearcraft.fission_irradiator.name=Fission Neutron Irradiator
+tile.nuclearcraft.fission_irradiator.name=Fission Irradiator
 
 tile.nuclearcraft.fission_source.radium_beryllium.name=Ra-Be Fission Neutron Source
 tile.nuclearcraft.fission_source.polonium_beryllium.name=Po-Be Fission Neutron Source
@@ -164,7 +164,7 @@ tile.nuclearcraft.fission_redstone_port.name=Fission Redstone Port (WIP)
 tile.nuclearcraft.fission_computer_port.name=Fission Computer Port (WIP)
 tile.nuclearcraft.fission_computer_port.desc=Used to access the reactor via OpenComputers.
 
-tile.nuclearcraft.fission_irradiator_port.name=Fission Neutron Irradiator Port
+tile.nuclearcraft.fission_irradiator_port.name=Fission Irradiator Port
 
 tile.nuclearcraft.fission_cell_port.name=Fission Fuel Cell Port
 
@@ -3207,7 +3207,7 @@ nuclearcraft.multiblock_validation.quantum_computer.too_many_qubits=There are %s
 nuclearcraft.collector.jei_name=Collector
 nuclearcraft.fission_moderator.jei_name=Fission Moderator
 nuclearcraft.fission_reflector.jei_name=Fission Reflector
-nuclearcraft.fission_irradiator.jei_name=Fission Neutron Irradiator
+nuclearcraft.fission_irradiator.jei_name=Fission Irradiator
 nuclearcraft.pebble_fission.jei_name=Pebble Bed Fission
 nuclearcraft.solid_fission.jei_name=Solid Fuel Fission
 nuclearcraft.fission_moderator.jei_name=Fission Moderators

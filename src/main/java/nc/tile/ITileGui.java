@@ -1,15 +1,14 @@
 package nc.tile;
 
-import java.util.Set;
-
 import nc.NuclearCraft;
-import nc.handler.PacketHandler;
 import nc.network.NCPacket;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+
+import java.util.Set;
 
 public interface ITileGui<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends NCPacket, INFO extends TileContainerInfo<TILE>> extends ITilePacket<PACKET> {
 	
@@ -31,8 +30,6 @@ public interface ITileGui<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>
 	}
 
 	default void sendTileUpdatePacketToListeners() {
-		for (EntityPlayer player : getTileUpdatePacketListeners()) {
-			PacketHandler.instance.sendTo(getTileUpdatePacket(), (EntityPlayerMP) player);
-		}
+		getTileUpdatePacket().sendTo(getTileUpdatePacketListeners());
 	}
 }

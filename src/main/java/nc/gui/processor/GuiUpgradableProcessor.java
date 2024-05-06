@@ -1,16 +1,14 @@
 package nc.gui.processor;
 
-import java.io.IOException;
-import java.util.List;
-
-import nc.gui.element.*;
+import nc.gui.element.GuiItemRenderer;
+import nc.gui.element.NCButton;
 import nc.init.NCItems;
-import nc.handler.PacketHandler;
 import nc.network.gui.OpenTileGuiPacket;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.NCMath;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -18,6 +16,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.io.IOException;
+import java.util.List;
 
 public abstract class GuiUpgradableProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends UpgradableProcessorContainerInfo<TILE, PACKET, INFO>> extends GuiProcessor<TILE, PACKET, INFO> {
 	
@@ -111,7 +112,7 @@ public abstract class GuiUpgradableProcessor<TILE extends TileEntity & IProcesso
 		@Override
 		protected void keyTyped(char typedChar, int keyCode) throws IOException {
 			if (isEscapeKeyDown(keyCode)) {
-				PacketHandler.instance.sendToServer(new OpenTileGuiPacket(tile));
+				new OpenTileGuiPacket(tile).sendToServer();
 			}
 			else {
 				super.keyTyped(typedChar, keyCode);

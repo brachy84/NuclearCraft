@@ -2,7 +2,7 @@ package nc.multiblock;
 
 import java.util.Set;
 
-import nc.handler.PacketHandler;
+import nc.init.NCPackets;
 import nc.network.multiblock.MultiblockUpdatePacket;
 import nc.tile.multiblock.ITileMultiblockPart;
 import net.minecraft.entity.player.*;
@@ -33,7 +33,7 @@ public interface IPacketMultiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>,
 			return;
 		}
 		for (EntityPlayer player : getMultiblockUpdatePacketListeners()) {
-			PacketHandler.instance.sendTo(packet, (EntityPlayerMP) player);
+			packet.sendTo(player);
 		}
 	}
 	
@@ -45,7 +45,7 @@ public interface IPacketMultiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>,
 		if (packet == null) {
 			return;
 		}
-		PacketHandler.instance.sendTo(packet, (EntityPlayerMP) player);
+		packet.sendTo(player);
 	}
 	
 	default void sendMultiblockUpdatePacketToAll() {
@@ -56,6 +56,6 @@ public interface IPacketMultiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>,
 		if (packet == null) {
 			return;
 		}
-		PacketHandler.instance.sendToAll(packet);
+		packet.sendToAll();
 	}
 }

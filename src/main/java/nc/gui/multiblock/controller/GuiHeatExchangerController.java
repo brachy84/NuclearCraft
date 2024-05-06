@@ -1,21 +1,26 @@
 package nc.gui.multiblock.controller;
 
-import java.util.*;
-
 import nc.Global;
 import nc.gui.element.MultiblockButton;
 import nc.multiblock.hx.HeatExchanger;
-import nc.handler.PacketHandler;
-import nc.network.multiblock.*;
+import nc.network.multiblock.ClearAllMaterialPacket;
+import nc.network.multiblock.HeatExchangerUpdatePacket;
 import nc.tile.TileContainerInfo;
-import nc.tile.hx.*;
-import nc.util.*;
+import nc.tile.hx.IHeatExchangerPart;
+import nc.tile.hx.TileHeatExchangerController;
+import nc.util.Lang;
+import nc.util.NCMath;
+import nc.util.NCUtil;
+import nc.util.StringHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiHeatExchangerController extends GuiMultiblockController<HeatExchanger, IHeatExchangerPart, HeatExchangerUpdatePacket, TileHeatExchangerController, TileContainerInfo<TileHeatExchangerController>> {
 	
@@ -87,7 +92,7 @@ public class GuiHeatExchangerController extends GuiMultiblockController<HeatExch
 	protected void actionPerformed(GuiButton guiButton) {
 		if (multiblock.WORLD.isRemote) {
 			if (guiButton.id == 0 && NCUtil.isModifierKeyDown()) {
-				PacketHandler.instance.sendToServer(new ClearAllMaterialPacket(tile.getTilePos()));
+				new ClearAllMaterialPacket(tile.getTilePos()).sendToServer();
 			}
 		}
 	}

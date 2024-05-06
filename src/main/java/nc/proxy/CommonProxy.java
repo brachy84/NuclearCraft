@@ -18,7 +18,7 @@ import nc.integration.tconstruct.*;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
 import nc.multiblock.*;
-import nc.handler.PacketHandler;
+import nc.init.NCPackets;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
 import nc.recipe.*;
@@ -90,7 +90,7 @@ public class CommonProxy {
 		MultiblockLogic.init();
 		PlacementRule.preInit();
 		
-		PacketHandler.registerMessages(Global.MOD_ID);
+		NCPackets.registerMessages(Global.MOD_ID);
 		
 		if (ModCheck.mekanismLoaded()) {
 			GasHelper.preInit();

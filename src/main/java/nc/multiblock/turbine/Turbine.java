@@ -16,7 +16,6 @@ import nc.multiblock.IPacketMultiblock;
 import nc.multiblock.cuboidal.CuboidalMultiblock;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.ITurbineRotorBlade;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
-import nc.handler.PacketHandler;
 import nc.network.multiblock.TurbineRenderPacket;
 import nc.network.multiblock.TurbineUpdatePacket;
 import nc.recipe.BasicRecipe;
@@ -33,7 +32,6 @@ import nc.util.NBTHelper;
 import nc.util.NCMath;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -481,7 +479,7 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 		if (packet == null) {
 			return;
 		}
-		PacketHandler.instance.sendTo(packet, (EntityPlayerMP) player);
+		packet.sendTo(player);
 	}
 	
 	public void sendRenderPacketToAll() {
@@ -492,7 +490,7 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 		if (packet == null) {
 			return;
 		}
-		PacketHandler.instance.sendToAll(packet);
+		packet.sendToAll();
 	}
 	
 	// Multiblock Validators

@@ -1,9 +1,10 @@
 package nc.gui.multiblock.port;
 
 import nc.gui.GuiInfoTile;
-import nc.gui.element.*;
-import nc.handler.PacketHandler;
-import nc.network.gui.*;
+import nc.gui.element.GuiFluidRenderer;
+import nc.gui.element.NCButton;
+import nc.network.gui.ClearFilterTankPacket;
+import nc.network.gui.ClearTankPacket;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.tile.fission.port.TileFissionHeaterPort;
 import nc.tile.fission.port.TileFissionHeaterPort.FissionHeaterPortContainerInfo;
@@ -61,7 +62,7 @@ public class GuiFissionHeaterPort extends GuiInfoTile<TileFissionHeaterPort, Flu
 		if (tile.getWorld().isRemote) {
 			for (int i = 0; i < 2; ++i) {
 				if (guiButton.id == i && NCUtil.isModifierKeyDown()) {
-					PacketHandler.instance.sendToServer(tile.getTanks().get(i).isEmpty() ? new ClearFilterTankPacket(tile, i) : new ClearTankPacket(tile, i));
+					(tile.getTanks().get(i).isEmpty() ? new ClearFilterTankPacket(tile, i) : new ClearTankPacket(tile, i)).sendToServer();
 					return;
 				}
 			}
