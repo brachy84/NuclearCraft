@@ -37,6 +37,8 @@ v2o.7.0
 * Updated Chinese language file [thanks to WuzgXY and TheRealKamisama!]
 * Updated Russian language file [thanks to thedeadferryman!]
 
+- Removed Paulobrine and Herobrian
+
 v2o.6.2
 
 * The requirement of Forge 14.23.5.2860 has been replaced by a requirement of Forge 14.23.5.2847 or above
@@ -47,6 +49,11 @@ v2o.6.1
 
 v2o.6.0
 
++ Added configs for battery max transfer rates and EU energy tiers
++ Added config for turbine bearing tension leniency
++ Added config for whether inactive or active reactors dissipate casing heat
++ Added config for the radiation inflicted by a feral ghoul attack
+
 * Fixed ore processing config not correctly disabling ore melting recipes and unnecessarily disabling ingot crushing and melting recipes
 
 * Fixed dungeon loot config not being read from config file
@@ -54,6 +61,10 @@ v2o.6.0
 - Removed Common Capabilities support due to unavailable dependency
 
 * Forge 14.23.5.2860 is now required
+
+* A few other minor fixes and changes
+
+- Removed Paulobrine and Herobrian
 
 v2o.5.5
 
