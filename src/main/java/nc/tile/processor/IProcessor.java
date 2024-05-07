@@ -5,7 +5,6 @@ import java.util.*;
 import javax.annotation.*;
 
 import it.unimi.dsi.fastutil.ints.IntList;
-import li.cil.oc.api.network.SimpleComponent;
 import nc.config.NCConfig;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.recipe.*;
@@ -25,12 +24,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional;
 
 public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>> extends ITickable, ITileInventory, ITileFluid, IInterfaceable, ITileGui<TILE, PACKET, INFO> {
-	
-	@Override
-    INFO getContainerInfo();
 	
 	BasicRecipeHandler getRecipeHandler();
 	
@@ -246,7 +241,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 					if (!stack.isItemEqual(productStack)) {
 						return false;
 					}
-					else if (outputSetting == ItemOutputSetting.DEFAULT && stack.getCount() + productMaxStackSize > stack.getMaxStackSize()) {
+					else if (outputSetting == ItemOutputSetting.DEFAULT && stack.getCount() + productMaxStackSize > getItemProductCapacity(slot, stack)) {
 						return false;
 					}
 				}
@@ -282,13 +277,21 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 					if (!tank.getFluid().isFluidEqual(productStack)) {
 						return false;
 					}
-					else if (outputSetting == TankOutputSetting.DEFAULT && tank.getFluidAmount() + productMaxStackSize > tank.getCapacity()) {
+					else if (outputSetting == TankOutputSetting.DEFAULT && tank.getFluidAmount() + productMaxStackSize > getFluidProductCapacity(tank, productStack)) {
 						return false;
 					}
 				}
 			}
 		}
 		return true;
+	}
+
+	default int getItemProductCapacity(int slot, ItemStack stack) {
+		return stack.getMaxStackSize();
+	}
+
+	default int getFluidProductCapacity(Tank tank, FluidStack stack) {
+		return tank.getCapacity();
 	}
 	
 	default void consumeInputs() {

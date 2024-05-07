@@ -1,24 +1,30 @@
 package nc.gui.processor;
 
-import java.io.IOException;
-
 import nc.Global;
 import nc.container.processor.ContainerSorptions;
 import nc.gui.NCGui;
-import nc.gui.element.*;
-import nc.network.PacketHandler;
-import nc.network.gui.*;
+import nc.gui.element.GuiBlockRenderer;
+import nc.gui.element.NCEnumButton;
+import nc.network.gui.ResetItemSorptionsPacket;
+import nc.network.gui.ToggleItemOutputSettingPacket;
+import nc.network.gui.ToggleItemSorptionPacket;
 import nc.network.tile.TileUpdatePacket;
-import nc.tile.*;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
 import nc.tile.internal.inventory.ItemSorption;
 import nc.tile.inventory.ITileInventory;
-import nc.util.*;
+import nc.util.BlockHelper;
+import nc.util.Lang;
+import nc.util.NCUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.io.IOException;
 
 public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO> & ITileInventory, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends NCGui {
 	
@@ -97,11 +103,11 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 							tile.setItemSorption(dirs[j], slot, ItemSorption.NON);
 							((NCEnumButton.ItemSorption) buttonList.get(j)).set(ItemSorption.NON);
 						}
-						PacketHandler.instance.sendToServer(new ResetItemSorptionsPacket(tile, slot, false));
+						new ResetItemSorptionsPacket(tile, slot, false).sendToServer();
 						return;
 					}
 					tile.toggleItemSorption(dirs[i], slot, sorptionType, false);
-					PacketHandler.instance.sendToServer(new ToggleItemSorptionPacket(tile, dirs[i], slot, tile.getItemSorption(dirs[i], slot)));
+					new ToggleItemSorptionPacket(tile, dirs[i], slot, tile.getItemSorption(dirs[i], slot)).sendToServer();
 					return;
 				}
 			}
@@ -119,11 +125,11 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 							tile.setItemSorption(dirs[j], slot, sorption);
 							((NCEnumButton.ItemSorption) buttonList.get(j)).set(sorption);
 						}
-						PacketHandler.instance.sendToServer(new ResetItemSorptionsPacket(tile, slot, true));
+						new ResetItemSorptionsPacket(tile, slot, true).sendToServer();
 						return;
 					}
 					tile.toggleItemSorption(dirs[i], slot, sorptionType, true);
-					PacketHandler.instance.sendToServer(new ToggleItemSorptionPacket(tile, dirs[i], slot, tile.getItemSorption(dirs[i], slot)));
+					new ToggleItemSorptionPacket(tile, dirs[i], slot, tile.getItemSorption(dirs[i], slot)).sendToServer();
 				}
 			}
 		}
@@ -170,7 +176,7 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
 					tile.setItemOutputSetting(slot, tile.getItemOutputSetting(slot).next(false));
-					PacketHandler.instance.sendToServer(new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)));
+					new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)).sendToServer();
 				}
 			}
 		}
@@ -181,7 +187,7 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
 					tile.setItemOutputSetting(slot, tile.getItemOutputSetting(slot).next(true));
-					PacketHandler.instance.sendToServer(new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)));
+					new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)).sendToServer();
 				}
 			}
 		}

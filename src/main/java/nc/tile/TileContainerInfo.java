@@ -2,6 +2,7 @@ package nc.tile;
 
 import nc.container.ContainerFunction;
 import nc.gui.GuiFunction;
+import nc.gui.GuiInfoTileFunction;
 import nc.handler.GuiHandler;
 import nc.util.Lazy.LazyInt;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -33,6 +34,10 @@ public class TileContainerInfo<TILE extends TileEntity> {
 		this.guiFunction = guiFunction;
 		
 		guiId = new LazyInt(() -> GuiHandler.getGuiId(name));
+	}
+
+	public TileContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
+		this(modId, name, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction));
 	}
 	
 	public Object getNewContainer(int id, EntityPlayer player, TILE tile) {

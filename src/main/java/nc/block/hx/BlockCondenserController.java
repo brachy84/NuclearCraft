@@ -73,7 +73,7 @@ public class BlockCondenserController extends BlockHeatExchangerPart implements 
 			if (tile instanceof TileCondenserController controller) {
                 if (controller.isMultiblockAssembled()) {
 					NCCriterions.CONDENSER_ASSEMBLED.trigger((EntityPlayerMP) player);
-					player.openGui(NuclearCraft.instance, 103, world, pos.getX(), pos.getY(), pos.getZ());
+					controller.openGui(world, pos, player);
 					return true;
 				}
 			}

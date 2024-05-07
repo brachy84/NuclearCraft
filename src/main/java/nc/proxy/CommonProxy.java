@@ -18,7 +18,7 @@ import nc.integration.tconstruct.*;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
 import nc.multiblock.*;
-import nc.network.PacketHandler;
+import nc.init.NCPackets;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
 import nc.recipe.*;
@@ -90,7 +90,7 @@ public class CommonProxy {
 		MultiblockLogic.init();
 		PlacementRule.preInit();
 		
-		PacketHandler.registerMessages(Global.MOD_ID);
+		NCPackets.registerMessages(Global.MOD_ID);
 		
 		if (ModCheck.mekanismLoaded()) {
 			GasHelper.preInit();
@@ -172,11 +172,11 @@ public class CommonProxy {
 		
 		MinecraftForge.EVENT_BUS.register(new ItemUseHandler());
 
-		RecipeStats.init();
-
 		NCRecipes.postInit();
 		
 		PlacementRule.postInit();
+
+		RecipeStats.init();
 		
 		if (ModCheck.projectELoaded() && register_projecte_emc) {
 			NCProjectE.addEMCValues();

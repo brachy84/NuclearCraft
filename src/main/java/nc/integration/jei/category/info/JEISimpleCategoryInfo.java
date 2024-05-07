@@ -1,18 +1,16 @@
 package nc.integration.jei.category.info;
 
-import java.util.*;
-
-import nc.integration.jei.category.*;
-import nc.integration.jei.wrapper.*;
+import nc.integration.jei.category.JEISimpleRecipeCategory;
+import nc.integration.jei.wrapper.JEIRecipeWrapperFunction;
+import nc.integration.jei.wrapper.JEISimpleRecipeWrapper;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
 import nc.tile.TileContainerInfoHelper;
 import nc.util.CollectionHelper;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
+
+import java.util.List;
 
 public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPER>> extends JEICategoryInfo<WRAPPER, JEISimpleRecipeCategory<WRAPPER>, JEISimpleCategoryInfo<WRAPPER>> {
-	
-	public final String modId;
-	public final String name;
 	
 	public final int itemInputSize;
 	public final int fluidInputSize;
@@ -62,16 +60,9 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 	public final int jeiTooltipW;
 	public final int jeiTooltipH;
 	
-	public final int jeiClickAreaX;
-	public final int jeiClickAreaY;
-	public final int jeiClickAreaW;
-	public final int jeiClickAreaH;
-	
-	public JEISimpleCategoryInfo(String modId, String name, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, JEISimpleRecipeCategory<WRAPPER>, JEISimpleCategoryInfo<WRAPPER>> jeiRecipeFunction, List<Object> jeiCrafters, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-		super(JEISimpleRecipeCategory::new, jeiRecipeClass, jeiRecipeFunction, jeiCrafters);
-		this.modId = modId;
-		this.name = name;
-		
+	public JEISimpleCategoryInfo(String modId, String name, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, JEISimpleRecipeCategory<WRAPPER>, JEISimpleCategoryInfo<WRAPPER>> jeiRecipeFunction, List<Object> jeiCrafters, List<JEIContainerConnection> jeiContainerConnections, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH) {
+		super(modId, name, JEISimpleRecipeCategory::new, jeiRecipeClass, jeiRecipeFunction, jeiCrafters, jeiContainerConnections);
+
 		itemInputSize = itemInputGuiXYWH.size();
 		fluidInputSize = fluidInputGuiXYWH.size();
 		itemOutputSize = itemOutputGuiXYWH.size();
@@ -119,21 +110,6 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 		jeiTooltipY = jeiTooltipXYWH[1];
 		jeiTooltipW = jeiTooltipXYWH[2];
 		jeiTooltipH = jeiTooltipXYWH[3];
-		
-		jeiClickAreaX = jeiClickAreaXYWH[0];
-		jeiClickAreaY = jeiClickAreaXYWH[1];
-		jeiClickAreaW = jeiClickAreaXYWH[2];
-		jeiClickAreaH = jeiClickAreaXYWH[3];
-	}
-	
-	@Override
-	public String getModId() {
-		return modId;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
 	}
 	
 	@Override
@@ -210,6 +186,11 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 	public List<int[]> getItemOutputStackXY() {
 		return itemOutputStackXY;
 	}
+
+	@Override
+	public BasicRecipeHandler getRecipeHandler() {
+		return NCRecipes.getHandler(getName());
+	}
 	
 	@Override
 	public String getJEICategoryUid() {
@@ -264,35 +245,5 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 	@Override
 	public int getJEITooltipH() {
 		return jeiTooltipH;
-	}
-	
-	@Override
-	public int getJEIClickAreaX() {
-		return jeiClickAreaX;
-	}
-	
-	@Override
-	public int getJEIClickAreaY() {
-		return jeiClickAreaY;
-	}
-	
-	@Override
-	public int getJEIClickAreaW() {
-		return jeiClickAreaW;
-	}
-	
-	@Override
-	public int getJEIClickAreaH() {
-		return jeiClickAreaH;
-	}
-	
-	@Override
-	public List<Class<? extends Container>> getContainerClasses() {
-		return Arrays.asList();
-	}
-	
-	@Override
-	public List<Class<? extends GuiContainer>> getGuiClasses() {
-		return Arrays.asList();
 	}
 }

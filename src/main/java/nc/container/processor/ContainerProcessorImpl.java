@@ -1,14 +1,21 @@
 package nc.container.processor;
 
-import nc.network.tile.multiblock.*;
+import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
+import nc.network.tile.multiblock.SaltFissionHeaterUpdatePacket;
+import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
+import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
 import nc.network.tile.processor.EnergyProcessorUpdatePacket;
-import nc.tile.fission.*;
+import nc.tile.fission.TileFissionIrradiator;
 import nc.tile.fission.TileFissionIrradiator.FissionIrradiatorContainerInfo;
+import nc.tile.fission.TileSaltFissionHeater;
 import nc.tile.fission.TileSaltFissionHeater.SaltFissionHeaterContainerInfo;
+import nc.tile.fission.TileSaltFissionVessel;
 import nc.tile.fission.TileSaltFissionVessel.SaltFissionVesselContainerInfo;
+import nc.tile.fission.TileSolidFissionCell;
 import nc.tile.fission.TileSolidFissionCell.SolidFissionCellContainerInfo;
 import nc.tile.processor.TileProcessorImpl.*;
-import nc.tile.processor.info.ProcessorContainerInfoImpl.*;
+import nc.tile.processor.info.ProcessorContainerInfoImpl.BasicProcessorContainerInfo;
+import nc.tile.processor.info.ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo;
 import nc.tile.radiation.TileRadiationScrubber;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -167,10 +174,17 @@ public class ContainerProcessorImpl {
 			super(player, tile);
 		}
 	}
-	
+
 	public static class ContainerRockCrusher extends ContainerBasicUpgradableProcessor<TileRockCrusher> {
-		
+
 		public ContainerRockCrusher(EntityPlayer player, TileRockCrusher tile) {
+			super(player, tile);
+		}
+	}
+
+	public static class ContainerElectricFurnace extends ContainerBasicUpgradableProcessor<TileElectricFurnace> {
+
+		public ContainerElectricFurnace(EntityPlayer player, TileElectricFurnace tile) {
 			super(player, tile);
 		}
 	}

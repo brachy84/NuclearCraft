@@ -1,20 +1,20 @@
 package nc.gui.multiblock.port;
 
 import nc.gui.GuiInfoTile;
-import nc.gui.element.*;
-import nc.network.PacketHandler;
-import nc.network.gui.*;
+import nc.gui.element.GuiFluidRenderer;
+import nc.gui.element.NCButton;
+import nc.network.gui.ClearFilterTankPacket;
+import nc.network.gui.ClearTankPacket;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.port.TileFissionVesselPort;
-import nc.tile.fission.port.TileFissionVesselPort.FissionVesselPortContainerInfo;
 import nc.tile.internal.fluid.Tank;
 import nc.util.NCUtil;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-public class GuiFissionVesselPort extends GuiInfoTile<TileFissionVesselPort, FluidPortUpdatePacket, FissionVesselPortContainerInfo> {
+public class GuiFissionVesselPort extends GuiInfoTile<TileFissionVesselPort, FluidPortUpdatePacket, TileContainerInfo<TileFissionVesselPort>> {
 	
 	public GuiFissionVesselPort(Container inventory, EntityPlayer player, TileFissionVesselPort tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);
@@ -62,7 +62,7 @@ public class GuiFissionVesselPort extends GuiInfoTile<TileFissionVesselPort, Flu
 		if (tile.getWorld().isRemote) {
 			for (int i = 0; i < 2; ++i) {
 				if (guiButton.id == i && NCUtil.isModifierKeyDown()) {
-					PacketHandler.instance.sendToServer(tile.getTanks().get(i).isEmpty() ? new ClearFilterTankPacket(tile, i) : new ClearTankPacket(tile, i));
+					(tile.getTanks().get(i).isEmpty() ? new ClearFilterTankPacket(tile, i) : new ClearTankPacket(tile, i)).sendToServer();
 					return;
 				}
 			}

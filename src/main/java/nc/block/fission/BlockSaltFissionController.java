@@ -2,7 +2,6 @@ package nc.block.fission;
 
 import static nc.block.property.BlockProperties.*;
 
-import nc.NuclearCraft;
 import nc.advancement.NCCriterions;
 import nc.block.tile.IActivatable;
 import nc.tile.fission.TileSaltFissionController;
@@ -69,7 +68,7 @@ public class BlockSaltFissionController extends BlockFissionPart implements IAct
 			if (tile instanceof TileSaltFissionController controller) {
                 if (controller.isMultiblockAssembled()) {
 					NCCriterions.SALT_FISSION_ASSEMBLED.trigger((EntityPlayerMP) player);
-					player.openGui(NuclearCraft.instance, 102, world, pos.getX(), pos.getY(), pos.getZ());
+					controller.openGui(world, pos, player);
 					return true;
 				}
 			}

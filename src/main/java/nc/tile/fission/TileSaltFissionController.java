@@ -4,24 +4,31 @@ import static nc.block.property.BlockProperties.FACING_ALL;
 
 import java.util.Iterator;
 
-import nc.container.multiblock.controller.ContainerSaltFissionController;
+import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
+import nc.tile.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileSaltFissionController extends TileFissionPart implements IFissionController<TileSaltFissionController> {
-	
+
+	protected final TileContainerInfo<TileSaltFissionController> info = TileInfoHandler.getTileContainerInfo("salt_fission_controller");
+
 	public TileSaltFissionController() {
 		super(CuboidalPartPositionType.WALL);
 	}
-	
+
 	@Override
 	public String getLogicID() {
 		return "molten_salt";
+	}
+
+	@Override
+	public TileContainerInfo<TileSaltFissionController> getContainerInfo() {
+		return info;
 	}
 	
 	@Override
@@ -36,11 +43,6 @@ public class TileSaltFissionController extends TileFissionPart implements IFissi
 	@Override
 	public void onMachineBroken() {
 		super.onMachineBroken();
-	}
-	
-	@Override
-	public ContainerSaltFissionController getContainer(EntityPlayer player) {
-		return new ContainerSaltFissionController(player, this);
 	}
 	
 	@Override

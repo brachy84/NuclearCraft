@@ -1,16 +1,20 @@
 package nc.container.multiblock.port;
 
-import nc.container.slot.*;
-import nc.multiblock.fission.*;
+import nc.container.slot.SlotFiltered;
+import nc.container.slot.SlotFurnace;
+import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.FissionReactorLogic;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
-import nc.recipe.*;
-import nc.tile.fission.*;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
+import nc.tile.TileContainerInfo;
+import nc.tile.fission.IFissionPart;
+import nc.tile.fission.TileSolidFissionCell;
 import nc.tile.fission.port.TileFissionCellPort;
-import nc.tile.fission.port.TileFissionCellPort.FissionCellPortContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerFissionCellPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionCellPort, TileSolidFissionCell, ItemPortUpdatePacket, FissionCellPortContainerInfo> {
+public class ContainerFissionCellPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionCellPort, TileSolidFissionCell, ItemPortUpdatePacket, TileContainerInfo<TileFissionCellPort>> {
 	
 	public ContainerFissionCellPort(EntityPlayer player, TileFissionCellPort tile) {
 		super(player, tile);

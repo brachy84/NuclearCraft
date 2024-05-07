@@ -3,6 +3,7 @@ package nc.network.multiblock;
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.*;
 import nc.network.NCPacket;
+import nc.tile.TileContainerInfo;
 import nc.tile.multiblock.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -35,7 +36,7 @@ public abstract class MultiblockUpdatePacket extends NCPacket {
 		writePos(buf, pos);
 	}
 	
-	public static abstract class Handler<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & IPacketMultiblock<MULTIBLOCK, T, PACKET>, T extends ITileMultiblockPart<MULTIBLOCK, T>, PACKET extends MultiblockUpdatePacket, CONTROLLER extends IMultiblockController<MULTIBLOCK, T, PACKET, CONTROLLER>, MESSAGE extends MultiblockUpdatePacket> implements IMessageHandler<MESSAGE, IMessage> {
+	public static abstract class Handler<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & IPacketMultiblock<MULTIBLOCK, T, PACKET>, T extends ITileMultiblockPart<MULTIBLOCK, T>, PACKET extends MultiblockUpdatePacket, CONTROLLER extends TileEntity & IMultiblockController<MULTIBLOCK, T, PACKET, CONTROLLER, INFO>, INFO extends TileContainerInfo<CONTROLLER>, MESSAGE extends MultiblockUpdatePacket> implements IMessageHandler<MESSAGE, IMessage> {
 		
 		protected final Class<CONTROLLER> controllerClass;
 		

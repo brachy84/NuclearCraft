@@ -129,6 +129,9 @@ public class CraftingRecipeHandler {
 		if (register_processor[19]) {
 			addShapedOreRecipe(NCBlocks.rock_crusher, "PMP", "ACA", "PTP", 'C', "chassis", 'P', "plateAdvanced", 'A', "actuator", 'T', "ingotTough", 'M', "motor");
 		}
+		if (register_processor[20]) {
+			addShapedOreRecipe(NCBlocks.electric_furnace, "PSP", "IFI", "BIB", 'F', Blocks.FURNACE, 'P', "plateBasic", 'S', "solenoidCopper", 'I', "ingotIron", 'B', Items.BRICK);
+		}
 		
 		addShapedOreRecipe(NCBlocks.machine_interface, " A ", "MCM", " S ", 'C', "chassis", 'A', "actuator", 'M', "motor", 'S', "servo");
 		

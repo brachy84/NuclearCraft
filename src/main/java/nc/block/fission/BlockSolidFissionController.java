@@ -69,7 +69,7 @@ public class BlockSolidFissionController extends BlockFissionPart implements IAc
 			if (tile instanceof TileSolidFissionController controller) {
                 if (controller.isMultiblockAssembled()) {
 					NCCriterions.SOLID_FISSION_ASSEMBLED.trigger((EntityPlayerMP) player);
-					player.openGui(NuclearCraft.instance, 101, world, pos.getX(), pos.getY(), pos.getZ());
+					controller.openGui(world, pos, player);
 					return true;
 				}
 			}

@@ -39,7 +39,7 @@ public abstract class BlockSaltFissionHeater extends BlockFissionPart {
 						heater.onFilterChanged(0);
 					}
 					else {
-						player.openGui(NuclearCraft.instance, 203, world, pos.getX(), pos.getY(), pos.getZ());
+						heater.openGui(world, pos, player);
 					}
 					return true;
 				}

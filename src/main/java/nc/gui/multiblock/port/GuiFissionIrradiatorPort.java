@@ -3,13 +3,12 @@ package nc.gui.multiblock.port;
 import nc.gui.GuiInfoTile;
 import nc.gui.element.GuiItemRenderer;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.port.TileFissionIrradiatorPort;
-import nc.tile.fission.port.TileFissionIrradiatorPort.FissionIrradiatorPortContainerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-public class GuiFissionIrradiatorPort extends GuiInfoTile<TileFissionIrradiatorPort, ItemPortUpdatePacket, FissionIrradiatorPortContainerInfo> {
+public class GuiFissionIrradiatorPort extends GuiInfoTile<TileFissionIrradiatorPort, ItemPortUpdatePacket, TileContainerInfo<TileFissionIrradiatorPort>> {
 	
 	public GuiFissionIrradiatorPort(Container inventory, EntityPlayer player, TileFissionIrradiatorPort tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);

@@ -1,30 +1,41 @@
 package nc.tile.fission.port;
 
-import static nc.config.NCConfig.enable_mek_gas;
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.ModCheck;
+import nc.handler.TileInfoHandler;
+import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
-import nc.tile.fluid.*;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
+import nc.tile.fluid.ITileFilteredFluid;
+import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
-import nc.util.*;
+import nc.util.CapabilityHelper;
+import nc.util.Lang;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<PORT, TARGET> & ITileFilteredFluid, TARGET extends IFissionPortTarget<PORT, TARGET> & ITileFilteredFluid> extends TileFissionPort<PORT, TARGET> implements ITileFilteredFluid {
-	
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static nc.config.NCConfig.enable_mek_gas;
+import static nc.util.PosHelper.DEFAULT_NON;
+
+public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<PORT, TARGET> & ITileFilteredFluid, TARGET extends IFissionPortTarget<PORT, TARGET> & ITileFilteredFluid> extends TileFissionPort<PORT, TARGET> implements ITileFilteredFluid, ITileGui<PORT, FluidPortUpdatePacket, TileContainerInfo<PORT>> {
+
+	protected final TileContainerInfo<PORT> info;
+
 	protected final @Nonnull List<Tank> tanks;
 	protected final @Nonnull List<Tank> filterTanks;
 	protected final int capacity;
@@ -36,23 +47,47 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	protected @Nonnull GasTileWrapper gasWrapper;
 	
 	protected final BasicRecipeHandler recipeHandler;
+
+	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
-	public TileFissionFluidPort(Class<PORT> portClass, int capacity, List<String> validFluids, BasicRecipeHandler recipeHandler) {
+	public TileFissionFluidPort(String name, Class<PORT> portClass, int capacity, List<String> validFluids, BasicRecipeHandler recipeHandler) {
 		super(portClass);
+		info = TileInfoHandler.getTileContainerInfo(name);
+
 		tanks = Lists.newArrayList(new Tank(capacity, validFluids), new Tank(capacity, new ArrayList<>()));
 		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ArrayList<>()));
 		this.capacity = capacity;
+
 		fluidSides = ITileFluid.getDefaultFluidSides(this);
 		gasWrapper = new GasTileWrapper(this);
+
 		this.recipeHandler = recipeHandler;
+	}
+
+	@Override
+	public TileContainerInfo<PORT> getContainerInfo() {
+		return info;
+	}
+
+	@Override
+	public int getTankCapacityPerConnection() {
+		return 36;
+	}
+
+	@Override
+	public Object getFilterKey() {
+		return getFilterTanks().get(0).getFluidName();
 	}
 	
 	@Override
 	public void update() {
 		super.update();
-		EnumFacing facing = getPartPosition().getFacing();
-		if (!world.isRemote && facing != null && !getTanks().get(1).isEmpty() && getTankSorption(facing, 1).canDrain()) {
-			pushFluidToSide(facing);
+		if (!world.isRemote) {
+			EnumFacing facing = getPartPosition().getFacing();
+			if (facing != null && !getTanks().get(1).isEmpty() && getTankSorption(facing, 1).canDrain()) {
+				pushFluidToSide(facing);
+			}
+			sendTileUpdatePacketToListeners();
 		}
 	}
 	
@@ -144,6 +179,28 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	@Override
 	public boolean hasConfigurableFluidConnections() {
 		return true;
+	}
+
+	// ITileGui
+
+	@Override
+	public Set<EntityPlayer> getTileUpdatePacketListeners() {
+		return updatePacketListeners;
+	}
+
+	@Override
+	public FluidPortUpdatePacket getTileUpdatePacket() {
+		return new FluidPortUpdatePacket(pos, masterPortPos, getTanks(), getFilterTanks());
+	}
+
+	@Override
+	public void onTileUpdatePacket(FluidPortUpdatePacket message) {
+		masterPortPos = message.masterPortPos;
+		if (DEFAULT_NON.equals(masterPortPos) ^ masterPort == null) {
+			refreshMasterPort();
+		}
+		Tank.TankInfo.readInfoList(message.tankInfos, getTanks());
+		Tank.TankInfo.readInfoList(message.filterTankInfos, getFilterTanks());
 	}
 	
 	// IMultitoolLogic

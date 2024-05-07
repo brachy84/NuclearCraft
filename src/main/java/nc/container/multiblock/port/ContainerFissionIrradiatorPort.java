@@ -1,16 +1,20 @@
 package nc.container.multiblock.port;
 
-import nc.container.slot.*;
-import nc.multiblock.fission.*;
+import nc.container.slot.SlotFiltered;
+import nc.container.slot.SlotFurnace;
+import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.FissionReactorLogic;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
-import nc.recipe.*;
-import nc.tile.fission.*;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
+import nc.tile.TileContainerInfo;
+import nc.tile.fission.IFissionPart;
+import nc.tile.fission.TileFissionIrradiator;
 import nc.tile.fission.port.TileFissionIrradiatorPort;
-import nc.tile.fission.port.TileFissionIrradiatorPort.FissionIrradiatorPortContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerFissionIrradiatorPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionIrradiatorPort, TileFissionIrradiator, ItemPortUpdatePacket, FissionIrradiatorPortContainerInfo> {
+public class ContainerFissionIrradiatorPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionIrradiatorPort, TileFissionIrradiator, ItemPortUpdatePacket, TileContainerInfo<TileFissionIrradiatorPort>> {
 	
 	public ContainerFissionIrradiatorPort(EntityPlayer player, TileFissionIrradiatorPort tile) {
 		super(player, tile);

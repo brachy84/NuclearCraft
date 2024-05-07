@@ -162,10 +162,17 @@ public class GuiProcessorImpl {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-	
+
 	public static class GuiRockCrusher extends GuiBasicUpgradableProcessor<TileRockCrusher> {
-		
+
 		public GuiRockCrusher(Container inventory, EntityPlayer player, TileRockCrusher tile, String textureLocation) {
+			super(inventory, player, tile, textureLocation);
+		}
+	}
+
+	public static class GuiElectricFurnace extends GuiBasicUpgradableProcessor<TileElectricFurnace> {
+
+		public GuiElectricFurnace(Container inventory, EntityPlayer player, TileElectricFurnace tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}

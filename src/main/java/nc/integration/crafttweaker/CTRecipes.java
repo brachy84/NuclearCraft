@@ -580,6 +580,36 @@ public class CTRecipes {
 			CraftTweakerAPI.apply(new CTClearRecipes(NCRecipes.rock_crusher));
 		}
 	}
+
+	@ZenClass("mods.nuclearcraft.ElectricFurnace")
+	@ZenRegister
+	public static class ElectricFurnaceMethods {
+
+		@ZenMethod
+		public static BasicRecipeHandler getRecipeHandler() {
+			return NCRecipes.electric_furnace;
+		}
+
+		@ZenMethod
+		public static void addRecipe(IIngredient input, IIngredient output, @Optional(valueDouble = 1D) double timeMultiplier, @Optional(valueDouble = 1D) double powerMultiplier, @Optional double processRadiation) {
+			CraftTweakerAPI.apply(new CTAddRecipe(NCRecipes.electric_furnace, Lists.newArrayList(input, output, timeMultiplier, powerMultiplier, processRadiation)));
+		}
+
+		@ZenMethod
+		public static void removeRecipeWithInput(IIngredient input) {
+			CraftTweakerAPI.apply(new CTRemoveRecipe(NCRecipes.electric_furnace, IngredientSorption.INPUT, Lists.newArrayList(input)));
+		}
+
+		@ZenMethod
+		public static void removeRecipeWithOutput(IIngredient output) {
+			CraftTweakerAPI.apply(new CTRemoveRecipe(NCRecipes.electric_furnace, IngredientSorption.OUTPUT, Lists.newArrayList(output)));
+		}
+
+		@ZenMethod
+		public static void removeAllRecipes() {
+			CraftTweakerAPI.apply(new CTClearRecipes(NCRecipes.electric_furnace));
+		}
+	}
 	
 	@ZenClass("mods.nuclearcraft.DecayGenerator")
 	@ZenRegister

@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import it.unimi.dsi.fastutil.ints.*;
 import nc.ModCheck;
+import nc.config.NCConfig;
 import nc.recipe.ingredient.*;
 import nc.tile.internal.fluid.Tank;
 import nc.util.*;
@@ -238,9 +239,12 @@ public class RecipeHelper {
 		if (AbstractRecipeHandler.requiresFluidFixing(object)) {
 			object = RecipeHelper.fixFluidStack(object);
 		}
-		if (fluidNeedsExpanding() && object instanceof FluidIngredient) {
-			return checkedFluidIngredient(buildFluidIngredient(expandedFluidStackList((FluidIngredient) object)));
+
+		boolean mekanismExpansion = fluidNeedsMekanismExpansion(), techRebornExpansion = fluidNeedsTechRebornExpansion();
+		if ((mekanismExpansion || techRebornExpansion) && object instanceof FluidIngredient) {
+			return checkedFluidIngredient(buildFluidIngredient(expandedFluidStackList((FluidIngredient) object, mekanismExpansion, techRebornExpansion)));
 		}
+
 		if (object instanceof IFluidIngredient) {
 			return checkedFluidIngredient((IFluidIngredient) object);
 		}
@@ -281,15 +285,19 @@ public class RecipeHelper {
 		return ingredient == null || !ingredient.isValid() ? null : ingredient;
 	}
 	
-	private static boolean fluidNeedsExpanding() {
-		return ModCheck.mekanismLoaded() || ModCheck.techRebornLoaded();
+	private static boolean fluidNeedsMekanismExpansion() {
+		return NCConfig.enable_fluid_recipe_expansion[0] && ModCheck.mekanismLoaded();
+	}
+
+	private static boolean fluidNeedsTechRebornExpansion() {
+		return NCConfig.enable_fluid_recipe_expansion[1] && ModCheck.techRebornLoaded();
 	}
 	
 	/** For Mekanism and Tech Reborn fluids */
-	public static List<FluidIngredient> expandedFluidStackList(FluidIngredient stack) {
+	public static List<FluidIngredient> expandedFluidStackList(FluidIngredient stack, boolean mekanismExpansion, boolean techRebornExpansion) {
 		List<FluidIngredient> fluidStackList = Lists.newArrayList(stack);
 		
-		if (ModCheck.mekanismLoaded() && !stack.fluidName.equals("helium")) {
+		if (mekanismExpansion && !stack.fluidName.equals("helium")) {
 			if (GasHelper.TRANSLATION_MAP.containsKey(stack.fluidName)) {
 				fluidStackList.add(AbstractRecipeHandler.fluidStack(GasHelper.TRANSLATION_MAP.get(stack.fluidName), stack.stack.amount));
 			}
@@ -298,7 +306,7 @@ public class RecipeHelper {
 			}
 		}
 		
-		if (ModCheck.techRebornLoaded()) {
+		if (techRebornExpansion) {
 			fluidStackList.add(AbstractRecipeHandler.fluidStack("fluid" + stack.fluidName, stack.stack.amount));
 		}
 		

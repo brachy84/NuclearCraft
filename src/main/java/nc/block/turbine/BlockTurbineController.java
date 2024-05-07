@@ -73,7 +73,7 @@ public class BlockTurbineController extends BlockTurbinePart implements IActivat
 			if (tile instanceof TileTurbineController controller) {
                 if (controller.isMultiblockAssembled()) {
 					NCCriterions.TURBINE_ASSEMBLED.trigger((EntityPlayerMP) player);
-					player.openGui(NuclearCraft.instance, 104, world, pos.getX(), pos.getY(), pos.getZ());
+					controller.openGui(world, pos, player);
 					return true;
 				}
 			}

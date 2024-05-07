@@ -4,6 +4,8 @@ import java.util.*;
 
 import mezz.jei.api.IGuiHelper;
 import nc.handler.TileInfoHandler;
+import nc.integration.jei.category.JEIProcessorRecipeCategory;
+import nc.integration.jei.category.info.JEIProcessorCategoryInfo;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.radiation.RadiationHelper;
 import nc.recipe.BasicRecipe;
@@ -14,13 +16,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 
 public abstract class JEIProcessorRecipeWrapper<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, WRAPPER extends JEIProcessorRecipeWrapper<TILE, PACKET, INFO, WRAPPER>> extends JEIRecipeWrapper {
-	
+
 	protected final INFO info;
 	
 	protected final int tooltipX, tooltipY, tooltipW, tooltipH;
 	
 	protected JEIProcessorRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
-		this(guiHelper, TileInfoHandler.getProcessorContainerInfo(name), recipe);
+		this(guiHelper, TileInfoHandler.<WRAPPER, JEIProcessorRecipeCategory<TILE, PACKET, INFO, WRAPPER>, JEIProcessorCategoryInfo<TILE, PACKET, INFO, WRAPPER>>getJEICategoryInfo(name).containerInfo, recipe);
 	}
 	
 	private JEIProcessorRecipeWrapper(IGuiHelper guiHelper, INFO info, BasicRecipe recipe) {

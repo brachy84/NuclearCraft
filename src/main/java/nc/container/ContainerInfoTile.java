@@ -1,10 +1,11 @@
 package nc.container;
 
+import nc.network.NCPacket;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.*;
 import net.minecraft.tileentity.TileEntity;
 
-public abstract class ContainerInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends NCContainer {
+public abstract class ContainerInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends NCPacket, INFO extends TileContainerInfo<TILE>> extends NCContainer {
 	
 	protected final INFO info;
 	

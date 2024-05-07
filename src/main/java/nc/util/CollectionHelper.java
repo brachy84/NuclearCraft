@@ -1,12 +1,17 @@
 package nc.util;
 
-import java.util.*;
-
-import it.unimi.dsi.fastutil.doubles.*;
-import it.unimi.dsi.fastutil.floats.*;
-import it.unimi.dsi.fastutil.ints.*;
-import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.floats.FloatList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+
+import java.util.*;
+import java.util.function.ObjIntConsumer;
 
 public class CollectionHelper {
 	
@@ -247,8 +252,17 @@ public class CollectionHelper {
 		}
 		return array;
 	}
+
+	// Iteration
+
+	public static <T> void forEachIndexed(Iterable<T> iterable, ObjIntConsumer<T> consumer) {
+		int i = 0;
+		for (T t : iterable) {
+			consumer.accept(t, i++);
+		}
+	}
 	
-	// Other methods
+	// Other
 	
 	public static int[] increasingArray(int start, int length) {
 		int[] array = new int[length];

@@ -1,25 +1,35 @@
 package nc.integration.jei.wrapper;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import mezz.jei.api.IGuiHelper;
 import nc.integration.jei.category.info.JEISimpleCategoryInfo;
-import nc.network.tile.multiblock.*;
+import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
+import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
+import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
 import nc.network.tile.processor.EnergyProcessorUpdatePacket;
 import nc.radiation.RadiationHelper;
-import nc.recipe.*;
-import nc.tile.fission.*;
+import nc.recipe.BasicRecipe;
+import nc.recipe.RecipeStats;
+import nc.tile.fission.TileFissionIrradiator;
 import nc.tile.fission.TileFissionIrradiator.FissionIrradiatorContainerInfo;
+import nc.tile.fission.TileSaltFissionVessel;
 import nc.tile.fission.TileSaltFissionVessel.SaltFissionVesselContainerInfo;
+import nc.tile.fission.TileSolidFissionCell;
 import nc.tile.fission.TileSolidFissionCell.SolidFissionCellContainerInfo;
 import nc.tile.processor.TileProcessorImpl.*;
-import nc.tile.processor.info.ProcessorContainerInfoImpl.*;
+import nc.tile.processor.info.ProcessorContainerInfoImpl.BasicProcessorContainerInfo;
+import nc.tile.processor.info.ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo;
 import nc.tile.radiation.TileRadiationScrubber;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.NCMath;
+import nc.util.UnitHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static nc.config.NCConfig.fission_decay_mechanics;
+import static nc.config.NCConfig.machine_update_rate;
 
 public class JEIRecipeWrapperImpl {
 	
@@ -176,10 +186,17 @@ public class JEIRecipeWrapperImpl {
 			super(name, guiHelper, recipe);
 		}
 	}
-	
+
 	public static class RockCrusherRecipeWrapper extends JEIBasicUpgradableProcessorRecipeWrapper<TileRockCrusher, RockCrusherRecipeWrapper> {
-		
+
 		public RockCrusherRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
+			super(name, guiHelper, recipe);
+		}
+	}
+
+	public static class ElectricFurnaceRecipeWrapper extends JEIBasicUpgradableProcessorRecipeWrapper<TileElectricFurnace, ElectricFurnaceRecipeWrapper> {
+
+		public ElectricFurnaceRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
@@ -448,7 +465,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getFissionFuelTime() / 80D);
+			return (int) (getFissionFuelTime() / 16D);
 		}
 		
 		protected int getFissionFuelTime() {
@@ -541,7 +558,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getFissionFuelTime() / 80D);
+			return (int) (getFissionFuelTime() / 16D);
 		}
 		
 		protected int getFissionFuelTime() {
@@ -666,7 +683,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (144D * getSaltFissionFuelTime() / 80D);
+			return (int) (9D * getSaltFissionFuelTime());
 		}
 		
 		protected double getSaltFissionFuelTime() {

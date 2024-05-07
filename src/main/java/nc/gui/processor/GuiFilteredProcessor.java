@@ -1,10 +1,8 @@
 package nc.gui.processor;
 
-import java.util.List;
-
-import nc.gui.element.*;
-import nc.network.PacketHandler;
-import nc.network.gui.*;
+import nc.gui.element.GuiFluidRenderer;
+import nc.gui.element.GuiItemRenderer;
+import nc.network.gui.ClearFilterTankPacket;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.ITileFiltered;
 import nc.tile.fluid.ITileFilteredFluid;
@@ -17,6 +15,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+
+import java.util.List;
 
 public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO> & ITileFiltered, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>> extends GuiProcessor<TILE, PACKET, INFO> {
 	
@@ -69,7 +69,7 @@ public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PAC
 	@Override
 	protected void clearTankAction(int tankNumber) {
 		if (tile instanceof ITileFilteredFluid && tile.getTanks().get(tankNumber).isEmpty()) {
-			PacketHandler.instance.sendToServer(new ClearFilterTankPacket((ITileFilteredFluid) tile, tankNumber));
+			new ClearFilterTankPacket((ITileFilteredFluid) tile, tankNumber).sendToServer();
 		}
 		else {
 			super.clearTankAction(tankNumber);

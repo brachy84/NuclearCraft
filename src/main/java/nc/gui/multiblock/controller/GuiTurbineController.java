@@ -3,23 +3,27 @@ package nc.gui.multiblock.controller;
 import nc.Global;
 import nc.gui.element.MultiblockButton;
 import nc.multiblock.turbine.Turbine;
-import nc.network.PacketHandler;
-import nc.network.multiblock.*;
-import nc.tile.turbine.*;
+import nc.network.multiblock.ClearAllMaterialPacket;
+import nc.network.multiblock.TurbineUpdatePacket;
+import nc.tile.TileContainerInfo;
+import nc.tile.turbine.ITurbinePart;
+import nc.tile.turbine.TileTurbineController;
+import nc.tile.turbine.TileTurbineRotorBearing;
 import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class GuiTurbineController extends GuiMultiblockController<Turbine, ITurbinePart, TurbineUpdatePacket, TileTurbineController> {
+public class GuiTurbineController extends GuiMultiblockController<Turbine, ITurbinePart, TurbineUpdatePacket, TileTurbineController, TileContainerInfo<TileTurbineController>> {
 	
 	protected final ResourceLocation gui_texture;
 	
 	int inputRateWidth = 0;
 	
-	public GuiTurbineController(EntityPlayer player, TileTurbineController controller) {
-		super(player, controller);
+	public GuiTurbineController(Container inventory, EntityPlayer player, TileTurbineController controller, String textureLocation) {
+		super(inventory, player, controller, textureLocation);
 		gui_texture = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/" + "turbine_controller" + ".png");
 		xSize = 176;
 		ySize = 75;
@@ -79,7 +83,7 @@ public class GuiTurbineController extends GuiMultiblockController<Turbine, ITurb
 	protected void actionPerformed(GuiButton guiButton) {
 		if (multiblock.WORLD.isRemote) {
 			if (guiButton.id == 0 && NCUtil.isModifierKeyDown()) {
-				PacketHandler.instance.sendToServer(new ClearAllMaterialPacket(tile.getTilePos()));
+				new ClearAllMaterialPacket(tile.getTilePos()).sendToServer();
 			}
 		}
 	}

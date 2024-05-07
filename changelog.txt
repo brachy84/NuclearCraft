@@ -1,10 +1,38 @@
-v2o.6.3
+v2o.7.1
 
-* Fixed crash when GTCEu is installed [thanks to DStrand1!]
++ Added Electric Furnace
 
+* Fixed turbine internal tanks not loading NBT correctly
+
++ Added config to disable additional recipe support for Mekanism and TechReborn fluids
++ Added config to totally prevent tile entities producing radiation
+
+* Attempted to improve performance of radiation system's chunk loop
+* Attempted to fix cross-mod crash where radiation capabilities are added to objects twice
+
+* References to NCO's network wrapper are no longer hard-coded
+
+* Fixed broken placement rule pluralisation when using some JVMs
+
+v2o.7.0
+
+* Large refactors to significantly reduce code required for future features
+* Moved to modern Gradle toolchain for 1.12.2 Forge modding
+
+* Fixed config localisation
+* Tweaked dynamo coil placement rule descriptions for additional clarity
+
+* Fixed fission ports not correctly handling more than 64 cells/irradiators
 * Attempted to prevent crashes caused by unexpected null multiblocks [thanks to thedeadferryman!]
 
 * Fixed rhodochrosite smelting info tooltip
+
++ Added config for IC2 reactor radiation multiplier
+
+* Moved from GTCE to GTCEu
+- Temporarily disabled GTCEu recipe integration
+
+* Fixed various potential overflow bugs in energy handling logic
 
 * Updated Chinese language file [thanks to WuzgXY and TheRealKamisama!]
 * Updated Russian language file [thanks to thedeadferryman!]

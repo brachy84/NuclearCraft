@@ -10,6 +10,8 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	
 	public final String modId;
 	public final String name;
+
+	protected String recipeHandlerName;
 	
 	protected int[] guiWH = new int[] {176, 166};
 	
@@ -27,7 +29,7 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	protected int[] redstoneControlGuiXY = new int[] {47, 63};
 	
 	protected boolean jeiCategoryEnabled = true;
-	
+
 	protected String jeiCategoryUid;
 	protected String jeiTitle;
 	protected String jeiTexture;
@@ -39,15 +41,23 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	protected ContainerInfoBuilder(String modId, String name) {
 		this.modId = modId;
 		this.name = name;
-		
-		jeiCategoryUid = modId + "_" + name;
-		jeiTitle = "tile." + modId + "." + name + ".name";
-		jeiTexture = modId + ":textures/gui/container/" + name + ".png";
+
+		setRecipeHandlerName(name);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public BUILDER getThis() {
 		return (BUILDER) this;
+	}
+
+	public BUILDER setRecipeHandlerName(String recipeHandlerName) {
+		this.recipeHandlerName = recipeHandlerName;
+
+		jeiCategoryUid = modId + "_" + recipeHandlerName;
+		jeiTitle = "tile." + modId + "." + recipeHandlerName + ".name";
+		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + ".png";
+
+		return getThis();
 	}
 	
 	public BUILDER setGuiWH(int w, int h) {
@@ -160,12 +170,12 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	}
 
 	public BUILDER setStandardJeiAlternateTitle() {
-		jeiTitle = modId + "." + name + ".jei_name";
+		jeiTitle = modId + "." + recipeHandlerName + ".jei_name";
 		return getThis();
 	}
 	
 	public BUILDER setStandardJeiAlternateTexture() {
-		jeiTexture = modId + ":textures/gui/container/" + name + "_jei.png";
+		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + "_jei.png";
 		return getThis();
 	}
 	

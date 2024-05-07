@@ -1,32 +1,29 @@
 package nc.integration.gtce;
 
-import static nc.config.NCConfig.gtce_recipe_logging;
-
-import java.util.*;
-
-import net.minecraftforge.fml.common.Loader;
-import org.apache.commons.lang3.tuple.Pair;
-
 import gregtech.api.items.metaitem.MetaItem;
-import gregtech.api.recipes.*;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeBuilder;
+import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.common.items.MetaItems;
-import nc.recipe.*;
+import nc.recipe.BasicRecipe;
+import nc.recipe.RecipeHelper;
+import nc.recipe.RecipeTupleGenerator;
 import nc.recipe.ingredient.*;
-import nc.util.*;
+import nc.util.NCUtil;
+import nc.util.OreDictHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
+
+import static nc.config.NCConfig.gtce_recipe_logging;
 
 public class GTCERecipeHelper {
-
-	private static RecipeMap<?> EXTRACTOR_MAP;
-
-	@Optional.Method(modid = "gregtech")
-	public static void checkGtVersion() {
-		String version = Loader.instance().getIndexedModList().get("gregtech").getVersion();
-		EXTRACTOR_MAP = getExtractorMap(Integer.parseInt(version.split("\\.")[0]));
-	}
 
 	// Thanks so much to Firew0lf for the original method!
 	@Optional.Method(modid = "gregtech")
@@ -56,7 +53,7 @@ public class GTCERecipeHelper {
 				builder = addStats(recipeMap.recipeBuilder(), recipe, 30, 10);
 				break;
 			case "melter":
-				recipeMap = EXTRACTOR_MAP;
+				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
 				if (recipeMap != null)
 				    builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
 				break;
@@ -103,7 +100,7 @@ public class GTCERecipeHelper {
 				builder = addStats(recipeMap.recipeBuilder(), recipe, 20, 20).notConsumable(new IntCircuitIngredient(2));
 				break;
 			case "extractor":
-				recipeMap = EXTRACTOR_MAP;
+				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
 				if (recipeMap != null)
 				    builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
 				break;
@@ -114,6 +111,8 @@ public class GTCERecipeHelper {
 			case "rock_crusher":
 				recipeMap = RecipeMaps.MACERATOR_RECIPES;
 				builder = addStats(recipeMap.recipeBuilder(), recipe, 20, 12);
+				break;
+			case "electric_furnace":
 				return;
 			default:
 				break;
@@ -267,45 +266,20 @@ public class GTCERecipeHelper {
 	// GTCE recipe matching - modified from GTCE source
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean isRecipeInvalid(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		if (fluidInputs.size() < recipeMap.getMinFluidInputs() || fluidInputs.size() > recipeMap.getMaxFluidInputs()) {
+	private static boolean isRecipeInvalid(RecipeMap<?> recipeMap, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
+		int itemInputCount = itemInputs.size(), fluidInputCount = fluidInputs.size();
+
+		if (itemInputCount > recipeMap.getMaxInputs() || fluidInputCount > recipeMap.getMaxFluidInputs() || itemInputCount + fluidInputCount < 1) {
 			return true;
 		}
-		else if (inputs.size() < recipeMap.getMinInputs() || inputs.size() > recipeMap.getMaxInputs()) {
-			return true;
-		}
-		
-		if (recipeMap.getMaxInputs() > 0) {
-			return findConflictByInputs(recipeMap, inputs, fluidInputs);
-		}
-		else {
-			return findConflictByFluidInputs(recipeMap, inputs, fluidInputs);
-		}
+
+		return findRecipeInputConflict(recipeMap, itemInputs, fluidInputs);
 	}
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean findConflictByFluidInputs(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		for (FluidStack fluid : fluidInputs) {
-			if (fluid == null) {
-				continue;
-			}
-			Collection<Recipe> recipes = recipeMap.getRecipesForFluid(fluid);
-			if (recipes == null) {
-				continue;
-			}
-			for (Recipe recipe : recipes) {
-				if (isRecipeConflict(recipe, inputs, fluidInputs)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	@Optional.Method(modid = "gregtech")
-	private static boolean findConflictByInputs(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
+	private static boolean findRecipeInputConflict(RecipeMap<?> recipeMap, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
 		for (Recipe recipe : recipeMap.getRecipeList()) {
-			if (isRecipeConflict(recipe, inputs, fluidInputs)) {
+			if (isRecipeInputConflict(recipe, itemInputs, fluidInputs)) {
 				return true;
 			}
 		}
@@ -313,23 +287,25 @@ public class GTCERecipeHelper {
 	}
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean isRecipeConflict(Recipe recipe, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		itemLoop: for (ItemStack input : inputs) {
-			for (CountableIngredient ingredient : recipe.getInputs()) {
-				if (ingredient.getIngredient().apply(input)) {
+	private static boolean isRecipeInputConflict(Recipe recipe, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
+		itemLoop: for (ItemStack input : itemInputs) {
+			for (GTRecipeInput gtInput : recipe.getInputs()) {
+				if (gtInput.acceptsStack(input)) {
 					continue itemLoop;
 				}
 			}
 			return false;
 		}
+
 		fluidLoop: for (FluidStack input : fluidInputs) {
-			for (FluidStack fluid : recipe.getFluidInputs()) {
-				if (input.isFluidEqual(fluid)) {
+			for (GTRecipeInput gtInput : recipe.getFluidInputs()) {
+				if (gtInput.acceptsFluid(input)) {
 					continue fluidLoop;
 				}
 			}
 			return false;
 		}
+
 		return true;
 	}
 	
@@ -350,17 +326,5 @@ public class GTCERecipeHelper {
 			}
 		}
 		return MetaItems.SHAPE_MOLD_BALL;
-	}
-
-	@Optional.Method(modid = "gregtech")
-	private static RecipeMap<?> getExtractorMap(int gtVersion) {
-		if (gtVersion == 2) {
-			return RecipeMaps.EXTRACTOR_RECIPES;
-		} else {
-			try {
-				return (RecipeMap<?>) RecipeMaps.class.getField("FLUID_EXTRACTION_RECIPES").get(null);
-			} catch (NoSuchFieldException | IllegalAccessException ignored) {}
-		}
-		return null;
 	}
 }

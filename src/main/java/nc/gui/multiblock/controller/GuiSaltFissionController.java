@@ -1,26 +1,32 @@
 package nc.gui.multiblock.controller;
 
-import java.util.*;
-
 import nc.Global;
 import nc.gui.element.MultiblockButton;
-import nc.multiblock.fission.*;
-import nc.network.PacketHandler;
-import nc.network.multiblock.*;
-import nc.tile.fission.*;
+import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.FissionReactorLogic;
+import nc.multiblock.fission.MoltenSaltFissionLogic;
+import nc.network.multiblock.ClearAllMaterialPacket;
+import nc.network.multiblock.FissionUpdatePacket;
+import nc.tile.TileContainerInfo;
+import nc.tile.fission.IFissionPart;
+import nc.tile.fission.TileSaltFissionController;
 import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiSaltFissionController extends GuiLogicMultiblockController<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket, TileSaltFissionController, MoltenSaltFissionLogic> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GuiSaltFissionController extends GuiLogicMultiblockController<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket, TileSaltFissionController, TileContainerInfo<TileSaltFissionController>, MoltenSaltFissionLogic> {
 	
 	protected final ResourceLocation gui_texture;
 	
-	public GuiSaltFissionController(EntityPlayer player, TileSaltFissionController controller) {
-		super(player, controller);
+	public GuiSaltFissionController(Container inventory, EntityPlayer player, TileSaltFissionController controller, String textureLocation) {
+		super(inventory, player, controller, textureLocation);
 		gui_texture = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/" + "salt_fission_controller" + ".png");
 		xSize = 176;
 		ySize = 114;
@@ -103,7 +109,7 @@ public class GuiSaltFissionController extends GuiLogicMultiblockController<Fissi
 	protected void actionPerformed(GuiButton guiButton) {
 		if (multiblock.WORLD.isRemote) {
 			if (guiButton.id == 0 && NCUtil.isModifierKeyDown()) {
-				PacketHandler.instance.sendToServer(new ClearAllMaterialPacket(tile.getTilePos()));
+				new ClearAllMaterialPacket(tile.getTilePos()).sendToServer();
 			}
 		}
 	}

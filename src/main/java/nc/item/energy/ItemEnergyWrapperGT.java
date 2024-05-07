@@ -31,6 +31,12 @@ public class ItemEnergyWrapperGT implements IElectricItem {
 	public boolean canProvideChargeExternally() {
 		return true;
 	}
+
+	@Override
+	@Optional.Method(modid = "gregtech")
+	public boolean chargeable() {
+		return true;
+	}
 	
 	@Override
 	@Optional.Method(modid = "gregtech")

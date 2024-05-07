@@ -2678,7 +2678,7 @@ gui.nc.config.fusion_optimal_temperature.comment=燃料组合的可选温度。�
 gui.nc.config.fusion_radiation=聚变燃料组合辐射
 gui.nc.config.fusion_radiation.comment=处理时燃料组合的基本辐射。顺序：氢 - 氢，氢 - 氘，氢 - 氚，氢 - 氦-3，氢 - 锂-6，氢 - 锂-7，氢 - 硼-11，氘 - 氘，氘 - 氚，氘 - 氦-3，……，氘 - 硼-11，……，硼-11 - 硼-11。
 gui.nc.config.fusion_electromagnet_power=电磁铁功率
-gui.nc.config.fusion_electromagnet_power.comment=电磁铁运行的有效功率（单位：RF/t）。
+gui.nc.config.fusion_electromagnet_power.comment=电磁铁生效的有效功率（单位：RF/t）。
 
 gui.nc.config.category.heat_exchanger=热交换器配置
 gui.nc.config.category.heat_exchanger.tooltip=配置与热交换器相关的内容。
@@ -6144,13 +6144,13 @@ fluid.depleted_pbp_fluoride_flibe=熔融枯竭钚增殖钚 氟化物燃料氟锂
 item.contenttweaker.uranium_oxide.name=氧化铀锭
 item.contenttweaker.pre_candu.name=未加压 CANDU 燃料束
 item.contenttweaker.candu.name=加压 CANDU 燃料束
-item.contenttweaker.dcandu.name=枯竭CANDU 燃料束
+item.contenttweaker.dcandu.name=枯竭 CANDU 燃料束
 # 加拿大重水铀
 
 item.contenttweaker.thorium_oxide.name=氧化钍锭
 item.contenttweaker.pre_aneel.name=未加压 ANEEL 燃料束
 item.contenttweaker.aneel.name=加压 ANEEL 燃料束
-item.contenttweaker.daneel.name=枯竭ANEEL 燃料束
+item.contenttweaker.daneel.name=枯竭 ANEEL 燃料束
 # Advanced Nuclear Energy for Enriched Life 丰富生活下更先进的核能
 
 item.contenttweaker.eightsmore.name=八层棉花糖巧克力夹心饼干
@@ -7049,3 +7049,7 @@ fluid.bismuth=熔融铋
 fluid.sponge=熔融海绵
 fluid.magma_slime=熔融岩浆膏
 #=================================================================================================================#
+
+info.reactorbuilder.pass.setting_filters=筛选器设定中
+info.reactorbuilder.template.irradiator_filters=辐照器筛选器
+info.reactorbuilder.template.components=组件

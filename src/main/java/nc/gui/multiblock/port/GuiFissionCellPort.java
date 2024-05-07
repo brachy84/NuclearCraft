@@ -3,13 +3,12 @@ package nc.gui.multiblock.port;
 import nc.gui.GuiInfoTile;
 import nc.gui.element.GuiItemRenderer;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.port.TileFissionCellPort;
-import nc.tile.fission.port.TileFissionCellPort.FissionCellPortContainerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-public class GuiFissionCellPort extends GuiInfoTile<TileFissionCellPort, ItemPortUpdatePacket, FissionCellPortContainerInfo> {
+public class GuiFissionCellPort extends GuiInfoTile<TileFissionCellPort, ItemPortUpdatePacket, TileContainerInfo<TileFissionCellPort>> {
 	
 	public GuiFissionCellPort(Container inventory, EntityPlayer player, TileFissionCellPort tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);

@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "nuclearcraft:electric_furnace"
+		},
+		"title": {
+			"translate": "advancement.nuclearcraft.electric_furnace.name"
+		},
+		"description": {
+			"translate": "advancement.nuclearcraft.electric_furnace.desc"
+		}
+	},
+	"parent": "nuclearcraft:processors/manufactory",
+	"criteria": {
+		"has_item": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "nuclearcraft:electric_furnace"
+					}
+				]
+			}
+		}
+	}
+}

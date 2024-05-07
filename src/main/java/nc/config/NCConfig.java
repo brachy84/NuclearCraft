@@ -1,29 +1,35 @@
 package nc.config;
 
-import static nc.util.CollectionHelper.arrayCopies;
-
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import nc.*;
+import nc.Global;
+import nc.ModCheck;
 import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
-import nc.network.PacketHandler;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
 import nc.recipe.BasicRecipeHandler;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.NCMath;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.*;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.*;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static nc.util.CollectionHelper.arrayCopies;
 
 public class NCConfig {
 	
@@ -75,6 +81,7 @@ public class NCConfig {
 	public static boolean enable_ic2_eu;
 	public static boolean enable_gtce_eu;
 	public static boolean enable_mek_gas;
+	public static boolean[] enable_fluid_recipe_expansion;
 	public static int machine_update_rate;
 	public static double[] processor_passive_rate;
 	public static boolean passive_push;
@@ -319,6 +326,7 @@ public class NCConfig {
 	public static int radiation_block_effect_max_rate;
 	public static double radiation_rain_mult;
 	public static double radiation_swim_mult;
+	public static double radiation_ic2_reactor_mult;
 	
 	public static double radiation_feral_ghoul_attack;
 	
@@ -346,7 +354,8 @@ public class NCConfig {
 	public static String[] radiation_shielding_item_blacklist;
 	public static String[] radiation_shielding_custom_stacks;
 	public static String[] radiation_shielding_default_levels;
-	
+
+	public static boolean radiation_tile_entities;
 	public static boolean radiation_hardcore_stacks;
 	public static double radiation_hardcore_containers;
 	public static boolean radiation_dropped_items;
@@ -486,8 +495,8 @@ public class NCConfig {
 		
 		processor_time_multiplier = sync(CATEGORY_PROCESSOR, "processor_time_multiplier", 1D, 0.001D, 255D);
 		processor_power_multiplier = sync(CATEGORY_PROCESSOR, "processor_power_multiplier", 1D, 0D, 255D);
-		processor_time = sync(CATEGORY_PROCESSOR, "processor_time", new int[] {400, 800, 800, 400, 400, 600, 800, 600, 3200, 600, 400, 600, 800, 600, 1600, 600, 2400, 1200, 400}, 1, 128000, ARRAY);
-		processor_power = sync(CATEGORY_PROCESSOR, "processor_power", new int[] {20, 10, 10, 20, 10, 10, 40, 20, 40, 10, 0, 40, 10, 20, 10, 10, 10, 10, 20}, 0, 16000, ARRAY);
+		processor_time = sync(CATEGORY_PROCESSOR, "processor_time", new int[] {400, 800, 800, 400, 400, 600, 800, 600, 3200, 600, 400, 600, 800, 600, 1600, 600, 2400, 1200, 400, 200}, 1, 128000, ARRAY);
+		processor_power = sync(CATEGORY_PROCESSOR, "processor_power", new int[] {20, 10, 10, 20, 10, 10, 40, 20, 40, 10, 0, 40, 10, 20, 10, 10, 10, 10, 20, 20}, 0, 16000, ARRAY);
 		speed_upgrade_power_laws_fp = sync(CATEGORY_PROCESSOR, "speed_upgrade_power_laws_fp", new double[] {1D, 2D}, 1D, 15D, ARRAY);
 		speed_upgrade_multipliers_fp = sync(CATEGORY_PROCESSOR, "speed_upgrade_multipliers_fp", new double[] {1D, 1D}, 0D, 15D, ARRAY);
 		energy_upgrade_power_laws_fp = sync(CATEGORY_PROCESSOR, "energy_upgrade_power_laws_fp", new double[] {1D}, 1D, 15D, ARRAY);
@@ -497,6 +506,7 @@ public class NCConfig {
 		enable_ic2_eu = sync(CATEGORY_PROCESSOR, "enable_ic2_eu", true);
 		enable_gtce_eu = sync(CATEGORY_PROCESSOR, "enable_gtce_eu", true);
 		enable_mek_gas = sync(CATEGORY_PROCESSOR, "enable_mek_gas", true);
+		enable_fluid_recipe_expansion = sync(CATEGORY_PROCESSOR, "enable_fluid_recipe_expansion", new boolean[] {true, true}, ARRAY);
 		machine_update_rate = sync(CATEGORY_PROCESSOR, "machine_update_rate", 20, 1, 1200);
 		processor_passive_rate = sync(CATEGORY_PROCESSOR, "processor_passive_rate", new double[] {0.125, 10, 5}, 0D, 4000D, ARRAY);
 		passive_push = sync(CATEGORY_PROCESSOR, "passive_push", true);
@@ -504,7 +514,7 @@ public class NCConfig {
 		ore_processing = sync(CATEGORY_PROCESSOR, "ore_processing", true);
 		manufactory_wood = sync(CATEGORY_PROCESSOR, "manufactory_wood", new int[] {6, 4}, 1, 64, ARRAY);
 		rock_crusher_alternate = sync(CATEGORY_PROCESSOR, "rock_crusher_alternate", false);
-		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
+		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
 		smart_processor_input = sync(CATEGORY_PROCESSOR, "smart_processor_input", true);
 		passive_permeation = sync(CATEGORY_PROCESSOR, "passive_permeation", true);
@@ -739,6 +749,7 @@ public class NCConfig {
 		radiation_block_effect_max_rate = sync(CATEGORY_RADIATION, "radiation_block_effect_max_rate", 0, 0, 15);
 		radiation_rain_mult = sync(CATEGORY_RADIATION, "radiation_rain_mult", 1D, 0.000001D, 1000000D);
 		radiation_swim_mult = sync(CATEGORY_RADIATION, "radiation_swim_mult", 2D, 0.000001D, 1000000D);
+		radiation_ic2_reactor_mult = sync(CATEGORY_RADIATION, "radiation_ic2_reactor_mult", 0.00001D, 0D, 1000000D);
 		
 		radiation_feral_ghoul_attack = sync(CATEGORY_RADIATION, "radiation_feral_ghoul_attack", RadSources.CAESIUM_137, 0.000001D, 1000000D);
 		
@@ -767,6 +778,7 @@ public class NCConfig {
 		radiation_shielding_custom_stacks = sync(CATEGORY_RADIATION, "radiation_shielding_custom_stacks", new String[] {}, LIST);
 		radiation_shielding_default_levels = sync(CATEGORY_RADIATION, "radiation_shielding_default_levels", new String[] {"nuclearcraft:helm_hazmat_2.0", "nuclearcraft:chest_hazmat_3.0", "nuclearcraft:legs_hazmat_2.0", "nuclearcraft:boots_hazmat_2.0", "ic2:hazmat_helmet_2.0", "ic2:hazmat_chestplate_3.0", "ic2:hazmat_leggings_2.0", "ic2:rubber_boots_2.0", "ic2:quantum_helmet_2.0", "ic2:quantum_chestplate_3.0", "ic2:quantum_leggings_2.0", "ic2:quantum_boots_2.0", "gravisuite:gravichestplate_3.0", "ic2:itemarmorquantumhelmet_2.0", "ic2:itemarmorquantumchestplate_3.0", "ic2:itemarmorquantumlegs_2.0", "ic2:itemarmorquantumboots_2.0", "gravisuit:gravisuit_3.0", "gravisuit:nucleargravisuit_3.0", "extraplanets:tier1_space_suit_helmet_1.0", "extraplanets:tier1_space_suit_chest_1.5", "extraplanets:tier1_space_suit_jetpack_chest_1.5", "extraplanets:tier1_space_suit_leggings_1.0", "extraplanets:tier1_space_suit_boots_1.0", "extraplanets:tier1_space_suit_gravity_boots_1.0", "extraplanets:tier2_space_suit_helmet_1.3", "extraplanets:tier2_space_suit_chest_1.95", "extraplanets:tier2_space_suit_jetpack_chest_1.95", "extraplanets:tier2_space_suit_leggings_1.3", "extraplanets:tier2_space_suit_boots_1.3", "extraplanets:tier2_space_suit_gravity_boots_1.3", "extraplanets:tier3_space_suit_helmet_1.6", "extraplanets:tier3_space_suit_chest_2.4", "extraplanets:tier3_space_suit_jetpack_chest_2.4", "extraplanets:tier3_space_suit_leggings_1.6", "extraplanets:tier3_space_suit_boots_1.6", "extraplanets:tier3_space_suit_gravity_boots_1.6", "extraplanets:tier4_space_suit_helmet_2.0", "extraplanets:tier4_space_suit_chest_3.0", "extraplanets:tier4_space_suit_jetpack_chest_3.0", "extraplanets:tier4_space_suit_leggings_2.0", "extraplanets:tier4_space_suit_boots_2.0", "extraplanets:tier4_space_suit_gravity_boots_2.0"}, LIST);
 		
+		radiation_tile_entities = sync(CATEGORY_RADIATION, "radiation_tile_entities", true);
 		radiation_hardcore_stacks = sync(CATEGORY_RADIATION, "radiation_hardcore_stacks", true);
 		radiation_hardcore_containers = sync(CATEGORY_RADIATION, "radiation_hardcore_containers", 0D, 0D, 1D);
 		radiation_dropped_items = sync(CATEGORY_RADIATION, "radiation_dropped_items", true);
@@ -802,7 +814,7 @@ public class NCConfig {
 		radiation_badge_durability = sync(CATEGORY_RADIATION, "radiation_badge_durability", 250D, 0.000000000000000001D, 1000D);
 		radiation_badge_info_rate = sync(CATEGORY_RADIATION, "radiation_badge_info_rate", 0.1D, 0.000000000000000001D, 1D);
 		
-		register_processor = sync(CATEGORY_REGISTRATION, "register_processor", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
+		register_processor = sync(CATEGORY_REGISTRATION, "register_processor", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		register_passive = sync(CATEGORY_REGISTRATION, "register_passive", new boolean[] {true, true, true}, ARRAY);
 		register_battery = sync(CATEGORY_REGISTRATION, "register_battery", new boolean[] {true, true}, ARRAY);
 		register_quantum = sync(CATEGORY_REGISTRATION, "register_quantum", true);
@@ -876,8 +888,8 @@ public class NCConfig {
 	}
 	
 	public static int sync(String category, String name, int defaultValue, int minValue, int maxValue) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"), minValue, maxValue);
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"), minValue, maxValue);
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		int value = property.getInt();
 		property.set(value);
@@ -885,8 +897,8 @@ public class NCConfig {
 	}
 	
 	public static boolean sync(String category, String name, boolean defaultValue) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		boolean value = property.getBoolean();
 		property.set(value);
@@ -894,8 +906,8 @@ public class NCConfig {
 	}
 	
 	public static double sync(String category, String name, double defaultValue) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		double value = property.getDouble();
 		property.set(value);
@@ -903,8 +915,8 @@ public class NCConfig {
 	}
 	
 	public static double sync(String category, String name, double defaultValue, double minValue, double maxValue) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"), minValue, maxValue);
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"), minValue, maxValue);
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		double value = property.getDouble();
 		property.set(value);
@@ -912,8 +924,8 @@ public class NCConfig {
 	}
 	
 	public static String sync(String category, String name, String defaultValue) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		String value = property.getString();
 		property.set(value);
@@ -921,8 +933,8 @@ public class NCConfig {
 	}
 	
 	public static int[] sync(String category, String name, int[] defaultValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		int[] value = fixedArray ? readIntegerArray(property) : property.getIntList();
 		property.set(value);
@@ -930,8 +942,8 @@ public class NCConfig {
 	}
 	
 	public static int[] sync(String category, String name, int[] defaultValue, int minValue, int maxValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"), minValue, maxValue);
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"), minValue, maxValue);
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		int[] value = fixedArray ? readIntegerArray(property) : property.getIntList();
 		property.set(value);
@@ -939,8 +951,8 @@ public class NCConfig {
 	}
 	
 	public static boolean[] sync(String category, String name, boolean[] defaultValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		boolean[] value = fixedArray ? readBooleanArray(property) : property.getBooleanList();
 		property.set(value);
@@ -948,8 +960,8 @@ public class NCConfig {
 	}
 	
 	public static double[] sync(String category, String name, double[] defaultValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		double[] value = fixedArray ? readDoubleArray(property) : property.getDoubleList();
 		property.set(value);
@@ -957,8 +969,8 @@ public class NCConfig {
 	}
 	
 	public static double[] sync(String category, String name, double[] defaultValue, double minValue, double maxValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"), minValue, maxValue);
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"), minValue, maxValue);
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		double[] value = fixedArray ? readDoubleArray(property) : property.getDoubleList();
 		property.set(value);
@@ -966,8 +978,8 @@ public class NCConfig {
 	}
 	
 	public static String[] sync(String category, String name, String[] defaultValue, boolean fixedArray) {
-		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + category + "." + name + ".comment"));
-		property.setLanguageKey("gui.nc.config." + category + "." + name);
+		Property property = config.get(category, name, defaultValue, Lang.localize("gui.nc.config." + name + ".comment"));
+		property.setLanguageKey("gui.nc.config." + name);
 		PROPERTY_ORDER_MAP.get(category).add(property.getName());
 		String[] value = fixedArray ? readStringArray(property) : property.getStringList();
 		property.set(value);
@@ -1070,16 +1082,10 @@ public class NCConfig {
 		
 		@SubscribeEvent
 		public void configOnWorldLoad(PlayerLoggedInEvent event) {
-			if (event.player instanceof EntityPlayerMP) {
-				PacketHandler.instance.sendTo(getConfigUpdatePacket(), (EntityPlayerMP) event.player);
-			}
+			new ConfigUpdatePacket(radiation_enabled, radiation_horse_armor).sendTo(event.player);
 		}
 	}
-	
-	public static ConfigUpdatePacket getConfigUpdatePacket() {
-		return new ConfigUpdatePacket(radiation_enabled, radiation_horse_armor);
-	}
-	
+
 	public static void onConfigPacket(ConfigUpdatePacket message) {
 		if (!radiation_enabled_public && message.radiation_enabled) {
 			String unloc = "message.nuclearcraft.radiation_config_info" + (ModCheck.jeiLoaded() ? "_jei" : "");
