@@ -47,16 +47,16 @@ import static nc.config.NCConfig.*;
 public class RadiationHandler {
 	
 	public static final Random RAND = new Random();
-	
-	private static final String RAD_X_WORE_OFF = Lang.localize("message.nuclearcraft.rad_x_wore_off");
-	private static final String RAD_WARNING = Lang.localize("message.nuclearcraft.rad_warning");
-	
-	private static EnumFacing tile_side = EnumFacing.DOWN;
+
+	public static final String RAD_X_WORE_OFF = Lang.localize("message.nuclearcraft.rad_x_wore_off");
+	public static final String RAD_WARNING = Lang.localize("message.nuclearcraft.rad_warning");
+
+	public static EnumFacing tile_side = EnumFacing.DOWN;
 	
 	public static boolean default_rad_immunity = false;
 	public static String[] rad_immunity_stages = new String[] {};
 	
-	public static BasicRecipeHandler radiation_block_purification = null;
+	public static final Lazy<BasicRecipeHandler> RADIATION_BLOCK_PURIFICATION = new Lazy<>(() -> NCRecipes.radiation_block_purification);
 	
 	@SubscribeEvent
 	public void updatePlayerRadiation(TickEvent.PlayerTickEvent event) {
@@ -336,7 +336,7 @@ public class RadiationHandler {
 			chunkSource.setEffectiveScrubberCount(0D);
 
 			Collection<TileEntity> tiles = chunk.getTileEntityMap().values();
-			
+
 			if (radiation_tile_entities) {
 				for (TileEntity tile : tiles) {
 					RadiationHelper.transferRadiationFromProviderToChunkBuffer(tile, tile_side, chunkSource);
@@ -415,10 +415,10 @@ public class RadiationHandler {
 		
 		tile_side = EnumFacing.byIndex(tile_side.getIndex() + 1);
 	}
-	
-	private static final List<byte[]> ADJACENT_COORDS = Lists.newArrayList(new byte[] {1, 0}, new byte[] {0, 1}, new byte[] {-1, 0}, new byte[] {0, -1});
-	
-	private static Chunk getRandomAdjacentChunk(ChunkProviderServer chunkProvider, Chunk chunk) {
+
+	public static final List<int[]> ADJACENT_COORDS = Lists.newArrayList(new int[] {1, 0}, new int[] {0, 1}, new int[] {-1, 0}, new int[] {0, -1});
+
+	public static Chunk getRandomAdjacentChunk(ChunkProviderServer chunkProvider, Chunk chunk) {
 		if (chunkProvider == null || chunk == null || !chunk.isLoaded()) {
 			return null;
 		}
@@ -426,7 +426,7 @@ public class RadiationHandler {
 		int x = chunkPos.x;
 		int z = chunkPos.z;
 		Collections.shuffle(ADJACENT_COORDS);
-		for (byte[] pos : ADJACENT_COORDS) {
+		for (int[] pos : ADJACENT_COORDS) {
 			if (chunkProvider.chunkExists(x + pos[0], z + pos[1])) {
 				Chunk adjChunk = chunkProvider.getLoadedChunk(x + pos[0], z + pos[1]);
 				if (adjChunk != null) {
@@ -436,16 +436,16 @@ public class RadiationHandler {
 		}
 		return null;
 	}
-	
-	private static BlockPos newRandomOffsetPos(World world) {
+
+	public static BlockPos newRandomOffsetPos(World world) {
 		return new BlockPos(RAND.nextInt(16), RAND.nextInt(world.getHeight()), RAND.nextInt(16));
 	}
-	
-	private static BlockPos newRandomPosInChunk(World world, Chunk chunk) {
+
+	public static BlockPos newRandomPosInChunk(World world, Chunk chunk) {
 		return chunk.getPos().getBlock(RAND.nextInt(16), RAND.nextInt(world.getHeight()), RAND.nextInt(16));
 	}
-	
-	private static void mutateTerrain(World world, Chunk chunk, double radiation) {
+
+	public static void mutateTerrain(World world, Chunk chunk, double radiation) {
 		long j = Math.min(radiation_block_effect_max_rate, (long) Math.log(Math.E - 1D + radiation / RecipeStats.getBlockMutationThreshold()));
 		while (j > 0) {
 			--j;
@@ -454,7 +454,7 @@ public class RadiationHandler {
 			
 			ItemStack stack = StackHelper.blockStateToStack(state);
 			if (stack != null && !stack.isEmpty()) {
-				RecipeInfo<BasicRecipe> mutationInfo = getRadiationBlockPurificationRecipeHandler().getRecipeInfoFromInputs(Lists.newArrayList(stack), new ArrayList<>());
+				RecipeInfo<BasicRecipe> mutationInfo = RADIATION_BLOCK_PURIFICATION.get().getRecipeInfoFromInputs(Lists.newArrayList(stack), new ArrayList<>());
 				if (mutationInfo != null && radiation >= mutationInfo.recipe.getBlockMutationThreshold()) {
 					ItemStack output = RecipeHelper.getItemStackFromIngredientList(mutationInfo.recipe.getItemProducts(), 0);
 					if (output != null) {
@@ -474,7 +474,7 @@ public class RadiationHandler {
 			IBlockState state = world.getBlockState(randomChunkPos);
 			ItemStack stack = StackHelper.blockStateToStack(state);
 			if (stack != null && !stack.isEmpty()) {
-				RecipeInfo<BasicRecipe> mutationInfo = getRadiationBlockPurificationRecipeHandler().getRecipeInfoFromInputs(Lists.newArrayList(stack), new ArrayList<>());
+				RecipeInfo<BasicRecipe> mutationInfo = RADIATION_BLOCK_PURIFICATION.get().getRecipeInfoFromInputs(Lists.newArrayList(stack), new ArrayList<>());
 				if (mutationInfo != null && radiation < mutationInfo.recipe.getBlockMutationThreshold()) {
 					ItemStack output = RecipeHelper.getItemStackFromIngredientList(mutationInfo.recipe.getItemProducts(), 0);
 					if (output != null) {
@@ -486,13 +486,6 @@ public class RadiationHandler {
 				}
 			}
 		}
-	}
-	
-	private static BasicRecipeHandler getRadiationBlockPurificationRecipeHandler() {
-		if (radiation_block_purification == null) {
-			radiation_block_purification = NCRecipes.radiation_block_purification;
-		}
-		return radiation_block_purification;
 	}
 	
 	public static void playGeigerSound(EntityPlayer player) {
@@ -515,8 +508,8 @@ public class RadiationHandler {
 			}
 		}
 	}
-	
-	private static void spawnFeralGhoul(World world, EntityLiving entityLiving) {
+
+	public static void spawnFeralGhoul(World world, EntityLiving entityLiving) {
 		EntityFeralGhoul feralGhoul = new EntityFeralGhoul(world);
 		feralGhoul.setLocationAndAngles(entityLiving.posX, entityLiving.posY, entityLiving.posZ, entityLiving.rotationYaw, entityLiving.rotationPitch);
 		feralGhoul.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(feralGhoul)), null);

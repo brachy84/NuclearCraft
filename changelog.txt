@@ -1,5 +1,7 @@
 v2o.7.1
 
++ Added Electric Furnace
+
 * Fixed turbine internal tanks not loading NBT correctly
 
 + Added config to disable additional recipe support for Mekanism and TechReborn fluids

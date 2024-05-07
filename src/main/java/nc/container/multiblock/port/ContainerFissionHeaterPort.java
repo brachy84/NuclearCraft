@@ -1,15 +1,18 @@
 package nc.container.multiblock.port;
 
-import nc.multiblock.fission.*;
+import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.FissionReactorLogic;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
-import nc.recipe.*;
-import nc.tile.fission.*;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
+import nc.tile.TileContainerInfo;
+import nc.tile.fission.IFissionPart;
+import nc.tile.fission.TileSaltFissionHeater;
 import nc.tile.fission.port.TileFissionHeaterPort;
-import nc.tile.fission.port.TileFissionHeaterPort.FissionHeaterPortContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 
-public class ContainerFissionHeaterPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionHeaterPort, TileSaltFissionHeater, FluidPortUpdatePacket, FissionHeaterPortContainerInfo> {
+public class ContainerFissionHeaterPort extends ContainerPort<FissionReactor, FissionReactorLogic, IFissionPart, TileFissionHeaterPort, TileSaltFissionHeater, FluidPortUpdatePacket, TileContainerInfo<TileFissionHeaterPort>> {
 	
 	public ContainerFissionHeaterPort(EntityPlayer player, TileFissionHeaterPort tile) {
 		super(player, tile);

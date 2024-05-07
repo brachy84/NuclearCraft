@@ -74,6 +74,7 @@ public class NCRecipes {
 		putHandler(new ExtractorRecipes());
 		putHandler(new CentrifugeRecipes());
 		putHandler(new RockCrusherRecipes());
+		putHandler(new ElectricFurnaceRecipes());
 		putHandler(new CollectorRecipes());
 		putHandler(new DecayGeneratorRecipes());
 		putHandler(new FissionModeratorRecipes());
@@ -124,6 +125,7 @@ public class NCRecipes {
 	public static ExtractorRecipes extractor;
 	public static CentrifugeRecipes centrifuge;
 	public static RockCrusherRecipes rock_crusher;
+	public static ElectricFurnaceRecipes electric_furnace;
 	public static CollectorRecipes collector;
 	public static DecayGeneratorRecipes decay_generator;
 	public static FissionModeratorRecipes fission_moderator;
@@ -162,6 +164,7 @@ public class NCRecipes {
 		extractor = getHandler("extractor");
 		centrifuge = getHandler("centrifuge");
 		rock_crusher = getHandler("rock_crusher");
+		electric_furnace = getHandler("electric_furnace");
 		collector = getHandler("collector");
 		decay_generator = getHandler("decay_generator");
 		fission_moderator = getHandler("fission_moderator");

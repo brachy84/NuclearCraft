@@ -495,8 +495,8 @@ public class NCConfig {
 		
 		processor_time_multiplier = sync(CATEGORY_PROCESSOR, "processor_time_multiplier", 1D, 0.001D, 255D);
 		processor_power_multiplier = sync(CATEGORY_PROCESSOR, "processor_power_multiplier", 1D, 0D, 255D);
-		processor_time = sync(CATEGORY_PROCESSOR, "processor_time", new int[] {400, 800, 800, 400, 400, 600, 800, 600, 3200, 600, 400, 600, 800, 600, 1600, 600, 2400, 1200, 400}, 1, 128000, ARRAY);
-		processor_power = sync(CATEGORY_PROCESSOR, "processor_power", new int[] {20, 10, 10, 20, 10, 10, 40, 20, 40, 10, 0, 40, 10, 20, 10, 10, 10, 10, 20}, 0, 16000, ARRAY);
+		processor_time = sync(CATEGORY_PROCESSOR, "processor_time", new int[] {400, 800, 800, 400, 400, 600, 800, 600, 3200, 600, 400, 600, 800, 600, 1600, 600, 2400, 1200, 400, 200}, 1, 128000, ARRAY);
+		processor_power = sync(CATEGORY_PROCESSOR, "processor_power", new int[] {20, 10, 10, 20, 10, 10, 40, 20, 40, 10, 0, 40, 10, 20, 10, 10, 10, 10, 20, 20}, 0, 16000, ARRAY);
 		speed_upgrade_power_laws_fp = sync(CATEGORY_PROCESSOR, "speed_upgrade_power_laws_fp", new double[] {1D, 2D}, 1D, 15D, ARRAY);
 		speed_upgrade_multipliers_fp = sync(CATEGORY_PROCESSOR, "speed_upgrade_multipliers_fp", new double[] {1D, 1D}, 0D, 15D, ARRAY);
 		energy_upgrade_power_laws_fp = sync(CATEGORY_PROCESSOR, "energy_upgrade_power_laws_fp", new double[] {1D}, 1D, 15D, ARRAY);
@@ -514,7 +514,7 @@ public class NCConfig {
 		ore_processing = sync(CATEGORY_PROCESSOR, "ore_processing", true);
 		manufactory_wood = sync(CATEGORY_PROCESSOR, "manufactory_wood", new int[] {6, 4}, 1, 64, ARRAY);
 		rock_crusher_alternate = sync(CATEGORY_PROCESSOR, "rock_crusher_alternate", false);
-		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
+		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
 		smart_processor_input = sync(CATEGORY_PROCESSOR, "smart_processor_input", true);
 		passive_permeation = sync(CATEGORY_PROCESSOR, "passive_permeation", true);
@@ -814,7 +814,7 @@ public class NCConfig {
 		radiation_badge_durability = sync(CATEGORY_RADIATION, "radiation_badge_durability", 250D, 0.000000000000000001D, 1000D);
 		radiation_badge_info_rate = sync(CATEGORY_RADIATION, "radiation_badge_info_rate", 0.1D, 0.000000000000000001D, 1D);
 		
-		register_processor = sync(CATEGORY_REGISTRATION, "register_processor", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
+		register_processor = sync(CATEGORY_REGISTRATION, "register_processor", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		register_passive = sync(CATEGORY_REGISTRATION, "register_passive", new boolean[] {true, true, true}, ARRAY);
 		register_battery = sync(CATEGORY_REGISTRATION, "register_battery", new boolean[] {true, true}, ARRAY);
 		register_quantum = sync(CATEGORY_REGISTRATION, "register_quantum", true);

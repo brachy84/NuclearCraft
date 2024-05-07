@@ -172,11 +172,11 @@ public class CommonProxy {
 		
 		MinecraftForge.EVENT_BUS.register(new ItemUseHandler());
 
-		RecipeStats.init();
-
 		NCRecipes.postInit();
 		
 		PlacementRule.postInit();
+
+		RecipeStats.init();
 		
 		if (ModCheck.projectELoaded() && register_projecte_emc) {
 			NCProjectE.addEMCValues();

@@ -1,49 +1,23 @@
 package nc.tile.fission.port;
 
-import static nc.init.NCCoolantFluids.COOLANTS;
-import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.Set;
-
 import com.google.common.collect.Lists;
-
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import nc.container.ContainerFunction;
-import nc.gui.*;
-import nc.handler.TileInfoHandler;
-import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.NCRecipes;
-import nc.tile.*;
 import nc.tile.fission.TileSaltFissionHeater;
-import nc.tile.fission.port.TileFissionHeaterPort.FissionHeaterPortContainerInfo;
-import nc.tile.internal.fluid.Tank.TankInfo;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeaterPort, TileSaltFissionHeater> implements ITileGui<TileFissionHeaterPort, FluidPortUpdatePacket, FissionHeaterPortContainerInfo> {
-	
-	public static class FissionHeaterPortContainerInfo extends TileContainerInfo<TileFissionHeaterPort> {
-		
-		public FissionHeaterPortContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileFissionHeaterPort> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileFissionHeaterPort> guiFunction) {
-			super(modId, name, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction));
-		}
-	}
-	
-	protected final FissionHeaterPortContainerInfo info = TileInfoHandler.getTileContainerInfo("fission_heater_port");
+import static nc.init.NCCoolantFluids.COOLANTS;
+import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
+
+public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeaterPort, TileSaltFissionHeater> {
 	
 	protected String heaterType, coolantName;
 	
-	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
-	
 	/** Don't use this constructor! */
 	public TileFissionHeaterPort() {
-		super(TileFissionHeaterPort.class, INGOT_BLOCK_VOLUME, null, NCRecipes.coolant_heater);
+		super("fission_heater_port", TileFissionHeaterPort.class, INGOT_BLOCK_VOLUME, null, NCRecipes.coolant_heater);
 	}
 	
 	public TileFissionHeaterPort(String heaterType, String coolantName) {
@@ -294,55 +268,8 @@ public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeate
 	}
 	
 	@Override
-	public FissionHeaterPortContainerInfo getContainerInfo() {
-		return info;
-	}
-	
-	@Override
-	public int getTankCapacityPerConnection() {
-		return 36;
-	}
-	
-	@Override
 	public Object getFilterKey() {
 		return heaterType;
-	}
-	
-	@Override
-	public boolean hasConfigurableFluidConnections() {
-		return true;
-	}
-	
-	// Ticking
-	
-	@Override
-	public void update() {
-		super.update();
-		if (!world.isRemote) {
-			sendTileUpdatePacketToListeners();
-		}
-	}
-	
-	// ITileGui
-	
-	@Override
-	public Set<EntityPlayer> getTileUpdatePacketListeners() {
-		return updatePacketListeners;
-	}
-	
-	@Override
-	public FluidPortUpdatePacket getTileUpdatePacket() {
-		return new FluidPortUpdatePacket(pos, masterPortPos, getTanks(), getFilterTanks());
-	}
-	
-	@Override
-	public void onTileUpdatePacket(FluidPortUpdatePacket message) {
-		masterPortPos = message.masterPortPos;
-		if (DEFAULT_NON.equals(masterPortPos) ^ masterPort == null) {
-			refreshMasterPort();
-		}
-		TankInfo.readInfoList(message.tankInfos, getTanks());
-		TankInfo.readInfoList(message.filterTankInfos, getFilterTanks());
 	}
 	
 	// NBT

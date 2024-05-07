@@ -11,14 +11,10 @@ Add auto-outputting to machines
 Fix smart insertion for fluid recipes
 
 QMD feature merge: nitrogen collector -> air collector
-
 QMD feature merge: particles in recipe system
 
 Global fission radiation configs
-
 Global turbine spin-up and spin-down multiplier configs
-
-Add lists of lambdas to parts of radiation tick loop for custom addon radiation logic
 
 Complete printing of registered multiblock component stats and rules to separate nuclearcraft.info file
 

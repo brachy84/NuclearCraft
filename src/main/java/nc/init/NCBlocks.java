@@ -68,6 +68,7 @@ public class NCBlocks {
 	public static Block extractor;
 	public static Block centrifuge;
 	public static Block rock_crusher;
+	public static Block electric_furnace;
 	
 	public static Block machine_interface;
 	
@@ -262,6 +263,9 @@ public class NCBlocks {
 		}
 		if (register_processor[19]) {
 			rock_crusher = withName(new BlockProcessor<>("rock_crusher"));
+		}
+		if (register_processor[20]) {
+			electric_furnace = withName(new BlockProcessor<>("electric_furnace"));
 		}
 		
 		machine_interface = withName(new BlockMachineInterface("machine_interface"));
@@ -470,6 +474,9 @@ public class NCBlocks {
 		}
 		if (register_processor[19]) {
 			registerBlock(rock_crusher);
+		}
+		if (register_processor[20]) {
+			registerBlock(electric_furnace);
 		}
 		
 		registerBlock(machine_interface);
@@ -685,6 +692,9 @@ public class NCBlocks {
 		}
 		if (register_processor[19]) {
 			registerRender(rock_crusher);
+		}
+		if (register_processor[20]) {
+			registerRender(electric_furnace);
 		}
 		
 		registerRender(machine_interface);

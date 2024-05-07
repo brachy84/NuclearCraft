@@ -1,32 +1,48 @@
 package nc.tile.fission.port;
 
-import static nc.config.NCConfig.smart_processor_input;
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
-import nc.Global;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import nc.config.NCConfig;
+import nc.handler.TileInfoHandler;
+import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.port.internal.PortItemHandler;
-import nc.tile.internal.inventory.*;
-import nc.tile.inventory.*;
-import nc.util.*;
+import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.internal.inventory.ItemSorption;
+import nc.tile.inventory.ITileFilteredInventory;
+import nc.tile.inventory.ITileInventory;
+import nc.util.Lang;
+import nc.util.NBTHelper;
+import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.text.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.*;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
-public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT, TARGET> & ITileFilteredInventory, TARGET extends IFissionPortTarget<PORT, TARGET> & ITileFilteredInventory> extends TileFissionPort<PORT, TARGET> implements ITileFilteredInventory {
-	
-	private final @Nonnull String inventoryName;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import static nc.util.PosHelper.DEFAULT_NON;
+
+public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT, TARGET> & ITileFilteredInventory, TARGET extends IFissionPortTarget<PORT, TARGET> & ITileFilteredInventory> extends TileFissionPort<PORT, TARGET> implements ITileFilteredInventory, ITileGui<PORT, ItemPortUpdatePacket, TileContainerInfo<PORT>> {
+
+	protected final TileContainerInfo<PORT> info;
+
+	protected final @Nonnull String inventoryName;
 	
 	protected final @Nonnull NonNullList<ItemStack> inventoryStacks = NonNullList.withSize(2, ItemStack.EMPTY);
 	protected final @Nonnull NonNullList<ItemStack> filterStacks = NonNullList.withSize(2, ItemStack.EMPTY);
@@ -36,19 +52,35 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	public int inventoryStackLimit = 64;
 	
 	protected final BasicRecipeHandler recipeHandler;
+
+	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
-	public TileFissionItemPort(Class<PORT> portClass, String type, BasicRecipeHandler recipeHandler) {
+	public TileFissionItemPort(String name, Class<PORT> portClass, BasicRecipeHandler recipeHandler) {
 		super(portClass);
-		inventoryName = Global.MOD_ID + ".container.fission_" + type + "_port";
+		info = TileInfoHandler.getTileContainerInfo(name);
+		inventoryName = info.modId + ".container." + name;
 		this.recipeHandler = recipeHandler;
+	}
+
+	@Override
+	public TileContainerInfo<PORT> getContainerInfo() {
+		return info;
+	}
+
+	@Override
+	public Object getFilterKey() {
+		return getFilterStacks().get(0).isEmpty() ? 0 : RecipeItemHelper.pack(getFilterStacks().get(0));
 	}
 	
 	@Override
 	public void update() {
 		super.update();
-		EnumFacing facing = getPartPosition().getFacing();
-		if (!world.isRemote && facing != null && !getStackInSlot(1).isEmpty() && getItemSorption(facing, 1).canExtract()) {
-			pushStacksToSide(facing);
+		if (!world.isRemote) {
+			EnumFacing facing = getPartPosition().getFacing();
+			if (facing != null && !getStackInSlot(1).isEmpty() && getItemSorption(facing, 1).canExtract()) {
+				pushStacksToSide(facing);
+			}
+			sendTileUpdatePacketToListeners();
 		}
 	}
 
@@ -151,7 +183,13 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 		if (stack.isEmpty() || slot >= recipeHandler.getItemInputSize()) {
 			return false;
 		}
-		return smart_processor_input ? recipeHandler.isValidItemInput(slot, stack, null, getInventoryStacks().subList(0, recipeHandler.getItemInputSize()), inputItemStacksExcludingSlot(slot)) : recipeHandler.isValidItemInput(slot, stack);
+
+		if (NCConfig.smart_processor_input) {
+			return recipeHandler.isValidItemInput(slot, stack, null, getInventoryStacks().subList(0, recipeHandler.getItemInputSize()), inputItemStacksExcludingSlot(slot));
+		}
+		else {
+			return recipeHandler.isValidItemInput(slot, stack);
+		}
 	}
 	
 	public List<ItemStack> inputItemStacksExcludingSlot(int slot) {
@@ -192,6 +230,27 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	@Override
 	public boolean hasConfigurableInventoryConnections() {
 		return true;
+	}
+
+	// ITileGui
+
+	@Override
+	public Set<EntityPlayer> getTileUpdatePacketListeners() {
+		return updatePacketListeners;
+	}
+
+	@Override
+	public ItemPortUpdatePacket getTileUpdatePacket() {
+		return new ItemPortUpdatePacket(pos, masterPortPos, getFilterStacks());
+	}
+
+	@Override
+	public void onTileUpdatePacket(ItemPortUpdatePacket message) {
+		masterPortPos = message.masterPortPos;
+		if (DEFAULT_NON.equals(masterPortPos) ^ masterPort == null) {
+			refreshMasterPort();
+		}
+		IntStream.range(0, filterStacks.size()).forEach(x -> filterStacks.set(x, message.filterStacks.get(x)));
 	}
 	
 	// IMultitoolLogic

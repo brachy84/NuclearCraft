@@ -48,6 +48,7 @@ public class NCTiles {
 		GameRegistry.registerTileEntity(TileExtractor.class, Global.MOD_ID + ":extractor");
 		GameRegistry.registerTileEntity(TileCentrifuge.class, Global.MOD_ID + ":centrifuge");
 		GameRegistry.registerTileEntity(TileRockCrusher.class, Global.MOD_ID + ":rock_crusher");
+		GameRegistry.registerTileEntity(TileElectricFurnace.class, Global.MOD_ID + ":electric_furnace");
 		
 		GameRegistry.registerTileEntity(TileBasicProcessorDyn.class, Global.MOD_ID + ":basic_processor_dyn");
 		GameRegistry.registerTileEntity(TileBasicUpgradableProcessorDyn.class, Global.MOD_ID + ":basic_upgradable_processor_dyn");

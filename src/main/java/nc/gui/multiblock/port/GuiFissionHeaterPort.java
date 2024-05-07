@@ -6,15 +6,15 @@ import nc.gui.element.NCButton;
 import nc.network.gui.ClearFilterTankPacket;
 import nc.network.gui.ClearTankPacket;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
+import nc.tile.TileContainerInfo;
 import nc.tile.fission.port.TileFissionHeaterPort;
-import nc.tile.fission.port.TileFissionHeaterPort.FissionHeaterPortContainerInfo;
 import nc.tile.internal.fluid.Tank;
 import nc.util.NCUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-public class GuiFissionHeaterPort extends GuiInfoTile<TileFissionHeaterPort, FluidPortUpdatePacket, FissionHeaterPortContainerInfo> {
+public class GuiFissionHeaterPort extends GuiInfoTile<TileFissionHeaterPort, FluidPortUpdatePacket, TileContainerInfo<TileFissionHeaterPort>> {
 	
 	public GuiFissionHeaterPort(Container inventory, EntityPlayer player, TileFissionHeaterPort tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);

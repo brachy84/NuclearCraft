@@ -52,10 +52,6 @@ import nc.tile.fission.TileSaltFissionVessel;
 import nc.tile.fission.TileSaltFissionVessel.SaltFissionVesselContainerInfoBuilder;
 import nc.tile.fission.TileSolidFissionCell;
 import nc.tile.fission.TileSolidFissionCell.SolidFissionCellContainerInfoBuilder;
-import nc.tile.fission.port.TileFissionCellPort.FissionCellPortContainerInfo;
-import nc.tile.fission.port.TileFissionHeaterPort.FissionHeaterPortContainerInfo;
-import nc.tile.fission.port.TileFissionIrradiatorPort.FissionIrradiatorPortContainerInfo;
-import nc.tile.fission.port.TileFissionVesselPort.FissionVesselPortContainerInfo;
 import nc.tile.generator.TileDecayGenerator;
 import nc.tile.generator.TileSolarPanel;
 import nc.tile.passive.TilePassive;
@@ -133,6 +129,7 @@ public class TileInfoHandler {
 		registerProcessorInfo(new BasicUpgradableProcessorContainerInfoBuilder<>(Global.MOD_ID, "extractor", TileExtractor.class, TileExtractor::new, ContainerExtractor.class, ContainerExtractor::new, GuiExtractor.class, GuiExtractor::new).setParticles("depthsuspend", "reddust").setDefaultProcessTime(processor_time[16]).setDefaultProcessPower(processor_power[16]).setLosesProgress(true).setItemInputSlots(standardSlot(42, 35)).setItemOutputSlots(bigSlot(98, 31)).setFluidOutputSlots(bigSlot(126, 31)).setProgressBarGuiXYWHUV(60, 34, 37, 18, 176, 3).setJeiCategoryEnabled(register_processor[17]));
 		registerProcessorInfo(new BasicUpgradableProcessorContainerInfoBuilder<>(Global.MOD_ID, "centrifuge", TileCentrifuge.class, TileCentrifuge::new, ContainerCentrifuge.class, ContainerCentrifuge::new, GuiCentrifuge.class, GuiCentrifuge::new).setParticles("depthsuspend", "endRod").setDefaultProcessTime(processor_time[17]).setDefaultProcessPower(processor_power[17]).standardExtend(0, 12).setFluidInputSlots(standardSlot(40, 41)).setFluidOutputSlots(standardSlot(96, 31), standardSlot(116, 31), standardSlot(136, 31), standardSlot(96, 51), standardSlot(116, 51), standardSlot(136, 51)).setProgressBarGuiXYWHUV(58, 30, 37, 38, 176, 3).setJeiCategoryEnabled(register_processor[18]));
 		registerProcessorInfo(new BasicUpgradableProcessorContainerInfoBuilder<>(Global.MOD_ID, "rock_crusher", TileRockCrusher.class, TileRockCrusher::new, ContainerRockCrusher.class, ContainerRockCrusher::new, GuiRockCrusher.class, GuiRockCrusher::new).setParticles("smoke").setDefaultProcessTime(processor_time[18]).setDefaultProcessPower(processor_power[18]).setItemInputSlots(standardSlot(38, 35)).setItemOutputSlots(standardSlot(94, 35), standardSlot(114, 35), standardSlot(134, 35)).setProgressBarGuiXYWHUV(56, 35, 37, 16, 176, 3).setJeiCategoryEnabled(register_processor[19]));
+		registerProcessorInfo(new BasicUpgradableProcessorContainerInfoBuilder<>(Global.MOD_ID, "electric_furnace", TileElectricFurnace.class, TileElectricFurnace::new, ContainerElectricFurnace.class, ContainerElectricFurnace::new, GuiElectricFurnace.class, GuiElectricFurnace::new).setParticles("reddust", "smoke").setDefaultProcessTime(processor_time[19]).setDefaultProcessPower(processor_power[19]).setItemInputSlots(standardSlot(56, 35)).setItemOutputSlots(bigSlot(112, 31)).setJeiCategoryEnabled(register_processor[20]));
 
 		registerProcessorInfo(new BasicProcessorContainerInfoBuilder<>(Global.MOD_ID, "radiation_scrubber", TileRadiationScrubber.class, TileRadiationScrubber::new, ContainerRadiationScrubber.class, ContainerRadiationScrubber::new, GuiRadiationScrubber.class, GuiRadiationScrubber::new).setCreativeTab(NCTabs.radiation).setParticles("reddust").setConsumesInputs(true).setItemInputSlots(standardSlot(32, 35)).setFluidInputSlots(standardSlot(52, 35)).setItemOutputSlots(bigSlot(108, 31)).setFluidOutputSlots(bigSlot(136, 31)).setProgressBarGuiXYWHUV(70, 35, 37, 16, 176, 3));
 
@@ -146,10 +143,10 @@ public class TileInfoHandler {
 		registerContainerInfo(new SaltFissionVesselContainerInfoBuilder(Global.MOD_ID, "salt_fission_vessel", TileSaltFissionVessel.class, TileSaltFissionVessel::new, ContainerSaltFissionVessel.class, ContainerSaltFissionVessel::new, GuiSaltFissionVessel.class, GuiSaltFissionVessel::new).setRecipeHandlerName("salt_fission").setConsumesInputs(true).setFluidInputSlots(standardSlot(56, 35)).setFluidOutputSlots(bigSlot(112, 31)).setStandardJeiAlternateTitle().buildContainerInfo());
 		registerContainerInfo(new SaltFissionHeaterContainerInfoBuilder(Global.MOD_ID, "salt_fission_heater", TileSaltFissionHeater.class, TileSaltFissionHeater::new, ContainerSaltFissionHeater.class, ContainerSaltFissionHeater::new, GuiSaltFissionHeater.class, GuiSaltFissionHeater::new).setRecipeHandlerName("coolant_heater").setConsumesInputs(true).setFluidInputSlots(standardSlot(56, 35)).setFluidOutputSlots(bigSlot(112, 31)).setStandardJeiAlternateTitle().buildContainerInfo());
 
-		registerContainerInfo(new FissionIrradiatorPortContainerInfo(Global.MOD_ID, "fission_irradiator_port", ContainerFissionIrradiatorPort.class, ContainerFissionIrradiatorPort::new, GuiFissionIrradiatorPort.class, GuiFissionIrradiatorPort::new));
-		registerContainerInfo(new FissionCellPortContainerInfo(Global.MOD_ID, "fission_cell_port", ContainerFissionCellPort.class, ContainerFissionCellPort::new, GuiFissionCellPort.class, GuiFissionCellPort::new));
-		registerContainerInfo(new FissionVesselPortContainerInfo(Global.MOD_ID, "fission_vessel_port", ContainerFissionVesselPort.class, ContainerFissionVesselPort::new, GuiFissionVesselPort.class, GuiFissionVesselPort::new));
-		registerContainerInfo(new FissionHeaterPortContainerInfo(Global.MOD_ID, "fission_heater_port", ContainerFissionHeaterPort.class, ContainerFissionHeaterPort::new, GuiFissionHeaterPort.class, GuiFissionHeaterPort::new));
+		registerContainerInfo(new TileContainerInfo<>(Global.MOD_ID, "fission_irradiator_port", ContainerFissionIrradiatorPort.class, ContainerFissionIrradiatorPort::new, GuiFissionIrradiatorPort.class, GuiFissionIrradiatorPort::new));
+		registerContainerInfo(new TileContainerInfo<>(Global.MOD_ID, "fission_cell_port", ContainerFissionCellPort.class, ContainerFissionCellPort::new, GuiFissionCellPort.class, GuiFissionCellPort::new));
+		registerContainerInfo(new TileContainerInfo<>(Global.MOD_ID, "fission_vessel_port", ContainerFissionVesselPort.class, ContainerFissionVesselPort::new, GuiFissionVesselPort.class, GuiFissionVesselPort::new));
+		registerContainerInfo(new TileContainerInfo<>(Global.MOD_ID, "fission_heater_port", ContainerFissionHeaterPort.class, ContainerFissionHeaterPort::new, GuiFissionHeaterPort.class, GuiFissionHeaterPort::new));
 	}
 
 	public static void init() {
@@ -175,7 +172,8 @@ public class TileInfoHandler {
 		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("extractor", ExtractorRecipeWrapper.class, ExtractorRecipeWrapper::new, Lists.newArrayList(NCBlocks.extractor)));
 		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("centrifuge", CentrifugeRecipeWrapper.class, CentrifugeRecipeWrapper::new, Lists.newArrayList(NCBlocks.centrifuge)));
 		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("rock_crusher", RockCrusherRecipeWrapper.class, RockCrusherRecipeWrapper::new, Lists.newArrayList(NCBlocks.rock_crusher)));
-		
+		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("electric_furnace", ElectricFurnaceRecipeWrapper.class, ElectricFurnaceRecipeWrapper::new, Lists.newArrayList(NCBlocks.electric_furnace)));
+
 		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("radiation_scrubber", RadiationScrubberRecipeWrapper.class, RadiationScrubberRecipeWrapper::new, Lists.newArrayList(NCBlocks.radiation_scrubber)));
 		
 		registerJEICategoryInfo(new JEIProcessorCategoryInfo<>("fission_irradiator", FissionIrradiatorRecipeWrapper.class, FissionIrradiatorRecipeWrapper::new, Lists.newArrayList(NCBlocks.fission_irradiator)));

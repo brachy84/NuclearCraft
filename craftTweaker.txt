@@ -287,6 +287,15 @@ mods.nuclearcraft.RockCrusher.removeRecipeWithInput(IIngredient itemInput);
 mods.nuclearcraft.RockCrusher.removeRecipeWithOutput(IIngredient itemOutput1, IIngredient itemOutput2, IIngredient itemOutput3);
 
 
+Electric Furnace:
+-------------
+
+mods.nuclearcraft.ElectricFurnace.addRecipe(IIngredient itemInput, IIngredient itemOutput, {double timeMultiplier, double powerMultiplier, double processRadiation});
+
+mods.nuclearcraft.ElectricFurnace.removeRecipeWithInput(IIngredient itemInput);
+mods.nuclearcraft.ElectricFurnace.removeRecipeWithOutput(IIngredient itemOutput);
+
+
 Decay Generator:
 ----------------
 

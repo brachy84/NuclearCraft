@@ -111,6 +111,8 @@ public class GTCERecipeHelper {
 			case "rock_crusher":
 				recipeMap = RecipeMaps.MACERATOR_RECIPES;
 				builder = addStats(recipeMap.recipeBuilder(), recipe, 20, 12);
+				break;
+			case "electric_furnace":
 				return;
 			default:
 				break;

@@ -157,11 +157,18 @@ public class TileProcessorImpl {
 			super("centrifuge");
 		}
 	}
-	
+
 	public static class TileRockCrusher extends TileBasicUpgradableProcessor<TileRockCrusher> {
-		
+
 		public TileRockCrusher() {
 			super("rock_crusher");
+		}
+	}
+
+	public static class TileElectricFurnace extends TileBasicUpgradableProcessor<TileElectricFurnace> {
+
+		public TileElectricFurnace() {
+			super("electric_furnace");
 		}
 	}
 }
