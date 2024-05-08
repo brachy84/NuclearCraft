@@ -1,5 +1,11 @@
 v2o.7.2
 
++ Added back GTCEu recipe integration
+
+* Fixed Nuclear Furnace
+
+* Fixed recipe system incorrectly handling items with wildcard metadata
+
 + Added config to entirely disable all GTCEu recipe integration
 + Added config to disable all miscellaneous TiC recipes
 

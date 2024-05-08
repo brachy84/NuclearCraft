@@ -130,7 +130,7 @@ public abstract class GuiProcessor<TILE extends TileEntity & IProcessor<TILE, PA
 	
 	protected int getProgressBarWidth() {
 		double baseProcessTime = tile.getBaseProcessTime();
-		if (baseProcessTime / tile.getSpeedMultiplier() < 4D) {
+		if (baseProcessTime / tile.getSpeedMultiplier() < 2D) {
 			return tile.getIsProcessing() ? info.progressBarGuiW : 0;
 		}
 		else {

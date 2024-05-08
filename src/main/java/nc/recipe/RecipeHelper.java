@@ -514,7 +514,7 @@ public class RecipeHelper {
 	public static long hashMaterialsRaw(List<ItemStack> items, List<Tank> fluids) {
 		long hash = 1L;
         for (ItemStack stack : items) {
-            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : RecipeItemHelper.pack(stack));
+            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
         }
         for (Tank tank : fluids) {
             hash = 31L * hash + (tank == null || tank.getFluid() == null ? 0L : tank.getFluid().getFluid().getName().hashCode());
@@ -525,7 +525,7 @@ public class RecipeHelper {
 	public static long hashMaterials(List<ItemStack> items, List<FluidStack> fluids) {
 		long hash = 1L;
         for (ItemStack stack : items) {
-            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : RecipeItemHelper.pack(stack));
+            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
         }
         for (FluidStack stack : fluids) {
             hash = 31L * hash + (stack == null ? 0L : stack.getFluid().getName().hashCode());

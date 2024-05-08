@@ -1,8 +1,7 @@
-Add back GTCE recipe integration
-
 GroovyScript support
 
-Wiki/Patchouli documentation
+Config localisation
+Patchouli documentation
 
 CT Registration of machines
 

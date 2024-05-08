@@ -191,11 +191,11 @@ public class NCRecipes {
 			TConstructExtras.init();
 		}
 
-		/*if (ModCheck.gregtechLoaded() && NCConfig.gtce_recipe_integration_global) {
+		if (ModCheck.gregtechLoaded() && NCConfig.gtce_recipe_integration_global) {
 			for (BasicRecipeHandler handler : getHandlers()) {
 				handler.addGTCERecipes();
 			}
-		}*/
+		}
 	}
 	
 	public static void init() {

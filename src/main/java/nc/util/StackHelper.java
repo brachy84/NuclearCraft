@@ -66,6 +66,10 @@ public class StackHelper {
 	public static int getMetadata(ItemStack stack) {
 		return Items.DIAMOND.getMetadata(stack);
 	}
+
+	public static boolean isWildcard(ItemStack stack) {
+		return getMetadata(stack) == 32767;
+	}
 	
 	public static ItemStack changeStackSize(ItemStack stack, int size) {
 		ItemStack newStack = stack.copy();
