@@ -14,13 +14,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
 
-public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends Item implements IInfoItem {
-	
-	private final Class<T> enumm;
+public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends Item implements IInfoItem, IItemMeta<T> {
+
+	public final Class<T> enumm;
 	public final T[] values;
 	
 	public final TextFormatting infoColor;
-	private final String[][] tooltips;
+	public final String[][] tooltips;
 	public String[][] info;
 	
 	public NCItemMeta(Class<T> enumm, TextFormatting infoColor, String[]... tooltips) {
@@ -34,7 +34,11 @@ public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> ext
 	public NCItemMeta(Class<T> enumm, String[]... tooltips) {
 		this(enumm, TextFormatting.AQUA, tooltips);
 	}
-	
+
+	public Class<T> getEnumClass() {
+		return enumm;
+	}
+
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (isInCreativeTab(tab)) {

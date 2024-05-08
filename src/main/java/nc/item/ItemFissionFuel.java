@@ -14,9 +14,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
 
-public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionFuelEnum> extends Item implements IInfoItem {
-	
-	private final Class<T> enumm;
+public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionFuelEnum> extends Item implements IInfoItem, IItemMeta<T> {
+
+	public final Class<T> enumm;
 	public final T[] values;
 	public String[] fixedInfo;
 	public String[][] info;
@@ -25,6 +25,10 @@ public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionF
 		setHasSubtypes(true);
 		this.enumm = enumm;
 		values = enumm.getEnumConstants();
+	}
+
+	public Class<T> getEnumClass() {
+		return enumm;
 	}
 	
 	@Override

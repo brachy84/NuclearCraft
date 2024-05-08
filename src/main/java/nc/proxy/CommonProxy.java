@@ -1,30 +1,33 @@
 package nc.proxy;
 
-import static nc.config.NCConfig.register_projecte_emc;
-
-import java.io.IOException;
-
 import crafttweaker.CraftTweakerAPI;
-import nc.*;
+import nc.Global;
+import nc.ModCheck;
 import nc.capability.radiation.RadiationCapabilityHandler;
 import nc.command.CommandHandler;
+import nc.config.NCConfig;
 import nc.handler.*;
 import nc.init.*;
 import nc.integration.crafttweaker.CTRegistration;
 import nc.integration.crafttweaker.CTRegistration.RegistrationInfo;
 import nc.integration.hwyla.NCHWLYA;
 import nc.integration.projecte.NCProjectE;
-import nc.integration.tconstruct.*;
+import nc.integration.tconstruct.TConstructIMC;
+import nc.integration.tconstruct.TConstructMaterials;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
-import nc.multiblock.*;
-import nc.init.NCPackets;
+import nc.multiblock.MultiblockHandler;
+import nc.multiblock.MultiblockLogic;
+import nc.multiblock.PlacementRule;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
-import nc.recipe.*;
+import nc.recipe.NCRecipes;
+import nc.recipe.RecipeStats;
 import nc.recipe.vanilla.CraftingRecipeHandler;
 import nc.tab.NCTabs;
-import nc.util.*;
+import nc.util.GasHelper;
+import nc.util.OreDictHelper;
+import nc.util.StructureHelper;
 import nc.worldgen.biome.NCBiomes;
 import nc.worldgen.decoration.MushroomGenerator;
 import nc.worldgen.dimension.NCWorlds;
@@ -33,11 +36,14 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import slimeknights.tconstruct.library.materials.Material;
+
+import java.io.IOException;
 
 public class CommonProxy {
 	
@@ -99,7 +105,10 @@ public class CommonProxy {
 		
 		if (ModCheck.tinkersLoaded()) {
 			TConstructMaterials.init();
-			TConstructIMC.init();
+
+			if (NCConfig.register_tic_recipes) {
+				TConstructIMC.init();
+			}
 		}
 		
 		if (ModCheck.constructsArmoryLoaded()) {
@@ -178,7 +187,7 @@ public class CommonProxy {
 
 		RecipeStats.init();
 		
-		if (ModCheck.projectELoaded() && register_projecte_emc) {
+		if (ModCheck.projectELoaded() && NCConfig.register_projecte_emc) {
 			NCProjectE.addEMCValues();
 		}
 		

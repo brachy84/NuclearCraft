@@ -25,8 +25,9 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.*;
 
-public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends Block implements IBlockMeta {
-	
+public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends Block implements IBlockMeta<T> {
+
+	public final Class<T> enumm;
 	public final T[] values;
 	public final PropertyEnum<T> type;
 	
@@ -37,6 +38,7 @@ public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlock
 	
 	public BlockMeta(Class<T> enumm, PropertyEnum<T> property, Material material) {
 		super(material);
+		this.enumm = enumm;
 		values = enumm.getEnumConstants();
 		type = property;
 		setDefaultState(blockState.getBaseState().withProperty(type, values[0]));
@@ -124,6 +126,16 @@ public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlock
 		protected BlockStateContainer createBlockState() {
 			return new BlockStateContainer(this, TYPE);
 		}
+	}
+
+	@Override
+	public Class<T> getEnumClass() {
+		return enumm;
+	}
+
+	@Override
+	public T[] getValues() {
+		return values;
 	}
 	
 	@Override

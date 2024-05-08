@@ -4,6 +4,7 @@ import java.util.*;
 
 import it.unimi.dsi.fastutil.objects.*;
 import nc.ModCheck;
+import nc.config.NCConfig;
 import nc.integration.crafttweaker.CTRegistration;
 import nc.integration.crafttweaker.CTRegistration.RegistrationInfo;
 import nc.integration.tconstruct.TConstructExtras;
@@ -186,13 +187,15 @@ public class NCRecipes {
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void registerIntegrationRecipes(RegistryEvent.Register<IRecipe> event) {
-		if (ModCheck.tinkersLoaded()) {
+		if (ModCheck.tinkersLoaded() && NCConfig.register_tic_recipes) {
 			TConstructExtras.init();
 		}
-		
-		for (BasicRecipeHandler handler : getHandlers()) {
-			handler.addGTCERecipes();
-		}
+
+		/*if (ModCheck.gregtechLoaded() && NCConfig.gtce_recipe_integration_global) {
+			for (BasicRecipeHandler handler : getHandlers()) {
+				handler.addGTCERecipes();
+			}
+		}*/
 	}
 	
 	public static void init() {

@@ -1,30 +1,35 @@
 package nc.block.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.block.IBlockMeta;
-import nc.util.*;
+import nc.enumm.IMetaEnum;
+import nc.util.InfoHelper;
+import nc.util.StackHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockMeta extends ItemBlock {
-	
-	private final TextFormatting[] fixedColors;
-	private final TextFormatting infoColor;
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class ItemBlockMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends ItemBlock {
+
+	public final Class<T> enumm;
+	public final T[] values;
+
+	public final TextFormatting[] fixedColors;
+	public final TextFormatting infoColor;
 	public final String[][] fixedInfo, info;
 	
-	public <T extends Enum<T> & IStringSerializable> ItemBlockMeta(Block block, Class<T> enumm, TextFormatting[] fixedColors, String[][] fixedTooltips, TextFormatting infoColor, String[]... tooltips) {
+	public <V extends Block & IBlockMeta<T>> ItemBlockMeta(V block, TextFormatting[] fixedColors, String[][] fixedTooltips, TextFormatting infoColor, String[]... tooltips) {
 		super(block);
-		if (!(block instanceof IBlockMeta)) {
-			throw new IllegalArgumentException(String.format("The block %s for this ItemBlockMeta is not an instance of IBlockMeta!", block.getTranslationKey()));
-		}
+		enumm = block.getEnumClass();
+		values = block.getValues();
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		this.fixedColors = fixedColors;
@@ -33,21 +38,21 @@ public class ItemBlockMeta extends ItemBlock {
 		info = InfoHelper.buildInfo(block.getTranslationKey(), enumm, tooltips);
 	}
 	
-	public <T extends Enum<T> & IStringSerializable> ItemBlockMeta(Block block, Class<T> enumm, TextFormatting fixedColor, String[][] fixedTooltips, TextFormatting infoColor, String[]... tooltips) {
-		this(block, enumm, new TextFormatting[] {fixedColor}, fixedTooltips, infoColor, tooltips);
+	public <V extends Block & IBlockMeta<T>> ItemBlockMeta(V block, TextFormatting fixedColor, String[][] fixedTooltips, TextFormatting infoColor, String[]... tooltips) {
+		this(block, new TextFormatting[] {fixedColor}, fixedTooltips, infoColor, tooltips);
 	}
 	
-	public <T extends Enum<T> & IStringSerializable> ItemBlockMeta(Block block, Class<T> enumm, TextFormatting infoColor, String[]... tooltips) {
-		this(block, enumm, TextFormatting.RED, InfoHelper.EMPTY_ARRAYS, infoColor, tooltips);
+	public <V extends Block & IBlockMeta<T>> ItemBlockMeta(V block, TextFormatting infoColor, String[]... tooltips) {
+		this(block, TextFormatting.RED, InfoHelper.EMPTY_ARRAYS, infoColor, tooltips);
 	}
 	
-	public <T extends Enum<T> & IStringSerializable> ItemBlockMeta(Block block, Class<T> enumm, String[]... tooltips) {
-		this(block, enumm, TextFormatting.RED, InfoHelper.EMPTY_ARRAYS, TextFormatting.AQUA, tooltips);
+	public <V extends Block & IBlockMeta<T>> ItemBlockMeta(V block, String[]... tooltips) {
+		this(block, TextFormatting.RED, InfoHelper.EMPTY_ARRAYS, TextFormatting.AQUA, tooltips);
 	}
 	
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		return getTranslationKey() + "." + ((IBlockMeta) block).getMetaName(stack);
+		return getTranslationKey() + "." + ((IBlockMeta<?>) block).getMetaName(stack);
 	}
 	
 	@Override

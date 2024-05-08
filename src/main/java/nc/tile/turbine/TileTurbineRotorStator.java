@@ -19,11 +19,18 @@ public class TileTurbineRotorStator extends TileTurbinePart implements ITurbineR
 	public TileTurbineRotorStator() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
-	
-	public static class Standard extends TileTurbineRotorStator {
+
+	public static class Variant extends TileTurbineRotorStator {
+
+		protected Variant(TurbineRotorStatorType statorType) {
+			super(statorType);
+		}
+	}
+
+	public static class Standard extends Variant {
 		
 		public Standard() {
-			super(TurbineRotorStatorType.STATOR);
+			super(TurbineRotorStatorType.STANDARD);
 		}
 	}
 	

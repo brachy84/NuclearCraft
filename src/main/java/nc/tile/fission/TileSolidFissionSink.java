@@ -41,7 +41,7 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 		this.placementRule = FissionPlacement.RULE_MAP.get(ruleID);
 	}
 	
-	protected static class Meta extends TileSolidFissionSink {
+	public static class Meta extends TileSolidFissionSink {
 		
 		protected Meta(String sinkType, int coolingID) {
 			super(sinkType, fission_sink_cooling_rate[coolingID], sinkType + "_sink");

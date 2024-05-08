@@ -1,41 +1,59 @@
 package nc.init;
 
-import static nc.config.NCConfig.*;
-
-import nc.*;
+import nc.Global;
+import nc.NCInfo;
 import nc.block.*;
-import nc.block.battery.*;
+import nc.block.battery.BatteryBlockType;
+import nc.block.battery.BlockBattery;
 import nc.block.fission.*;
 import nc.block.fission.manager.BlockFissionShieldManager;
 import nc.block.fission.port.*;
 import nc.block.hx.*;
-import nc.block.item.*;
+import nc.block.item.ItemBlockMeta;
+import nc.block.item.NCItemBlock;
 import nc.block.item.energy.ItemBlockBattery;
-import nc.block.plant.*;
+import nc.block.plant.BlockGlowingMushroom;
+import nc.block.plant.BlockHugeGlowingMushroom;
 import nc.block.quantum.*;
 import nc.block.rtg.BlockRTG;
-import nc.block.tile.*;
+import nc.block.tile.BlockPortalWasteland;
+import nc.block.tile.BlockSimpleTile;
+import nc.block.tile.ITileType;
 import nc.block.tile.dummy.BlockMachineInterface;
-import nc.block.tile.processor.*;
-import nc.block.tile.radiation.*;
+import nc.block.tile.processor.BlockNuclearFurnace;
+import nc.block.tile.processor.BlockProcessor;
+import nc.block.tile.radiation.BlockGeigerCounter;
+import nc.block.tile.radiation.BlockRadiationScrubber;
 import nc.block.turbine.*;
+import nc.enumm.IMetaEnum;
 import nc.enumm.MetaEnums;
 import nc.multiblock.hx.HeatExchangerTubeType;
-import nc.multiblock.quantum.QuantumGateEnums;
 import nc.multiblock.rtg.RTGType;
-import nc.multiblock.turbine.TurbineDynamoCoilType;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorBladeType;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorStatorType;
 import nc.radiation.RadiationHelper;
 import nc.tab.NCTabs;
 import nc.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.UnaryOperator;
+
+import static nc.config.NCConfig.*;
 
 public class NCBlocks {
 	
@@ -193,703 +211,302 @@ public class NCBlocks {
 	public static Block quantum_computer_connector;
 	
 	public static Block quantum_computer_code_generator;
+
+	public static List<BlockRegistrationInfo<?>> registrationList = new ArrayList<>();
 	
 	public static void init() {
-		ore = withName(new BlockMeta.BlockOre(), "ore");
-		ingot_block = withName(new BlockMeta.BlockIngot(), "ingot_block");
+		ore = addWithNameMeta(Global.MOD_ID, "ore", new BlockMeta.BlockOre());
+		ingot_block = addWithNameMeta(Global.MOD_ID, "ingot_block", new BlockMeta.BlockIngot());
 		
-		fertile_isotope = withName(new BlockMeta.BlockFertileIsotope(), "fertile_isotope");
+		fertile_isotope = addWithNameMeta(Global.MOD_ID, "fertile_isotope", new BlockMeta.BlockFertileIsotope());
 		
-		supercold_ice = withName(new NCBlockIce(0.999F).setCreativeTab(NCTabs.material), "supercold_ice");
+		supercold_ice = addWithName(Global.MOD_ID, "supercold_ice", new NCBlockIce(0.999F).setCreativeTab(NCTabs.material));
 		
-		heavy_water_moderator = withName(new NCBlock(Material.IRON).setCreativeTab(NCTabs.misc), "heavy_water_moderator");
+		heavy_water_moderator = addWithName(Global.MOD_ID, "heavy_water_moderator", new NCBlock(Material.IRON).setCreativeTab(NCTabs.misc));
 		
 		if (register_processor[0]) {
-			nuclear_furnace = withName(new BlockNuclearFurnace(), "nuclear_furnace");
+			nuclear_furnace = addWithName(Global.MOD_ID, "nuclear_furnace", new BlockNuclearFurnace());
 		}
 		if (register_processor[1]) {
-			manufactory = withName(new BlockProcessor<>("manufactory"));
+			manufactory = addWithName(Global.MOD_ID, new BlockProcessor<>("manufactory"));
 		}
 		if (register_processor[2]) {
-			separator = withName(new BlockProcessor<>("separator"));
+			separator = addWithName(Global.MOD_ID, new BlockProcessor<>("separator"));
 		}
 		if (register_processor[3]) {
-			decay_hastener = withName(new BlockProcessor<>("decay_hastener"));
+			decay_hastener = addWithName(Global.MOD_ID, new BlockProcessor<>("decay_hastener"));
 		}
 		if (register_processor[4]) {
-			fuel_reprocessor = withName(new BlockProcessor<>("fuel_reprocessor"));
+			fuel_reprocessor = addWithName(Global.MOD_ID, new BlockProcessor<>("fuel_reprocessor"));
 		}
 		if (register_processor[5]) {
-			alloy_furnace = withName(new BlockProcessor<>("alloy_furnace"));
+			alloy_furnace = addWithName(Global.MOD_ID, new BlockProcessor<>("alloy_furnace"));
 		}
 		if (register_processor[6]) {
-			infuser = withName(new BlockProcessor<>("infuser"));
+			infuser = addWithName(Global.MOD_ID, new BlockProcessor<>("infuser"));
 		}
 		if (register_processor[7]) {
-			melter = withName(new BlockProcessor<>("melter"));
+			melter = addWithName(Global.MOD_ID, new BlockProcessor<>("melter"));
 		}
 		if (register_processor[8]) {
-			supercooler = withName(new BlockProcessor<>("supercooler"));
+			supercooler = addWithName(Global.MOD_ID, new BlockProcessor<>("supercooler"));
 		}
 		if (register_processor[9]) {
-			electrolyzer = withName(new BlockProcessor<>("electrolyzer"));
+			electrolyzer = addWithName(Global.MOD_ID, new BlockProcessor<>("electrolyzer"));
 		}
 		if (register_processor[10]) {
-			assembler = withName(new BlockProcessor<>("assembler"));
+			assembler = addWithName(Global.MOD_ID, new BlockProcessor<>("assembler"));
 		}
 		if (register_processor[11]) {
-			ingot_former = withName(new BlockProcessor<>("ingot_former"));
+			ingot_former = addWithName(Global.MOD_ID, new BlockProcessor<>("ingot_former"));
 		}
 		if (register_processor[12]) {
-			pressurizer = withName(new BlockProcessor<>("pressurizer"));
+			pressurizer = addWithName(Global.MOD_ID, new BlockProcessor<>("pressurizer"));
 		}
 		if (register_processor[13]) {
-			chemical_reactor = withName(new BlockProcessor<>("chemical_reactor"));
+			chemical_reactor = addWithName(Global.MOD_ID, new BlockProcessor<>("chemical_reactor"));
 		}
 		if (register_processor[14]) {
-			salt_mixer = withName(new BlockProcessor<>("salt_mixer"));
+			salt_mixer = addWithName(Global.MOD_ID, new BlockProcessor<>("salt_mixer"));
 		}
 		if (register_processor[15]) {
-			crystallizer = withName(new BlockProcessor<>("crystallizer"));
+			crystallizer = addWithName(Global.MOD_ID, new BlockProcessor<>("crystallizer"));
 		}
 		if (register_processor[16]) {
-			enricher = withName(new BlockProcessor<>("enricher"));
+			enricher = addWithName(Global.MOD_ID, new BlockProcessor<>("enricher"));
 		}
 		if (register_processor[17]) {
-			extractor = withName(new BlockProcessor<>("extractor"));
+			extractor = addWithName(Global.MOD_ID, new BlockProcessor<>("extractor"));
 		}
 		if (register_processor[18]) {
-			centrifuge = withName(new BlockProcessor<>("centrifuge"));
+			centrifuge = addWithName(Global.MOD_ID, new BlockProcessor<>("centrifuge"));
 		}
 		if (register_processor[19]) {
-			rock_crusher = withName(new BlockProcessor<>("rock_crusher"));
+			rock_crusher = addWithName(Global.MOD_ID, new BlockProcessor<>("rock_crusher"));
 		}
 		if (register_processor[20]) {
-			electric_furnace = withName(new BlockProcessor<>("electric_furnace"));
+			electric_furnace = addWithName(Global.MOD_ID, new BlockProcessor<>("electric_furnace"));
 		}
 		
-		machine_interface = withName(new BlockMachineInterface("machine_interface"));
+		machine_interface = addWithName(Global.MOD_ID, new BlockMachineInterface("machine_interface"));
 		
-		rtg_uranium = withName(new BlockRTG(RTGType.URANIUM), "rtg_uranium");
-		rtg_plutonium = withName(new BlockRTG(RTGType.PLUTONIUM), "rtg_plutonium");
-		rtg_americium = withName(new BlockRTG(RTGType.AMERICIUM), "rtg_americium");
-		rtg_californium = withName(new BlockRTG(RTGType.CALIFORNIUM), "rtg_californium");
+		IntFunction<String[]> rtgInfo = x -> InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "rtg"), UnitHelper.prefix(rtg_power[x], 5, "RF/t"));
+		rtg_uranium = addWithName(Global.MOD_ID, "rtg_uranium", new BlockRTG(RTGType.URANIUM), rtgInfo.apply(0));
+		rtg_plutonium = addWithName(Global.MOD_ID, "rtg_plutonium", new BlockRTG(RTGType.PLUTONIUM), rtgInfo.apply(1));
+		rtg_americium = addWithName(Global.MOD_ID, "rtg_americium", new BlockRTG(RTGType.AMERICIUM), rtgInfo.apply(2));
+		rtg_californium = addWithName(Global.MOD_ID, "rtg_californium", new BlockRTG(RTGType.CALIFORNIUM), rtgInfo.apply(3));
+
+		IntFunction<String[]> solarPanelInfo = x -> InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "solar_panel"), UnitHelper.prefix(solar_power[x], 5, "RF/t"));
+		solar_panel_basic = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_basic"), solarPanelInfo.apply(0));
+		solar_panel_advanced = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_advanced"), solarPanelInfo.apply(1));
+		solar_panel_du = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_du"), solarPanelInfo.apply(2));
+		solar_panel_elite = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_elite"), solarPanelInfo.apply(3));
 		
-		solar_panel_basic = withName(new BlockSimpleTile<>("solar_panel_basic"));
-		solar_panel_advanced = withName(new BlockSimpleTile<>("solar_panel_advanced"));
-		solar_panel_du = withName(new BlockSimpleTile<>("solar_panel_du"));
-		solar_panel_elite = withName(new BlockSimpleTile<>("solar_panel_elite"));
-		
-		decay_generator = withName(new BlockSimpleTile<>("decay_generator"));
-		
+		decay_generator = addWithName(Global.MOD_ID, new BlockSimpleTile<>("decay_generator"));
+
+		Function<BlockBattery, ItemBlockBattery> itemBlockBatteryFunction = x -> new ItemBlockBattery(x, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "energy_storage")));
 		if (register_battery[0]) {
-			voltaic_pile_basic = withName(new BlockBattery(BatteryBlockType.VOLTAIC_PILE_BASIC), "voltaic_pile_basic");
-			voltaic_pile_advanced = withName(new BlockBattery(BatteryBlockType.VOLTAIC_PILE_ADVANCED), "voltaic_pile_advanced");
-			voltaic_pile_du = withName(new BlockBattery(BatteryBlockType.VOLTAIC_PILE_DU), "voltaic_pile_du");
-			voltaic_pile_elite = withName(new BlockBattery(BatteryBlockType.VOLTAIC_PILE_ELITE), "voltaic_pile_elite");
+			voltaic_pile_basic = addWithName(Global.MOD_ID, "voltaic_pile_basic", new BlockBattery(BatteryBlockType.VOLTAIC_PILE_BASIC), itemBlockBatteryFunction);
+			voltaic_pile_advanced = addWithName(Global.MOD_ID, "voltaic_pile_advanced", new BlockBattery(BatteryBlockType.VOLTAIC_PILE_ADVANCED), itemBlockBatteryFunction);
+			voltaic_pile_du = addWithName(Global.MOD_ID, "voltaic_pile_du", new BlockBattery(BatteryBlockType.VOLTAIC_PILE_DU), itemBlockBatteryFunction);
+			voltaic_pile_elite = addWithName(Global.MOD_ID, "voltaic_pile_elite", new BlockBattery(BatteryBlockType.VOLTAIC_PILE_ELITE), itemBlockBatteryFunction);
 		}
-		
 		if (register_battery[1]) {
-			lithium_ion_battery_basic = withName(new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_BASIC), "lithium_ion_battery_basic");
-			lithium_ion_battery_advanced = withName(new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_ADVANCED), "lithium_ion_battery_advanced");
-			lithium_ion_battery_du = withName(new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_DU), "lithium_ion_battery_du");
-			lithium_ion_battery_elite = withName(new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_ELITE), "lithium_ion_battery_elite");
+			lithium_ion_battery_basic = addWithName(Global.MOD_ID, "lithium_ion_battery_basic", new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_BASIC), itemBlockBatteryFunction);
+			lithium_ion_battery_advanced = addWithName(Global.MOD_ID, "lithium_ion_battery_advanced", new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_ADVANCED), itemBlockBatteryFunction);
+			lithium_ion_battery_du = addWithName(Global.MOD_ID, "lithium_ion_battery_du", new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_DU), itemBlockBatteryFunction);
+			lithium_ion_battery_elite = addWithName(Global.MOD_ID, "lithium_ion_battery_elite", new BlockBattery(BatteryBlockType.LITHIUM_ION_BATTERY_ELITE), itemBlockBatteryFunction);
 		}
 		
-		bin = withName(new BlockSimpleTile<>("bin"));
+		bin = addWithName(Global.MOD_ID, new BlockSimpleTile<>("bin"));
 		
-		fission_casing = withName(new BlockFissionCasing(), "fission_casing");
-		fission_glass = withName(new BlockFissionGlass(), "fission_glass");
-		fission_conductor = withName(new BlockFissionConductor(), "fission_conductor");
-		fission_monitor = withName(new BlockFissionMonitor(), "fission_monitor");
-		fission_reflector = withName(new BlockMeta.BlockFissionReflector(), "fission_reflector");
-		fission_power_port = withName(new BlockFissionPowerPort(), "fission_power_port");
-		fission_vent = withName(new BlockFissionVent(), "fission_vent");
-		fission_irradiator = withName(new BlockFissionIrradiator(), "fission_irradiator");
-		fission_source = withName(new BlockFissionMetaSource(), "fission_source");
-		fission_shield = withName(new BlockFissionMetaShield(), "fission_shield");
-		fission_computer_port = withName(new BlockFissionComputerPort(), "fission_computer_port");
+		fission_casing = addWithName(Global.MOD_ID, "fission_casing", new BlockFissionCasing());
+		fission_glass = addWithName(Global.MOD_ID, "fission_glass", new BlockFissionGlass());
+		fission_conductor = addWithName(Global.MOD_ID, "fission_conductor", new BlockFissionConductor());
+		fission_monitor = addWithName(Global.MOD_ID, "fission_monitor", new BlockFissionMonitor());
+		fission_reflector = addWithNameMeta(Global.MOD_ID, "fission_reflector", new BlockMeta.BlockFissionReflector());
+		fission_power_port = addWithName(Global.MOD_ID, "fission_power_port", new BlockFissionPowerPort());
+		fission_vent = addWithName(Global.MOD_ID, "fission_vent", new BlockFissionVent());
+		fission_irradiator = addWithName(Global.MOD_ID, "fission_irradiator", new BlockFissionIrradiator());
+		fission_source = addWithNameMeta(Global.MOD_ID, "fission_source", new BlockFissionMetaSource(), x -> new ItemBlockMeta<>(x, TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceFixedInfo(), TextFormatting.AQUA, NCInfo.neutronSourceInfo()), x -> "active=false,facing=south,type=" + x);
+		fission_shield = addWithNameMeta(Global.MOD_ID, "fission_shield", new BlockFissionMetaShield(), x -> new ItemBlockMeta<>(x, new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldFixedInfo(), TextFormatting.AQUA, NCInfo.neutronShieldInfo()), x -> "active=true,type=" + x);
+
+		fission_computer_port = addWithName(Global.MOD_ID, "fission_computer_port", new BlockFissionComputerPort());
+
+		fission_irradiator_port = addWithName(Global.MOD_ID, "fission_irradiator_port", new BlockFissionIrradiatorPort());
+		fission_cell_port = addWithName(Global.MOD_ID, "fission_cell_port", new BlockFissionCellPort());
 		
-		fission_irradiator_port = withName(new BlockFissionIrradiatorPort(), "fission_irradiator_port");
+		fission_vessel_port = addWithName(Global.MOD_ID, "fission_vessel_port", new BlockFissionVesselPort());
+		fission_heater_port = addWithNameMeta(Global.MOD_ID, "fission_heater_port", new BlockFissionHeaterPort(), ItemBlockMeta<MetaEnums.CoolantHeaterType>::new, x -> "active=false,axis=z,type=" + x);
+		fission_heater_port2 = addWithNameMeta(Global.MOD_ID, "fission_heater_port2", new BlockFissionHeaterPort2(), ItemBlockMeta<MetaEnums.CoolantHeaterType2>::new, x -> "active=false,axis=z,type=" + x);
 		
-		fission_cell_port = withName(new BlockFissionCellPort(), "fission_cell_port");
+		fission_shield_manager = addWithName(Global.MOD_ID, "fission_shield_manager", new BlockFissionShieldManager());
 		
-		fission_vessel_port = withName(new BlockFissionVesselPort(), "fission_vessel_port");
-		fission_heater_port = withName(new BlockFissionHeaterPort(), "fission_heater_port");
-		fission_heater_port2 = withName(new BlockFissionHeaterPort2(), "fission_heater_port2");
+		solid_fission_controller = addWithName(Global.MOD_ID, "solid_fission_controller", new BlockSolidFissionController());
+		solid_fission_cell = addWithName(Global.MOD_ID, "solid_fission_cell", new BlockSolidFissionCell());
+		solid_fission_sink = addWithNameMeta(Global.MOD_ID, "solid_fission_sink", new BlockSolidFissionMetaSink(), x -> new ItemBlockMeta<>(x, TextFormatting.BLUE, NCInfo.heatSinkFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
+		solid_fission_sink2 = addWithNameMeta(Global.MOD_ID, "solid_fission_sink2", new BlockSolidFissionMetaSink2(), x -> new ItemBlockMeta<>(x, TextFormatting.BLUE, NCInfo.heatSinkFixedInfo2(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
 		
-		fission_shield_manager = withName(new BlockFissionShieldManager(), "fission_shield_manager");
+		salt_fission_controller = addWithName(Global.MOD_ID, "salt_fission_controller", new BlockSaltFissionController());
+		salt_fission_vessel = addWithName(Global.MOD_ID, "salt_fission_vessel", new BlockSaltFissionVessel());
+		salt_fission_heater = addWithNameMeta(Global.MOD_ID, "salt_fission_heater", new BlockSaltFissionMetaHeater(), x -> new ItemBlockMeta<>(x, TextFormatting.BLUE, NCInfo.coolantHeaterFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
+		salt_fission_heater2 = addWithNameMeta(Global.MOD_ID, "salt_fission_heater2", new BlockSaltFissionMetaHeater2(), x -> new ItemBlockMeta<>(x, TextFormatting.BLUE, NCInfo.coolantHeaterFixedInfo2(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
 		
-		solid_fission_controller = withName(new BlockSolidFissionController(), "solid_fission_controller");
-		solid_fission_cell = withName(new BlockSolidFissionCell(), "solid_fission_cell");
-		solid_fission_sink = withName(new BlockSolidFissionMetaSink(), "solid_fission_sink");
-		solid_fission_sink2 = withName(new BlockSolidFissionMetaSink2(), "solid_fission_sink2");
+		heat_exchanger_controller = addWithName(Global.MOD_ID, "heat_exchanger_controller", new BlockHeatExchangerController());
+		heat_exchanger_casing = addWithName(Global.MOD_ID, "heat_exchanger_casing", new BlockHeatExchangerCasing());
+		heat_exchanger_glass = addWithName(Global.MOD_ID, "heat_exchanger_glass", new BlockHeatExchangerGlass());
+		heat_exchanger_vent = addWithName(Global.MOD_ID, "heat_exchanger_vent", new BlockHeatExchangerVent());
+
+		TriFunction<Block, String, Integer, NCItemBlock> hxTubeItemBlockFunction = (x, y, z) -> new NCItemBlock(x, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine(Global.MOD_ID, y), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[z], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, y)));
+		heat_exchanger_tube_copper = addWithName(Global.MOD_ID, "heat_exchanger_tube_copper", new BlockHeatExchangerTube(HeatExchangerTubeType.COPPER), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 0));
+		heat_exchanger_tube_hard_carbon = addWithName(Global.MOD_ID, "heat_exchanger_tube_hard_carbon", new BlockHeatExchangerTube(HeatExchangerTubeType.HARD_CARBON), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 1));
+		heat_exchanger_tube_thermoconducting = addWithName(Global.MOD_ID, "heat_exchanger_tube_thermoconducting", new BlockHeatExchangerTube(HeatExchangerTubeType.THERMOCONDUCTING), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 2));
+
+		heat_exchanger_computer_port = addWithName(Global.MOD_ID, "heat_exchanger_computer_port", new BlockHeatExchangerComputerPort());
 		
-		salt_fission_controller = withName(new BlockSaltFissionController(), "salt_fission_controller");
-		salt_fission_vessel = withName(new BlockSaltFissionVessel(), "salt_fission_vessel");
-		salt_fission_heater = withName(new BlockSaltFissionMetaHeater(), "salt_fission_heater");
-		salt_fission_heater2 = withName(new BlockSaltFissionMetaHeater2(), "salt_fission_heater2");
+		condenser_controller = addWithName(Global.MOD_ID, "condenser_controller", new BlockCondenserController());
+
+		condenser_tube_copper = addWithName(Global.MOD_ID, "condenser_tube_copper", new BlockCondenserTube(HeatExchangerTubeType.COPPER), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 0));
+		condenser_tube_hard_carbon = addWithName(Global.MOD_ID, "condenser_tube_hard_carbon", new BlockCondenserTube(HeatExchangerTubeType.HARD_CARBON), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 1));
+		condenser_tube_thermoconducting = addWithName(Global.MOD_ID, "condenser_tube_thermoconducting", new BlockCondenserTube(HeatExchangerTubeType.THERMOCONDUCTING), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 2));
 		
-		heat_exchanger_controller = withName(new BlockHeatExchangerController(), "heat_exchanger_controller");
-		heat_exchanger_casing = withName(new BlockHeatExchangerCasing(), "heat_exchanger_casing");
-		heat_exchanger_glass = withName(new BlockHeatExchangerGlass(), "heat_exchanger_glass");
-		heat_exchanger_vent = withName(new BlockHeatExchangerVent(), "heat_exchanger_vent");
-		heat_exchanger_tube_copper = withName(new BlockHeatExchangerTube(HeatExchangerTubeType.COPPER), "heat_exchanger_tube_copper");
-		heat_exchanger_tube_hard_carbon = withName(new BlockHeatExchangerTube(HeatExchangerTubeType.HARD_CARBON), "heat_exchanger_tube_hard_carbon");
-		heat_exchanger_tube_thermoconducting = withName(new BlockHeatExchangerTube(HeatExchangerTubeType.THERMOCONDUCTING), "heat_exchanger_tube_thermoconducting");
-		heat_exchanger_computer_port = withName(new BlockHeatExchangerComputerPort(), "heat_exchanger_computer_port");
-		
-		condenser_controller = withName(new BlockCondenserController(), "condenser_controller");
-		condenser_tube_copper = withName(new BlockCondenserTube(HeatExchangerTubeType.COPPER), "condenser_tube_copper");
-		condenser_tube_hard_carbon = withName(new BlockCondenserTube(HeatExchangerTubeType.HARD_CARBON), "condenser_tube_hard_carbon");
-		condenser_tube_thermoconducting = withName(new BlockCondenserTube(HeatExchangerTubeType.THERMOCONDUCTING), "condenser_tube_thermoconducting");
-		
-		turbine_controller = withName(new BlockTurbineController(), "turbine_controller");
-		turbine_casing = withName(new BlockTurbineCasing(), "turbine_casing");
-		turbine_glass = withName(new BlockTurbineGlass(), "turbine_glass");
-		turbine_rotor_shaft = withName(new BlockTurbineRotorShaft(), "turbine_rotor_shaft");
-		turbine_rotor_blade_steel = withName(new BlockTurbineRotorBlade(TurbineRotorBladeType.STEEL), "turbine_rotor_blade_steel");
-		turbine_rotor_blade_extreme = withName(new BlockTurbineRotorBlade(TurbineRotorBladeType.EXTREME), "turbine_rotor_blade_extreme");
-		turbine_rotor_blade_sic_sic_cmc = withName(new BlockTurbineRotorBlade(TurbineRotorBladeType.SIC_SIC_CMC), "turbine_rotor_blade_sic_sic_cmc");
-		turbine_rotor_stator = withName(new BlockTurbineRotorStator(), "turbine_rotor_stator");
-		turbine_rotor_bearing = withName(new BlockTurbineRotorBearing(), "turbine_rotor_bearing");
-		turbine_dynamo_coil = withName(new BlockTurbineMetaDynamoCoil(), "turbine_dynamo_coil");
-		turbine_coil_connector = withName(new BlockTurbineCoilConnector(), "turbine_coil_connector");
-		turbine_inlet = withName(new BlockTurbineInlet(), "turbine_inlet");
-		turbine_outlet = withName(new BlockTurbineOutlet(), "turbine_outlet");
-		turbine_computer_port = withName(new BlockTurbineComputerPort(), "turbine_computer_port");
+		turbine_controller = addWithName(Global.MOD_ID, "turbine_controller", new BlockTurbineController());
+		turbine_casing = addWithName(Global.MOD_ID, "turbine_casing", new BlockTurbineCasing());
+		turbine_glass = addWithName(Global.MOD_ID, "turbine_glass", new BlockTurbineGlass());
+		turbine_rotor_shaft = addWithName(Global.MOD_ID, "turbine_rotor_shaft", new BlockTurbineRotorShaft());
+
+		PrimitiveFunction.ObjIntFunction<Block, ItemBlock> turbineBladeItemBlockFunction = (x, y) -> new NCItemBlock(x, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(turbine_blade_efficiency[y], 1)), Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(turbine_blade_expansion[y], 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1)));
+		turbine_rotor_blade_steel = addWithName(Global.MOD_ID, "turbine_rotor_blade_steel", new BlockTurbineRotorBlade(TurbineRotorBladeType.STEEL), x -> turbineBladeItemBlockFunction.apply(x, 0));
+		turbine_rotor_blade_extreme = addWithName(Global.MOD_ID, "turbine_rotor_blade_extreme", new BlockTurbineRotorBlade(TurbineRotorBladeType.EXTREME), x -> turbineBladeItemBlockFunction.apply(x, 1));
+		turbine_rotor_blade_sic_sic_cmc = addWithName(Global.MOD_ID, "turbine_rotor_blade_sic_sic_cmc", new BlockTurbineRotorBlade(TurbineRotorBladeType.SIC_SIC_CMC), x -> turbineBladeItemBlockFunction.apply(x, 2));
+
+		turbine_rotor_stator = addWithName(Global.MOD_ID, "turbine_rotor_stator", new BlockTurbineRotorStator(TurbineRotorStatorType.STANDARD), x -> new NCItemBlock(x, TextFormatting.GRAY, new String[] {Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_stator_expansion"), NCMath.pcDecimalPlaces(turbine_stator_expansion, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "turbine_rotor_stator"))));
+
+		turbine_rotor_bearing = addWithName(Global.MOD_ID, "turbine_rotor_bearing", new BlockTurbineRotorBearing());
+		turbine_dynamo_coil = addWithNameMeta(Global.MOD_ID, "turbine_dynamo_coil", new BlockTurbineMetaDynamoCoil(), x -> new ItemBlockMeta<>(x, TextFormatting.LIGHT_PURPLE, NCInfo.dynamoCoilFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
+		turbine_coil_connector = addWithName(Global.MOD_ID, "turbine_coil_connector", new BlockTurbineCoilConnector());
+		turbine_inlet = addWithName(Global.MOD_ID, "turbine_inlet", new BlockTurbineInlet());
+		turbine_outlet = addWithName(Global.MOD_ID, "turbine_outlet", new BlockTurbineOutlet());
+
+		turbine_computer_port = addWithName(Global.MOD_ID, "turbine_computer_port", new BlockTurbineComputerPort());
 		
 		if (register_passive[0]) {
-			cobblestone_generator = withName(new BlockSimpleTile<>("cobblestone_generator"));
-			cobblestone_generator_compact = withName(new BlockSimpleTile<>("cobblestone_generator_compact"));
-			cobblestone_generator_dense = withName(new BlockSimpleTile<>("cobblestone_generator_dense"));
+			PrimitiveFunction.ObjIntFunction<Block, ItemBlock> cobbleGeneratorItemBlockFunction = (x, y) -> {
+				String rateString = NCMath.sigFigs(processor_passive_rate[0] * y, 5) + " " + Lang.localize("nuclearcraft.cobblestone") + "/t";
+				return new NCItemBlock(x, cobble_gen_power > 0 ? InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_req_power", rateString, UnitHelper.prefix(cobble_gen_power * y, 5, "RF/t")) : InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_no_req_power", rateString));
+			};
+			cobblestone_generator = addWithName(Global.MOD_ID, new BlockSimpleTile<>("cobblestone_generator"), x -> cobbleGeneratorItemBlockFunction.apply(x, 1));
+			cobblestone_generator_compact = addWithName(Global.MOD_ID, new BlockSimpleTile<>("cobblestone_generator_compact"), x -> cobbleGeneratorItemBlockFunction.apply(x, 8));
+			cobblestone_generator_dense = addWithName(Global.MOD_ID, new BlockSimpleTile<>("cobblestone_generator_dense"), x -> cobbleGeneratorItemBlockFunction.apply(x, 64));
 		}
 		
 		if (register_passive[1]) {
-			water_source = withName(new BlockSimpleTile<>("water_source"));
-			water_source_compact = withName(new BlockSimpleTile<>("water_source_compact"));
-			water_source_dense = withName(new BlockSimpleTile<>("water_source_dense"));
+			PrimitiveFunction.ObjIntFunction<Block, ItemBlock> waterSourceItemBlockFunction = (x, y) -> new NCItemBlock(x, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "water_source"), UnitHelper.prefix(processor_passive_rate[1] * y, 5, "B/t", -1)));
+			water_source = addWithName(Global.MOD_ID, new BlockSimpleTile<>("water_source"), x -> waterSourceItemBlockFunction.apply(x, 1));
+			water_source_compact = addWithName(Global.MOD_ID, new BlockSimpleTile<>("water_source_compact"), x -> waterSourceItemBlockFunction.apply(x, 8));
+			water_source_dense = addWithName(Global.MOD_ID, new BlockSimpleTile<>("water_source_dense"), x -> waterSourceItemBlockFunction.apply(x, 64));
 		}
 		
 		if (register_passive[2]) {
-			nitrogen_collector = withName(new BlockSimpleTile<>("nitrogen_collector"));
-			nitrogen_collector_compact = withName(new BlockSimpleTile<>("nitrogen_collector_compact"));
-			nitrogen_collector_dense = withName(new BlockSimpleTile<>("nitrogen_collector_dense"));
+			PrimitiveFunction.ObjIntFunction<Block, ItemBlock> nitrogenCollectorItemBlockFunction = (x, y) -> new NCItemBlock(x, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "nitrogen_collector"), UnitHelper.prefix(processor_passive_rate[2] * y, 5, "B/t", -1)));
+			nitrogen_collector = addWithName(Global.MOD_ID, new BlockSimpleTile<>("nitrogen_collector"), x -> nitrogenCollectorItemBlockFunction.apply(x, 1));
+			nitrogen_collector_compact = addWithName(Global.MOD_ID, new BlockSimpleTile<>("nitrogen_collector_compact"), x -> nitrogenCollectorItemBlockFunction.apply(x, 8));
+			nitrogen_collector_dense = addWithName(Global.MOD_ID, new BlockSimpleTile<>("nitrogen_collector_dense"), x -> nitrogenCollectorItemBlockFunction.apply(x, 64));
 		}
 		
-		radiation_scrubber = withName(new BlockRadiationScrubber("radiation_scrubber"));
+		radiation_scrubber = addWithName(Global.MOD_ID, new BlockRadiationScrubber("radiation_scrubber"), x -> new NCItemBlock(x, radiation_scrubber_non_linear ? InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "radiation_scrubber_non_linear"), NCMath.pcDecimalPlaces(RadiationHelper.getAltScrubbingFraction(1D), 1), Lang.localize("nuclearcraft.one_hundred_percent")) : InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "radiation_scrubber"), NCMath.pcDecimalPlaces(radiation_scrubber_fraction, 1), Lang.localize("nuclearcraft.one_hundred_percent"))));
 		
-		geiger_block = withName(new BlockGeigerCounter("geiger_block"));
+		geiger_block = addWithName(Global.MOD_ID, new BlockGeigerCounter("geiger_block"));
 		
-		glowing_mushroom = withName(new BlockGlowingMushroom().setCreativeTab(NCTabs.radiation), "glowing_mushroom");
-		glowing_mushroom_block = withName(new BlockHugeGlowingMushroom().setCreativeTab(NCTabs.radiation), "glowing_mushroom_block");
-		wasteland_earth = withName(new NCBlock(Material.ROCK).setCreativeTab(NCTabs.radiation), "wasteland_earth");
+		glowing_mushroom = addWithName(Global.MOD_ID, "glowing_mushroom", new BlockGlowingMushroom().setCreativeTab(NCTabs.radiation));
+		glowing_mushroom_block = addWithName(Global.MOD_ID, "glowing_mushroom_block", new BlockHugeGlowingMushroom().setCreativeTab(NCTabs.radiation));
+		wasteland_earth = addWithName(Global.MOD_ID, "wasteland_earth", new NCBlock(Material.ROCK).setCreativeTab(NCTabs.radiation));
 		
-		wasteland_portal = withName(new BlockPortalWasteland().setCreativeTab(NCTabs.radiation), "wasteland_portal");
+		wasteland_portal = addWithName(Global.MOD_ID, "wasteland_portal", new BlockPortalWasteland().setCreativeTab(NCTabs.radiation));
 		
-		tritium_lamp = withName(new NCBlock(Material.GLASS).setCreativeTab(NCTabs.misc).setLightLevel(1F), "tritium_lamp");
+		tritium_lamp = addWithName(Global.MOD_ID, "tritium_lamp", new NCBlock(Material.GLASS).setCreativeTab(NCTabs.misc).setLightLevel(1F));
 		
-		solidified_corium = withName(new NCBlockMagma(DamageSources.CORIUM_BURN, 1F).setCreativeTab(NCTabs.misc), "solidified_corium");
+		solidified_corium = addWithName(Global.MOD_ID, "solidified_corium", new NCBlockMagma(DamageSources.CORIUM_BURN, 1F).setCreativeTab(NCTabs.misc));
 		
 		if (register_quantum) {
-			quantum_computer_controller = withName(new BlockQuantumComputerController(), "quantum_computer_controller");
-			quantum_computer_qubit = withName(new BlockQuantumComputerQubit(), "quantum_computer_qubit");
+			quantum_computer_controller = addWithName(Global.MOD_ID, "quantum_computer_controller", new BlockQuantumComputerController());
+			quantum_computer_qubit = addWithName(Global.MOD_ID, "quantum_computer_qubit", new BlockQuantumComputerQubit());
 			
-			quantum_computer_gate_single = withName(new BlockQuantumComputerGate.Single(), "quantum_computer_gate_single");
-			quantum_computer_gate_control = withName(new BlockQuantumComputerGate.Control(), "quantum_computer_gate_control");
-			quantum_computer_gate_swap = withName(new BlockQuantumComputerGate.Swap(), "quantum_computer_gate_swap");
+			quantum_computer_gate_single = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_single", new BlockQuantumComputerGate.Single());
+			quantum_computer_gate_control = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_control", new BlockQuantumComputerGate.Control());
+			quantum_computer_gate_swap = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_swap", new BlockQuantumComputerGate.Swap());
 			
-			quantum_computer_connector = withName(new BlockQuantumComputerConnector(), "quantum_computer_connector");
+			quantum_computer_connector = addWithName(Global.MOD_ID, "quantum_computer_connector", new BlockQuantumComputerConnector());
 			
-			quantum_computer_code_generator = withName(new BlockQuantumComputerCodeGenerator(), "quantum_computer_code_generator");
+			quantum_computer_code_generator = addWithNameMeta(Global.MOD_ID, "quantum_computer_code_generator", new BlockQuantumComputerCodeGenerator());
 		}
 	}
 	
 	public static void register() {
-		registerBlock(ore, new ItemBlockMeta(ore, MetaEnums.OreType.class, TextFormatting.AQUA));
-		registerBlock(ingot_block, new ItemBlockMeta(ingot_block, MetaEnums.IngotType.class, TextFormatting.AQUA));
-		
-		registerBlock(fertile_isotope, new ItemBlockMeta(fertile_isotope, MetaEnums.FertileIsotopeType.class, TextFormatting.AQUA));
-		
-		registerBlock(supercold_ice);
-		
-		registerBlock(heavy_water_moderator);
-		
-		if (register_processor[0]) {
-			registerBlock(nuclear_furnace);
-		}
-		if (register_processor[1]) {
-			registerBlock(manufactory);
-		}
-		if (register_processor[2]) {
-			registerBlock(separator);
-		}
-		if (register_processor[3]) {
-			registerBlock(decay_hastener);
-		}
-		if (register_processor[4]) {
-			registerBlock(fuel_reprocessor);
-		}
-		if (register_processor[5]) {
-			registerBlock(alloy_furnace);
-		}
-		if (register_processor[6]) {
-			registerBlock(infuser);
-		}
-		if (register_processor[7]) {
-			registerBlock(melter);
-		}
-		if (register_processor[8]) {
-			registerBlock(supercooler);
-		}
-		if (register_processor[9]) {
-			registerBlock(electrolyzer);
-		}
-		if (register_processor[10]) {
-			registerBlock(assembler);
-		}
-		if (register_processor[11]) {
-			registerBlock(ingot_former);
-		}
-		if (register_processor[12]) {
-			registerBlock(pressurizer);
-		}
-		if (register_processor[13]) {
-			registerBlock(chemical_reactor);
-		}
-		if (register_processor[14]) {
-			registerBlock(salt_mixer);
-		}
-		if (register_processor[15]) {
-			registerBlock(crystallizer);
-		}
-		if (register_processor[16]) {
-			registerBlock(enricher);
-		}
-		if (register_processor[17]) {
-			registerBlock(extractor);
-		}
-		if (register_processor[18]) {
-			registerBlock(centrifuge);
-		}
-		if (register_processor[19]) {
-			registerBlock(rock_crusher);
-		}
-		if (register_processor[20]) {
-			registerBlock(electric_furnace);
-		}
-		
-		registerBlock(machine_interface);
-		
-		registerBlock(rtg_uranium, InfoHelper.formattedInfo(infoLine("rtg"), UnitHelper.prefix(rtg_power[0], 5, "RF/t")));
-		registerBlock(rtg_plutonium, InfoHelper.formattedInfo(infoLine("rtg"), UnitHelper.prefix(rtg_power[1], 5, "RF/t")));
-		registerBlock(rtg_americium, InfoHelper.formattedInfo(infoLine("rtg"), UnitHelper.prefix(rtg_power[2], 5, "RF/t")));
-		registerBlock(rtg_californium, InfoHelper.formattedInfo(infoLine("rtg"), UnitHelper.prefix(rtg_power[3], 5, "RF/t")));
-		
-		registerBlock(solar_panel_basic, InfoHelper.formattedInfo(infoLine("solar_panel"), UnitHelper.prefix(solar_power[0], 5, "RF/t")));
-		registerBlock(solar_panel_advanced, InfoHelper.formattedInfo(infoLine("solar_panel"), UnitHelper.prefix(solar_power[1], 5, "RF/t")));
-		registerBlock(solar_panel_du, InfoHelper.formattedInfo(infoLine("solar_panel"), UnitHelper.prefix(solar_power[2], 5, "RF/t")));
-		registerBlock(solar_panel_elite, InfoHelper.formattedInfo(infoLine("solar_panel"), UnitHelper.prefix(solar_power[3], 5, "RF/t")));
-		
-		registerBlock(decay_generator);
-		
-		if (register_battery[0]) {
-			registerBlock(voltaic_pile_basic, new ItemBlockBattery(voltaic_pile_basic, BatteryBlockType.VOLTAIC_PILE_BASIC, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(voltaic_pile_advanced, new ItemBlockBattery(voltaic_pile_advanced, BatteryBlockType.VOLTAIC_PILE_ADVANCED, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(voltaic_pile_du, new ItemBlockBattery(voltaic_pile_du, BatteryBlockType.VOLTAIC_PILE_DU, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(voltaic_pile_elite, new ItemBlockBattery(voltaic_pile_elite, BatteryBlockType.VOLTAIC_PILE_ELITE, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-		}
-		
-		if (register_battery[1]) {
-			registerBlock(lithium_ion_battery_basic, new ItemBlockBattery(lithium_ion_battery_basic, BatteryBlockType.LITHIUM_ION_BATTERY_BASIC, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(lithium_ion_battery_advanced, new ItemBlockBattery(lithium_ion_battery_advanced, BatteryBlockType.LITHIUM_ION_BATTERY_ADVANCED, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(lithium_ion_battery_du, new ItemBlockBattery(lithium_ion_battery_du, BatteryBlockType.LITHIUM_ION_BATTERY_DU, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-			registerBlock(lithium_ion_battery_elite, new ItemBlockBattery(lithium_ion_battery_elite, BatteryBlockType.LITHIUM_ION_BATTERY_ELITE, InfoHelper.formattedInfo(infoLine("energy_storage"))));
-		}
-		
-		registerBlock(bin);
-		
-		registerBlock(fission_casing);
-		registerBlock(fission_glass);
-		registerBlock(fission_conductor);
-		registerBlock(fission_monitor);
-		registerBlock(fission_reflector, new ItemBlockMeta(fission_reflector, MetaEnums.NeutronReflectorType.class, TextFormatting.AQUA));
-		registerBlock(fission_power_port);
-		registerBlock(fission_vent);
-		registerBlock(fission_irradiator);
-		registerBlock(fission_source, new ItemBlockMeta(fission_source, MetaEnums.NeutronSourceType.class, TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceFixedInfo(), TextFormatting.AQUA, NCInfo.neutronSourceInfo()));
-		registerBlock(fission_shield, new ItemBlockMeta(fission_shield, MetaEnums.NeutronShieldType.class, new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldFixedInfo(), TextFormatting.AQUA, NCInfo.neutronShieldInfo()));
-		registerBlock(fission_computer_port);
-		
-		registerBlock(fission_irradiator_port);
-		
-		registerBlock(fission_cell_port);
-		
-		registerBlock(fission_vessel_port);
-		registerBlock(fission_heater_port, new ItemBlockMeta(fission_heater_port, MetaEnums.CoolantHeaterType.class, TextFormatting.AQUA));
-		registerBlock(fission_heater_port2, new ItemBlockMeta(fission_heater_port2, MetaEnums.CoolantHeaterType2.class, TextFormatting.AQUA));
-		
-		registerBlock(fission_shield_manager);
-		
-		registerBlock(solid_fission_controller);
-		registerBlock(solid_fission_cell);
-		registerBlock(solid_fission_sink, new ItemBlockMeta(solid_fission_sink, MetaEnums.HeatSinkType.class, TextFormatting.BLUE, NCInfo.heatSinkFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS));
-		registerBlock(solid_fission_sink2, new ItemBlockMeta(solid_fission_sink2, MetaEnums.HeatSinkType2.class, TextFormatting.BLUE, NCInfo.heatSinkFixedInfo2(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS));
-		
-		registerBlock(salt_fission_controller);
-		registerBlock(salt_fission_vessel);
-		registerBlock(salt_fission_heater, new ItemBlockMeta(salt_fission_heater, MetaEnums.CoolantHeaterType.class, TextFormatting.BLUE, NCInfo.coolantHeaterFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS));
-		registerBlock(salt_fission_heater2, new ItemBlockMeta(salt_fission_heater2, MetaEnums.CoolantHeaterType2.class, TextFormatting.BLUE, NCInfo.coolantHeaterFixedInfo2(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS));
-		
-		registerBlock(heat_exchanger_controller);
-		registerBlock(heat_exchanger_casing);
-		registerBlock(heat_exchanger_glass);
-		registerBlock(heat_exchanger_vent);
-		registerBlock(heat_exchanger_tube_copper, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("heat_exchanger_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[0], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("heat_exchanger_tube")));
-		registerBlock(heat_exchanger_tube_hard_carbon, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("heat_exchanger_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[1], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("heat_exchanger_tube")));
-		registerBlock(heat_exchanger_tube_thermoconducting, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("heat_exchanger_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[2], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("heat_exchanger_tube")));
-		registerBlock(heat_exchanger_computer_port);
-		
-		registerBlock(condenser_controller);
-		registerBlock(condenser_tube_copper, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("condenser_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[0], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("condenser_tube")));
-		registerBlock(condenser_tube_hard_carbon, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("condenser_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[1], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("condenser_tube")));
-		registerBlock(condenser_tube_thermoconducting, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine("condenser_tube"), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[2], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("condenser_tube")));
-		
-		registerBlock(turbine_controller);
-		registerBlock(turbine_casing);
-		registerBlock(turbine_glass);
-		registerBlock(turbine_rotor_shaft);
-		registerBlock(turbine_rotor_blade_steel, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(fixedLine("turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(turbine_blade_efficiency[0], 1)), Lang.localize(fixedLine("turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(turbine_blade_expansion[0], 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1)));
-		registerBlock(turbine_rotor_blade_extreme, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(fixedLine("turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(turbine_blade_efficiency[1], 1)), Lang.localize(fixedLine("turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(turbine_blade_expansion[1], 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1)));
-		registerBlock(turbine_rotor_blade_sic_sic_cmc, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(fixedLine("turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(turbine_blade_efficiency[2], 1)), Lang.localize(fixedLine("turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(turbine_blade_expansion[2], 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1)));
-		registerBlock(turbine_rotor_stator, TextFormatting.GRAY, new String[] {Lang.localize(fixedLine("turbine_rotor_stator_expansion"), NCMath.pcDecimalPlaces(turbine_stator_expansion, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine("turbine_rotor_stator")));
-		registerBlock(turbine_rotor_bearing);
-		registerBlock(turbine_dynamo_coil, new ItemBlockMeta(turbine_dynamo_coil, TurbineDynamoCoilType.class, TextFormatting.LIGHT_PURPLE, NCInfo.dynamoCoilFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS));
-		registerBlock(turbine_coil_connector);
-		registerBlock(turbine_inlet);
-		registerBlock(turbine_outlet);
-		registerBlock(turbine_computer_port);
-		
-		if (register_passive[0]) {
-			String cobblePerTick = " " + Lang.localize("nuclearcraft.cobblestone") + "/t";
-			registerBlock(cobblestone_generator, cobble_gen_power > 0 ? InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_req_power", NCMath.sigFigs(processor_passive_rate[0], 5) + cobblePerTick, UnitHelper.prefix(cobble_gen_power, 5, "RF/t")) : InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_no_req_power", NCMath.sigFigs(processor_passive_rate[0], 5) + cobblePerTick));
-			registerBlock(cobblestone_generator_compact, cobble_gen_power > 0 ? InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_req_power", NCMath.sigFigs(processor_passive_rate[0] * 8, 5) + cobblePerTick, UnitHelper.prefix(cobble_gen_power * 8, 5, "RF/t")) : InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_no_req_power", NCMath.sigFigs(processor_passive_rate[0] * 8, 5) + cobblePerTick));
-			registerBlock(cobblestone_generator_dense, cobble_gen_power > 0 ? InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_req_power", NCMath.sigFigs(processor_passive_rate[0] * 64, 5) + cobblePerTick, UnitHelper.prefix(cobble_gen_power * 64, 5, "RF/t")) : InfoHelper.formattedInfo("tile.nuclearcraft.cobblestone_generator_no_req_power", NCMath.sigFigs(processor_passive_rate[0] * 64, 5) + cobblePerTick));
-		}
-		
-		if (register_passive[1]) {
-			registerBlock(water_source, InfoHelper.formattedInfo(infoLine("water_source"), UnitHelper.prefix(processor_passive_rate[1], 5, "B/t", -1)));
-			registerBlock(water_source_compact, InfoHelper.formattedInfo(infoLine("water_source"), UnitHelper.prefix(processor_passive_rate[1] * 8, 5, "B/t", -1)));
-			registerBlock(water_source_dense, InfoHelper.formattedInfo(infoLine("water_source"), UnitHelper.prefix(processor_passive_rate[1] * 64, 5, "B/t", -1)));
-		}
-		
-		if (register_passive[2]) {
-			registerBlock(nitrogen_collector, InfoHelper.formattedInfo(infoLine("nitrogen_collector"), UnitHelper.prefix(processor_passive_rate[2], 5, "B/t", -1)));
-			registerBlock(nitrogen_collector_compact, InfoHelper.formattedInfo(infoLine("nitrogen_collector"), UnitHelper.prefix(processor_passive_rate[2] * 8, 5, "B/t", -1)));
-			registerBlock(nitrogen_collector_dense, InfoHelper.formattedInfo(infoLine("nitrogen_collector"), UnitHelper.prefix(processor_passive_rate[2] * 64, 5, "B/t", -1)));
-		}
-		
-		registerBlock(radiation_scrubber, radiation_scrubber_non_linear ? InfoHelper.formattedInfo(infoLine("radiation_scrubber_non_linear"), NCMath.pcDecimalPlaces(RadiationHelper.getAltScrubbingFraction(1D), 1), Lang.localize("nuclearcraft.one_hundred_percent")) : InfoHelper.formattedInfo(infoLine("radiation_scrubber"), NCMath.pcDecimalPlaces(radiation_scrubber_fraction, 1), Lang.localize("nuclearcraft.one_hundred_percent")));
-		
-		registerBlock(geiger_block);
-		
-		registerBlock(glowing_mushroom);
-		registerBlock(glowing_mushroom_block);
-		registerBlock(wasteland_earth);
-		
-		registerBlock(wasteland_portal);
-		
-		registerBlock(tritium_lamp);
-		
-		registerBlock(solidified_corium);
-		
-		if (register_quantum) {
-			registerBlock(quantum_computer_controller);
-			registerBlock(quantum_computer_qubit);
-			
-			registerBlock(quantum_computer_gate_single, new ItemBlockMeta(quantum_computer_gate_single, QuantumGateEnums.SingleType.class, TextFormatting.AQUA));
-			registerBlock(quantum_computer_gate_control, new ItemBlockMeta(quantum_computer_gate_control, QuantumGateEnums.ControlType.class, TextFormatting.AQUA));
-			registerBlock(quantum_computer_gate_swap, new ItemBlockMeta(quantum_computer_gate_swap, QuantumGateEnums.SwapType.class, TextFormatting.AQUA));
-			
-			registerBlock(quantum_computer_connector);
-			
-			registerBlock(quantum_computer_code_generator, new ItemBlockMeta(quantum_computer_code_generator, BlockQuantumComputerCodeGenerator.Type.class, TextFormatting.AQUA));
+		for (BlockRegistrationInfo<?> registration : registrationList) {
+			registration.registerBlock.run();
 		}
 	}
 	
 	public static void registerRenders() {
-		for (int i = 0; i < MetaEnums.OreType.values().length; ++i) {
-			registerRender(ore, i, "type=" + MetaEnums.OreType.values()[i].getName());
-		}
-		for (int i = 0; i < MetaEnums.IngotType.values().length; ++i) {
-			registerRender(ingot_block, i, "type=" + MetaEnums.IngotType.values()[i].getName());
-		}
-		
-		for (int i = 0; i < MetaEnums.FertileIsotopeType.values().length; ++i) {
-			registerRender(fertile_isotope, i, "type=" + MetaEnums.FertileIsotopeType.values()[i].getName());
-		}
-		
-		registerRender(supercold_ice);
-		
-		registerRender(heavy_water_moderator);
-		
-		if (register_processor[0]) {
-			registerRender(nuclear_furnace);
-		}
-		if (register_processor[1]) {
-			registerRender(manufactory);
-		}
-		if (register_processor[2]) {
-			registerRender(separator);
-		}
-		if (register_processor[3]) {
-			registerRender(decay_hastener);
-		}
-		if (register_processor[4]) {
-			registerRender(fuel_reprocessor);
-		}
-		if (register_processor[5]) {
-			registerRender(alloy_furnace);
-		}
-		if (register_processor[6]) {
-			registerRender(infuser);
-		}
-		if (register_processor[7]) {
-			registerRender(melter);
-		}
-		if (register_processor[8]) {
-			registerRender(supercooler);
-		}
-		if (register_processor[9]) {
-			registerRender(electrolyzer);
-		}
-		if (register_processor[10]) {
-			registerRender(assembler);
-		}
-		if (register_processor[11]) {
-			registerRender(ingot_former);
-		}
-		if (register_processor[12]) {
-			registerRender(pressurizer);
-		}
-		if (register_processor[13]) {
-			registerRender(chemical_reactor);
-		}
-		if (register_processor[14]) {
-			registerRender(salt_mixer);
-		}
-		if (register_processor[15]) {
-			registerRender(crystallizer);
-		}
-		if (register_processor[16]) {
-			registerRender(enricher);
-		}
-		if (register_processor[17]) {
-			registerRender(extractor);
-		}
-		if (register_processor[18]) {
-			registerRender(centrifuge);
-		}
-		if (register_processor[19]) {
-			registerRender(rock_crusher);
-		}
-		if (register_processor[20]) {
-			registerRender(electric_furnace);
-		}
-		
-		registerRender(machine_interface);
-		
-		registerRender(rtg_uranium);
-		registerRender(rtg_plutonium);
-		registerRender(rtg_americium);
-		registerRender(rtg_californium);
-		
-		registerRender(solar_panel_basic);
-		registerRender(solar_panel_advanced);
-		registerRender(solar_panel_du);
-		registerRender(solar_panel_elite);
-		
-		registerRender(decay_generator);
-		
-		if (register_battery[0]) {
-			registerRender(voltaic_pile_basic);
-			registerRender(voltaic_pile_advanced);
-			registerRender(voltaic_pile_du);
-			registerRender(voltaic_pile_elite);
-		}
-		
-		if (register_battery[1]) {
-			registerRender(lithium_ion_battery_basic);
-			registerRender(lithium_ion_battery_advanced);
-			registerRender(lithium_ion_battery_du);
-			registerRender(lithium_ion_battery_elite);
-		}
-		
-		registerRender(bin);
-		
-		registerRender(fission_casing);
-		registerRender(fission_glass);
-		registerRender(fission_conductor);
-		registerRender(fission_monitor);
-		for (int i = 0; i < MetaEnums.NeutronReflectorType.values().length; ++i) {
-			registerRender(fission_reflector, i, "type=" + MetaEnums.NeutronReflectorType.values()[i].getName());
-		}
-		registerRender(fission_power_port);
-		registerRender(fission_vent);
-		registerRender(fission_irradiator);
-		for (int i = 0; i < MetaEnums.NeutronSourceType.values().length; ++i) {
-			registerRender(fission_source, i, "active=false,facing=south,type=" + MetaEnums.NeutronSourceType.values()[i].getName());
-		}
-		for (int i = 0; i < MetaEnums.NeutronShieldType.values().length; ++i) {
-			registerRender(fission_shield, i, "active=true,type=" + MetaEnums.NeutronShieldType.values()[i].getName());
-		}
-		registerRender(fission_computer_port);
-		
-		registerRender(fission_irradiator_port);
-		
-		registerRender(fission_cell_port);
-		
-		registerRender(fission_vessel_port);
-		for (int i = 0; i < MetaEnums.CoolantHeaterType.values().length; ++i) {
-			registerRender(fission_heater_port, i, "active=false,axis=z,type=" + MetaEnums.CoolantHeaterType.values()[i].getName());
-		}
-		for (int i = 0; i < MetaEnums.CoolantHeaterType2.values().length; ++i) {
-			registerRender(fission_heater_port2, i, "active=false,axis=z,type=" + MetaEnums.CoolantHeaterType2.values()[i].getName());
-		}
-		
-		registerRender(fission_shield_manager);
-		
-		registerRender(solid_fission_controller);
-		registerRender(solid_fission_cell);
-		for (int i = 0; i < MetaEnums.HeatSinkType.values().length; ++i) {
-			registerRender(solid_fission_sink, i, "type=" + MetaEnums.HeatSinkType.values()[i].getName());
-		}
-		for (int i = 0; i < MetaEnums.HeatSinkType2.values().length; ++i) {
-			registerRender(solid_fission_sink2, i, "type=" + MetaEnums.HeatSinkType2.values()[i].getName());
-		}
-		
-		registerRender(salt_fission_controller);
-		registerRender(salt_fission_vessel);
-		for (int i = 0; i < MetaEnums.CoolantHeaterType.values().length; ++i) {
-			registerRender(salt_fission_heater, i, "type=" + MetaEnums.CoolantHeaterType.values()[i].getName());
-		}
-		for (int i = 0; i < MetaEnums.CoolantHeaterType2.values().length; ++i) {
-			registerRender(salt_fission_heater2, i, "type=" + MetaEnums.CoolantHeaterType2.values()[i].getName());
-		}
-		
-		registerRender(heat_exchanger_controller);
-		registerRender(heat_exchanger_casing);
-		registerRender(heat_exchanger_glass);
-		registerRender(heat_exchanger_vent);
-		registerRender(heat_exchanger_tube_copper);
-		registerRender(heat_exchanger_tube_hard_carbon);
-		registerRender(heat_exchanger_tube_thermoconducting);
-		registerRender(heat_exchanger_computer_port);
-		
-		registerRender(condenser_controller);
-		registerRender(condenser_tube_copper);
-		registerRender(condenser_tube_hard_carbon);
-		registerRender(condenser_tube_thermoconducting);
-		
-		registerRender(turbine_controller);
-		registerRender(turbine_casing);
-		registerRender(turbine_glass);
-		registerRender(turbine_rotor_shaft);
-		registerRender(turbine_rotor_blade_steel);
-		registerRender(turbine_rotor_blade_extreme);
-		registerRender(turbine_rotor_blade_sic_sic_cmc);
-		registerRender(turbine_rotor_stator);
-		registerRender(turbine_rotor_bearing);
-		for (int i = 0; i < TurbineDynamoCoilType.values().length; ++i) {
-			registerRender(turbine_dynamo_coil, i, "type=" + TurbineDynamoCoilType.values()[i].getName());
-		}
-		registerRender(turbine_coil_connector);
-		registerRender(turbine_inlet);
-		registerRender(turbine_outlet);
-		registerRender(turbine_computer_port);
-		
-		if (register_passive[0]) {
-			registerRender(cobblestone_generator);
-			registerRender(cobblestone_generator_compact);
-			registerRender(cobblestone_generator_dense);
-		}
-		
-		if (register_passive[1]) {
-			registerRender(water_source);
-			registerRender(water_source_compact);
-			registerRender(water_source_dense);
-		}
-		
-		if (register_passive[2]) {
-			registerRender(nitrogen_collector);
-			registerRender(nitrogen_collector_compact);
-			registerRender(nitrogen_collector_dense);
-		}
-		
-		registerRender(radiation_scrubber);
-		
-		registerRender(geiger_block);
-		
-		registerRender(glowing_mushroom);
-		registerRender(glowing_mushroom_block);
-		registerRender(wasteland_earth);
-		
-		registerRender(wasteland_portal);
-		
-		registerRender(tritium_lamp);
-		
-		registerRender(solidified_corium);
-		
-		if (register_quantum) {
-			registerRender(quantum_computer_controller);
-			registerRender(quantum_computer_qubit);
-			
-			for (int i = 0; i < QuantumGateEnums.SingleType.values().length; ++i) {
-				registerRender(quantum_computer_gate_single, i, "type=" + QuantumGateEnums.SingleType.values()[i].getName());
-			}
-			for (int i = 0; i < QuantumGateEnums.ControlType.values().length; ++i) {
-				registerRender(quantum_computer_gate_control, i, "type=" + QuantumGateEnums.ControlType.values()[i].getName());
-			}
-			for (int i = 0; i < QuantumGateEnums.SwapType.values().length; ++i) {
-				registerRender(quantum_computer_gate_swap, i, "type=" + QuantumGateEnums.SwapType.values()[i].getName());
-			}
-			
-			registerRender(quantum_computer_connector);
-			
-			for (int i = 0; i < BlockQuantumComputerCodeGenerator.Type.values().length; ++i) {
-				registerRender(quantum_computer_code_generator, i, "type=" + BlockQuantumComputerCodeGenerator.Type.values()[i].getName());
-			}
+		for (BlockRegistrationInfo<?> registration : registrationList) {
+			registration.registerRender.run();
 		}
 	}
-	
-	public static Block withName(Block block, String name) {
-		return block.setTranslationKey(Global.MOD_ID + "." + name).setRegistryName(new ResourceLocation(Global.MOD_ID, name));
+
+	// Factory
+
+	public static <T extends Block> T addWithName(String modId, String name, T block, Consumer<BlockRegistrationInfo<T>> registerBlock, Consumer<BlockRegistrationInfo<T>> registerRender) {
+		block = withName(modId, name, block);
+		registrationList.add(new BlockRegistrationInfo<>(modId, name, block, registerBlock, registerRender));
+		return block;
+	}
+
+	public static <T extends Block> T addWithName(String modId, String name, T block, String... tooltip) {
+		return addWithName(modId, name, block, x -> registerBlock(x.block, tooltip), x -> registerRender(x.block));
+	}
+
+	public static <T extends Block & ITileType> T addWithName(String modId, T block, String... tooltip) {
+		return addWithName(modId, block.getTileName(), block, x -> registerBlock(x.block, tooltip), x -> registerRender(x.block));
+	}
+
+	public static <T extends Block> T addWithName(String modId, String name, T block, Function<T, ? extends ItemBlock> itemBlockFunction) {
+		return addWithName(modId, name, block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRender(x.block));
+	}
+
+	public static <T extends Block & ITileType> T addWithName(String modId, T block, Function<T, ? extends ItemBlock> itemBlockFunction) {
+		return addWithName(modId, block.getTileName(), block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRender(x.block));
+	}
+
+	public static <T extends Block & IBlockMeta<V>, U extends ItemBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> T addWithNameMeta(String modId, String name, T block, Function<T, U> itemBlockFunction, UnaryOperator<String> variantFunction) {
+		return addWithName(modId, name, block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRenderMeta(x.modId, x.block, variantFunction));
+	}
+
+	public static <T extends Block & IBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> T addWithNameMeta(String modId, String name, T block) {
+		return addWithNameMeta(modId, name, block, ItemBlockMeta<V>::new, x -> "type=" + x);
+	}
+
+	// Auxiliary
+
+	public static String fixedLine(String modId, String name) {
+		return "tile." + modId + "." + name + ".fixd";
+	}
+
+	public static String infoLine(String modId, String name) {
+		return "tile." + modId + "." + name + ".desc";
 	}
 	
-	public static <T extends Block & ITileType> Block withName(T block) {
-		return block.setTranslationKey(Global.MOD_ID + "." + block.getTileName()).setRegistryName(new ResourceLocation(Global.MOD_ID, block.getTileName()));
+	public static <T extends Block> T withName(String modId, String name, T block) {
+		block.setTranslationKey(modId + "." + name).setRegistryName(new ResourceLocation(modId, name));
+		return block;
 	}
 	
-	public static String fixedLine(String name) {
-		return "tile." + Global.MOD_ID + "." + name + ".fixd";
+	public static <T extends Block & ITileType> T withName(String modId, T block) {
+		return withName(modId, block.getTileName(), block);
 	}
-	
-	public static String infoLine(String name) {
-		return "tile." + Global.MOD_ID + "." + name + ".desc";
-	}
-	
-	public static void registerBlock(Block block, TextFormatting[] fixedColors, String[] fixedTooltip, TextFormatting infoColor, String... tooltip) {
-		ForgeRegistries.BLOCKS.register(block);
-		ForgeRegistries.ITEMS.register(new NCItemBlock(block, fixedColors, fixedTooltip, infoColor, tooltip).setRegistryName(block.getRegistryName()));
-	}
-	
-	public static void registerBlock(Block block, TextFormatting fixedColor, String[] fixedTooltip, TextFormatting infoColor, String... tooltip) {
-		ForgeRegistries.BLOCKS.register(block);
-		ForgeRegistries.ITEMS.register(new NCItemBlock(block, fixedColor, fixedTooltip, infoColor, tooltip).setRegistryName(block.getRegistryName()));
-	}
-	
+
 	public static void registerBlock(Block block, String... tooltip) {
-		registerBlock(block, TextFormatting.RED, InfoHelper.EMPTY_ARRAY, TextFormatting.AQUA, tooltip);
+		registerBlock(block, new NCItemBlock(block, TextFormatting.RED, InfoHelper.EMPTY_ARRAY, TextFormatting.AQUA, tooltip));
 	}
 	
 	public static void registerBlock(Block block, ItemBlock itemBlock) {
@@ -900,8 +517,16 @@ public class NCBlocks {
 	public static void registerRender(Block block) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
 	}
+
+	public static <T extends Block & IBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> void registerRenderMeta(String modId, T block, UnaryOperator<String> variantFunction) {
+		registerRenderMeta(modId, block, StreamHelper.map(Arrays.asList(block.getValues()), IStringSerializable::getName), variantFunction);
+	}
 	
-	public static void registerRender(Block block, int meta, String variant) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(new ResourceLocation(Global.MOD_ID, block.getRegistryName().getPath()), variant));
+	public static <T extends IStringSerializable> void registerRenderMeta(String modId, Block block, List<String> types, UnaryOperator<String> variantFunction) {
+		Item itemBlock = Item.getItemFromBlock(block);
+		ResourceLocation blockLocation = new ResourceLocation(modId, block.getRegistryName().getPath());
+		for (int i = 0; i < types.size(); ++i) {
+			ModelLoader.setCustomModelResourceLocation(itemBlock, i, new ModelResourceLocation(blockLocation, variantFunction.apply(types.get(i))));
+		}
 	}
 }

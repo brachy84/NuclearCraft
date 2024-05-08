@@ -1,12 +1,16 @@
 package nc.block.quantum;
 
 import nc.enumm.IBlockMetaEnum;
+import nc.enumm.ITileEnum;
 import nc.tile.quantum.TileQuantumComputerCodeGenerator;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.*;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -36,17 +40,19 @@ public class BlockQuantumComputerCodeGenerator extends BlockQuantumComputerMetaP
 		return rightClickOnPart(world, pos, player, hand, facing);
 	}
 	
-	public static enum Type implements IStringSerializable, IBlockMetaEnum {
+	public enum Type implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerCodeGenerator> {
 		
-		QASM("qasm", 0),
-		QISKIT("qiskit", 1);
+		QASM("qasm", 0, TileQuantumComputerCodeGenerator.Qasm.class),
+		QISKIT("qiskit", 1, TileQuantumComputerCodeGenerator.Qiskit.class);
 		
 		private final String name;
 		private final int id;
+		private final Class<? extends TileQuantumComputerCodeGenerator> tileClass;
 		
-		private Type(String name, int id) {
+		Type(String name, int id, Class<? extends TileQuantumComputerCodeGenerator> tileClass) {
 			this.name = name;
 			this.id = id;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -83,12 +89,17 @@ public class BlockQuantumComputerCodeGenerator extends BlockQuantumComputerMetaP
 		public float getResistance() {
 			return 15F;
 		}
-		
+
 		@Override
 		public int getLightValue() {
 			return 0;
 		}
-		
+
+		@Override
+		public Class<? extends TileQuantumComputerCodeGenerator> getTileClass() {
+			return tileClass;
+		}
+
 		public TileEntity getTile() {
             return switch (this) {
                 case QASM -> new TileQuantumComputerCodeGenerator.Qasm();

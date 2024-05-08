@@ -15,8 +15,8 @@ public class TileTurbineDynamoCoil extends TileTurbineDynamoPart {
 	public TileTurbineDynamoCoil(String coilName, Double conductivity, String ruleID) {
 		super(coilName, conductivity, ruleID);
 	}
-	
-	protected static class Meta extends TileTurbineDynamoCoil {
+
+	public static class Meta extends TileTurbineDynamoCoil {
 		
 		protected Meta(TurbineDynamoCoilType coilType) {
 			super(coilType.getName(), coilType.getConductivity(), coilType.getName() + "_coil");

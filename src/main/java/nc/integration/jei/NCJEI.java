@@ -1,21 +1,29 @@
 package nc.integration.jei;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import mezz.jei.api.*;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import nc.ModCheck;
+import nc.container.processor.ContainerNuclearFurnace;
 import nc.enumm.MetaEnums;
+import nc.gui.processor.GuiNuclearFurnace;
 import nc.handler.TileInfoHandler;
-import nc.init.*;
+import nc.init.NCArmor;
+import nc.init.NCBlocks;
+import nc.init.NCItems;
 import nc.integration.jei.category.info.JEICategoryInfo;
 import nc.multiblock.fission.FissionPlacement;
 import nc.recipe.BasicRecipe;
 import nc.recipe.ingredient.IItemIngredient;
-import nc.util.*;
-import net.minecraft.item.*;
+import nc.util.NCUtil;
+import nc.util.StackHelper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static nc.config.NCConfig.*;
 
 @JEIPlugin
 public class NCJEI implements IModPlugin {
@@ -29,6 +37,10 @@ public class NCJEI implements IModPlugin {
 		for (JEICategoryInfo<?, ?, ?> categoryInfo : TileInfoHandler.JEI_CATEGORY_INFO_MAP.values()) {
 			categoryInfo.registerJEICategory(registry, jeiHelpers, guiHelper, transferRegistry);
 		}
+
+		registry.addRecipeCatalyst(new ItemStack(NCBlocks.nuclear_furnace), VanillaRecipeCategoryUid.SMELTING);
+		registry.addRecipeClickArea(GuiNuclearFurnace.class, 78, 32, 28, 23, VanillaRecipeCategoryUid.SMELTING);
+		transferRegistry.addRecipeTransferHandler(ContainerNuclearFurnace.class, VanillaRecipeCategoryUid.SMELTING, 0, 1, 3, 36);
 		
 		for (int i = 0; i < MetaEnums.OreType.values().length; ++i) {
 			if (!ore_gen[i] && ore_hide_disabled) {

@@ -1,14 +1,18 @@
 package nc.tile.turbine;
 
-import java.util.Iterator;
-
 import nc.block.turbine.BlockTurbineRotorBlade;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.turbine.*;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
+import nc.multiblock.turbine.Turbine;
+import nc.multiblock.turbine.TurbineRotorBladeUtil;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.IRotorBladeType;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.ITurbineRotorBlade;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorBladeType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Iterator;
 
 public class TileTurbineRotorBlade extends TileTurbinePart implements ITurbineRotorBlade<TileTurbineRotorBlade> {
 	
@@ -19,22 +23,29 @@ public class TileTurbineRotorBlade extends TileTurbinePart implements ITurbineRo
 	public TileTurbineRotorBlade() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
-	
-	public static class Steel extends TileTurbineRotorBlade {
+
+	public static class Variant extends TileTurbineRotorBlade {
+
+		protected Variant(TurbineRotorBladeType bladeType) {
+			super(bladeType);
+		}
+	}
+
+	public static class Steel extends Variant {
 		
 		public Steel() {
 			super(TurbineRotorBladeType.STEEL);
 		}
 	}
 	
-	public static class Extreme extends TileTurbineRotorBlade {
+	public static class Extreme extends Variant {
 		
 		public Extreme() {
 			super(TurbineRotorBladeType.EXTREME);
 		}
 	}
 	
-	public static class SicSicCMC extends TileTurbineRotorBlade {
+	public static class SicSicCMC extends Variant {
 		
 		public SicSicCMC() {
 			super(TurbineRotorBladeType.SIC_SIC_CMC);

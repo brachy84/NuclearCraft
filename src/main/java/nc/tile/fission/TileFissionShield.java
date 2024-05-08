@@ -48,7 +48,7 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 		this.efficiency = efficiency;
 	}
 	
-	protected static class Meta extends TileFissionShield {
+	public static class Meta extends TileFissionShield {
 		
 		protected Meta(MetaEnums.NeutronShieldType type) {
 			super(type.getHeatPerFlux(), type.getEfficiency());

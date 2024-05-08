@@ -145,19 +145,19 @@ public class NCCoolantFluids {
 			
 			NCBlockFluid fluidBlock = fluidPair.getRight();
 			if (fluidBlock != null) {
-				registerBlock(fluidBlock);
+				registerBlock(Global.MOD_ID, fluidBlock);
 			}
 		}
 	}
 	
-	private static void registerBlock(NCBlockFluid block) {
-		ForgeRegistries.BLOCKS.register(withName(block));
+	private static void registerBlock(String modId, NCBlockFluid block) {
+		ForgeRegistries.BLOCKS.register(withName(modId, block));
 		ForgeRegistries.ITEMS.register(new NCItemBlock(block, TextFormatting.AQUA).setRegistryName(block.getRegistryName()));
 		NuclearCraft.proxy.registerFluidBlockRendering(block, "fluid_molten_colored");
 	}
 	
-	private static <T extends NCBlockFluid> Block withName(T block) {
-		return block.setTranslationKey(Global.MOD_ID + "." + block.name).setRegistryName(new ResourceLocation(Global.MOD_ID, block.name));
+	private static <T extends NCBlockFluid> Block withName(String modId, T block) {
+		return block.setTranslationKey(modId + "." + block.name).setRegistryName(new ResourceLocation(modId, block.name));
 	}
 	
 	private static boolean registerCoFHAlt() {

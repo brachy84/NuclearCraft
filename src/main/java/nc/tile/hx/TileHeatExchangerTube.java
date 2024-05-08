@@ -16,31 +16,38 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart {
 	public EnumFacing flowDir = null;
 	
 	public final double conductivity;
+
+	public static abstract class Variant extends TileHeatExchangerTube {
+
+		protected Variant(HeatExchangerTubeType type) {
+			super(type.getConductivity());
+		}
+	}
 	
-	public static class Copper extends TileHeatExchangerTube {
+	public static class Copper extends Variant {
 		
 		public Copper() {
 			super(HeatExchangerTubeType.COPPER);
 		}
 	}
 	
-	public static class HardCarbon extends TileHeatExchangerTube {
+	public static class HardCarbon extends Variant {
 		
 		public HardCarbon() {
 			super(HeatExchangerTubeType.HARD_CARBON);
 		}
 	}
 	
-	public static class Thermoconducting extends TileHeatExchangerTube {
+	public static class Thermoconducting extends Variant {
 		
 		public Thermoconducting() {
 			super(HeatExchangerTubeType.THERMOCONDUCTING);
 		}
 	}
 	
-	protected TileHeatExchangerTube(HeatExchangerTubeType tubeType) {
+	protected TileHeatExchangerTube(double conductivity) {
 		super(CuboidalPartPositionType.INTERIOR);
-		conductivity = tubeType.getConductivity();
+		this.conductivity = conductivity;
 	}
 	
 	@Override

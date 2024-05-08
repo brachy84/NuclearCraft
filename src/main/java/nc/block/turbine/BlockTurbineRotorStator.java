@@ -17,10 +17,13 @@ import net.minecraftforge.fml.relauncher.*;
 public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockRotorBlade {
 	
 	private static final AxisAlignedBB[] STATOR_AABB = {new AxisAlignedBB(0D, PIXEL * 2D, PIXEL * 7D, PIXEL * 16D, PIXEL * 14D, PIXEL * 9D), new AxisAlignedBB(PIXEL * 7D, 0D, PIXEL * 2D, PIXEL * 9D, PIXEL * 16D, PIXEL * 14D), new AxisAlignedBB(PIXEL * 7D, PIXEL * 2D, 0D, PIXEL * 9D, PIXEL * 14D, PIXEL * 16D)};
-	
-	public BlockTurbineRotorStator() {
+
+	private final TurbineRotorStatorType statorType;
+
+	public BlockTurbineRotorStator(TurbineRotorStatorType statorType) {
 		super();
 		setDefaultState(blockState.getBaseState().withProperty(TurbineRotorBladeUtil.DIR, TurbinePartDir.Y));
+		this.statorType = statorType;
 	}
 	
 	@Override
@@ -35,7 +38,9 @@ public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockR
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileTurbineRotorStator.Standard();
+		return switch (statorType) {
+            case STANDARD -> new TileTurbineRotorStator.Standard();
+        };
 	}
 	
 	@Override

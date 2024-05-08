@@ -1,23 +1,32 @@
 package nc.recipe;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.annotation.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import crafttweaker.annotations.ZenRegister;
-import it.unimi.dsi.fastutil.ints.*;
-import it.unimi.dsi.fastutil.objects.*;
-import nc.ModCheck;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import nc.integration.gtce.GTCERecipeHelper;
-import nc.recipe.ingredient.*;
-import nc.util.*;
+import nc.recipe.ingredient.IFluidIngredient;
+import nc.recipe.ingredient.IItemIngredient;
+import nc.util.NCMath;
+import nc.util.NCUtil;
+import nc.util.PermutationHelper;
+import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import stanhebben.zenscript.annotations.*;
+import org.apache.commons.lang3.tuple.Pair;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+import static nc.config.NCConfig.factor_recipes;
+import static nc.config.NCConfig.gtce_recipe_integration;
 
 @ZenClass("mods.nuclearcraft.BasicRecipeHandler")
 @ZenRegister
@@ -73,9 +82,9 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	}
 	
 	public void addGTCERecipes() {
-		if (ModCheck.gregtechLoaded() && GTCE_INTEGRATION.getBoolean(name)) {
+		if (GTCE_INTEGRATION.getBoolean(name)) {
 			for (BasicRecipe recipe : recipeList) {
-				//GTCERecipeHelper.addGTCERecipe(name, recipe);
+				GTCERecipeHelper.addGTCERecipe(name, recipe);
 			}
 		}
 	}

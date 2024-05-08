@@ -1,27 +1,44 @@
 package nc.multiblock.hx;
 
+import nc.enumm.ITileEnum;
+import nc.tile.hx.TileCondenserTube;
+import nc.tile.hx.TileHeatExchangerTube;
+
 import static nc.config.NCConfig.heat_exchanger_conductivity;
 
-public enum HeatExchangerTubeType {
+public enum HeatExchangerTubeType implements ITileEnum<TileHeatExchangerTube.Variant> {
 	
-	COPPER("copper", heat_exchanger_conductivity[0]),
-	HARD_CARBON("hard_carbon", heat_exchanger_conductivity[1]),
-	THERMOCONDUCTING("thermoconducting", heat_exchanger_conductivity[2]);
+	COPPER("copper", heat_exchanger_conductivity[0], TileHeatExchangerTube.Copper.class, TileCondenserTube.Copper.class),
+	HARD_CARBON("hard_carbon", heat_exchanger_conductivity[1], TileHeatExchangerTube.HardCarbon.class, TileCondenserTube.HardCarbon.class),
+	THERMOCONDUCTING("thermoconducting", heat_exchanger_conductivity[2], TileHeatExchangerTube.Thermoconducting.class, TileCondenserTube.Thermoconducting.class);
 	
 	private final String name;
 	private final double conductivity;
+	private final Class<? extends TileHeatExchangerTube.Variant> tileClass;
+	private final Class<? extends TileCondenserTube.Variant> condenserClass;
 	
-	HeatExchangerTubeType(String name, double conductivity) {
+	HeatExchangerTubeType(String name, double conductivity, Class<? extends TileHeatExchangerTube.Variant> tileClass, Class<? extends TileCondenserTube.Variant> condenserClass) {
 		this.name = name;
 		this.conductivity = conductivity;
+		this.tileClass = tileClass;
+		this.condenserClass = condenserClass;
 	}
 	
 	@Override
 	public String toString() {
 		return name;
 	}
-	
+
 	public double getConductivity() {
 		return conductivity;
+	}
+
+	@Override
+	public Class<? extends TileHeatExchangerTube.Variant> getTileClass() {
+		return tileClass;
+	}
+
+	public Class<? extends TileCondenserTube.Variant> getCondenserClass() {
+		return condenserClass;
 	}
 }

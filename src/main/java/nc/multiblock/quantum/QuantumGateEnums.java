@@ -1,33 +1,36 @@
 package nc.multiblock.quantum;
 
 import nc.enumm.IBlockMetaEnum;
+import nc.enumm.ITileEnum;
 import nc.tile.quantum.TileQuantumComputerGate;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 
 public class QuantumGateEnums {
 	
-	public enum SingleType implements IStringSerializable, IBlockMetaEnum {
+	public enum SingleType implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerGate> {
 		
-		X("x", 0),
-		Y("y", 1),
-		Z("z", 2),
-		H("h", 3),
-		S("s", 4),
-		Sdg("sdg", 5),
-		T("t", 6),
-		Tdg("tdg", 7),
-		P("p", 8),
-		RX("rx", 9),
-		RY("ry", 10),
-		RZ("rz", 11);
+		X("x", 0, TileQuantumComputerGate.X.class),
+		Y("y", 1, TileQuantumComputerGate.Y.class),
+		Z("z", 2, TileQuantumComputerGate.Z.class),
+		H("h", 3, TileQuantumComputerGate.H.class),
+		S("s", 4, TileQuantumComputerGate.S.class),
+		Sdg("sdg", 5, TileQuantumComputerGate.Sdg.class),
+		T("t", 6, TileQuantumComputerGate.T.class),
+		Tdg("tdg", 7, TileQuantumComputerGate.Tdg.class),
+		P("p", 8, TileQuantumComputerGate.P.class),
+		RX("rx", 9, TileQuantumComputerGate.RX.class),
+		RY("ry", 10, TileQuantumComputerGate.RY.class),
+		RZ("rz", 11, TileQuantumComputerGate.RZ.class);
 		
 		private final String name;
 		private final int id;
+		private final Class<? extends TileQuantumComputerGate> tileClass;
 		
-		SingleType(String name, int id) {
+		SingleType(String name, int id, Class<? extends TileQuantumComputerGate> tileClass) {
 			this.name = name;
 			this.id = id;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -69,7 +72,12 @@ public class QuantumGateEnums {
 		public int getLightValue() {
 			return 0;
 		}
-		
+
+		@Override
+		public Class<? extends TileQuantumComputerGate> getTileClass() {
+			return tileClass;
+		}
+
 		public TileEntity getTile() {
             return switch (this) {
                 case X -> new TileQuantumComputerGate.X();
@@ -88,27 +96,29 @@ public class QuantumGateEnums {
 		}
 	}
 	
-	public enum ControlType implements IStringSerializable, IBlockMetaEnum {
+	public enum ControlType implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerGate> {
 		
-		CX("cx", 0),
-		CY("cy", 1),
-		CZ("cz", 2),
-		CH("ch", 3),
-		CS("cs", 4),
-		CSdg("csdg", 5),
-		CT("ct", 6),
-		CTdg("ctdg", 7),
-		CP("cp", 8),
-		CRX("crx", 9),
-		CRY("cry", 10),
-		CRZ("crz", 11);
+		CX("cx", 0, TileQuantumComputerGate.CX.class),
+		CY("cy", 1, TileQuantumComputerGate.CY.class),
+		CZ("cz", 2, TileQuantumComputerGate.CZ.class),
+		CH("ch", 3, TileQuantumComputerGate.CH.class),
+		CS("cs", 4, TileQuantumComputerGate.CS.class),
+		CSdg("csdg", 5, TileQuantumComputerGate.CSdg.class),
+		CT("ct", 6, TileQuantumComputerGate.CT.class),
+		CTdg("ctdg", 7, TileQuantumComputerGate.CTdg.class),
+		CP("cp", 8, TileQuantumComputerGate.CP.class),
+		CRX("crx", 9, TileQuantumComputerGate.CRX.class),
+		CRY("cry", 10, TileQuantumComputerGate.CRY.class),
+		CRZ("crz", 11, TileQuantumComputerGate.CRZ.class);
 		
 		private final String name;
 		private final int id;
+		private final Class<? extends TileQuantumComputerGate> tileClass;
 		
-		ControlType(String name, int id) {
+		ControlType(String name, int id, Class<? extends TileQuantumComputerGate> tileClass) {
 			this.name = name;
 			this.id = id;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -149,6 +159,11 @@ public class QuantumGateEnums {
 		@Override
 		public int getLightValue() {
 			return 0;
+		}
+
+		@Override
+		public Class<? extends TileQuantumComputerGate> getTileClass() {
+			return tileClass;
 		}
 		
 		public TileEntity getTile() {
@@ -169,17 +184,19 @@ public class QuantumGateEnums {
 		}
 	}
 	
-	public enum SwapType implements IStringSerializable, IBlockMetaEnum {
+	public enum SwapType implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerGate> {
 		
-		SWAP("swap", 0),
-		CSWAP("cswap", 1);
+		SWAP("swap", 0, TileQuantumComputerGate.Swap.class),
+		CSWAP("cswap", 1, TileQuantumComputerGate.ControlSwap.class);
 		
 		private final String name;
 		private final int id;
+		private final Class<? extends TileQuantumComputerGate> tileClass;
 		
-		SwapType(String name, int id) {
+		SwapType(String name, int id, Class<? extends TileQuantumComputerGate> tileClass) {
 			this.name = name;
 			this.id = id;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -221,7 +238,12 @@ public class QuantumGateEnums {
 		public int getLightValue() {
 			return 0;
 		}
-		
+
+		@Override
+		public Class<? extends TileQuantumComputerGate> getTileClass() {
+			return tileClass;
+		}
+
 		public TileEntity getTile() {
             return switch (this) {
                 case SWAP -> new TileQuantumComputerGate.Swap();

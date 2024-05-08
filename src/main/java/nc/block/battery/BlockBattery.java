@@ -23,7 +23,7 @@ import net.minecraft.world.*;
 
 public class BlockBattery extends BlockMultiblockPart implements IDynamicState, ISidedEnergy, INBTDrop {
 	
-	private final IBatteryBlockType type;
+	public final IBatteryBlockType type;
 	
 	public BlockBattery(IBatteryBlockType type) {
 		super(Material.IRON, NCTabs.multiblock);

@@ -1,3 +1,10 @@
+v2o.7.2
+
++ Added config to entirely disable all GTCEu recipe integration
++ Added config to disable all miscellaneous TiC recipes
+
+* Simplified registration logic
+
 v2o.7.1
 
 + Added Electric Furnace
@@ -13,6 +20,8 @@ v2o.7.1
 * References to NCO's network wrapper are no longer hard-coded
 
 * Fixed broken placement rule pluralisation when using some JVMs
+
+* Updated Chinese language file [thanks to WuzgXY!]
 
 v2o.7.0
 

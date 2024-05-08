@@ -1,7 +1,5 @@
 package nc.integration.jei.category.info;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -122,9 +120,8 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 			registry.addRecipeHandlers(category);
 			
 			addJEIRecipeCatalysts(registry);
-			
-			addRecipeTransferHandlers(transferRegistry);
 			addRecipeClickAreas(registry);
+			addRecipeTransferHandlers(transferRegistry);
 		}
 	}
 	
@@ -145,16 +142,16 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 			}
 		}
 	}
+
+	public void addRecipeClickAreas(IModRegistry registry) {
+		for (JEIContainerConnection connection : jeiContainerConnections) {
+			registry.addRecipeClickArea(connection.guiClass, connection.jeiClickAreaX, connection.jeiClickAreaY, connection.jeiClickAreaW, connection.jeiClickAreaH, getJEICategoryUid());
+		}
+	}
 	
 	public void addRecipeTransferHandlers(IRecipeTransferRegistry transferRegistry) {
 		for (JEIContainerConnection connection : jeiContainerConnections) {
 			transferRegistry.addRecipeTransferHandler(connection.containerClass, getJEICategoryUid(), connection.itemInputStart, connection.itemInputEnd, connection.playerInventoryStart, 36);
-		}
-	}
-	
-	public void addRecipeClickAreas(IModRegistry registry) {
-		for (JEIContainerConnection connection : jeiContainerConnections) {
-			registry.addRecipeClickArea(connection.guiClass, connection.jeiClickAreaX, connection.jeiClickAreaY, connection.jeiClickAreaW, connection.jeiClickAreaH, getJEICategoryUid());
 		}
 	}
 }

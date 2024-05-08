@@ -30,7 +30,7 @@ public class TileFissionSource extends TileFissionPart {
 		this.efficiency = efficiency;
 	}
 	
-	protected static class Meta extends TileFissionSource {
+	public static class Meta extends TileFissionSource {
 		
 		protected Meta(MetaEnums.NeutronSourceType type) {
 			super(type.getEfficiency());

@@ -27,7 +27,7 @@ public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeate
 		tanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
 	}
 	
-	protected static class Meta extends TileFissionHeaterPort {
+	public static class Meta extends TileFissionHeaterPort {
 		
 		protected Meta(String heaterType, String coolantName) {
 			super(heaterType, coolantName);

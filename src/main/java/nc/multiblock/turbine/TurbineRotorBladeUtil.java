@@ -4,6 +4,9 @@ import static nc.config.NCConfig.*;
 
 import java.util.Iterator;
 
+import nc.enumm.ITileEnum;
+import nc.tile.turbine.TileTurbineRotorBlade;
+import nc.tile.turbine.TileTurbineRotorStator;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.*;
@@ -11,20 +14,22 @@ import net.minecraft.util.math.BlockPos;
 
 public class TurbineRotorBladeUtil {
 	
-	public enum TurbineRotorBladeType implements IRotorBladeType {
+	public enum TurbineRotorBladeType implements IRotorBladeType, ITileEnum<TileTurbineRotorBlade.Variant> {
 		
-		STEEL("steel", turbine_blade_efficiency[0], turbine_blade_expansion[0]),
-		EXTREME("extreme", turbine_blade_efficiency[1], turbine_blade_expansion[1]),
-		SIC_SIC_CMC("sic_sic_cmc", turbine_blade_efficiency[2], turbine_blade_expansion[2]);
+		STEEL("steel", turbine_blade_efficiency[0], turbine_blade_expansion[0], TileTurbineRotorBlade.Steel.class),
+		EXTREME("extreme", turbine_blade_efficiency[1], turbine_blade_expansion[1], TileTurbineRotorBlade.Extreme.class),
+		SIC_SIC_CMC("sic_sic_cmc", turbine_blade_efficiency[2], turbine_blade_expansion[2], TileTurbineRotorBlade.SicSicCMC.class);
 		
 		private final String name;
 		private final double efficiency;
 		private final double expansion;
+		private final Class<? extends TileTurbineRotorBlade.Variant> tileClass;
 		
-		TurbineRotorBladeType(String name, double efficiency, double expansion) {
+		TurbineRotorBladeType(String name, double efficiency, double expansion, Class<? extends TileTurbineRotorBlade.Variant> tileClass) {
 			this.name = name;
 			this.efficiency = efficiency;
 			this.expansion = expansion;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -41,10 +46,15 @@ public class TurbineRotorBladeUtil {
 		public double getEfficiency() {
 			return efficiency;
 		}
-		
+
 		@Override
 		public double getExpansionCoefficient() {
 			return expansion;
+		}
+
+		@Override
+		public Class<? extends TileTurbineRotorBlade.Variant> getTileClass() {
+			return tileClass;
 		}
 	}
 	
@@ -59,16 +69,18 @@ public class TurbineRotorBladeUtil {
 		}
 	}
 	
-	public enum TurbineRotorStatorType implements IRotorStatorType {
+	public enum TurbineRotorStatorType implements IRotorStatorType, ITileEnum<TileTurbineRotorStator.Variant> {
 		
-		STATOR("stator", turbine_stator_expansion);
+		STANDARD("standard", turbine_stator_expansion, TileTurbineRotorStator.Standard.class);
 		
 		private final String name;
 		private final double expansion;
+		private final Class<? extends TileTurbineRotorStator.Variant> tileClass;
 		
-		TurbineRotorStatorType(String name, double expansion) {
+		TurbineRotorStatorType(String name, double expansion, Class<? extends TileTurbineRotorStator.Variant> tileClass) {
 			this.name = name;
 			this.expansion = expansion;
+			this.tileClass = tileClass;
 		}
 		
 		@Override
@@ -84,6 +96,11 @@ public class TurbineRotorBladeUtil {
 		@Override
 		public double getExpansionCoefficient() {
 			return expansion;
+		}
+
+		@Override
+		public Class<? extends TileTurbineRotorStator.Variant> getTileClass() {
+			return tileClass;
 		}
 	}
 	

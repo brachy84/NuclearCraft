@@ -1,6 +1,8 @@
 package nc.enumm;
 
-public interface ICoolingComponentEnum extends IBlockMetaEnum {
+import net.minecraft.tileentity.TileEntity;
+
+public interface ICoolingComponentEnum<T extends TileEntity> extends ITileEnum<T> {
 	
 	int getCooling();
 }

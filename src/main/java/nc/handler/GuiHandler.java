@@ -20,8 +20,8 @@ public class GuiHandler implements IGuiHandler {
 		}
 		return GUI_ID_MAP.getInt(name);
 	}
-	
-	@SuppressWarnings("rawtypes")
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -30,8 +30,8 @@ public class GuiHandler implements IGuiHandler {
 		}
 		return null;
 	}
-	
-	@SuppressWarnings("rawtypes")
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));

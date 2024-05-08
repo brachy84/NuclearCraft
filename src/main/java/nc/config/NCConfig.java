@@ -89,6 +89,8 @@ public class NCConfig {
 	public static boolean ore_processing;
 	public static int[] manufactory_wood;
 	public static boolean rock_crusher_alternate;
+
+	public static boolean gtce_recipe_integration_global;
 	public static boolean[] gtce_recipe_integration;
 	public static boolean gtce_recipe_logging;
 	public static boolean smart_processor_input;
@@ -402,6 +404,7 @@ public class NCConfig {
 	public static boolean[] register_entity;
 	public static boolean register_fluid_blocks;
 	public static boolean register_cofh_fluids;
+	public static boolean register_tic_recipes;
 	public static boolean register_projecte_emc;
 	
 	public static boolean give_guidebook;
@@ -514,6 +517,8 @@ public class NCConfig {
 		ore_processing = sync(CATEGORY_PROCESSOR, "ore_processing", true);
 		manufactory_wood = sync(CATEGORY_PROCESSOR, "manufactory_wood", new int[] {6, 4}, 1, 64, ARRAY);
 		rock_crusher_alternate = sync(CATEGORY_PROCESSOR, "rock_crusher_alternate", false);
+
+		gtce_recipe_integration_global = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration_global", true);
 		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
 		smart_processor_input = sync(CATEGORY_PROCESSOR, "smart_processor_input", true);
@@ -825,6 +830,7 @@ public class NCConfig {
 		register_entity = sync(CATEGORY_REGISTRATION, "register_entity", new boolean[] {true}, ARRAY);
 		register_fluid_blocks = sync(CATEGORY_REGISTRATION, "register_fluid_blocks", false);
 		register_cofh_fluids = sync(CATEGORY_REGISTRATION, "register_cofh_fluids", false);
+		register_tic_recipes = sync(CATEGORY_REGISTRATION, "register_tic_recipes", true);
 		register_projecte_emc = sync(CATEGORY_REGISTRATION, "register_projecte_emc", true);
 		
 		give_guidebook = sync(CATEGORY_MISC, "give_guidebook", true);
