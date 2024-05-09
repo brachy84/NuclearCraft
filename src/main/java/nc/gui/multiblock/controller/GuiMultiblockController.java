@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import nc.gui.GuiInfoTile;
 import nc.multiblock.*;
 import nc.network.multiblock.MultiblockUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.multiblock.*;
 import nc.util.Lang;
 import net.minecraft.client.renderer.GlStateManager;

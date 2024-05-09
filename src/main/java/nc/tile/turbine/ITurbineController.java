@@ -2,7 +2,7 @@ package nc.tile.turbine;
 
 import nc.multiblock.turbine.Turbine;
 import nc.network.multiblock.TurbineUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.multiblock.ILogicMultiblockController;
 import net.minecraft.tileentity.TileEntity;
 

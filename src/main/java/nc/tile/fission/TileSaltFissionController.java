@@ -7,7 +7,7 @@ import java.util.Iterator;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

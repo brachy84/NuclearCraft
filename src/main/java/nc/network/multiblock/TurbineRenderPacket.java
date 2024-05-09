@@ -2,7 +2,7 @@ package nc.network.multiblock;
 
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.turbine.Turbine;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.turbine.*;
 import net.minecraft.util.math.BlockPos;
 

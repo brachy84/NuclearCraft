@@ -5,7 +5,7 @@ import nc.multiblock.fission.FissionReactorLogic;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
 import nc.recipe.NCRecipes;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.IFissionPart;
 import nc.tile.fission.TileSaltFissionHeater;
 import nc.tile.fission.port.TileFissionHeaterPort;

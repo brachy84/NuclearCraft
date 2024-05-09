@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import nc.multiblock.fission.FissionReactor;
 import nc.network.multiblock.FissionUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.multiblock.ILogicMultiblockController;
 import net.minecraft.tileentity.TileEntity;
 

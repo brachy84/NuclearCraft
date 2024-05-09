@@ -7,7 +7,7 @@ import nc.handler.TileInfoHandler;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
 import nc.tile.ITileGui;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.fluid.ITileFilteredFluid;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;

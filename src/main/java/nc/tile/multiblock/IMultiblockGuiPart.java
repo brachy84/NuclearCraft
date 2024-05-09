@@ -4,7 +4,7 @@ import nc.multiblock.IPacketMultiblock;
 import nc.multiblock.Multiblock;
 import nc.network.multiblock.MultiblockUpdatePacket;
 import nc.tile.ITileGui;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 

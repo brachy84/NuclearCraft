@@ -3,7 +3,7 @@ package nc.tile.processor.info;
 import java.util.List;
 import java.util.function.Supplier;
 
-import nc.tile.BlockTileInfo;
+import nc.block.tile.info.BlockTileInfo;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 
@@ -11,8 +11,8 @@ public class ProcessorBlockInfo<TILE extends TileEntity> extends BlockTileInfo<T
 	
 	public final List<String> particles;
 	
-	public ProcessorBlockInfo(String name, Supplier<TILE> tileSupplier, CreativeTabs creativeTab, List<String> particles) {
-		super(name, tileSupplier, creativeTab);
+	public ProcessorBlockInfo(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, CreativeTabs creativeTab, List<String> particles) {
+		super(modId, name, tileClass, tileSupplier, creativeTab);
 		this.particles = particles;
 	}
 }

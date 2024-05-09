@@ -1,8 +1,8 @@
 package nc.gui;
 
 import nc.network.NCPacket;
-import nc.network.tile.TileUpdatePacket;
 import nc.tile.*;
+import nc.tile.info.TileContainerInfo;
 import nc.util.Lazy;
 import nc.util.Lazy.LazyInt;
 import net.minecraft.client.renderer.GlStateManager;

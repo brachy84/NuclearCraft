@@ -6,7 +6,7 @@ import nc.container.ContainerFunction;
 import nc.gui.GuiFunction;
 import nc.gui.GuiInfoTileFunction;
 import nc.network.tile.processor.ProcessorUpdatePacket;
-import nc.tile.TileContainerInfoHelper;
+import nc.tile.info.TileContainerInfoHelper;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.*;
 import net.minecraft.client.gui.inventory.GuiContainer;

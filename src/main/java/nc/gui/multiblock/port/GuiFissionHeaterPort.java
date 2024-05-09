@@ -6,7 +6,7 @@ import nc.gui.element.NCButton;
 import nc.network.gui.ClearFilterTankPacket;
 import nc.network.gui.ClearTankPacket;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.port.TileFissionHeaterPort;
 import nc.tile.internal.fluid.Tank;
 import nc.util.NCUtil;

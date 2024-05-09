@@ -4,7 +4,7 @@ import static nc.config.NCConfig.*;
 
 import nc.handler.TileInfoHandler;
 import nc.recipe.processor.BasicProcessorRecipeHandler;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.NCMath;
 

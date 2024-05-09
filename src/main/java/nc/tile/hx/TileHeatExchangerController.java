@@ -5,7 +5,7 @@ import static nc.block.property.BlockProperties.FACING_ALL;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.HeatExchanger;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

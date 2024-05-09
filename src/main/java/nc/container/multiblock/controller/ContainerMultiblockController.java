@@ -3,7 +3,7 @@ package nc.container.multiblock.controller;
 import nc.container.ContainerInfoTile;
 import nc.multiblock.*;
 import nc.network.multiblock.MultiblockUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.multiblock.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

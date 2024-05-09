@@ -2,6 +2,7 @@ package nc.tile;
 
 import nc.NuclearCraft;
 import nc.network.NCPacket;
+import nc.tile.info.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

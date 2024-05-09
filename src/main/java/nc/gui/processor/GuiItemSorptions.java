@@ -10,7 +10,7 @@ import nc.network.gui.ToggleItemOutputSettingPacket;
 import nc.network.gui.ToggleItemSorptionPacket;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.ITileGui;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.internal.inventory.ItemSorption;
 import nc.tile.inventory.ITileInventory;
 import nc.util.BlockHelper;

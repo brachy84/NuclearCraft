@@ -2,7 +2,7 @@ package nc.container.multiblock.controller;
 
 import nc.multiblock.hx.HeatExchanger;
 import nc.network.multiblock.HeatExchangerUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.hx.*;
 import net.minecraft.entity.player.EntityPlayer;
 

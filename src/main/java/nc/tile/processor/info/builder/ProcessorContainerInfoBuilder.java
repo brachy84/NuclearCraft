@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, BUILDER extends ProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER>> extends ContainerInfoBuilder<BUILDER> {
 	
-	protected final Class<TILE> tileClass;
+	public final Class<TILE> tileClass;
 	protected final Supplier<TILE> tileSupplier;
 	
 	protected CreativeTabs creativeTab = NCTabs.machine;
@@ -76,7 +76,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	}
 	
 	public ProcessorBlockInfo<TILE> buildBlockInfo() {
-		return new ProcessorBlockInfo<>(name, tileSupplier, creativeTab, particles);
+		return new ProcessorBlockInfo<>(modId, name, tileClass, tileSupplier, creativeTab, particles);
 	}
 
 	public abstract INFO buildContainerInfo();

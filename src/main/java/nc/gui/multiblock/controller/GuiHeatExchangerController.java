@@ -5,7 +5,7 @@ import nc.gui.element.MultiblockButton;
 import nc.multiblock.hx.HeatExchanger;
 import nc.network.multiblock.ClearAllMaterialPacket;
 import nc.network.multiblock.HeatExchangerUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.hx.IHeatExchangerPart;
 import nc.tile.hx.TileHeatExchangerController;
 import nc.util.Lang;

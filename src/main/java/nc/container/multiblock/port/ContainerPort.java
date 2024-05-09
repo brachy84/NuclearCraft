@@ -5,6 +5,7 @@ import nc.multiblock.*;
 import nc.network.tile.TileUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
 import nc.tile.*;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.inventory.ITileFilteredInventory;
 import nc.tile.multiblock.ITileLogicMultiblockPart;
 import nc.tile.multiblock.port.*;

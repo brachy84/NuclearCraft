@@ -5,7 +5,7 @@ import nc.integration.jei.wrapper.JEIRecipeWrapperFunction;
 import nc.integration.jei.wrapper.JEISimpleRecipeWrapper;
 import nc.recipe.BasicRecipeHandler;
 import nc.recipe.NCRecipes;
-import nc.tile.TileContainerInfoHelper;
+import nc.tile.info.TileContainerInfoHelper;
 import nc.util.CollectionHelper;
 
 import java.util.List;

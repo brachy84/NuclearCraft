@@ -1,8 +1,8 @@
 package nc.container;
 
 import nc.network.NCPacket;
-import nc.network.tile.TileUpdatePacket;
 import nc.tile.*;
+import nc.tile.info.TileContainerInfo;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class ContainerInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>, PACKET extends NCPacket, INFO extends TileContainerInfo<TILE>> extends NCContainer {

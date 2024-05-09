@@ -7,7 +7,7 @@ import nc.multiblock.fission.FissionReactorLogic;
 import nc.multiblock.fission.SolidFuelFissionLogic;
 import nc.network.multiblock.ClearAllMaterialPacket;
 import nc.network.multiblock.FissionUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.IFissionPart;
 import nc.tile.fission.TileSolidFissionController;
 import nc.util.*;

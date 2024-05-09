@@ -1,5 +1,6 @@
 package nc.block.tile;
 
+import nc.block.tile.info.BlockSimpleTileInfo;
 import nc.handler.TileInfoHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

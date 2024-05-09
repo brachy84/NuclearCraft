@@ -10,7 +10,7 @@ import nc.network.gui.ToggleTankOutputSettingPacket;
 import nc.network.gui.ToggleTankSorptionPacket;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.ITileGui;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.TankSorption;
 import nc.util.BlockHelper;

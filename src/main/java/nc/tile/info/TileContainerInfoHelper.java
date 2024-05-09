@@ -1,4 +1,4 @@
-package nc.tile;
+package nc.tile.info;
 
 import java.util.List;
 

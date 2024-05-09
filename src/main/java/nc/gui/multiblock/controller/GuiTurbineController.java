@@ -5,7 +5,7 @@ import nc.gui.element.MultiblockButton;
 import nc.multiblock.turbine.Turbine;
 import nc.network.multiblock.ClearAllMaterialPacket;
 import nc.network.multiblock.TurbineUpdatePacket;
-import nc.tile.TileContainerInfo;
+import nc.tile.info.TileContainerInfo;
 import nc.tile.turbine.ITurbinePart;
 import nc.tile.turbine.TileTurbineController;
 import nc.tile.turbine.TileTurbineRotorBearing;
