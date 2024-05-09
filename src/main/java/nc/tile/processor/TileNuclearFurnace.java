@@ -1,65 +1,56 @@
 package nc.tile.processor;
 
-import java.util.*;
-import java.util.function.Supplier;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import nc.Global;
-import nc.capability.radiation.source.*;
-import nc.container.ContainerFunction;
-import nc.container.processor.ContainerMachineConfig;
-import nc.gui.*;
-import nc.gui.processor.*;
+import nc.capability.radiation.source.IRadiationSource;
+import nc.capability.radiation.source.RadiationSource;
 import nc.handler.TileInfoHandler;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.radiation.RadSources;
-import nc.recipe.*;
-import nc.recipe.ingredient.*;
+import nc.recipe.BasicRecipe;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.RecipeInfo;
+import nc.recipe.ingredient.IFluidIngredient;
+import nc.recipe.ingredient.IItemIngredient;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.*;
-import nc.tile.processor.TileNuclearFurnace.NuclearFurnaceContainerInfo;
-import nc.tile.processor.info.ProcessorContainerInfo;
-import nc.tile.processor.info.builder.ProcessorContainerInfoBuilder;
-import nc.util.*;
+import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.internal.inventory.ItemSorption;
+import nc.tile.processor.info.ProcessorContainerInfoImpl;
+import nc.util.OreDictHelper;
+import nc.util.StackHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.*;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.*;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.datafix.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.datafix.DataFixer;
+import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.walkers.ItemStackDataLists;
-import net.minecraft.util.math.*;
-import net.minecraft.util.text.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileNuclearFurnace extends TileEntity implements IProcessor<TileNuclearFurnace, ProcessorUpdatePacket, NuclearFurnaceContainerInfo> {
-	
-	public static class NuclearFurnaceContainerInfo extends ProcessorContainerInfo<TileNuclearFurnace, ProcessorUpdatePacket, NuclearFurnaceContainerInfo> {
-		
-		public NuclearFurnaceContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileNuclearFurnace> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileNuclearFurnace> guiFunction, ContainerFunction<TileNuclearFurnace> configContainerFunction, GuiFunction<TileNuclearFurnace> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
-		}
-	}
-	
-	public static class NuclearFurnaceContainerInfoBuilder extends ProcessorContainerInfoBuilder<TileNuclearFurnace, ProcessorUpdatePacket, NuclearFurnaceContainerInfo, NuclearFurnaceContainerInfoBuilder> {
-		
-		public NuclearFurnaceContainerInfoBuilder(String modId, String name, Class<TileNuclearFurnace> tileClass, Supplier<TileNuclearFurnace> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TileNuclearFurnace> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileNuclearFurnace> guiFunction) {
-			super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
-			infoFunction = NuclearFurnaceContainerInfo::new;
-		}
-	}
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<TileNuclearFurnace, ProcessorUpdatePacket> {
 	
 	private final @Nonnull NonNullList<ItemStack> furnaceItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
 	
@@ -329,7 +320,7 @@ public class TileNuclearFurnace extends TileEntity implements IProcessor<TileNuc
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
-		return IProcessor.super.canInsertItem(slot, stack, side) && isItemValidForSlot(slot, stack);
+		return IBasicProcessor.super.canInsertItem(slot, stack, side) && isItemValidForSlot(slot, stack);
 	}
 	
 	@Override
@@ -340,7 +331,7 @@ public class TileNuclearFurnace extends TileEntity implements IProcessor<TileNuc
 				return false;
 			}
 		}
-		return IProcessor.super.canExtractItem(slot, stack, side);
+		return IBasicProcessor.super.canExtractItem(slot, stack, side);
 	}
 	
 	@Override
@@ -479,10 +470,10 @@ public class TileNuclearFurnace extends TileEntity implements IProcessor<TileNuc
 	
 	// ITileGui
 	
-	protected final NuclearFurnaceContainerInfo info = TileInfoHandler.getProcessorContainerInfo("nuclear_furnace");
+	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileNuclearFurnace, ProcessorUpdatePacket> info = TileInfoHandler.getProcessorContainerInfo("nuclear_furnace");
 	
 	@Override
-	public NuclearFurnaceContainerInfo getContainerInfo() {
+	public ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileNuclearFurnace, ProcessorUpdatePacket> getContainerInfo() {
 		return info;
 	}
 	

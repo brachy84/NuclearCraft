@@ -1,69 +1,60 @@
 package nc.tile.fission;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import nc.Global;
+import nc.capability.radiation.source.IRadiationSource;
+import nc.handler.TileInfoHandler;
+import nc.multiblock.cuboidal.CuboidalPartPositionType;
+import nc.multiblock.fission.FissionCluster;
+import nc.multiblock.fission.FissionReactor;
+import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
+import nc.radiation.RadiationHelper;
+import nc.recipe.BasicRecipe;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
+import nc.recipe.RecipeInfo;
+import nc.tile.fission.port.IFissionPortTarget;
+import nc.tile.fission.port.TileFissionCellPort;
+import nc.tile.fluid.ITileFluid;
+import nc.tile.internal.fluid.*;
+import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.inventory.ITileFilteredInventory;
+import nc.tile.inventory.ITileInventory;
+import nc.tile.processor.IBasicProcessor;
+import nc.tile.processor.info.ProcessorContainerInfoImpl;
+import nc.util.NBTHelper;
+import nc.util.NCMath;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.RecipeItemHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.IntStream;
+
 import static nc.config.NCConfig.*;
 import static nc.util.PosHelper.DEFAULT_NON;
 
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
-import javax.annotation.*;
-
-import it.unimi.dsi.fastutil.longs.*;
-import it.unimi.dsi.fastutil.objects.*;
-import nc.Global;
-import nc.capability.radiation.source.IRadiationSource;
-import nc.container.ContainerFunction;
-import nc.container.processor.ContainerMachineConfig;
-import nc.gui.*;
-import nc.gui.processor.*;
-import nc.handler.TileInfoHandler;
-import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.*;
-import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
-import nc.radiation.RadiationHelper;
-import nc.recipe.*;
-import nc.tile.fission.TileSolidFissionCell.SolidFissionCellContainerInfo;
-import nc.tile.fission.port.*;
-import nc.tile.fluid.ITileFluid;
-import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.*;
-import nc.tile.inventory.*;
-import nc.tile.processor.IProcessor;
-import nc.tile.processor.info.ProcessorContainerInfo;
-import nc.tile.processor.info.builder.ProcessorContainerInfoBuilder;
-import nc.util.*;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.util.RecipeItemHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.items.*;
-
-public class TileSolidFissionCell extends TileFissionPart implements IProcessor<TileSolidFissionCell, SolidFissionCellUpdatePacket, SolidFissionCellContainerInfo>, ITileFilteredInventory, IFissionFuelComponent, IFissionPortTarget<TileFissionCellPort, TileSolidFissionCell> {
+public class TileSolidFissionCell extends TileFissionPart implements IBasicProcessor<TileSolidFissionCell, SolidFissionCellUpdatePacket>, ITileFilteredInventory, IFissionFuelComponent, IFissionPortTarget<TileFissionCellPort, TileSolidFissionCell> {
 	
-	public static class SolidFissionCellContainerInfo extends ProcessorContainerInfo<TileSolidFissionCell, SolidFissionCellUpdatePacket, SolidFissionCellContainerInfo> {
-		
-		public SolidFissionCellContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSolidFissionCell> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSolidFissionCell> guiFunction, ContainerFunction<TileSolidFissionCell> configContainerFunction, GuiFunction<TileSolidFissionCell> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
-		}
-	}
-	
-	public static class SolidFissionCellContainerInfoBuilder extends ProcessorContainerInfoBuilder<TileSolidFissionCell, SolidFissionCellUpdatePacket, SolidFissionCellContainerInfo, SolidFissionCellContainerInfoBuilder> {
-		
-		public SolidFissionCellContainerInfoBuilder(String modId, String name, Class<TileSolidFissionCell> tileClass, Supplier<TileSolidFissionCell> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TileSolidFissionCell> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileSolidFissionCell> guiFunction) {
-			super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
-			infoFunction = SolidFissionCellContainerInfo::new;
-		}
-	}
-	
-	protected final SolidFissionCellContainerInfo info;
+	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSolidFissionCell, SolidFissionCellUpdatePacket> info;
 	
 	protected final @Nonnull String inventoryName;
 	
@@ -602,7 +593,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IProcessor<
 	// IProcessor
 	
 	@Override
-	public SolidFissionCellContainerInfo getContainerInfo() {
+	public ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSolidFissionCell, SolidFissionCellUpdatePacket> getContainerInfo() {
 		return info;
 	}
 	
@@ -750,7 +741,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IProcessor<
 	@Override
 	public void process() {
 		getRadiationSource().setRadiationLevel(baseProcessRadiation * getSpeedMultiplier());
-		IProcessor.super.process();
+		IBasicProcessor.super.process();
 	}
 	
 	@Override
@@ -786,7 +777,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IProcessor<
 
 	@Override
 	public int getItemProductCapacity(int slot, ItemStack stack) {
-		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getItemProductCapacity(slot, stack);
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getItemProductCapacity(slot, stack);
 	}
 	
 	// ITileInventory
@@ -826,12 +817,12 @@ public class TileSolidFissionCell extends TileFissionPart implements IProcessor<
 	
 	@Override
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
-		return IProcessor.super.isItemValidForSlot(slot, stack);
+		return IBasicProcessor.super.isItemValidForSlot(slot, stack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getInventoryStackLimit();
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getInventoryStackLimit();
 	}
 	
 	@Override
@@ -951,7 +942,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IProcessor<
 	
 	@Override
 	public void onTileUpdatePacket(SolidFissionCellUpdatePacket message) {
-		IProcessor.super.onTileUpdatePacket(message);
+		IBasicProcessor.super.onTileUpdatePacket(message);
 		if (DEFAULT_NON.equals(masterPortPos = message.masterPortPos) ^ masterPort == null) {
 			refreshMasterPort();
 		}

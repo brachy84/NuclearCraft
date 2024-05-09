@@ -59,8 +59,8 @@ public class NCTiles {
 		registerTile(Global.MOD_ID, "rock_crusher", TileRockCrusher.class);
 		registerTile(Global.MOD_ID, "electric_furnace", TileElectricFurnace.class);
 		
-		registerTile(Global.MOD_ID, "basic_processor_dyn", TileBasicProcessorDyn.class);
-		registerTile(Global.MOD_ID, "basic_upgradable_processor_dyn", TileBasicUpgradableProcessorDyn.class);
+		registerTile(Global.MOD_ID, "basic_processor_dyn", TileBasicEnergyProcessorDyn.class);
+		registerTile(Global.MOD_ID, "basic_upgradable_processor_dyn", TileBasicUpgradableEnergyProcessorDyn.class);
 		
 		registerTile(Global.MOD_ID, "machine_interface", TileMachineInterface.class);
 		

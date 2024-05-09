@@ -1,16 +1,18 @@
 package nc.container.processor;
 
 import nc.container.ContainerInfoTile;
-import nc.container.slot.*;
+import nc.container.slot.SlotFurnace;
+import nc.container.slot.SlotNuclearFuel;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.processor.TileNuclearFurnace;
-import nc.tile.processor.TileNuclearFurnace.NuclearFurnaceContainerInfo;
+import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
-public class ContainerNuclearFurnace extends ContainerInfoTile<TileNuclearFurnace, ProcessorUpdatePacket, NuclearFurnaceContainerInfo> {
+public class ContainerNuclearFurnace extends ContainerInfoTile<TileNuclearFurnace, ProcessorUpdatePacket, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileNuclearFurnace, ProcessorUpdatePacket>> {
 	
 	private int cookTime;
 	private int totalCookTime;

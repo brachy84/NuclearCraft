@@ -1,20 +1,19 @@
 package nc.gui.multiblock;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
-import nc.gui.processor.GuiFilteredProcessor;
+import nc.gui.processor.GuiProcessorImpl;
 import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
 import nc.tile.fission.TileSolidFissionCell;
-import nc.tile.fission.TileSolidFissionCell.SolidFissionCellContainerInfo;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.UnitHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiSolidFissionCell extends GuiFilteredProcessor<TileSolidFissionCell, SolidFissionCellUpdatePacket, SolidFissionCellContainerInfo> {
+import java.util.List;
+
+public class GuiSolidFissionCell extends GuiProcessorImpl.GuiBasicFilteredProcessor<TileSolidFissionCell, SolidFissionCellUpdatePacket> {
 	
 	public GuiSolidFissionCell(Container inventory, EntityPlayer player, TileSolidFissionCell tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);

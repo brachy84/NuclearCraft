@@ -1,12 +1,10 @@
 package nc.block.tile;
 
-import javax.annotation.*;
-
 import nc.block.NCBlock;
-import nc.init.NCItems;
 import nc.tile.ITileGui;
 import nc.tile.fluid.ITileFluid;
-import nc.tile.processor.*;
+import nc.tile.ITileInstallable;
+import nc.tile.processor.IProcessor;
 import nc.util.BlockHelper;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -16,11 +14,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.*;
+
+import javax.annotation.Nullable;
 
 public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 	
@@ -34,8 +34,7 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return getDefaultState();
 	}
-	
-	// TODO move this logic into tile entities with ITile method
+
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (hand != EnumHand.MAIN_HAND) {
@@ -43,13 +42,8 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 		}
 		
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IUpgradableProcessor) {
-			if (installUpgrade(tile, ((IUpgradableProcessor) tile).getSpeedUpgradeSlot(), player, hand, facing, new ItemStack(NCItems.upgrade, 1, 0))) {
-				return true;
-			}
-			if (installUpgrade(tile, ((IUpgradableProcessor) tile).getEnergyUpgradeSlot(), player, hand, facing, new ItemStack(NCItems.upgrade, 1, 1))) {
-				return true;
-			}
+		if (tile instanceof ITileInstallable && ((ITileInstallable) tile).tryInstall(player, hand, facing)) {
+			return true;
 		}
 		
 		if (player.isSneaking()) {
@@ -96,27 +90,6 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 		}
 		
 		return true;
-	}
-	
-	protected boolean installUpgrade(TileEntity tile, int slot, EntityPlayer player, EnumHand hand, EnumFacing facing, @Nonnull ItemStack stack) {
-		ItemStack held = player.getHeldItem(hand);
-		if (held.isItemEqual(stack)) {
-			IItemHandler inv = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
-			
-			if (inv != null && inv.isItemValid(slot, held)) {
-				if (player.isSneaking()) {
-					player.setHeldItem(EnumHand.MAIN_HAND, inv.insertItem(slot, held, false));
-					return true;
-				}
-				else {
-					if (inv.insertItem(slot, stack, false).isEmpty()) {
-						player.getHeldItem(hand).shrink(1);
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 	
 	public void onGuiOpened(World world, BlockPos pos) {

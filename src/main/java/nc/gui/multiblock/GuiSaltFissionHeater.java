@@ -1,20 +1,19 @@
 package nc.gui.multiblock;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
-import nc.gui.processor.GuiFilteredProcessor;
+import nc.gui.processor.GuiProcessorImpl;
 import nc.network.tile.multiblock.SaltFissionHeaterUpdatePacket;
 import nc.tile.fission.TileSaltFissionHeater;
-import nc.tile.fission.TileSaltFissionHeater.SaltFissionHeaterContainerInfo;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.UnitHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiSaltFissionHeater extends GuiFilteredProcessor<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket, SaltFissionHeaterContainerInfo> {
+import java.util.List;
+
+public class GuiSaltFissionHeater extends GuiProcessorImpl.GuiBasicFilteredProcessor<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket> {
 	
 	public GuiSaltFissionHeater(Container inventory, EntityPlayer player, TileSaltFissionHeater tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);

@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import nc.container.ContainerFunction;
 import nc.gui.GuiFunction;
+import nc.gui.GuiInfoTileFunction;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.TileContainerInfoHelper;
 import nc.tile.processor.IProcessor;
@@ -16,18 +17,15 @@ public abstract class UpgradableProcessorContainerInfoBuilder<TILE extends TileE
 	
 	protected int[] speedUpgradeGuiXYWH = TileContainerInfoHelper.standardSlot(132, 64);
 	protected int[] energyUpgradeGuiXYWH = TileContainerInfoHelper.standardSlot(152, 64);
-	
-	protected UpgradableProcessorContainerInfoFunction<TILE, PACKET, INFO> infoFunction = null;
-	
-	public UpgradableProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction) {
+
+	protected UpgradableProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction) {
 		super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction);
 	}
-	
-	@Override
-	public INFO buildContainerInfo() {
-		return infoFunction.get(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH, speedUpgradeGuiXYWH, energyUpgradeGuiXYWH);
+
+	protected UpgradableProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
+		super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, guiFunction);
 	}
-	
+
 	public BUILDER setSpeedUpgradeSlot(int x, int y, int w, int h) {
 		speedUpgradeGuiXYWH = new int[] {x, y, w, h};
 		return getThis();

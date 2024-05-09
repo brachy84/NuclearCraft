@@ -1,64 +1,47 @@
 package nc.tile.fission;
 
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.Global;
-import nc.container.ContainerFunction;
-import nc.container.processor.ContainerMachineConfig;
-import nc.gui.*;
-import nc.gui.processor.*;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.*;
+import nc.multiblock.fission.FissionCluster;
+import nc.multiblock.fission.FissionReactor;
 import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
 import nc.recipe.*;
-import nc.tile.fission.TileFissionIrradiator.FissionIrradiatorContainerInfo;
-import nc.tile.fission.port.*;
+import nc.tile.fission.port.IFissionPortTarget;
+import nc.tile.fission.port.TileFissionIrradiatorPort;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.*;
-import nc.tile.inventory.*;
-import nc.tile.processor.IProcessor;
-import nc.tile.processor.info.ProcessorContainerInfo;
-import nc.tile.processor.info.builder.ProcessorContainerInfoBuilder;
+import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.inventory.ITileFilteredInventory;
+import nc.tile.inventory.ITileInventory;
+import nc.tile.processor.IBasicProcessor;
+import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.util.NBTHelper;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.*;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
-public class TileFissionIrradiator extends TileFissionPart implements IProcessor<TileFissionIrradiator, FissionIrradiatorUpdatePacket, FissionIrradiatorContainerInfo>, ITileFilteredInventory, IFissionHeatingComponent, IFissionFluxSink, IFissionPortTarget<TileFissionIrradiatorPort, TileFissionIrradiator> {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.IntStream;
+
+import static nc.util.PosHelper.DEFAULT_NON;
+
+public class TileFissionIrradiator extends TileFissionPart implements IBasicProcessor<TileFissionIrradiator, FissionIrradiatorUpdatePacket>, ITileFilteredInventory, IFissionHeatingComponent, IFissionFluxSink, IFissionPortTarget<TileFissionIrradiatorPort, TileFissionIrradiator> {
 	
-	public static class FissionIrradiatorContainerInfo extends ProcessorContainerInfo<TileFissionIrradiator, FissionIrradiatorUpdatePacket, FissionIrradiatorContainerInfo> {
-		
-		public FissionIrradiatorContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileFissionIrradiator> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileFissionIrradiator> guiFunction, ContainerFunction<TileFissionIrradiator> configContainerFunction, GuiFunction<TileFissionIrradiator> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
-		}
-	}
-	
-	public static class FissionIrradiatorContainerInfoBuilder extends ProcessorContainerInfoBuilder<TileFissionIrradiator, FissionIrradiatorUpdatePacket, FissionIrradiatorContainerInfo, FissionIrradiatorContainerInfoBuilder> {
-		
-		public FissionIrradiatorContainerInfoBuilder(String modId, String name, Class<TileFissionIrradiator> tileClass, Supplier<TileFissionIrradiator> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TileFissionIrradiator> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileFissionIrradiator> guiFunction) {
-			super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
-			infoFunction = FissionIrradiatorContainerInfo::new;
-		}
-	}
-	
-	protected final FissionIrradiatorContainerInfo info;
+	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileFissionIrradiator, FissionIrradiatorUpdatePacket> info;
 	
 	protected final @Nonnull String inventoryName;
 	
@@ -307,7 +290,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	// IProcessor
 	
 	@Override
-	public FissionIrradiatorContainerInfo getContainerInfo() {
+	public ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileFissionIrradiator, FissionIrradiatorUpdatePacket> getContainerInfo() {
 		return info;
 	}
 	
@@ -449,7 +432,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	@Override
 	public void process() {
 		getRadiationSource().setRadiationLevel(baseProcessRadiation * getSpeedMultiplier() / RecipeStats.getFissionMaxModeratorLineFlux());
-		IProcessor.super.process();
+		IBasicProcessor.super.process();
 	}
 	
 	@Override
@@ -477,7 +460,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 
 	@Override
 	public int getItemProductCapacity(int slot, ItemStack stack) {
-		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getItemProductCapacity(slot, stack);
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getItemProductCapacity(slot, stack);
 	}
 	
 	// ITileInventory
@@ -517,12 +500,12 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	
 	@Override
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
-		return IProcessor.super.isItemValidForSlot(slot, stack);
+		return IBasicProcessor.super.isItemValidForSlot(slot, stack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IProcessor.super.getInventoryStackLimit();
+		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getInventoryStackLimit();
 	}
 	
 	@Override
@@ -642,7 +625,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IProcessor
 	
 	@Override
 	public void onTileUpdatePacket(FissionIrradiatorUpdatePacket message) {
-		IProcessor.super.onTileUpdatePacket(message);
+		IBasicProcessor.super.onTileUpdatePacket(message);
 		if (DEFAULT_NON.equals(masterPortPos = message.masterPortPos) ^ masterPort == null) {
 			refreshMasterPort();
 		}

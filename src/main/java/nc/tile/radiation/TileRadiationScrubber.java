@@ -11,7 +11,7 @@ import nc.capability.radiation.source.IRadiationSource;
 import nc.radiation.*;
 import nc.radiation.environment.*;
 import nc.recipe.BasicRecipe;
-import nc.tile.processor.TileProcessorImpl.TileBasicProcessor;
+import nc.tile.processor.TileProcessorImpl.TileBasicEnergyProcessor;
 import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
-public class TileRadiationScrubber extends TileBasicProcessor<TileRadiationScrubber> implements ITileRadiationEnvironment {
+public class TileRadiationScrubber extends TileBasicEnergyProcessor<TileRadiationScrubber> implements ITileRadiationEnvironment {
 	
 	private double efficiency = 0D, scrubberFraction = 0D, currentChunkLevel = 0D, currentChunkBuffer = 0D;
 	

@@ -4,11 +4,12 @@ import static nc.config.NCConfig.*;
 
 import nc.init.NCItems;
 import nc.network.tile.processor.*;
+import nc.tile.ITileInstallable;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 
-public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableEnergyProcessor<TILE, INFO>, INFO extends UpgradableProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket, INFO>> extends TileEnergyProcessor<TILE, INFO> implements IUpgradableProcessor {
+public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableEnergyProcessor<TILE, INFO>, INFO extends UpgradableProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket, INFO>> extends TileEnergyProcessor<TILE, INFO> implements ITileInstallable {
 	
 	protected TileUpgradableEnergyProcessor(String name) {
 		super(name);
@@ -36,11 +37,11 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 	}
 	
 	public int getSpeedCount() {
-		return 1 + getInventoryStacks().get(getSpeedUpgradeSlot()).getCount();
+		return 1 + getInventoryStacks().get(info.speedUpgradeSlot).getCount();
 	}
 	
 	public int getEnergyCount() {
-		return Math.min(getSpeedCount(), 1 + getInventoryStacks().get(getEnergyUpgradeSlot()).getCount());
+		return Math.min(getSpeedCount(), 1 + getInventoryStacks().get(info.energyUpgradeSlot).getCount());
 	}
 	
 	// ITileInventory
@@ -56,7 +57,7 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 			else if (slot < info.itemInputSize + info.itemOutputSize) {
 				refreshActivity();
 			}
-			else if (slot == getSpeedUpgradeSlot() || slot == getEnergyUpgradeSlot()) {
+			else if (slot == info.speedUpgradeSlot || slot == info.energyUpgradeSlot) {
 				refreshEnergyCapacity();
 			}
 		}
@@ -67,7 +68,7 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		super.setInventorySlotContents(slot, stack);
 		if (!world.isRemote) {
-			if (slot == getSpeedUpgradeSlot() || slot == getEnergyUpgradeSlot()) {
+			if (slot == info.speedUpgradeSlot || slot == info.energyUpgradeSlot) {
 				refreshEnergyCapacity();
 			}
 		}
@@ -76,25 +77,13 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if (stack.getItem() == NCItems.upgrade) {
-			if (slot == getSpeedUpgradeSlot()) {
+			if (slot == info.speedUpgradeSlot) {
 				return StackHelper.getMetadata(stack) == 0;
 			}
-			else if (slot == getEnergyUpgradeSlot()) {
+			else if (slot == info.energyUpgradeSlot) {
 				return StackHelper.getMetadata(stack) == 1;
 			}
 		}
 		return super.isItemValidForSlot(slot, stack);
-	}
-	
-	// IBasicUpgradable
-	
-	@Override
-	public int getSpeedUpgradeSlot() {
-		return info.speedUpgradeSlot;
-	}
-	
-	@Override
-	public int getEnergyUpgradeSlot() {
-		return info.energyUpgradeSlot;
 	}
 }

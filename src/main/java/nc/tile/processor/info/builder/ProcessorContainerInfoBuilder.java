@@ -8,7 +8,10 @@ import java.util.function.Supplier;
 import com.google.common.collect.Lists;
 
 import nc.container.ContainerFunction;
+import nc.container.processor.ContainerMachineConfig;
 import nc.gui.GuiFunction;
+import nc.gui.GuiInfoTileFunction;
+import nc.gui.processor.GuiProcessor;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tab.NCTabs;
 import nc.tile.processor.IProcessor;
@@ -49,10 +52,8 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	protected boolean losesProgress = false;
 	
 	protected String ocComponentName;
-	
-	protected ProcessorContainerInfoFunction<TILE, PACKET, INFO> infoFunction = null;
-	
-	public ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction) {
+
+	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction) {
 		super(modId, name);
 		
 		this.tileClass = tileClass;
@@ -69,14 +70,16 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 		
 		ocComponentName = NCUtil.getShortModId(modId) + "_" + name;
 	}
+
+	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
+		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
+	}
 	
 	public ProcessorBlockInfo<TILE> buildBlockInfo() {
 		return new ProcessorBlockInfo<>(name, tileSupplier, creativeTab, particles);
 	}
-	
-	public INFO buildContainerInfo() {
-		return infoFunction.get(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
-	}
+
+	public abstract INFO buildContainerInfo();
 	
 	public BUILDER setCreativeTab(CreativeTabs tab) {
 		creativeTab = tab;

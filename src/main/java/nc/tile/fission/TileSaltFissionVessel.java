@@ -1,71 +1,62 @@
 package nc.tile.fission;
 
-import static nc.config.NCConfig.*;
-import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.*;
-import java.util.function.Supplier;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
-import it.unimi.dsi.fastutil.longs.*;
-import it.unimi.dsi.fastutil.objects.*;
-import nc.*;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import nc.Global;
+import nc.ModCheck;
 import nc.capability.radiation.source.IRadiationSource;
-import nc.container.ContainerFunction;
-import nc.container.processor.ContainerMachineConfig;
-import nc.gui.*;
-import nc.gui.processor.*;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.*;
+import nc.multiblock.fission.FissionCluster;
+import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.SaltFissionVesselBunch;
 import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
 import nc.radiation.RadiationHelper;
-import nc.recipe.*;
-import nc.tile.fission.TileSaltFissionVessel.SaltFissionVesselContainerInfo;
-import nc.tile.fission.port.*;
-import nc.tile.fluid.*;
+import nc.recipe.BasicRecipe;
+import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
+import nc.recipe.RecipeInfo;
+import nc.tile.fission.port.IFissionPortTarget;
+import nc.tile.fission.port.TileFissionVesselPort;
+import nc.tile.fluid.ITileFilteredFluid;
+import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.fluid.Tank.TankInfo;
-import nc.tile.internal.inventory.*;
+import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.ItemOutputSetting;
 import nc.tile.inventory.ITileInventory;
-import nc.tile.processor.IProcessor;
-import nc.tile.processor.info.ProcessorContainerInfo;
-import nc.tile.processor.info.builder.ProcessorContainerInfoBuilder;
-import nc.util.*;
+import nc.tile.processor.IBasicProcessor;
+import nc.tile.processor.info.ProcessorContainerInfoImpl;
+import nc.util.CapabilityHelper;
+import nc.util.NCMath;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileSaltFissionVessel extends TileFissionPart implements IProcessor<TileSaltFissionVessel, SaltFissionVesselUpdatePacket, SaltFissionVesselContainerInfo>, ITileFilteredFluid, IFissionFuelComponent, IFissionPortTarget<TileFissionVesselPort, TileSaltFissionVessel> {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static nc.config.NCConfig.*;
+import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
+import static nc.util.PosHelper.DEFAULT_NON;
+
+public class TileSaltFissionVessel extends TileFissionPart implements IBasicProcessor<TileSaltFissionVessel, SaltFissionVesselUpdatePacket>, ITileFilteredFluid, IFissionFuelComponent, IFissionPortTarget<TileFissionVesselPort, TileSaltFissionVessel> {
 	
-	public static class SaltFissionVesselContainerInfo extends ProcessorContainerInfo<TileSaltFissionVessel, SaltFissionVesselUpdatePacket, SaltFissionVesselContainerInfo> {
-		
-		public SaltFissionVesselContainerInfo(String modId, String name, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionVessel> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TileSaltFissionVessel> guiFunction, ContainerFunction<TileSaltFissionVessel> configContainerFunction, GuiFunction<TileSaltFissionVessel> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
-			super(modId, name, containerClass, containerFunction, guiClass, guiFunction, configContainerFunction, configGuiFunction, recipeHandlerName, inputTankCapacity, outputTankCapacity, defaultProcessTime, defaultProcessPower, isGenerator, consumesInputs, losesProgress, ocComponentName, guiWH, itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH, playerGuiXY, progressBarGuiXYWHUV, energyBarGuiXYWHUV, machineConfigGuiXY, redstoneControlGuiXY, jeiCategoryEnabled, jeiCategoryUid, jeiTitle, jeiTexture, jeiBackgroundXYWH, jeiTooltipXYWH, jeiClickAreaXYWH);
-		}
-	}
-	
-	public static class SaltFissionVesselContainerInfoBuilder extends ProcessorContainerInfoBuilder<TileSaltFissionVessel, SaltFissionVesselUpdatePacket, SaltFissionVesselContainerInfo, SaltFissionVesselContainerInfoBuilder> {
-		
-		public SaltFissionVesselContainerInfoBuilder(String modId, String name, Class<TileSaltFissionVessel> tileClass, Supplier<TileSaltFissionVessel> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TileSaltFissionVessel> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TileSaltFissionVessel> guiFunction) {
-			super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
-			infoFunction = SaltFissionVesselContainerInfo::new;
-		}
-	}
-	
-	protected final SaltFissionVesselContainerInfo info;
+	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSaltFissionVessel, SaltFissionVesselUpdatePacket> info;
 	
 	protected final @Nonnull String inventoryName;
 	
@@ -634,7 +625,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	// IProcessor
 	
 	@Override
-	public SaltFissionVesselContainerInfo getContainerInfo() {
+	public ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSaltFissionVessel, SaltFissionVesselUpdatePacket> getContainerInfo() {
 		return info;
 	}
 	
@@ -782,7 +773,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	@Override
 	public void process() {
 		getRadiationSource().setRadiationLevel(baseProcessRadiation * getSpeedMultiplier());
-		IProcessor.super.process();
+		IBasicProcessor.super.process();
 	}
 	
 	@Override
@@ -960,7 +951,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IProcessor
 	
 	@Override
 	public void onTileUpdatePacket(SaltFissionVesselUpdatePacket message) {
-		IProcessor.super.onTileUpdatePacket(message);
+		IBasicProcessor.super.onTileUpdatePacket(message);
 		if (DEFAULT_NON.equals(masterPortPos = message.masterPortPos) ^ masterPort == null) {
 			refreshMasterPort();
 		}

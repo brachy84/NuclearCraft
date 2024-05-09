@@ -1,20 +1,19 @@
 package nc.gui.multiblock;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
-import nc.gui.processor.GuiFilteredProcessor;
+import nc.gui.processor.GuiProcessorImpl;
 import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
 import nc.tile.fission.TileFissionIrradiator;
-import nc.tile.fission.TileFissionIrradiator.FissionIrradiatorContainerInfo;
-import nc.util.*;
+import nc.util.Lang;
+import nc.util.UnitHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.text.TextFormatting;
 
-public class GuiFissionIrradiator extends GuiFilteredProcessor<TileFissionIrradiator, FissionIrradiatorUpdatePacket, FissionIrradiatorContainerInfo> {
+import java.util.List;
+
+public class GuiFissionIrradiator extends GuiProcessorImpl.GuiBasicFilteredProcessor<TileFissionIrradiator, FissionIrradiatorUpdatePacket> {
 	
 	public GuiFissionIrradiator(Container inventory, EntityPlayer player, TileFissionIrradiator tile, String textureLocation) {
 		super(inventory, player, tile, textureLocation);
