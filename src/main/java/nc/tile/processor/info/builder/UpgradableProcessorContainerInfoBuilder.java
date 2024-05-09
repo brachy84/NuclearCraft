@@ -1,17 +1,19 @@
 package nc.tile.processor.info.builder;
 
-import java.util.function.Supplier;
-
 import nc.container.ContainerFunction;
+import nc.container.processor.ContainerSideConfig;
 import nc.gui.GuiFunction;
 import nc.gui.GuiInfoTileFunction;
+import nc.gui.processor.GuiUpgradableProcessor;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.info.TileContainerInfoHelper;
 import nc.tile.processor.IProcessor;
-import nc.tile.processor.info.*;
+import nc.tile.processor.info.UpgradableProcessorContainerInfo;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.function.Supplier;
 
 public abstract class UpgradableProcessorContainerInfoBuilder<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends UpgradableProcessorContainerInfo<TILE, PACKET, INFO>, BUILDER extends UpgradableProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER>> extends ProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER> {
 	
@@ -23,7 +25,7 @@ public abstract class UpgradableProcessorContainerInfoBuilder<TILE extends TileE
 	}
 
 	protected UpgradableProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
-		super(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, guiFunction);
+		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, GuiUpgradableProcessor.SideConfig::new));
 	}
 
 	public BUILDER setSpeedUpgradeSlot(int x, int y, int w, int h) {

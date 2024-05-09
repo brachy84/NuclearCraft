@@ -1,5 +1,7 @@
 v2o.7.2
 
++ Added Radiation Scrubber GUI (shift-click to see radiation removal rate)
+
 + Added back GTCEu recipe integration
 
 * Fixed Nuclear Furnace

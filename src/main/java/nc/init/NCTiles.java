@@ -30,8 +30,8 @@ import java.util.function.Function;
 public class NCTiles {
 	
 	public static void register() {
-		registerTile(Global.MOD_ID, "basic_processor_dyn", TileBasicEnergyProcessorDyn.class);
-		registerTile(Global.MOD_ID, "basic_upgradable_processor_dyn", TileBasicUpgradableEnergyProcessorDyn.class);
+		registerTile(Global.MOD_ID, "basic_energy_processor_dyn", TileBasicEnergyProcessorDyn.class);
+		registerTile(Global.MOD_ID, "basic_upgradable_energy_processor_dyn", TileBasicUpgradableEnergyProcessorDyn.class);
 		
 		registerTile(Global.MOD_ID, "fission_casing", TileFissionCasing.class);
 		registerTile(Global.MOD_ID, "fission_glass", TileFissionGlass.class);

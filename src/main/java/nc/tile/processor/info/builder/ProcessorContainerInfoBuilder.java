@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import com.google.common.collect.Lists;
 
 import nc.container.ContainerFunction;
-import nc.container.processor.ContainerMachineConfig;
+import nc.container.processor.ContainerSideConfig;
 import nc.gui.GuiFunction;
 import nc.gui.GuiInfoTileFunction;
 import nc.gui.processor.GuiProcessor;
@@ -72,7 +72,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	}
 
 	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
-		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerMachineConfig::new, GuiFunction.of(modId, name, ContainerMachineConfig::new, GuiProcessor.SideConfig::new));
+		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, GuiProcessor.SideConfig::new));
 	}
 	
 	public ProcessorBlockInfo<TILE> buildBlockInfo() {

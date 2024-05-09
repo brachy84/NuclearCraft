@@ -48,7 +48,7 @@ public class BlockRadiationScrubber extends BlockTile implements ITileType {
 			return false;
 		}
 		
-		if (player.getHeldItem(hand).isEmpty()) {
+		if (player.isSneaking() && player.getHeldItem(hand).isEmpty()) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (!world.isRemote && tile instanceof TileRadiationScrubber scrubber) {
                 scrubber.checkRadiationEnvironmentInfo();
