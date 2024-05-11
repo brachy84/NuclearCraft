@@ -1,11 +1,6 @@
 package nc.recipe.processor;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Set;
-
 import com.google.common.collect.*;
-
 import nc.init.NCItems;
 import nc.recipe.RecipeHelper;
 import nc.util.*;
@@ -16,6 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Set;
+
+import static nc.config.NCConfig.*;
 
 public class ManufactoryRecipes extends BasicProcessorRecipeHandler {
 	
@@ -121,7 +120,9 @@ public class ManufactoryRecipes extends BasicProcessorRecipeHandler {
 		}
 	}
 	
-	/** Originally from KingLemming's Thermal Expansion: cofh.thermalexpansion.util.managers.machine.SawmillManager */
+	/**
+	 * Originally from KingLemming's Thermal Expansion: cofh.thermalexpansion.util.managers.machine.SawmillManager
+	 */
 	public void addLogRecipes() {
 		InventoryCrafting fakeCrafter = RecipeHelper.fakeCrafter(3, 3);
 		for (ItemStack logWood : OreDictionary.getOres("logWood", false)) {

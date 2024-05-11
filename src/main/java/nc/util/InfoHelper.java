@@ -1,11 +1,11 @@
 package nc.util;
 
-import static nc.config.NCConfig.ctrl_info;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.*;
 
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.TextFormatting;
+import static nc.config.NCConfig.ctrl_info;
 
 public class InfoHelper {
 	

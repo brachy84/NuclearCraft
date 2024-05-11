@@ -1,8 +1,8 @@
 package nc.recipe.processor;
 
-import static nc.config.NCConfig.rock_crusher_alternate;
-
 import com.google.common.collect.Lists;
+
+import static nc.config.NCConfig.rock_crusher_alternate;
 
 public class RockCrusherRecipes extends BasicProcessorRecipeHandler {
 	

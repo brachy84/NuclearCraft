@@ -1,7 +1,5 @@
 package nc.handler;
 
-import static nc.config.NCConfig.*;
-
 import nc.capability.radiation.source.IRadiationSource;
 import nc.entity.EntityFeralGhoul;
 import nc.radiation.RadiationHelper;
@@ -14,8 +12,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.*;
+
+import static nc.config.NCConfig.*;
 
 public class EntityHandler {
 	
@@ -36,17 +36,18 @@ public class EntityHandler {
 				
 				boolean tooManyGhouls = false;
 				ClassInheritanceMultiMap<Entity>[] entityListArray = world.getChunk(pos).getEntityLists();
-				loop: for (ClassInheritanceMultiMap<Entity> entities : entityListArray) {
-                    Iterable<EntityFeralGhoul> ghouls = entities.getByClass(EntityFeralGhoul.class);
-                    while (ghouls.iterator().hasNext()) {
-                        tooManyGhouls = true;
-                        break loop;
-                    }
-                }
+				loop:
+				for (ClassInheritanceMultiMap<Entity> entities : entityListArray) {
+					Iterable<EntityFeralGhoul> ghouls = entities.getByClass(EntityFeralGhoul.class);
+					while (ghouls.iterator().hasNext()) {
+						tooManyGhouls = true;
+						break loop;
+					}
+				}
 				
 				if (tooManyGhouls) {
 					event.setResult(Result.DENY);
-                }
+				}
 			}
 		}
 	}

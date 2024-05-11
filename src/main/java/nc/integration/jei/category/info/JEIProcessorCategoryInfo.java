@@ -4,11 +4,9 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.IGuiHelper;
 import nc.handler.TileInfoHandler;
 import nc.integration.jei.category.JEIProcessorRecipeCategory;
-import nc.integration.jei.wrapper.JEIProcessorRecipeWrapper;
-import nc.integration.jei.wrapper.JEIProcessorRecipeWrapperFunction;
+import nc.integration.jei.wrapper.*;
 import nc.network.tile.processor.ProcessorUpdatePacket;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
+import nc.recipe.*;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import net.minecraft.tileentity.TileEntity;
@@ -20,14 +18,14 @@ public class JEIProcessorCategoryInfo<TILE extends TileEntity & IProcessor<TILE,
 	public final INFO containerInfo;
 	
 	public final JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction;
-
+	
 	public JEIProcessorCategoryInfo(String name, Class<WRAPPER> jeiRecipeClass, JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction, List<Object> jeiCrafters) {
 		this(TileInfoHandler.<TILE, PACKET, INFO>getProcessorContainerInfo(name), jeiRecipeClass, jeiRecipeWrapperFunction, jeiCrafters);
 	}
-
+	
 	private JEIProcessorCategoryInfo(INFO containerInfo, Class<WRAPPER> jeiRecipeClass, JEIProcessorRecipeWrapperFunction<TILE, PACKET, INFO, WRAPPER> jeiRecipeWrapperFunction, List<Object> jeiCrafters) {
 		super(containerInfo.modId, containerInfo.recipeHandlerName, JEIProcessorRecipeCategory::new, jeiRecipeClass, null, jeiCrafters, Lists.newArrayList(containerInfo.getJEIContainerConnection()));
-
+		
 		this.containerInfo = containerInfo;
 		this.jeiRecipeWrapperFunction = jeiRecipeWrapperFunction;
 	}

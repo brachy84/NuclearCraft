@@ -1,9 +1,5 @@
 package nc.tile;
 
-import java.util.List;
-
-import javax.annotation.*;
-
 import nc.block.property.BlockProperties;
 import nc.block.tile.IActivatable;
 import nc.capability.radiation.source.IRadiationSource;
@@ -15,6 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.*;
+import java.util.List;
 
 public interface ITile {
 	
@@ -51,7 +50,7 @@ public interface ITile {
 	}
 	
 	@Deprecated
-    default void setState(boolean isActive, TileEntity tile) {
+	default void setState(boolean isActive, TileEntity tile) {
 		if (getTileBlockType() instanceof IActivatable) {
 			((IActivatable) getTileBlockType()).setActivity(isActive, tile);
 		}
@@ -121,7 +120,9 @@ public interface ITile {
 		getTileWorld().notifyNeighborsOfStateChange(getTilePos(), getTileBlockType(), true);
 	}
 	
-	/** Call after markDirty if comparators might need to know about the changes made to the TE */
+	/**
+	 * Call after markDirty if comparators might need to know about the changes made to the TE
+	 */
 	default void updateComparatorOutputLevel() {
 		getTileWorld().updateComparatorOutputLevel(getTilePos(), getTileBlockType());
 	}
@@ -135,13 +136,15 @@ public interface ITile {
 	}
 	
 	@Deprecated
-    default void markDirtyAndNotify() {
+	default void markDirtyAndNotify() {
 		markDirtyAndNotify(true);
 	}
 	
 	// Capabilities
 	
-	/** Use when the capability provider side argument must be non-null */
+	/**
+	 * Use when the capability provider side argument must be non-null
+	 */
 	default @Nonnull EnumFacing nonNullSide(@Nullable EnumFacing side) {
 		return side == null ? EnumFacing.DOWN : side;
 	}

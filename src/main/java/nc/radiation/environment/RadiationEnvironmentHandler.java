@@ -1,17 +1,17 @@
 package nc.radiation.environment;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.concurrent.*;
-
 import nc.tile.radiation.ITileRadiationEnvironment;
 import nc.util.FourPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.concurrent.*;
+
+import static nc.config.NCConfig.*;
 
 public class RadiationEnvironmentHandler {
 	

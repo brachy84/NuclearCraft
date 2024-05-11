@@ -1,12 +1,11 @@
 package nc.gui.element;
 
-import org.lwjgl.opengl.GL11;
-
 import nc.Global;
 import nc.gui.IGuiButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.*;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public abstract class NCEnumButton<T extends Enum<T>> extends NCButton {

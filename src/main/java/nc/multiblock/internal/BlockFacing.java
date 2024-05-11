@@ -6,8 +6,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-/** A general purpose class to track the state of all 6 faces of a block
- * Example usages: - track which faces are exposed on the outside walls of a complex structure - track which faces is connected to a face of a similar block */
+/**
+ * A general purpose class to track the state of all 6 faces of a block
+ * Example usages: - track which faces are exposed on the outside walls of a complex structure - track which faces is connected to a face of a similar block
+ */
 public final class BlockFacing {
 	
 	public static final BlockFacing NONE, ALL, DOWN, UP, NORTH, SOUTH, WEST, EAST;
@@ -19,11 +21,12 @@ public final class BlockFacing {
 	public static final PropertyBool FACING_NORTH = PropertyBool.create("northFacing");
 	public static final PropertyBool FACING_SOUTH = PropertyBool.create("southFacing");
 	
-	/** Check if a specific face is "set"
-	 * 
-	 * @param facing
-	 *            the face to check
-	 * @return true if the face is "set", false otherwise */
+	/**
+	 * Check if a specific face is "set"
+	 *
+	 * @param facing the face to check
+	 * @return true if the face is "set", false otherwise
+	 */
 	public boolean isSet(EnumFacing facing) {
 		
 		return 0 != (_value & 1 << facing.getIndex());
@@ -65,13 +68,13 @@ public final class BlockFacing {
 		return state.withProperty(FACING_DOWN, isSet(EnumFacing.DOWN)).withProperty(FACING_UP, isSet(EnumFacing.UP)).withProperty(FACING_WEST, isSet(EnumFacing.WEST)).withProperty(FACING_EAST, isSet(EnumFacing.EAST)).withProperty(FACING_NORTH, isSet(EnumFacing.NORTH)).withProperty(FACING_SOUTH, isSet(EnumFacing.SOUTH));
 	}
 	
-	/** Return a BlockFacing object that describe the current facing with the given face set or unset
+	/**
+	 * Return a BlockFacing object that describe the current facing with the given face set or unset
 	 *
-	 * @param facing
-	 *            the face to modify
-	 * @param value
-	 *            the new value for the state of the face
-	 * @return a BlockFacing object */
+	 * @param facing the face to modify
+	 * @param value  the new value for the state of the face
+	 * @return a BlockFacing object
+	 */
 	public BlockFacing set(EnumFacing facing, boolean value) {
 		byte newHash = _value;
 		
@@ -85,11 +88,12 @@ public final class BlockFacing {
 		return BlockFacing.from(newHash);
 	}
 	
-	/** Count the number of faces that are in the required state
+	/**
+	 * Count the number of faces that are in the required state
 	 *
-	 * @param areSet
-	 *            specify if you are looking for "set" faces (true) or not (false)
-	 * @return the number of faces found in the required state */
+	 * @param areSet specify if you are looking for "set" faces (true) or not (false)
+	 * @return the number of faces found in the required state
+	 */
 	public int countFacesIf(boolean areSet) {
 		int checkFor = areSet ? 1 : 0;
 		int mask = _value;
@@ -105,9 +109,11 @@ public final class BlockFacing {
 		return faces;
 	}
 	
-	/** Return a PropertyBlockFacings for the current facing
+	/**
+	 * Return a PropertyBlockFacings for the current facing
 	 *
-	 * @return a PropertyBlockFacings value */
+	 * @return a PropertyBlockFacings value
+	 */
 	public PropertyBlockFacing toProperty() {
 		PropertyBlockFacing[] values = PropertyBlockFacing.values();
 		
@@ -120,11 +126,12 @@ public final class BlockFacing {
 		return PropertyBlockFacing.None;
 	}
 	
-	/** Offset the given BlockPos in all direction set in this object
+	/**
+	 * Offset the given BlockPos in all direction set in this object
 	 *
-	 * @param originalPosition
-	 *            the original position
-	 * @return the new position */
+	 * @param originalPosition the original position
+	 * @return the new position
+	 */
 	public BlockPos offsetBlockPos(BlockPos originalPosition) {
 		int x = 0, y = 0, z = 0;
 		
@@ -140,11 +147,12 @@ public final class BlockFacing {
 		return originalPosition.add(x, y, z);
 	}
 	
-	/** Return the first face that is in the required state
+	/**
+	 * Return the first face that is in the required state
 	 *
-	 * @param isSet
-	 *            specify if you are looking for "set" faces (true) or not (false)
-	 * @return the first face that match the required state or null if no face is found */
+	 * @param isSet specify if you are looking for "set" faces (true) or not (false)
+	 * @return the first face that match the required state or null if no face is found
+	 */
 	public EnumFacing firstIf(boolean isSet) {
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			if (isSet == isSet(facing)) {
@@ -155,30 +163,27 @@ public final class BlockFacing {
 		return null;
 	}
 	
-	/** Return a BlockFacing object that describe the passed in state
-	 * 
-	 * @param down
-	 *            the state of the "down" face
-	 * @param up
-	 *            the state of the "up" face
-	 * @param north
-	 *            the state of the "north" face
-	 * @param south
-	 *            the state of the "south" face
-	 * @param west
-	 *            the state of the "west" face
-	 * @param east
-	 *            the state of the "east" face
-	 * @return a BlockFacing object */
+	/**
+	 * Return a BlockFacing object that describe the passed in state
+	 *
+	 * @param down  the state of the "down" face
+	 * @param up    the state of the "up" face
+	 * @param north the state of the "north" face
+	 * @param south the state of the "south" face
+	 * @param west  the state of the "west" face
+	 * @param east  the state of the "east" face
+	 * @return a BlockFacing object
+	 */
 	public static BlockFacing from(boolean down, boolean up, boolean north, boolean south, boolean west, boolean east) {
 		return BlockFacing.from(BlockFacing.computeHash(down, up, north, south, west, east));
 	}
 	
-	/** Return a BlockFacing object that describe the passed in state
-	 * 
-	 * @param facings
-	 *            an array describing the state. the elements of the array must be filled in following the order in EnumFacing.VALUES
-	 * @return a BlockFacing object */
+	/**
+	 * Return a BlockFacing object that describe the passed in state
+	 *
+	 * @param facings an array describing the state. the elements of the array must be filled in following the order in EnumFacing.VALUES
+	 * @return a BlockFacing object
+	 */
 	public static BlockFacing from(boolean[] facings) {
 		return BlockFacing.from(BlockFacing.computeHash(facings));
 	}

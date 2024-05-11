@@ -1,9 +1,6 @@
 package nc.block;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import nc.block.tile.INBTDrop;
 import nc.tile.ITile;
 import nc.util.NCInventoryHelper;
@@ -21,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.*;
+
+import java.util.List;
 
 public class NCBlock extends Block {
 	

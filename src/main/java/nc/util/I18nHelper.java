@@ -1,23 +1,22 @@
 package nc.util;
 
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.*;
 
 public class I18nHelper {
-
+	
 	private static final Lazy<Int2IntMap> PLURAL_RULE_MAP = new Lazy<>(() -> {
 		Int2IntMap map = new Int2IntOpenHashMap();
-
+		
 		String str = Lang.localize("nc.sf.plural_rule");
 		String[] split = str.split(",", -1);
-
+		
 		map.defaultReturnValue(Integer.parseInt(split[0]));
-
+		
 		for (int i = 1; i < split.length; ++i) {
 			String[] entry = split[i].split(":", -1);
 			map.put(Integer.parseInt(entry[0]), Integer.parseInt(entry[1]));
 		}
-
+		
 		return map;
 	});
 	

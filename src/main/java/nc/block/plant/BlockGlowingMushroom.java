@@ -1,7 +1,5 @@
 package nc.block.plant;
 
-import java.util.Random;
-
 import nc.init.NCBlocks;
 import nc.worldgen.biome.NCBiomes;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +8,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+
+import java.util.Random;
 
 public class BlockGlowingMushroom extends NCBlockMushroom {
 	

@@ -58,7 +58,7 @@ public class BlockBattery extends BlockMultiblockPart implements IDynamicState, 
 		
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileBattery battery) {
-            if (ItemMultitool.isMultitool(player.getHeldItem(hand))) {
+			if (ItemMultitool.isMultitool(player.getHeldItem(hand))) {
 				EnumFacing side = player.isSneaking() ? facing.getOpposite() : facing;
 				battery.toggleEnergyConnection(side, EnergyConnection.Type.DEFAULT);
 			}
@@ -97,8 +97,8 @@ public class BlockBattery extends BlockMultiblockPart implements IDynamicState, 
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileBattery battery) {
 			NBTTagCompound nbt = new NBTTagCompound();
-
-            BatteryMultiblock multiblock = battery.getMultiblock();
+			
+			BatteryMultiblock multiblock = battery.getMultiblock();
 			
 			if (multiblock != null) {
 				EnergyStorage storage = multiblock.getEnergyStorage();
@@ -127,8 +127,8 @@ public class BlockBattery extends BlockMultiblockPart implements IDynamicState, 
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileBattery battery) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(stack);
-
-            battery.waitingEnergy += new EnergyStorage(battery.capacity, NCMath.toInt(battery.capacity)).readFromNBT(nbt, "energyStorage").getEnergyStoredLong();
+			
+			battery.waitingEnergy += new EnergyStorage(battery.capacity, NCMath.toInt(battery.capacity)).readFromNBT(nbt, "energyStorage").getEnergyStoredLong();
 			
 			if (player.isSneaking()) {
 				battery.readEnergyConnections(nbt);

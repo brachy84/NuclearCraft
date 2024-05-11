@@ -1,7 +1,5 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.integration.crafttweaker.ingredient.CTChanceFluidIngredient;
 import nc.recipe.*;
@@ -9,6 +7,8 @@ import nc.util.NCMath;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class ChanceFluidIngredient implements IChanceFluidIngredient {
 	
@@ -31,8 +31,7 @@ public class ChanceFluidIngredient implements IChanceFluidIngredient {
 		this.stackDiff = Math.max(1, stackDiff);
 		this.minStackSize = MathHelper.clamp(minStackSize, 0, ingredient.getMaxStackSize(0));
 		
-		@SuppressWarnings("hiding")
-		int sizeIncrSteps = (ingredient.getMaxStackSize(0) - this.minStackSize) / this.stackDiff;
+		@SuppressWarnings("hiding") int sizeIncrSteps = (ingredient.getMaxStackSize(0) - this.minStackSize) / this.stackDiff;
 		int sizeShift = ingredient.getMaxStackSize(0) - this.minStackSize - sizeIncrSteps * this.stackDiff;
 		
 		// this.ingredient.setMaxStackSize(this.ingredient.getMaxStackSize(0) + sizeShift);

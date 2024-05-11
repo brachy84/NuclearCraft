@@ -1,9 +1,8 @@
 package nc.block.tile;
 
 import nc.block.NCBlock;
-import nc.tile.ITileGui;
+import nc.tile.*;
 import nc.tile.fluid.ITileFluid;
-import nc.tile.ITileInstallable;
 import nc.tile.processor.IProcessor;
 import nc.util.BlockHelper;
 import net.minecraft.block.ITileEntityProvider;
@@ -14,8 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
@@ -34,7 +32,7 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return getDefaultState();
 	}
-
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (hand != EnumHand.MAIN_HAND) {
@@ -62,7 +60,7 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 			if (world.isRemote) {
 				return true;
 			}
-            boolean accessedTanks = BlockHelper.accessTanks(player, hand, facing, tileFluid);
+			boolean accessedTanks = BlockHelper.accessTanks(player, hand, facing, tileFluid);
 			if (accessedTanks) {
 				if (tile instanceof IProcessor) {
 					((IProcessor<?, ?, ?>) tile).refreshRecipe();
@@ -93,7 +91,7 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 	}
 	
 	public void onGuiOpened(World world, BlockPos pos) {
-		
+	
 	}
 	
 	@Override

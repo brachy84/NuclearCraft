@@ -1,10 +1,5 @@
 package nc.util;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-import javax.vecmath.Vector3f;
-
 import it.unimi.dsi.fastutil.doubles.DoubleCollection;
 import it.unimi.dsi.fastutil.floats.FloatCollection;
 import it.unimi.dsi.fastutil.ints.*;
@@ -12,6 +7,10 @@ import it.unimi.dsi.fastutil.longs.LongCollection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
+
+import javax.vecmath.Vector3f;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class NBTHelper {
 	

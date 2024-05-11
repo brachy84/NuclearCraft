@@ -1,7 +1,5 @@
 package nc.network.tile.multiblock;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.fission.FissionCluster;
 import nc.network.tile.TileUpdatePacket;
@@ -10,6 +8,8 @@ import nc.tile.ITilePacket;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.internal.fluid.Tank.TankInfo;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class SaltFissionHeaterUpdatePacket extends ProcessorUpdatePacket {
 	

@@ -166,3 +166,5 @@ nc.sf.sic_sic_cmc_coil1=%s SiC-SiC CMC dynamo coils
 tile.nuclearcraft.rtg_strontium.name=Strontium RTG
 
 tile.nuclearcraft.battery_zinc.name=Zinc Battery
+
+tile.nuclearcraft.glowstone_aggregator.name=Glowstone Aggregator

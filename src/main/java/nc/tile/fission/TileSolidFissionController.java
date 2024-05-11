@@ -3,7 +3,7 @@ package nc.tile.fission;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,18 +14,18 @@ import java.util.Iterator;
 import static nc.block.property.BlockProperties.FACING_ALL;
 
 public class TileSolidFissionController extends TileFissionPart implements IFissionController<TileSolidFissionController> {
-
+	
 	protected final TileContainerInfo<TileSolidFissionController> info = TileInfoHandler.getTileContainerInfo("solid_fission_controller");
-
+	
 	public TileSolidFissionController() {
 		super(CuboidalPartPositionType.WALL);
 	}
-
+	
 	@Override
 	public String getLogicID() {
 		return "solid_fuel";
 	}
-
+	
 	@Override
 	public TileContainerInfo<TileSolidFissionController> getContainerInfo() {
 		return info;

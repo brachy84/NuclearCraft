@@ -1,7 +1,5 @@
 package nc.item.bauble;
 
-import static nc.config.NCConfig.radiation_require_counter;
-
 import baubles.api.*;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.item.NCItem;
@@ -17,6 +15,8 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import static nc.config.NCConfig.radiation_require_counter;
 
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemGeigerCounter extends NCItem implements IBauble {
@@ -58,7 +58,7 @@ public class ItemGeigerCounter extends NCItem implements IBauble {
 		if (!world.isRemote || !radiation_require_counter || !(entity instanceof EntityPlayer player)) {
 			return;
 		}
-        if (isStackOnHotbar(stack, player)) {
+		if (isStackOnHotbar(stack, player)) {
 			RadiationHandler.playGeigerSound(player);
 		}
 	}

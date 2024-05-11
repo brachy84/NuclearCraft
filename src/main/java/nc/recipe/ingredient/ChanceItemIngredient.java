@@ -1,9 +1,5 @@
 package nc.recipe.ingredient;
 
-import static nc.config.NCConfig.jei_chance_items_include_null;
-
-import java.util.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.integration.crafttweaker.ingredient.CTChanceItemIngredient;
 import nc.recipe.*;
@@ -11,6 +7,10 @@ import nc.util.NCMath;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
+
+import static nc.config.NCConfig.jei_chance_items_include_null;
 
 public class ChanceItemIngredient implements IChanceItemIngredient {
 	

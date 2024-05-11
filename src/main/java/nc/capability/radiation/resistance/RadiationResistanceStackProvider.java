@@ -1,12 +1,12 @@
 package nc.capability.radiation.resistance;
 
-import javax.annotation.*;
-
 import nc.radiation.RadArmor;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
+
+import javax.annotation.*;
 
 public class RadiationResistanceStackProvider implements ICapabilityProvider {
 	

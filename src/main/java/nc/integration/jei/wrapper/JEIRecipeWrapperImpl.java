@@ -2,65 +2,54 @@ package nc.integration.jei.wrapper;
 
 import mezz.jei.api.IGuiHelper;
 import nc.integration.jei.category.info.JEISimpleCategoryInfo;
-import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
-import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
-import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
-import nc.network.tile.processor.EnergyProcessorUpdatePacket;
-import nc.network.tile.processor.ProcessorUpdatePacket;
+import nc.network.tile.multiblock.*;
+import nc.network.tile.processor.*;
 import nc.radiation.RadiationHelper;
-import nc.recipe.BasicRecipe;
-import nc.recipe.RecipeStats;
-import nc.tile.fission.TileFissionIrradiator;
-import nc.tile.fission.TileSaltFissionVessel;
-import nc.tile.fission.TileSolidFissionCell;
-import nc.tile.processor.IBasicProcessor;
-import nc.tile.processor.IUpgradableBasicProcessor;
+import nc.recipe.*;
+import nc.tile.fission.*;
+import nc.tile.processor.*;
 import nc.tile.processor.TileProcessorImpl.*;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.tile.radiation.TileRadiationScrubber;
-import nc.util.Lang;
-import nc.util.NCMath;
-import nc.util.UnitHelper;
+import nc.util.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static nc.config.NCConfig.fission_decay_mechanics;
-import static nc.config.NCConfig.machine_update_rate;
+import static nc.config.NCConfig.*;
 
 public class JEIRecipeWrapperImpl {
-
+	
 	public static class JEIBasicProcessorRecipeWrapper<TILE extends TileEntity & IBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket, WRAPPER extends JEIBasicProcessorRecipeWrapper<TILE, PACKET, WRAPPER>> extends JEIProcessorRecipeWrapper<TILE, PACKET, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, PACKET>, WRAPPER> {
-
+		
 		public JEIBasicProcessorRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class JEIBasicUpgradableProcessorRecipeWrapper<TILE extends TileEntity & IUpgradableBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket, WRAPPER extends JEIBasicUpgradableProcessorRecipeWrapper<TILE, PACKET, WRAPPER>> extends JEIProcessorRecipeWrapper<TILE, PACKET, ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo<TILE, PACKET>, WRAPPER> {
-
+		
 		public JEIBasicUpgradableProcessorRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class JEIBasicEnergyProcessorRecipeWrapper<TILE extends TileBasicEnergyProcessor<TILE>, WRAPPER extends JEIBasicEnergyProcessorRecipeWrapper<TILE, WRAPPER>> extends JEIBasicProcessorRecipeWrapper<TILE, EnergyProcessorUpdatePacket, WRAPPER> {
-
+		
 		public JEIBasicEnergyProcessorRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class JEIBasicUpgradableEnergyProcessorRecipeWrapper<TILE extends TileBasicUpgradableEnergyProcessor<TILE>, WRAPPER extends JEIBasicUpgradableEnergyProcessorRecipeWrapper<TILE, WRAPPER>> extends JEIBasicUpgradableProcessorRecipeWrapper<TILE, EnergyProcessorUpdatePacket, WRAPPER> {
-
+		
 		public JEIBasicUpgradableEnergyProcessorRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class JEIBasicEnergyProcessorRecipeWrapperDyn extends JEIBasicEnergyProcessorRecipeWrapper<TileBasicEnergyProcessorDyn, JEIBasicEnergyProcessorRecipeWrapperDyn> {
 		
 		public JEIBasicEnergyProcessorRecipeWrapperDyn(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
@@ -200,16 +189,16 @@ public class JEIRecipeWrapperImpl {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class RockCrusherRecipeWrapper extends JEIBasicUpgradableEnergyProcessorRecipeWrapper<TileRockCrusher, RockCrusherRecipeWrapper> {
-
+		
 		public RockCrusherRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}
 	}
-
+	
 	public static class ElectricFurnaceRecipeWrapper extends JEIBasicUpgradableEnergyProcessorRecipeWrapper<TileElectricFurnace, ElectricFurnaceRecipeWrapper> {
-
+		
 		public ElectricFurnaceRecipeWrapper(String name, IGuiHelper guiHelper, BasicRecipe recipe) {
 			super(name, guiHelper, recipe);
 		}

@@ -1,7 +1,5 @@
 package nc.multiblock;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.tile.multiblock.ITileMultiblockPart;
@@ -10,9 +8,13 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLLog;
 
-/** This class manages all the multiblocks that exist in a given world, either client- or server-side. You must create different registries for server and client worlds.
+import java.util.*;
+
+/**
+ * This class manages all the multiblocks that exist in a given world, either client- or server-side. You must create different registries for server and client worlds.
  *
- * @author Erogenous Beef */
+ * @author Erogenous Beef
+ */
 @SuppressWarnings("rawtypes")
 public class MultiblockWorldRegistry {
 	
@@ -56,7 +58,9 @@ public class MultiblockWorldRegistry {
 		orphanedPartsMutex = new Object();
 	}
 	
-	/** Called before Tile Entities are ticked in the world. Run game logic. */
+	/**
+	 * Called before Tile Entities are ticked in the world. Run game logic.
+	 */
 	public void tickStart() {
 		if (!multiblocks.isEmpty()) {
 			for (Multiblock multiblock : multiblocks) {
@@ -75,7 +79,9 @@ public class MultiblockWorldRegistry {
 		}
 	}
 	
-	/** Called prior to processing multiblocks. Do bookkeeping. */
+	/**
+	 * Called prior to processing multiblocks. Do bookkeeping.
+	 */
 	public void processMultiblockChanges() {
 		BlockPos coord;
 		
@@ -255,10 +261,11 @@ public class MultiblockWorldRegistry {
 		detachedParts.clear();
 	}
 	
-	/** Called when a multiblock part is added to the world, either via chunk-load or user action. If its chunk is loaded, it will be processed during the next tick. If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
-	 * 
-	 * @param part
-	 *            The part which is being added to this world. */
+	/**
+	 * Called when a multiblock part is added to the world, either via chunk-load or user action. If its chunk is loaded, it will be processed during the next tick. If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
+	 *
+	 * @param part The part which is being added to this world.
+	 */
 	public void onPartAdded(final ITileMultiblockPart part) {
 		BlockPos worldLocation = part.getTilePos();
 		
@@ -285,10 +292,11 @@ public class MultiblockWorldRegistry {
 		}
 	}
 	
-	/** Called when a part is removed from the world, via user action or via chunk unloads. This part is removed from any lists in which it may be, and its machine is marked for recalculation.
-	 * 
-	 * @param part
-	 *            The part which is being removed. */
+	/**
+	 * Called when a part is removed from the world, via user action or via chunk unloads. This part is removed from any lists in which it may be, and its machine is marked for recalculation.
+	 *
+	 * @param part The part which is being removed.
+	 */
 	public void onPartRemovedFromWorld(final ITileMultiblockPart part) {
 		final BlockPos coord = part.getTilePos();
 		if (coord != null) {
@@ -316,7 +324,9 @@ public class MultiblockWorldRegistry {
 		part.assertDetached();
 	}
 	
-	/** Called when the world which this World Registry represents is fully unloaded from the system. Does some housekeeping just to be nice. */
+	/**
+	 * Called when the world which this World Registry represents is fully unloaded from the system. Does some housekeeping just to be nice.
+	 */
 	public void onWorldUnloaded() {
 		multiblocks.clear();
 		deadMultiblocks.clear();
@@ -335,12 +345,12 @@ public class MultiblockWorldRegistry {
 		worldObj = null;
 	}
 	
-	/** Called when a chunk has finished loading. Adds all the parts which are awaiting load to the list of parts which are orphans and therefore will be added to machines after the next world tick.
+	/**
+	 * Called when a chunk has finished loading. Adds all the parts which are awaiting load to the list of parts which are orphans and therefore will be added to machines after the next world tick.
 	 *
-	 * @param chunkX
-	 *            Chunk X coordinate (world coordinate >> 4) of the chunk that was loaded
-	 * @param chunkZ
-	 *            Chunk Z coordinate (world coordinate >> 4) of the chunk that was loaded */
+	 * @param chunkX Chunk X coordinate (world coordinate >> 4) of the chunk that was loaded
+	 * @param chunkZ Chunk Z coordinate (world coordinate >> 4) of the chunk that was loaded
+	 */
 	public void onChunkLoaded(final int chunkX, final int chunkZ) {
 		final long chunkHash = ChunkPos.asLong(chunkX, chunkZ);
 		if (partsAwaitingChunkLoad.containsKey(chunkHash)) {
@@ -353,25 +363,29 @@ public class MultiblockWorldRegistry {
 		}
 	}
 	
-	/** Registers a multiblock as dead. It will be cleaned up at the end of the next world tick. Note that a multiblock must shed all of its blocks before being marked as dead, or the system will complain at you.
+	/**
+	 * Registers a multiblock as dead. It will be cleaned up at the end of the next world tick. Note that a multiblock must shed all of its blocks before being marked as dead, or the system will complain at you.
 	 *
-	 * @param deadMultiblock
-	 *            The multiblock which is dead. */
+	 * @param deadMultiblock The multiblock which is dead.
+	 */
 	public void addDeadMultiblock(Multiblock deadMultiblock) {
 		deadMultiblocks.add(deadMultiblock);
 	}
 	
-	/** Registers a multiblock as dirty - its list of attached blocks has changed, and it must be re-checked for assembly and, possibly, for orphans.
+	/**
+	 * Registers a multiblock as dirty - its list of attached blocks has changed, and it must be re-checked for assembly and, possibly, for orphans.
 	 *
-	 * @param dirtyMultiblock
-	 *            The dirty multiblock. */
+	 * @param dirtyMultiblock The dirty multiblock.
+	 */
 	public void addDirtyMultiblock(Multiblock dirtyMultiblock) {
 		dirtyMultiblocks.add(dirtyMultiblock);
 	}
 	
-	/** Use this only if you know what you're doing. You should rarely need to iterate over all multiblocks in a world!
+	/**
+	 * Use this only if you know what you're doing. You should rarely need to iterate over all multiblocks in a world!
 	 *
-	 * @return An (unmodifiable) set of multiblocks which are active in this world. */
+	 * @return An (unmodifiable) set of multiblocks which are active in this world.
+	 */
 	public Set<Multiblock> getMultiblocks() {
 		return Collections.unmodifiableSet(multiblocks);
 	}

@@ -1,14 +1,6 @@
 package nc.tile.turbine;
 
-import static nc.block.property.BlockProperties.AXIS_ALL;
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import nc.ModCheck;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
@@ -22,15 +14,23 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.*;
 
+import javax.annotation.*;
+import java.util.*;
+
+import static nc.block.property.BlockProperties.AXIS_ALL;
+import static nc.config.NCConfig.*;
+
 public class TileTurbineOutlet extends TileTurbinePart implements ITickable, ITileFluid {
 	
 	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ArrayList<>()));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(TankSorption.OUT);
 	
-	private @Nonnull final FluidTileWrapper[] fluidSides;
+	private @Nonnull
+	final FluidTileWrapper[] fluidSides;
 	
-	private @Nonnull final GasTileWrapper gasWrapper;
+	private @Nonnull
+	final GasTileWrapper gasWrapper;
 	
 	protected int outletCount;
 	

@@ -1,11 +1,5 @@
 package nc.tile.fission;
 
-import static nc.config.NCConfig.fission_sink_cooling_rate;
-
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import nc.multiblock.PlacementRule;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
@@ -15,6 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+
+import static nc.config.NCConfig.fission_sink_cooling_rate;
 
 public class TileSolidFissionSink extends TileFissionPart implements IFissionCoolingComponent {
 	
@@ -28,7 +27,9 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	private long heat = 0L;
 	public boolean isInValidPosition = false;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileSolidFissionSink() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
@@ -345,7 +346,7 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	
 	@Override
 	public void onClusterMeltdown(Iterator<IFissionComponent> componentIterator) {
-		
+	
 	}
 	
 	@Override
@@ -372,10 +373,12 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	@Override
 	public void readAll(NBTTagCompound nbt) {
 		super.readAll(nbt);
-		if (nbt.hasKey("sinkName"))
+		if (nbt.hasKey("sinkName")) {
 			sinkType = nbt.getString("sinkName");
-		if (nbt.hasKey("coolingRate"))
+		}
+		if (nbt.hasKey("coolingRate")) {
 			coolingRate = nbt.getInteger("coolingRate");
+		}
 		if (nbt.hasKey("ruleID")) {
 			ruleID = nbt.getString("ruleID");
 			placementRule = FissionPlacement.RULE_MAP.get(ruleID);

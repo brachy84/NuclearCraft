@@ -1,12 +1,11 @@
 package nc.integration.crafttweaker;
 
 import com.google.common.collect.Lists;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.entity.IEntityLivingBase;
-import crafttweaker.api.item.*;
 import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.item.*;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.oredict.IOreDictEntry;
@@ -34,12 +33,12 @@ public class CTRadiation {
 				return stack.isEmpty() ? 0D : RadSources.STACK_MAP.get(RecipeItemHelper.pack(stack)) * stack.getCount();
 			}
 			else if (ingredient instanceof IOreDictEntry ore) {
-                return RadSources.ORE_MAP.getDouble(ore.getName()) * ore.getAmount();
+				return RadSources.ORE_MAP.getDouble(ore.getName()) * ore.getAmount();
 			}
 			else if (ingredient instanceof IngredientStack) {
 				IItemIngredient i = CTHelper.buildOreIngredientArray(ingredient, true);
 				if (i instanceof OreIngredient ore) {
-                    return RadSources.ORE_MAP.getDouble(ore.oreName) * ore.stackSize;
+					return RadSources.ORE_MAP.getDouble(ore.oreName) * ore.stackSize;
 				}
 				else {
 					ItemStack stack = i.getStack();

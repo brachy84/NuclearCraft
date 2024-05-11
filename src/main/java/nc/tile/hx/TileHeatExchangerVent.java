@@ -1,14 +1,6 @@
 package nc.tile.hx;
 
-import static nc.block.property.BlockProperties.AXIS_ALL;
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import nc.ModCheck;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.HeatExchanger;
@@ -20,15 +12,23 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import javax.annotation.*;
+import java.util.List;
+
+import static nc.block.property.BlockProperties.AXIS_ALL;
+import static nc.config.NCConfig.*;
+
 public class TileHeatExchangerVent extends TileHeatExchangerPart implements ITickable, ITileFluid {
 	
 	private final @Nonnull List<Tank> tanks = Lists.newArrayList(new Tank(128000, null));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(TankSorption.BOTH);
 	
-	private @Nonnull final FluidTileWrapper[] fluidSides;
+	private @Nonnull
+	final FluidTileWrapper[] fluidSides;
 	
-	private @Nonnull final GasTileWrapper gasWrapper;
+	private @Nonnull
+	final GasTileWrapper gasWrapper;
 	
 	protected int ventCount;
 	
@@ -100,7 +100,7 @@ public class TileHeatExchangerVent extends TileHeatExchangerPart implements ITic
 	@Override
 	public void pushFluidToSide(@Nonnull EnumFacing side) {
 		if (!getTankSorption(side, 0).canDrain()) {
-        }
+		}
 		
 		/*TileEntity tile = getTileWorld().getTileEntity(getTilePos().offset(side));
 		if (tile instanceof TileHeatExchangerTube) {

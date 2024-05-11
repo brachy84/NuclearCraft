@@ -1,10 +1,10 @@
 package nc.item.energy;
 
-import static nc.config.NCConfig.rf_per_eu;
-
 import ic2.api.item.IElectricItemManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+
+import static nc.config.NCConfig.rf_per_eu;
 
 public class ElectricItemManager implements IElectricItemManager {
 	
@@ -67,7 +67,7 @@ public class ElectricItemManager implements IElectricItemManager {
 	
 	@Override
 	public void chargeFromArmor(ItemStack stack, EntityLivingBase entity) {
-		
+	
 	}
 	
 	@Override

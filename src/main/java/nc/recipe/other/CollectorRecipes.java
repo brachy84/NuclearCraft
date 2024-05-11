@@ -1,14 +1,14 @@
 package nc.recipe.other;
 
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
 import nc.init.NCBlocks;
 import nc.recipe.BasicRecipeHandler;
 import nc.util.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
+
+import static nc.config.NCConfig.*;
 
 public class CollectorRecipes extends BasicRecipeHandler {
 	

@@ -1,9 +1,6 @@
 package nc.recipe.vanilla;
 
-import static nc.config.NCConfig.*;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.*;
 import nc.enumm.MetaEnums.IngotType;
@@ -23,6 +20,8 @@ import net.minecraft.util.*;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.*;
 import vazkii.patchouli.common.item.ItemModBook;
+
+import static nc.config.NCConfig.*;
 
 public class CraftingRecipeHandler {
 	
@@ -76,7 +75,7 @@ public class CraftingRecipeHandler {
 			addShapedOreRecipe(NCBlocks.manufactory, "LRL", "FPF", "LSL", 'P', Blocks.PISTON, 'L', "ingotLead", 'S', "solenoidCopper", 'R', "dustRedstone", 'F', Items.FLINT);
 		}
 		if (register_processor[2]) {
-			addShapedOreRecipe(NCBlocks.alloy_furnace, "PRP", "BFB", "PSP", 'F', Blocks.FURNACE, 'P', "plateBasic", 'S', "solenoidCopper", 'R', "dustRedstone", 'B', Items.BRICK);
+			addShapedOreRecipe(NCBlocks.separator, "PMP", "RCR", "PMP", 'C', "chassis", 'P', "plateBasic", 'M', "motor", 'R', "dustRedstone");
 		}
 		if (register_processor[3]) {
 			addShapedOreRecipe(NCBlocks.decay_hastener, "PGP", "ECE", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'S', "solenoidCopper", 'G', "dustGlowstone", 'E', Items.ENDER_PEARL);
@@ -85,40 +84,40 @@ public class CraftingRecipeHandler {
 			addShapedOreRecipe(NCBlocks.fuel_reprocessor, "PBP", "TCT", "PAP", 'C', "chassis", 'P', "plateBasic", 'A', "actuator", 'T', "ingotTough", 'B', "ingotBoron");
 		}
 		if (register_processor[5]) {
-			addShapedOreRecipe(NCBlocks.separator, "PMP", "RCR", "PMP", 'C', "chassis", 'P', "plateBasic", 'M', "motor", 'R', "dustRedstone");
+			addShapedOreRecipe(NCBlocks.alloy_furnace, "PRP", "BFB", "PSP", 'F', Blocks.FURNACE, 'P', "plateBasic", 'S', "solenoidCopper", 'R', "dustRedstone", 'B', Items.BRICK);
 		}
 		if (register_processor[6]) {
-			addShapedOreRecipe(NCBlocks.pressurizer, "PTP", "ACA", "PTP", 'C', "chassis", 'P', "plateAdvanced", 'T', "ingotTough", 'A', "actuator");
+			addShapedOreRecipe(NCBlocks.infuser, "PBP", "GCG", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'G', "ingotGold", 'S', "servo", 'B', Items.BUCKET);
 		}
 		if (register_processor[7]) {
-			addShapedOreRecipe(NCBlocks.salt_mixer, "PSP", "BCB", "PMP", 'C', "chassis", 'P', "plateBasic", 'B', Items.BUCKET, 'M', "motor", 'S', "ingotSteel");
+			addShapedOreRecipe(NCBlocks.melter, "PNP", "NCN", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'N', "ingotBrickNether", 'S', "servo");
 		}
 		if (register_processor[8]) {
-			addShapedOreRecipe(NCBlocks.enricher, "PHP", "LCL", "PMP", 'C', "chassis", 'P', "plateAdvanced", 'L', "gemLapis", 'M', "motor", 'H', Blocks.HOPPER);
-		}
-		if (register_processor[9]) {
-			addShapedOreRecipe(NCBlocks.chemical_reactor, "PMP", "GCG", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'G', "dustGlowstone", 'M', "motor", 'S', "servo");
-		}
-		if (register_processor[10]) {
-			addShapedOreRecipe(NCBlocks.electrolyzer, "PGP", "SCS", "PMP", 'C', "chassis", 'P', "plateAdvanced", 'S', "solenoidCopper", 'G', "ingotGraphite", 'M', "motor");
-		}
-		if (register_processor[11]) {
-			addShapedOreRecipe(NCBlocks.assembler, "PHP", "ACA", "PMP", 'C', "chassis", 'P', "plateBasic", 'H', "ingotHardCarbon", 'A', "actuator", 'M', "motor");
-		}
-		if (register_processor[12]) {
 			addShapedOreRecipe(NCBlocks.supercooler, "PDP", "HCH", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'D', "ingotMagnesiumDiboride", 'H', "ingotHardCarbon", 'S', "servo");
 		}
-		if (register_processor[13]) {
+		if (register_processor[9]) {
+			addShapedOreRecipe(NCBlocks.electrolyzer, "PGP", "SCS", "PMP", 'C', "chassis", 'P', "plateAdvanced", 'S', "solenoidCopper", 'G', "ingotGraphite", 'M', "motor");
+		}
+		if (register_processor[10]) {
+			addShapedOreRecipe(NCBlocks.assembler, "PHP", "ACA", "PMP", 'C', "chassis", 'P', "plateBasic", 'H', "ingotHardCarbon", 'A', "actuator", 'M', "motor");
+		}
+		if (register_processor[11]) {
 			addShapedOreRecipe(NCBlocks.ingot_former, "PHP", "FCF", "PTP", 'C', "chassis", 'P', "plateBasic", 'F', "ingotFerroboron", 'T', "ingotTough", 'H', Blocks.HOPPER);
 		}
+		if (register_processor[12]) {
+			addShapedOreRecipe(NCBlocks.pressurizer, "PTP", "ACA", "PTP", 'C', "chassis", 'P', "plateAdvanced", 'T', "ingotTough", 'A', "actuator");
+		}
+		if (register_processor[13]) {
+			addShapedOreRecipe(NCBlocks.chemical_reactor, "PMP", "GCG", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'G', "dustGlowstone", 'M', "motor", 'S', "servo");
+		}
 		if (register_processor[14]) {
-			addShapedOreRecipe(NCBlocks.melter, "PNP", "NCN", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'N', "ingotBrickNether", 'S', "servo");
+			addShapedOreRecipe(NCBlocks.salt_mixer, "PSP", "BCB", "PMP", 'C', "chassis", 'P', "plateBasic", 'B', Items.BUCKET, 'M', "motor", 'S', "ingotSteel");
 		}
 		if (register_processor[15]) {
 			addShapedOreRecipe(NCBlocks.crystallizer, "PSP", "SCS", "PUP", 'C', "chassis", 'P', "plateAdvanced", 'S', "solenoidCopper", 'U', Items.CAULDRON);
 		}
 		if (register_processor[16]) {
-			addShapedOreRecipe(NCBlocks.infuser, "PBP", "GCG", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'G', "ingotGold", 'S', "servo", 'B', Items.BUCKET);
+			addShapedOreRecipe(NCBlocks.enricher, "PHP", "LCL", "PMP", 'C', "chassis", 'P', "plateAdvanced", 'L', "gemLapis", 'M', "motor", 'H', Blocks.HOPPER);
 		}
 		if (register_processor[17]) {
 			addShapedOreRecipe(NCBlocks.extractor, "PMP", "BCB", "PSP", 'C', "chassis", 'P', "plateAdvanced", 'M', "ingotMagnesium", 'S', "servo", 'B', Items.BUCKET);
@@ -130,7 +129,7 @@ public class CraftingRecipeHandler {
 			addShapedOreRecipe(NCBlocks.rock_crusher, "PMP", "ACA", "PTP", 'C', "chassis", 'P', "plateAdvanced", 'A', "actuator", 'T', "ingotTough", 'M', "motor");
 		}
 		if (register_processor[20]) {
-			addShapedOreRecipe(NCBlocks.electric_furnace, "PSP", "IFI", "BIB", 'F', Blocks.FURNACE, 'P', "plateBasic", 'S', "solenoidCopper", 'I', "ingotIron", 'B', Items.BRICK);
+			addShapedOreRecipe(NCBlocks.electric_furnace, "LIL", "BFB", "LSL", 'F', Blocks.FURNACE, 'L', "ingotLead", 'S', "solenoidCopper", 'I', "ingotIron", 'B', Items.BRICK);
 		}
 		
 		addShapedOreRecipe(NCBlocks.machine_interface, " A ", "MCM", " S ", 'C', "chassis", 'A', "actuator", 'M', "motor", 'S', "servo");

@@ -1,7 +1,5 @@
 package nc.tile.fission;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.*;
 import li.cil.oc.api.machine.*;
@@ -11,6 +9,8 @@ import nc.multiblock.fission.*;
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 public class TileFissionComputerPort extends TileFissionPart implements SimpleComponent {
@@ -291,10 +291,10 @@ public class TileFissionComputerPort extends TileFissionPart implements SimpleCo
 			for (IFissionComponent component : cluster.getComponentMap().values()) {
 				Object2ObjectMap<String, Object> componentMap = new Object2ObjectOpenHashMap<>();
 				if (component instanceof TileSolidFissionSink sink) {
-                    componentMap.put(sink.ruleID, new Object[] {sink.getHeatStored(), sink.coolingRate});
+					componentMap.put(sink.ruleID, new Object[] {sink.getHeatStored(), sink.coolingRate});
 				}
 				if (component instanceof TileFissionShield shield) {
-                    componentMap.put(shield.getClass().getName(), new Object[] {shield.flux, shield.heatPerFlux, shield.isShielding, shield.heat, shield.efficiency});
+					componentMap.put(shield.getClass().getName(), new Object[] {shield.flux, shield.heatPerFlux, shield.isShielding, shield.heat, shield.efficiency});
 				}
 				componentsData.add(componentMap);
 			}

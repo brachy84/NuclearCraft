@@ -1,7 +1,5 @@
 package nc.item;
 
-import static nc.config.NCConfig.*;
-
 import nc.capability.radiation.entity.IEntityRads;
 import nc.init.NCSounds;
 import nc.util.*;
@@ -14,6 +12,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 
+import static nc.config.NCConfig.*;
+
 public class ItemRadX extends NCItem {
 	
 	private static final String RAD_X_COOLDOWN = Lang.localize("message.nuclearcraft.rad_x_cooling_down");
@@ -25,7 +25,7 @@ public class ItemRadX extends NCItem {
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entity) {
 		if (entity instanceof EntityPlayer player) {
-            if (!player.hasCapability(IEntityRads.CAPABILITY_ENTITY_RADS, null)) {
+			if (!player.hasCapability(IEntityRads.CAPABILITY_ENTITY_RADS, null)) {
 				return stack;
 			}
 			IEntityRads playerRads = player.getCapability(IEntityRads.CAPABILITY_ENTITY_RADS, null);

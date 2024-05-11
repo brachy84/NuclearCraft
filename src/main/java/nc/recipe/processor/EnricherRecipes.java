@@ -1,11 +1,11 @@
 package nc.recipe.processor;
 
-import static nc.util.FluidStackHelper.*;
-
 import nc.ModCheck;
 import nc.init.NCBlocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import static nc.util.FluidStackHelper.*;
 
 public class EnricherRecipes extends BasicProcessorRecipeHandler {
 	

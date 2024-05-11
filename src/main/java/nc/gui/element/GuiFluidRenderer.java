@@ -1,10 +1,8 @@
-/** Massive thanks to CrazyPants, maker of EnderIO and related mods, for letting me use this code! */
+/**
+ * Massive thanks to CrazyPants, maker of EnderIO and related mods, for letting me use this code!
+ */
 
 package nc.gui.element;
-
-import javax.annotation.*;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -12,6 +10,9 @@ import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.*;
 
 public class GuiFluidRenderer {
 	
@@ -43,7 +44,9 @@ public class GuiFluidRenderer {
 		renderGuiTank(tank.getFluid(), tank.getCapacity(), tank.getFluidAmount(), x, y, zLevel, width, height, 255);
 	}
 	
-	/** Alpha is a byte! */
+	/**
+	 * Alpha is a byte!
+	 */
 	public static void renderGuiTank(FluidTank tank, double x, double y, double zLevel, double width, double height, int alpha) {
 		if (tank == null || tank.getFluid() == null) {
 			return;
@@ -51,7 +54,9 @@ public class GuiFluidRenderer {
 		renderGuiTank(tank.getFluid(), tank.getCapacity(), tank.getFluidAmount(), x, y, zLevel, width, height, alpha);
 	}
 	
-	/** Alpha is a byte! */
+	/**
+	 * Alpha is a byte!
+	 */
 	public static void renderGuiTank(@Nullable FluidStack fluid, int capacity, int amount, double x, double y, double zLevel, double width, double height, int alpha) {
 		if (fluid == null || fluid.getFluid() == null || fluid.amount <= 0) {
 			return;
@@ -60,7 +65,7 @@ public class GuiFluidRenderer {
 		
 		int renderAmount = (int) Math.max(Math.min(height, amount * height / capacity), 1);
 		int posY = (int) (y + height - renderAmount);
-
+		
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		int color = fluid.getFluid().getColor(fluid);
 		GL11.glColor4ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF), (byte) alpha);

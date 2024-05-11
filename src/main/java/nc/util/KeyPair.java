@@ -1,8 +1,8 @@
 package nc.util;
 
-import java.util.*;
-
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 
 public final class KeyPair<L, R> extends Pair<L, R> {
 	
@@ -35,7 +35,7 @@ public final class KeyPair<L, R> extends Pair<L, R> {
 			return true;
 		}
 		if (obj instanceof Map.Entry<?, ?> other) {
-            return Objects.equals(getKey(), other.getKey());
+			return Objects.equals(getKey(), other.getKey());
 		}
 		return false;
 	}

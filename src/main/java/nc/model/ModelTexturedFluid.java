@@ -1,16 +1,7 @@
 package nc.model;
 
-import java.util.*;
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-import javax.vecmath.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.cache.*;
 import com.google.common.collect.*;
-
 import nc.Global;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.*;
@@ -25,6 +16,12 @@ import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.*;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.*;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
+import javax.vecmath.*;
+import java.util.*;
+import java.util.function.Function;
 
 public class ModelTexturedFluid implements IModel {
 	
@@ -77,24 +74,24 @@ public class ModelTexturedFluid implements IModel {
 		protected static final float eps = 0.001F;
 		
 		protected final LoadingCache<Long, BakedFluidTextured> modelCache = CacheBuilder.newBuilder().maximumSize(1000).build(new CacheLoader<>() {
-
-            @Override
-            public BakedFluidTextured load(Long key) {
-                int opacity = (int) (key & 0x3FF);
-                key >>>= 10;
-                boolean gas = (key & 1) != 0;
-                key >>>= 1;
-                boolean statePresent = (key & 1) != 0;
-                key >>>= 1;
-                int[] cornerRound = new int[4];
-                for (int i = 0; i < 4; ++i) {
-                    cornerRound[i] = (int) (key & 0x3FF);
-                    key >>>= 10;
-                }
-                int flowRound = (int) (key & 0x7FF) - 1024;
-                return new BakedFluidTextured(transformation, transforms, format, opacity, still, flowing, gas, statePresent, cornerRound, flowRound);
-            }
-        });
+			
+			@Override
+			public BakedFluidTextured load(Long key) {
+				int opacity = (int) (key & 0x3FF);
+				key >>>= 10;
+				boolean gas = (key & 1) != 0;
+				key >>>= 1;
+				boolean statePresent = (key & 1) != 0;
+				key >>>= 1;
+				int[] cornerRound = new int[4];
+				for (int i = 0; i < 4; ++i) {
+					cornerRound[i] = (int) (key & 0x3FF);
+					key >>>= 10;
+				}
+				int flowRound = (int) (key & 0x7FF) - 1024;
+				return new BakedFluidTextured(transformation, transforms, format, opacity, still, flowing, gas, statePresent, cornerRound, flowRound);
+			}
+		});
 		
 		protected final Optional<TRSRTransformation> transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
@@ -282,7 +279,7 @@ public class ModelTexturedFluid implements IModel {
 		public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 			BakedFluidTextured model = this;
 			if (state instanceof IExtendedBlockState exState) {
-                int[] cornerRound = getCorners(Optional.of(exState));
+				int[] cornerRound = getCorners(Optional.of(exState));
 				int flowRound = getFlow(Optional.of(exState));
 				long key = flowRound + 1024;
 				for (int i = 3; i >= 0; --i) {

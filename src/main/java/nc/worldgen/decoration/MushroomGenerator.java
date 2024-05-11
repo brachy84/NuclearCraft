@@ -1,9 +1,5 @@
 package nc.worldgen.decoration;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Random;
-
 import nc.worldgen.biome.NCBiomes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +7,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+
+import java.util.Random;
+
+import static nc.config.NCConfig.*;
 
 public class MushroomGenerator extends BushGenerator {
 	

@@ -1,7 +1,5 @@
 package nc.item.armor;
 
-import javax.annotation.Nonnull;
-
 import ic2.api.item.IHazmatLike;
 import nc.ModCheck;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,6 +11,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nonnull;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "ic2.api.item.IHazmatLike", modid = "ic2")})
 public class ItemHazmatSuit extends NCItemArmor implements ISpecialArmor, IHazmatLike {

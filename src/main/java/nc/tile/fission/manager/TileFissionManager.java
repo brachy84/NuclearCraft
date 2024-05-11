@@ -1,9 +1,5 @@
 package nc.tile.fission.manager;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.*;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
@@ -12,6 +8,10 @@ import nc.util.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
+
+import javax.annotation.Nullable;
+
+import static nc.block.property.BlockProperties.FACING_ALL;
 
 public abstract class TileFissionManager<MANAGER extends TileFissionManager<MANAGER, LISTENER>, LISTENER extends IFissionManagerListener<MANAGER, LISTENER>> extends TileFissionPart implements ITickable, IFissionManager<MANAGER, LISTENER> {
 	

@@ -1,11 +1,10 @@
 package nc.multiblock;
 
-import java.util.Set;
-
-import nc.init.NCPackets;
 import nc.network.multiblock.MultiblockUpdatePacket;
 import nc.tile.multiblock.ITileMultiblockPart;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.Set;
 
 public interface IPacketMultiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>, PACKET extends MultiblockUpdatePacket> extends IMultiblock<MULTIBLOCK, T> {
 	

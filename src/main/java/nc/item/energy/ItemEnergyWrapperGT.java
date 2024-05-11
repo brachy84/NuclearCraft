@@ -1,15 +1,15 @@
 package nc.item.energy;
 
-import static nc.config.NCConfig.rf_per_eu;
-
-import java.util.*;
-import java.util.function.BiConsumer;
-
 import gregtech.api.capability.IElectricItem;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
+import java.util.function.BiConsumer;
+
+import static nc.config.NCConfig.rf_per_eu;
 
 @Optional.Interface(iface = "gregtech.api.capability.IElectricItem", modid = "gregtech")
 public class ItemEnergyWrapperGT implements IElectricItem {
@@ -31,7 +31,7 @@ public class ItemEnergyWrapperGT implements IElectricItem {
 	public boolean canProvideChargeExternally() {
 		return true;
 	}
-
+	
 	@Override
 	@Optional.Method(modid = "gregtech")
 	public boolean chargeable() {

@@ -1,12 +1,12 @@
 package nc.tile.turbine;
 
-import java.util.*;
-
 import li.cil.oc.api.machine.*;
 import li.cil.oc.api.network.SimpleComponent;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 public class TileTurbineComputerPort extends TileTurbinePart implements SimpleComponent {

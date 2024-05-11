@@ -1,12 +1,6 @@
 package nc.tile.inventory;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import nc.tile.ITile;
 import nc.tile.internal.inventory.*;
 import nc.tile.multiblock.port.ITilePort;
@@ -20,31 +14,35 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraftforge.items.*;
 
+import javax.annotation.*;
+import java.util.*;
+
 public interface ITileInventory extends ITile, ISidedInventory {
 	
 	// Inventory
 	
-	@Nonnull NonNullList<ItemStack> getInventoryStacks();
+	@Nonnull
+	NonNullList<ItemStack> getInventoryStacks();
 	
 	default void clearAllSlots() {
 		@Nonnull NonNullList<ItemStack> stacks = getInventoryStacks();
-        Collections.fill(stacks, ItemStack.EMPTY);
+		Collections.fill(stacks, ItemStack.EMPTY);
 	}
 	
 	// IInventory
 	
 	@Override
-    default boolean hasCustomName() {
+	default boolean hasCustomName() {
 		return false;
 	}
 	
 	@Override
-    default int getSizeInventory() {
+	default int getSizeInventory() {
 		return getInventoryStacks().size();
 	}
 	
 	@Override
-    default boolean isEmpty() {
+	default boolean isEmpty() {
 		for (ItemStack stack : getInventoryStacks()) {
 			if (!stack.isEmpty()) {
 				return false;
@@ -54,22 +52,22 @@ public interface ITileInventory extends ITile, ISidedInventory {
 	}
 	
 	@Override
-    default ItemStack getStackInSlot(int slot) {
+	default ItemStack getStackInSlot(int slot) {
 		return getInventoryStacks().get(slot);
 	}
 	
 	@Override
-    default ItemStack decrStackSize(int slot, int count) {
+	default ItemStack decrStackSize(int slot, int count) {
 		return ItemStackHelper.getAndSplit(getInventoryStacks(), slot, count);
 	}
 	
 	@Override
-    default ItemStack removeStackFromSlot(int slot) {
+	default ItemStack removeStackFromSlot(int slot) {
 		return ItemStackHelper.getAndRemove(getInventoryStacks(), slot);
 	}
 	
 	@Override
-    default void setInventorySlotContents(int slot, ItemStack stack) {
+	default void setInventorySlotContents(int slot, ItemStack stack) {
 		@Nonnull NonNullList<ItemStack> stacks = getInventoryStacks();
 		ItemStack itemstack = stacks.get(slot);
 		boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && StackHelper.areItemStackTagsEqual(stack, itemstack);
@@ -86,67 +84,68 @@ public interface ITileInventory extends ITile, ISidedInventory {
 	}
 	
 	@Override
-    default boolean isItemValidForSlot(int slot, ItemStack stack) {
+	default boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
 	}
 	
 	@Override
-    default int getInventoryStackLimit() {
+	default int getInventoryStackLimit() {
 		return 64;
 	}
 	
 	@Override
-    default void clear() {
+	default void clear() {
 		getInventoryStacks().clear();
 	}
 	
 	@Override
-    default void openInventory(EntityPlayer player) {}
+	default void openInventory(EntityPlayer player) {}
 	
 	@Override
-    default void closeInventory(EntityPlayer player) {}
+	default void closeInventory(EntityPlayer player) {}
 	
 	@Override
-    default boolean isUsableByPlayer(EntityPlayer player) {
+	default boolean isUsableByPlayer(EntityPlayer player) {
 		return ITile.super.isUsableByPlayer(player);
 	}
 	
 	@Override
-    default int getField(int id) {
+	default int getField(int id) {
 		return 0;
 	}
 	
 	@Override
-    default void setField(int id, int value) {}
+	default void setField(int id, int value) {}
 	
 	@Override
-    default int getFieldCount() {
+	default int getFieldCount() {
 		return 0;
 	}
 	
 	@Override
-    String getName();
+	String getName();
 	
 	// ISidedInventory
 	
 	@Override
-    default int[] getSlotsForFace(EnumFacing side) {
+	default int[] getSlotsForFace(EnumFacing side) {
 		return getInventoryConnection(side).getSlotsForFace();
 	}
 	
 	@Override
-    default boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
+	default boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		return getItemSorption(side, slot).canReceive();
 	}
 	
 	@Override
-    default boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+	default boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
 		return getItemSorption(side, slot).canExtract();
 	}
 	
 	// Inventory Connections
 	
-	@Nonnull InventoryConnection[] getInventoryConnections();
+	@Nonnull
+	InventoryConnection[] getInventoryConnections();
 	
 	void setInventoryConnections(@Nonnull InventoryConnection[] connections);
 	

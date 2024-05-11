@@ -1,12 +1,8 @@
 package nc.multiblock.hx;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
-import nc.multiblock.ILogicMultiblock;
-import nc.multiblock.IPacketMultiblock;
+import nc.multiblock.*;
 import nc.multiblock.cuboidal.CuboidalMultiblock;
 import nc.network.multiblock.HeatExchangerUpdatePacket;
 import nc.tile.hx.*;
@@ -21,8 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import static nc.config.NCConfig.heat_exchanger_max_size;
-import static nc.config.NCConfig.heat_exchanger_min_size;
+import static nc.config.NCConfig.*;
 
 public class HeatExchanger extends CuboidalMultiblock<HeatExchanger, IHeatExchangerPart> implements ILogicMultiblock<HeatExchanger, HeatExchangerLogic, IHeatExchangerPart>, IPacketMultiblock<HeatExchanger, IHeatExchangerPart, HeatExchangerUpdatePacket> {
 	
@@ -172,7 +167,7 @@ public class HeatExchanger extends CuboidalMultiblock<HeatExchanger, IHeatExchan
 	
 	@Override
 	protected void onMachinePaused() {
-		
+	
 	}
 	
 	@Override

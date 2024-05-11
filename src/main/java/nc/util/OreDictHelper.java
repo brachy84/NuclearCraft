@@ -1,11 +1,6 @@
 package nc.util;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.Block;
@@ -14,6 +9,10 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class OreDictHelper {
 	
@@ -67,10 +66,10 @@ public class OreDictHelper {
 	}
 	
 	public static String getOreNameFromStacks(List<ItemStack> stackList) {
-        if (stackList == null || stackList.isEmpty()) {
+		if (stackList == null || stackList.isEmpty()) {
 			return "Unknown";
 		}
-        List<String> oreNameList = new ArrayList<>(getOreNames(stackList.get(0)));
+		List<String> oreNameList = new ArrayList<>(getOreNames(stackList.get(0)));
 		
 		for (ItemStack stack : stackList) {
 			if (stack == null || stack.isEmpty()) {

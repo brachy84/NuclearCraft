@@ -1,10 +1,8 @@
 package nc.integration.crafttweaker;
 
-import java.util.*;
-
 import crafttweaker.CraftTweakerAPI;
-import crafttweaker.api.item.*;
 import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.item.*;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.oredict.IOreDictEntry;
 import nc.integration.crafttweaker.ingredient.*;
@@ -13,6 +11,8 @@ import nc.recipe.ingredient.*;
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.*;
 
 public class CTHelper {
 	
@@ -40,7 +40,7 @@ public class CTHelper {
 			return new EmptyItemIngredient();
 		}
 		else if (ingredient instanceof CTChanceItemIngredient chanceIngredient) {
-            return new ChanceItemIngredient(buildAdditionItemIngredient(chanceIngredient.getInternalIngredient()), chanceIngredient.getChancePercent(), chanceIngredient.getMinStackSize());
+			return new ChanceItemIngredient(buildAdditionItemIngredient(chanceIngredient.getInternalIngredient()), chanceIngredient.getChancePercent(), chanceIngredient.getMinStackSize());
 		}
 		else if (ingredient instanceof IItemStack) {
 			return RecipeHelper.buildItemIngredient(getItemStack((IItemStack) ingredient));
@@ -65,7 +65,7 @@ public class CTHelper {
 			return new EmptyFluidIngredient();
 		}
 		else if (ingredient instanceof CTChanceFluidIngredient chanceIngredient) {
-            return new ChanceFluidIngredient(buildAdditionFluidIngredient(chanceIngredient.getInternalIngredient()), chanceIngredient.getChancePercent(), chanceIngredient.getStackDiff(), chanceIngredient.getMinStackSize());
+			return new ChanceFluidIngredient(buildAdditionFluidIngredient(chanceIngredient.getInternalIngredient()), chanceIngredient.getChancePercent(), chanceIngredient.getStackDiff(), chanceIngredient.getMinStackSize());
 		}
 		else if (ingredient instanceof ILiquidStack) {
 			return RecipeHelper.buildFluidIngredient(getFluidStack((ILiquidStack) ingredient));

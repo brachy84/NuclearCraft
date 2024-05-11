@@ -1,8 +1,8 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
 import it.unimi.dsi.fastutil.ints.*;
+
+import static nc.config.NCConfig.*;
 
 public class RadWorlds {
 	

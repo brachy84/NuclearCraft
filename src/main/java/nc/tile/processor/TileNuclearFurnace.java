@@ -2,53 +2,36 @@ package nc.tile.processor;
 
 import com.google.common.collect.Lists;
 import nc.Global;
-import nc.capability.radiation.source.IRadiationSource;
-import nc.capability.radiation.source.RadiationSource;
+import nc.capability.radiation.source.*;
 import nc.handler.TileInfoHandler;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.radiation.RadSources;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.RecipeInfo;
-import nc.recipe.ingredient.IFluidIngredient;
-import nc.recipe.ingredient.IItemIngredient;
+import nc.recipe.*;
+import nc.recipe.ingredient.*;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.InventoryConnection;
-import nc.tile.internal.inventory.ItemOutputSetting;
-import nc.tile.internal.inventory.ItemSorption;
+import nc.tile.internal.inventory.*;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
-import nc.util.OreDictHelper;
-import nc.util.StackHelper;
+import nc.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.*;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.util.*;
+import net.minecraft.util.datafix.*;
 import net.minecraft.util.datafix.walkers.ItemStackDataLists;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.*;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.*;
+import java.util.*;
 
 public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<TileNuclearFurnace, ProcessorUpdatePacket> {
 	
@@ -178,34 +161,35 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 			updateComparatorOutputLevel();
 		}
 	}
-
+	
 	@Override
 	public void update() {
 		boolean flag = isBurning();
 		boolean flag1 = false;
-
+		
 		if (isBurning()) {
 			--furnaceBurnTime;
 			getRadiationSource().setRadiationLevel(RadSources.LEU_235_FISSION);
-		} else {
+		}
+		else {
 			getRadiationSource().setRadiationLevel(0D);
 		}
-
+		
 		if (!world.isRemote) {
 			ItemStack itemstack = furnaceItemStacks.get(1);
-
+			
 			if (isBurning() || !itemstack.isEmpty() && !(furnaceItemStacks.get(0)).isEmpty()) {
 				if (!isBurning() && canSmelt()) {
 					furnaceBurnTime = getItemBurnTime(itemstack);
 					currentItemBurnTime = furnaceBurnTime;
-
+					
 					if (isBurning()) {
 						flag1 = true;
-
+						
 						if (!itemstack.isEmpty()) {
 							Item item = itemstack.getItem();
 							itemstack.shrink(1);
-
+							
 							if (itemstack.isEmpty()) {
 								ItemStack item1 = item.getContainerItem(itemstack);
 								furnaceItemStacks.set(1, item1);
@@ -213,10 +197,10 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 						}
 					}
 				}
-
+				
 				if (isBurning() && canSmelt()) {
 					++cookTime;
-
+					
 					if (cookTime == totalCookTime) {
 						cookTime = 0;
 						//totalCookTime = getCookTime(furnaceItemStacks.get(0));
@@ -224,56 +208,65 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 						smeltItem();
 						flag1 = true;
 					}
-				} else {
+				}
+				else {
 					cookTime = 0;
 				}
-			} else if (!isBurning() && cookTime > 0) {
+			}
+			else if (!isBurning() && cookTime > 0) {
 				cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
 			}
-
+			
 			if (flag != isBurning()) {
 				flag1 = true;
 				setState(isBurning(), this);
 				world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 			}
-
+			
 			if (flag1) {
 				markDirty();
 			}
 		}
 	}
-
+	
 	public int getCookTime() {
 		return 10;
 	}
-
+	
 	private boolean canSmelt() {
 		if ((furnaceItemStacks.get(0)).isEmpty()) {
 			return false;
-		} else {
+		}
+		else {
 			ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(furnaceItemStacks.get(0));
-
+			
 			if (itemstack.isEmpty()) {
 				return false;
-			} else {
+			}
+			else {
 				ItemStack itemstack1 = furnaceItemStacks.get(2);
-				if (itemstack1.isEmpty()) return true;
-				if (!itemstack1.isItemEqual(itemstack)) return false;
+				if (itemstack1.isEmpty()) {
+					return true;
+				}
+				if (!itemstack1.isItemEqual(itemstack)) {
+					return false;
+				}
 				int result = itemstack1.getCount() + itemstack.getCount();
 				return result <= getInventoryStackLimit() && result <= itemstack1.getMaxStackSize();
 			}
 		}
 	}
-
+	
 	public void smeltItem() {
 		if (canSmelt()) {
 			ItemStack itemstack = furnaceItemStacks.get(0);
 			ItemStack itemstack1 = FurnaceRecipes.instance().getSmeltingResult(itemstack);
 			ItemStack itemstack2 = furnaceItemStacks.get(2);
-
+			
 			if (itemstack2.isEmpty()) {
 				furnaceItemStacks.set(2, itemstack1.copy());
-			} else if (itemstack2.getItem() == itemstack1.getItem()) {
+			}
+			else if (itemstack2.getItem() == itemstack1.getItem()) {
 				itemstack2.grow(itemstack1.getCount());
 			}
 			if (itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && StackHelper.getMetadata(itemstack) == 1 && !(furnaceItemStacks.get(1)).isEmpty() && (furnaceItemStacks.get(1)).getItem() == Items.BUCKET) {
@@ -341,13 +334,13 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public int getField(int id) {
-        return switch (id) {
-            case 0 -> furnaceBurnTime;
-            case 1 -> currentItemBurnTime;
-            case 2 -> cookTime;
-            case 3 -> totalCookTime;
-            default -> 0;
-        };
+		return switch (id) {
+			case 0 -> furnaceBurnTime;
+			case 1 -> currentItemBurnTime;
+			case 2 -> cookTime;
+			case 3 -> totalCookTime;
+			default -> 0;
+		};
 	}
 	
 	@Override
@@ -431,7 +424,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void onBlockNeighborChanged(IBlockState state, World worldIn, BlockPos posIn, BlockPos fromPos) {
-		
+	
 	}
 	
 	@Override
@@ -514,7 +507,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setFluidConnections(FluidConnection[] connections) {
-		
+	
 	}
 	
 	protected final FluidTileWrapper[] fluidSides = {};
@@ -567,7 +560,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setBaseProcessTime(double baseProcessTime) {
-		
+	
 	}
 	
 	@Override
@@ -577,7 +570,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setBaseProcessPower(double baseProcessPower) {
-		
+	
 	}
 	
 	@Override
@@ -607,12 +600,12 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void process() {
-		
+	
 	}
 	
 	@Override
 	public void finishProcess() {
-		
+	
 	}
 	
 	@Override
@@ -632,7 +625,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setCurrentTime(double time) {
-		
+	
 	}
 	
 	@Override
@@ -642,7 +635,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setResetTime(double resetTime) {
-		
+	
 	}
 	
 	@Override
@@ -652,7 +645,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setIsProcessing(boolean isProcessing) {
-		
+	
 	}
 	
 	@Override
@@ -662,7 +655,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setCanProcessInputs(boolean canProcessInputs) {
-		
+	
 	}
 	
 	@Override
@@ -672,7 +665,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setHasConsumed(boolean hasConsumed) {
-		
+	
 	}
 	
 	@Override
@@ -688,7 +681,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	protected final NonNullList<ItemStack> consumedStacks = NonNullList.create();
 	
 	@Nonnull
-    @Override
+	@Override
 	public NonNullList<ItemStack> getConsumedStacks() {
 		return consumedStacks;
 	}
@@ -708,7 +701,7 @@ public class TileNuclearFurnace extends TileEntity implements IBasicProcessor<Ti
 	
 	@Override
 	public void setRecipeInfo(RecipeInfo<BasicRecipe> recipeInfo) {
-		
+	
 	}
 	
 	@Override

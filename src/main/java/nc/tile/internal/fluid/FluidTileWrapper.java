@@ -1,11 +1,11 @@
 package nc.tile.internal.fluid;
 
-import javax.annotation.Nonnull;
-
 import nc.tile.fluid.ITileFluid;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
+
+import javax.annotation.Nonnull;
 
 public class FluidTileWrapper implements IFluidHandler {
 	

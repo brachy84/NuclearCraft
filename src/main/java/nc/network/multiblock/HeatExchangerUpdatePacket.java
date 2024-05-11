@@ -2,8 +2,8 @@ package nc.network.multiblock;
 
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.hx.HeatExchanger;
-import nc.tile.info.TileContainerInfo;
 import nc.tile.hx.*;
+import nc.tile.TileContainerInfo;
 import net.minecraft.util.math.BlockPos;
 
 public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {

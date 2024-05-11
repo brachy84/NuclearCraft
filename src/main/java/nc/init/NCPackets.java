@@ -23,7 +23,7 @@ public class NCPackets {
 	
 	public static void registerMessages() {
 		// CLIENT -> SERVER
-
+		
 		wrapper.registerMessage(ClearTankPacket.Handler.class, ClearTankPacket.class, nextID(), Side.SERVER);
 		wrapper.registerMessage(ClearFilterTankPacket.Handler.class, ClearFilterTankPacket.class, nextID(), Side.SERVER);
 		
@@ -46,7 +46,7 @@ public class NCPackets {
 		wrapper.registerMessage(ClearAllMaterialPacket.Handler.class, ClearAllMaterialPacket.class, nextID(), Side.SERVER);
 		
 		// SERVER -> CLIENT
-
+		
 		wrapper.registerMessage(ConfigUpdatePacket.Handler.class, ConfigUpdatePacket.class, nextID(), Side.CLIENT);
 		
 		wrapper.registerMessage(BlockHighlightUpdatePacket.Handler.class, BlockHighlightUpdatePacket.class, nextID(), Side.CLIENT);

@@ -1,7 +1,5 @@
 package nc.item.bauble;
 
-import static nc.config.NCConfig.*;
-
 import baubles.api.*;
 import nc.ModCheck;
 import nc.capability.radiation.entity.IEntityRads;
@@ -16,6 +14,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import static nc.config.NCConfig.*;
 
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemRadiationBadge extends NCItem implements IBauble {

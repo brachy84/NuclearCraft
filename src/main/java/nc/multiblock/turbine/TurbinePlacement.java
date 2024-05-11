@@ -1,12 +1,5 @@
 package nc.multiblock.turbine;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.init.NCBlocks;
 import nc.multiblock.PlacementRule;
@@ -18,23 +11,39 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static nc.config.NCConfig.*;
+
 public abstract class TurbinePlacement {
 	
-	/** List of all defined rule parsers. Earlier entries are prioritised! */
+	/**
+	 * List of all defined rule parsers. Earlier entries are prioritised!
+	 */
 	public static final List<PlacementRule.RuleParser<Turbine, ITurbinePart>> RULE_PARSER_LIST = new LinkedList<>();
 	
-	/** Map of all placement rule IDs to unparsed rule strings, used for ordered iterations. */
+	/**
+	 * Map of all placement rule IDs to unparsed rule strings, used for ordered iterations.
+	 */
 	public static final Object2ObjectMap<String, String> RULE_MAP_RAW = new Object2ObjectArrayMap<>();
 	
-	/** Map of all defined placement rules. */
+	/**
+	 * Map of all defined placement rules.
+	 */
 	public static final Object2ObjectMap<String, PlacementRule<Turbine, ITurbinePart>> RULE_MAP = new PlacementMap<>();
 	
-	/** List of all defined tooltip builders. Earlier entries are prioritised! */
+	/**
+	 * List of all defined tooltip builders. Earlier entries are prioritised!
+	 */
 	public static final List<PlacementRule.TooltipBuilder<Turbine, ITurbinePart>> TOOLTIP_BUILDER_LIST = new LinkedList<>();
 	
 	public static PlacementRule.RecipeHandler recipe_handler;
 	
-	/** Map of all localized tooltips. */
+	/**
+	 * Map of all localized tooltips.
+	 */
 	public static final Object2ObjectMap<String, String> TOOLTIP_MAP = new Object2ObjectOpenHashMap<>();
 	
 	public static void preInit() {
@@ -70,8 +79,9 @@ public abstract class TurbinePlacement {
 		for (Object2ObjectMap.Entry<String, PlacementRule<Turbine, ITurbinePart>> entry : RULE_MAP.object2ObjectEntrySet()) {
 			for (PlacementRule.TooltipBuilder<Turbine, ITurbinePart> builder : TOOLTIP_BUILDER_LIST) {
 				String tooltip = builder.buildTooltip(entry.getValue());
-				if (tooltip != null)
+				if (tooltip != null) {
 					TOOLTIP_MAP.put(entry.getKey(), tooltip);
+				}
 			}
 		}
 	}
@@ -82,7 +92,9 @@ public abstract class TurbinePlacement {
 		return PlacementRule.parse(string, RULE_PARSER_LIST);
 	}
 	
-	/** Rule parser for all rule types available in base NC. */
+	/**
+	 * Rule parser for all rule types available in base NC.
+	 */
 	public static class DefaultRuleParser extends PlacementRule.DefaultRuleParser<Turbine, ITurbinePart> {
 		
 		@Override
@@ -94,8 +106,9 @@ public abstract class TurbinePlacement {
 			boolean exact = s.contains("exact"), atMost = s.contains("at most");
 			boolean axial = s.contains("axial"), vertex = s.contains("vertex"), edge = s.contains("edge");
 			
-			if ((exact && atMost) || (axial && vertex))
+			if ((exact && atMost) || (axial && vertex)) {
 				return null;
+			}
 			
 			s = s.replaceAll("at least", "");
 			s = s.replaceAll("exactly", "");
@@ -145,21 +158,22 @@ public abstract class TurbinePlacement {
 				}
 			}
 			
-			if (amount < 0 || rule == null)
+			if (amount < 0 || rule == null) {
 				return null;
+			}
 			
 			CountType countType = exact ? CountType.EXACTLY : (atMost ? CountType.AT_MOST : CountType.AT_LEAST);
 			AdjacencyType adjType = axial ? AdjacencyType.AXIAL : (vertex ? AdjacencyType.VERTEX : (edge ? AdjacencyType.EDGE : AdjacencyType.STANDARD));
-
-            return switch (rule) {
-                case "casing" -> new AdjacentCasing(amount, countType, adjType);
-                case "bearing" -> new AdjacentBearing(amount, countType, adjType);
-                case "connector" -> new AdjacentConnector(amount, countType, adjType);
-                case "coil" -> new AdjacentCoil(amount, countType, adjType, type);
-                default -> null;
-            };
-
-        }
+			
+			return switch (rule) {
+				case "casing" -> new AdjacentCasing(amount, countType, adjType);
+				case "bearing" -> new AdjacentBearing(amount, countType, adjType);
+				case "connector" -> new AdjacentConnector(amount, countType, adjType);
+				case "coil" -> new AdjacentCoil(amount, countType, adjType, type);
+				default -> null;
+			};
+			
+		}
 	}
 	
 	// Adjacent

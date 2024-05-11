@@ -1,15 +1,14 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
+import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import nc.util.PotionHelper;
+import net.minecraft.potion.*;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-import com.google.common.collect.Lists;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import nc.util.PotionHelper;
-import net.minecraft.potion.*;
+import static nc.config.NCConfig.*;
 
 public class RadPotionEffects {
 	
@@ -32,7 +31,8 @@ public class RadPotionEffects {
 		List<Double> radLevelListUnordered = new ArrayList<>();
 		List<List<PotionEffect>> potionListUnordered = new ArrayList<>();
 		
-		main: for (String effects : effectsArray) {
+		main:
+		for (String effects : effectsArray) {
 			int puncPos = effects.indexOf('_');
 			if (puncPos == -1) {
 				continue;
@@ -85,12 +85,12 @@ public class RadPotionEffects {
 	}
 	
 	private static int getModifiedTime(String potionName, int effectTime, int amplifier) {
-        return switch (potionName) {
-            case "regeneration", "minecraft:regeneration" -> Math.max(effectTime, 50 >> amplifier);
-            case "wither", "minecraft:wither" -> Math.max(effectTime, 40 >> amplifier);
-            case "poison", "minecraft:poison" -> Math.max(effectTime, 25 >> amplifier);
-            case "blindness", "minecraft:blindness" -> effectTime + 25;
-            default -> effectTime;
-        };
+		return switch (potionName) {
+			case "regeneration", "minecraft:regeneration" -> Math.max(effectTime, 50 >> amplifier);
+			case "wither", "minecraft:wither" -> Math.max(effectTime, 40 >> amplifier);
+			case "poison", "minecraft:poison" -> Math.max(effectTime, 25 >> amplifier);
+			case "blindness", "minecraft:blindness" -> effectTime + 25;
+			default -> effectTime;
+		};
 	}
 }

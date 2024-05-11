@@ -2,26 +2,23 @@ package nc.block.item;
 
 import nc.block.IBlockMeta;
 import nc.enumm.IMetaEnum;
-import nc.util.InfoHelper;
-import nc.util.StackHelper;
+import nc.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBlockMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends ItemBlock {
-
+	
 	public final Class<T> enumm;
 	public final T[] values;
-
+	
 	public final TextFormatting[] fixedColors;
 	public final TextFormatting infoColor;
 	public final String[][] fixedInfo, info;

@@ -8,20 +8,15 @@ import nc.container.processor.ContainerNuclearFurnace;
 import nc.enumm.MetaEnums;
 import nc.gui.processor.GuiNuclearFurnace;
 import nc.handler.TileInfoHandler;
-import nc.init.NCArmor;
-import nc.init.NCBlocks;
-import nc.init.NCItems;
+import nc.init.*;
 import nc.integration.jei.category.info.JEICategoryInfo;
 import nc.multiblock.fission.FissionPlacement;
 import nc.recipe.BasicRecipe;
 import nc.recipe.ingredient.IItemIngredient;
-import nc.util.NCUtil;
-import nc.util.StackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import nc.util.*;
+import net.minecraft.item.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static nc.config.NCConfig.*;
 
@@ -37,7 +32,7 @@ public class NCJEI implements IModPlugin {
 		for (JEICategoryInfo<?, ?, ?> categoryInfo : TileInfoHandler.JEI_CATEGORY_INFO_MAP.values()) {
 			categoryInfo.registerJEICategory(registry, jeiHelpers, guiHelper, transferRegistry);
 		}
-
+		
 		registry.addRecipeCatalyst(new ItemStack(NCBlocks.nuclear_furnace), VanillaRecipeCategoryUid.SMELTING);
 		registry.addRecipeClickArea(GuiNuclearFurnace.class, 78, 32, 28, 23, VanillaRecipeCategoryUid.SMELTING);
 		transferRegistry.addRecipeTransferHandler(ContainerNuclearFurnace.class, VanillaRecipeCategoryUid.SMELTING, 0, 1, 3, 36);
@@ -116,10 +111,11 @@ public class NCJEI implements IModPlugin {
 	public static List<Object> getCoolantHeaters() {
 		List<Object> list = new ArrayList<>();
 		for (BasicRecipe recipe : FissionPlacement.recipe_handler.getRecipeList()) {
-			if (recipe.getPlacementRuleID().endsWith("_heater"))
+			if (recipe.getPlacementRuleID().endsWith("_heater")) {
 				for (IItemIngredient ingredient : recipe.getItemIngredients()) {
-                    list.addAll(ingredient.getInputStackList());
+					list.addAll(ingredient.getInputStackList());
 				}
+			}
 		}
 		return list;
 	}

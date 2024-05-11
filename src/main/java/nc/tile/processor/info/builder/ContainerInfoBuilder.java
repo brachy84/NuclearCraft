@@ -1,16 +1,15 @@
 package nc.tile.processor.info.builder;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import nc.util.MinMax.MinMaxInt;
+
+import java.util.*;
 
 public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<BUILDER>> {
 	
 	public final String modId;
 	public final String name;
-
+	
 	protected String recipeHandlerName;
 	
 	protected int[] guiWH = new int[] {176, 166};
@@ -29,7 +28,7 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	protected int[] redstoneControlGuiXY = new int[] {47, 63};
 	
 	protected boolean jeiCategoryEnabled = true;
-
+	
 	protected String jeiCategoryUid;
 	protected String jeiTitle;
 	protected String jeiTexture;
@@ -41,23 +40,13 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 	protected ContainerInfoBuilder(String modId, String name) {
 		this.modId = modId;
 		this.name = name;
-
+		
 		setRecipeHandlerName(name);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public BUILDER getThis() {
+	protected BUILDER getThis() {
 		return (BUILDER) this;
-	}
-
-	public BUILDER setRecipeHandlerName(String recipeHandlerName) {
-		this.recipeHandlerName = recipeHandlerName;
-
-		jeiCategoryUid = modId + "_" + recipeHandlerName;
-		jeiTitle = "tile." + modId + "." + recipeHandlerName + ".name";
-		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + ".png";
-
-		return getThis();
 	}
 	
 	public BUILDER setGuiWH(int w, int h) {
@@ -116,6 +105,16 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 		return getThis();
 	}
 	
+	public BUILDER setRecipeHandlerName(String recipeHandlerName) {
+		this.recipeHandlerName = recipeHandlerName;
+		
+		jeiCategoryUid = modId + "_" + recipeHandlerName;
+		jeiTitle = "tile." + modId + "." + recipeHandlerName + ".name";
+		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + ".png";
+		
+		return getThis();
+	}
+	
 	public BUILDER setJeiCategoryEnabled(boolean jeiCategoryEnabled) {
 		this.jeiCategoryEnabled = jeiCategoryEnabled;
 		return getThis();
@@ -151,6 +150,16 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 		return getThis();
 	}
 	
+	public BUILDER setStandardJeiAlternateTitle() {
+		jeiTitle = modId + "." + recipeHandlerName + ".jei_name";
+		return getThis();
+	}
+	
+	public BUILDER setStandardJeiAlternateTexture() {
+		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + "_jei.png";
+		return getThis();
+	}
+	
 	public BUILDER standardExtend(int x, int y) {
 		guiWH[0] += x;
 		guiWH[1] += y;
@@ -168,18 +177,15 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 		
 		return getThis();
 	}
-
-	public BUILDER setStandardJeiAlternateTitle() {
-		jeiTitle = modId + "." + recipeHandlerName + ".jei_name";
+	
+	public BUILDER disableProgressBar() {
+		progressBarGuiXYWHUV = new int[] {-1, -1, -1, -1, -1, -1};
+		jeiTooltipXYWH = new int[] {-1, -1, -1, -1};
+		jeiClickAreaXYWH = new int[] {-1, -1, -1, -1};
 		return getThis();
 	}
 	
-	public BUILDER setStandardJeiAlternateTexture() {
-		jeiTexture = modId + ":textures/gui/container/" + recipeHandlerName + "_jei.png";
-		return getThis();
-	}
-	
-	public void autoJeiBackgroundXY() {
+	protected void autoJeiBackgroundXY() {
 		MinMaxInt minMaxCenterX = new MinMaxInt(), minMaxCenterY = new MinMaxInt();
 		for (List<int[]> xywhList : Arrays.asList(itemInputGuiXYWH, fluidInputGuiXYWH, itemOutputGuiXYWH, fluidOutputGuiXYWH)) {
 			for (int[] xywh : xywhList) {
@@ -191,12 +197,5 @@ public abstract class ContainerInfoBuilder<BUILDER extends ContainerInfoBuilder<
 		}
 		
 		jeiBackgroundXYWH = new int[] {minMaxCenterX.getMin(), minMaxCenterY.getMin(), minMaxCenterX.getDiff(), minMaxCenterY.getDiff()};
-	}
-	
-	public BUILDER disableProgressBar() {
-		progressBarGuiXYWHUV = new int[] {-1, -1, -1, -1, -1, -1};
-		jeiTooltipXYWH = new int[] {-1, -1, -1, -1};
-		jeiClickAreaXYWH = new int[] {-1, -1, -1, -1};
-		return getThis();
 	}
 }

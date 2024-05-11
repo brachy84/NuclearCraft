@@ -1,8 +1,8 @@
 package nc.recipe.processor;
 
-import static nc.util.FissionHelper.FISSION_ORE_DICT;
-
 import com.google.common.collect.Lists;
+
+import static nc.util.FissionHelper.FISSION_ORE_DICT;
 
 public class SeparatorRecipes extends BasicProcessorRecipeHandler {
 	

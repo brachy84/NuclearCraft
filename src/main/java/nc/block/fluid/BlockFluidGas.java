@@ -1,15 +1,14 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import nc.fluid.FluidGas;
 import net.minecraft.block.material.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class BlockFluidGas extends NCBlockFluid {
 	

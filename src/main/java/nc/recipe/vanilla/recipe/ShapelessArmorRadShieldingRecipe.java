@@ -1,9 +1,5 @@
 package nc.recipe.vanilla.recipe;
 
-import static nc.config.NCConfig.radiation_horse_armor_public;
-
-import javax.annotation.Nonnull;
-
 import nc.util.*;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -11,6 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import javax.annotation.Nonnull;
+
+import static nc.config.NCConfig.radiation_horse_armor_public;
 
 public class ShapelessArmorRadShieldingRecipe extends ShapelessOreRecipe {
 	

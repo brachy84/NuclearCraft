@@ -1,9 +1,6 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.item.IngredientStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import it.unimi.dsi.fastutil.ints.*;
@@ -11,6 +8,8 @@ import nc.recipe.*;
 import nc.util.OreDictHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class OreIngredient implements IItemIngredient {
 	
@@ -94,7 +93,7 @@ public class OreIngredient implements IItemIngredient {
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption sorption) {
 		if (object instanceof OreIngredient oreStack) {
-            if (oreStack.oreName.equals(oreName) && sorption.checkStackSize(stackSize, oreStack.stackSize)) {
+			if (oreStack.oreName.equals(oreName) && sorption.checkStackSize(stackSize, oreStack.stackSize)) {
 				return IngredientMatchResult.PASS_0;
 			}
 		}
@@ -102,7 +101,7 @@ public class OreIngredient implements IItemIngredient {
 			return new IngredientMatchResult(oreName.equals(object), 0);
 		}
 		else if (object instanceof ItemStack itemstack && sorption.checkStackSize(stackSize, ((ItemStack) object).getCount())) {
-            if (itemstack.isEmpty()) {
+			if (itemstack.isEmpty()) {
 				return IngredientMatchResult.FAIL;
 			}
 			if (OreDictHelper.getOreNames(itemstack).contains(oreName)) {

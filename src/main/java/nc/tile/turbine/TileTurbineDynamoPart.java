@@ -1,9 +1,5 @@
 package nc.tile.turbine;
 
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.*;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -20,6 +16,10 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.*;
+
+import static nc.config.NCConfig.enable_gtce_eu;
 
 @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")
 public abstract class TileTurbineDynamoPart extends TileTurbinePart implements ITickable, ITileEnergy, IEnergySource {
@@ -41,7 +41,9 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 	public String ruleID;
 	public PlacementRule<Turbine, ITurbinePart> placementRule;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileTurbineDynamoPart() {
 		super(CuboidalPartPositionType.WALL);
 	}
@@ -104,8 +106,9 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 	
 	public boolean isSearchRoot() {
 		for (String dep : placementRule.getDependencies()) {
-			if (dep.equals("bearing"))
+			if (dep.equals("bearing")) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -213,8 +216,9 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 	public NBTTagCompound writeAll(NBTTagCompound nbt) {
 		super.writeAll(nbt);
 		nbt.setString("partName", partName);
-		if (conductivity != null)
+		if (conductivity != null) {
 			nbt.setDouble("conductivity", conductivity);
+		}
 		nbt.setString("ruleID", ruleID);
 		
 		writeEnergyConnections(nbt);
@@ -225,10 +229,12 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 	@Override
 	public void readAll(NBTTagCompound nbt) {
 		super.readAll(nbt);
-		if (nbt.hasKey("partName"))
+		if (nbt.hasKey("partName")) {
 			partName = nbt.getString("partName");
-		if (nbt.hasKey("conductivity"))
+		}
+		if (nbt.hasKey("conductivity")) {
 			conductivity = nbt.getDouble("conductivity");
+		}
 		if (nbt.hasKey("ruleID")) {
 			ruleID = nbt.getString("ruleID");
 			placementRule = TurbinePlacement.RULE_MAP.get(ruleID);

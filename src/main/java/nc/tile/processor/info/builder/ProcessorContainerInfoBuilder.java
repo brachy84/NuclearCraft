@@ -1,16 +1,9 @@
 package nc.tile.processor.info.builder;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-import java.util.function.Supplier;
-
 import com.google.common.collect.Lists;
-
 import nc.container.ContainerFunction;
 import nc.container.processor.ContainerSideConfig;
-import nc.gui.GuiFunction;
-import nc.gui.GuiInfoTileFunction;
+import nc.gui.*;
 import nc.gui.processor.GuiProcessor;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tab.NCTabs;
@@ -22,23 +15,28 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.*;
+import java.util.function.Supplier;
+
+import static nc.config.NCConfig.*;
+
 public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, BUILDER extends ProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER>> extends ContainerInfoBuilder<BUILDER> {
 	
 	public final Class<TILE> tileClass;
-	protected final Supplier<TILE> tileSupplier;
+	public final Supplier<TILE> tileSupplier;
+	
+	public final Class<? extends Container> containerClass;
+	public final ContainerFunction<TILE> containerFunction;
+	
+	public final Class<? extends GuiContainer> guiClass;
+	public final GuiFunction<TILE> guiFunction;
+	
+	public final ContainerFunction<TILE> configContainerFunction;
+	public final GuiFunction<TILE> configGuiFunction;
 	
 	protected CreativeTabs creativeTab = NCTabs.machine;
 	
 	protected List<String> particles = new ArrayList<>();
-	
-	protected final Class<? extends Container> containerClass;
-	protected final ContainerFunction<TILE> containerFunction;
-	
-	protected final Class<? extends GuiContainer> guiClass;
-	protected final GuiFunction<TILE> guiFunction;
-	
-	protected final ContainerFunction<TILE> configContainerFunction;
-	protected final GuiFunction<TILE> configGuiFunction;
 	
 	protected int inputTankCapacity = 16000;
 	protected int outputTankCapacity = 16000;
@@ -52,7 +50,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	protected boolean losesProgress = false;
 	
 	protected String ocComponentName;
-
+	
 	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction) {
 		super(modId, name);
 		
@@ -70,7 +68,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 		
 		ocComponentName = NCUtil.getShortModId(modId) + "_" + name;
 	}
-
+	
 	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
 		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, GuiProcessor.SideConfig::new));
 	}
@@ -78,7 +76,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	public ProcessorBlockInfo<TILE> buildBlockInfo() {
 		return new ProcessorBlockInfo<>(modId, name, tileClass, tileSupplier, creativeTab, particles);
 	}
-
+	
 	public abstract INFO buildContainerInfo();
 	
 	public BUILDER setCreativeTab(CreativeTabs tab) {
@@ -90,8 +88,8 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 		return setCreativeTab(NCTabs.getCreativeTab(tab));
 	}
 	
-	public BUILDER setParticles(String... names) {
-		particles = Lists.newArrayList(names);
+	public BUILDER setParticles(String... particles) {
+		this.particles = Lists.newArrayList(particles);
 		return getThis();
 	}
 	

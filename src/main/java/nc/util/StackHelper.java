@@ -1,9 +1,5 @@
 package nc.util;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.*;
@@ -11,6 +7,9 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class StackHelper {
 	
@@ -60,13 +59,13 @@ public class StackHelper {
 		if (!(item instanceof ItemBlock itemBlock)) {
 			return null;
 		}
-        return itemBlock.getBlock().getStateFromMeta(meta);
+		return itemBlock.getBlock().getStateFromMeta(meta);
 	}
 	
 	public static int getMetadata(ItemStack stack) {
 		return Items.DIAMOND.getMetadata(stack);
 	}
-
+	
 	public static boolean isWildcard(ItemStack stack) {
 		return getMetadata(stack) == 32767;
 	}
@@ -100,7 +99,9 @@ public class StackHelper {
 		return names.substring(2);
 	}
 	
-	/** Stack tag comparison without checking capabilities such as radiation */
+	/**
+	 * Stack tag comparison without checking capabilities such as radiation
+	 */
 	public static boolean areItemStackTagsEqual(ItemStack stackA, ItemStack stackB) {
 		boolean isAEmpty = stackA.isEmpty(), isBEmpty = stackB.isEmpty();
 		if (isAEmpty && isBEmpty) {

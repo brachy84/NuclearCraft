@@ -39,12 +39,16 @@ public class HeatBuffer {
 		heatStored = NCMath.clamp(heatStored + heat, 0, heatCapacity);
 	}
 	
-	/** Ignores heat capacity! */
+	/**
+	 * Ignores heat capacity!
+	 */
 	public void setHeatStored(long heat) {
 		heatStored = Math.max(0, heat);
 	}
 	
-	/** Ignores heat stored! */
+	/**
+	 * Ignores heat stored!
+	 */
 	public void setHeatCapacity(long newCapacity) {
 		heatCapacity = Math.max(0, newCapacity);
 		// if (newCapacity < heatStored) setHeatStored(newCapacity);

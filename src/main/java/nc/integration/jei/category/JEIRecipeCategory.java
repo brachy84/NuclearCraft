@@ -1,7 +1,5 @@
 package nc.integration.jei.category;
 
-import java.util.List;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
@@ -15,6 +13,8 @@ import nc.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
 
 public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGORY extends JEIRecipeCategory<WRAPPER, CATEGORY, CATEGORY_INFO>, CATEGORY_INFO extends JEICategoryInfo<WRAPPER, CATEGORY, CATEGORY_INFO>> extends BlankRecipeCategory<WRAPPER> implements IRecipeHandler<WRAPPER> {
 	
@@ -53,7 +53,7 @@ public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGO
 	
 	@Override
 	public void drawExtras(Minecraft minecraft) {
-		
+	
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGO
 			if (outputIndex >= 0 && outputIndex <= recipeHandler.getItemOutputSize()) {
 				IItemIngredient product = itemProducts.get(outputIndex);
 				if (product instanceof IChanceItemIngredient chanceProduct) {
-                    tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));
+					tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));
 				}
 			}
 		});
@@ -82,7 +82,7 @@ public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGO
 			if (outputIndex >= 0 && outputIndex <= recipeHandler.getFluidOutputSize()) {
 				IFluidIngredient product = fluidProducts.get(outputIndex);
 				if (product instanceof IChanceFluidIngredient chanceProduct) {
-                    tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));
+					tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));
 				}
 			}
 		});

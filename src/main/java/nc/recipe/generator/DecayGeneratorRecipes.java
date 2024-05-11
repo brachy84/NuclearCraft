@@ -1,14 +1,13 @@
 package nc.recipe.generator;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import com.google.common.collect.*;
-
 import nc.radiation.RadSources;
 import nc.recipe.BasicRecipeHandler;
 import nc.util.OreDictHelper;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class DecayGeneratorRecipes extends BasicRecipeHandler {
 	

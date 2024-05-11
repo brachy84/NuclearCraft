@@ -1,7 +1,5 @@
 package nc.recipe.vanilla;
 
-import static nc.config.NCConfig.ore_dict_raw_material_recipes;
-
 import nc.enumm.MetaEnums.*;
 import nc.init.*;
 import nc.util.*;
@@ -9,6 +7,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import static nc.config.NCConfig.ore_dict_raw_material_recipes;
 
 public class FurnaceRecipeHandler {
 	

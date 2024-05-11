@@ -1,7 +1,6 @@
 package nc.multiblock.quantum;
 
-import nc.enumm.IBlockMetaEnum;
-import nc.enumm.ITileEnum;
+import nc.enumm.*;
 import nc.tile.quantum.TileQuantumComputerGate;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
@@ -72,27 +71,27 @@ public class QuantumGateEnums {
 		public int getLightValue() {
 			return 0;
 		}
-
+		
 		@Override
 		public Class<? extends TileQuantumComputerGate> getTileClass() {
 			return tileClass;
 		}
-
+		
 		public TileEntity getTile() {
-            return switch (this) {
-                case X -> new TileQuantumComputerGate.X();
-                case Y -> new TileQuantumComputerGate.Y();
-                case Z -> new TileQuantumComputerGate.Z();
-                case H -> new TileQuantumComputerGate.H();
-                case S -> new TileQuantumComputerGate.S();
-                case Sdg -> new TileQuantumComputerGate.Sdg();
-                case T -> new TileQuantumComputerGate.T();
-                case Tdg -> new TileQuantumComputerGate.Tdg();
-                case P -> new TileQuantumComputerGate.P();
-                case RX -> new TileQuantumComputerGate.RX();
-                case RY -> new TileQuantumComputerGate.RY();
-                case RZ -> new TileQuantumComputerGate.RZ();
-            };
+			return switch (this) {
+				case X -> new TileQuantumComputerGate.X();
+				case Y -> new TileQuantumComputerGate.Y();
+				case Z -> new TileQuantumComputerGate.Z();
+				case H -> new TileQuantumComputerGate.H();
+				case S -> new TileQuantumComputerGate.S();
+				case Sdg -> new TileQuantumComputerGate.Sdg();
+				case T -> new TileQuantumComputerGate.T();
+				case Tdg -> new TileQuantumComputerGate.Tdg();
+				case P -> new TileQuantumComputerGate.P();
+				case RX -> new TileQuantumComputerGate.RX();
+				case RY -> new TileQuantumComputerGate.RY();
+				case RZ -> new TileQuantumComputerGate.RZ();
+			};
 		}
 	}
 	
@@ -160,27 +159,27 @@ public class QuantumGateEnums {
 		public int getLightValue() {
 			return 0;
 		}
-
+		
 		@Override
 		public Class<? extends TileQuantumComputerGate> getTileClass() {
 			return tileClass;
 		}
 		
 		public TileEntity getTile() {
-            return switch (this) {
-                case CX -> new TileQuantumComputerGate.CX();
-                case CY -> new TileQuantumComputerGate.CY();
-                case CZ -> new TileQuantumComputerGate.CZ();
-                case CH -> new TileQuantumComputerGate.CH();
-                case CS -> new TileQuantumComputerGate.CS();
-                case CSdg -> new TileQuantumComputerGate.CSdg();
-                case CT -> new TileQuantumComputerGate.CT();
-                case CTdg -> new TileQuantumComputerGate.CTdg();
-                case CP -> new TileQuantumComputerGate.CP();
-                case CRX -> new TileQuantumComputerGate.CRX();
-                case CRY -> new TileQuantumComputerGate.CRY();
-                case CRZ -> new TileQuantumComputerGate.CRZ();
-            };
+			return switch (this) {
+				case CX -> new TileQuantumComputerGate.CX();
+				case CY -> new TileQuantumComputerGate.CY();
+				case CZ -> new TileQuantumComputerGate.CZ();
+				case CH -> new TileQuantumComputerGate.CH();
+				case CS -> new TileQuantumComputerGate.CS();
+				case CSdg -> new TileQuantumComputerGate.CSdg();
+				case CT -> new TileQuantumComputerGate.CT();
+				case CTdg -> new TileQuantumComputerGate.CTdg();
+				case CP -> new TileQuantumComputerGate.CP();
+				case CRX -> new TileQuantumComputerGate.CRX();
+				case CRY -> new TileQuantumComputerGate.CRY();
+				case CRZ -> new TileQuantumComputerGate.CRZ();
+			};
 		}
 	}
 	
@@ -238,17 +237,17 @@ public class QuantumGateEnums {
 		public int getLightValue() {
 			return 0;
 		}
-
+		
 		@Override
 		public Class<? extends TileQuantumComputerGate> getTileClass() {
 			return tileClass;
 		}
-
+		
 		public TileEntity getTile() {
-            return switch (this) {
-                case SWAP -> new TileQuantumComputerGate.Swap();
-                case CSWAP -> new TileQuantumComputerGate.ControlSwap();
-            };
+			return switch (this) {
+				case SWAP -> new TileQuantumComputerGate.Swap();
+				case CSWAP -> new TileQuantumComputerGate.ControlSwap();
+			};
 		}
 	}
 }

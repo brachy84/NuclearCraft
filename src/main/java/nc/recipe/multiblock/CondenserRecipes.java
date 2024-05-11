@@ -1,8 +1,8 @@
 package nc.recipe.multiblock;
 
-import java.util.*;
-
 import nc.recipe.BasicRecipeHandler;
+
+import java.util.*;
 
 public class CondenserRecipes extends BasicRecipeHandler {
 	

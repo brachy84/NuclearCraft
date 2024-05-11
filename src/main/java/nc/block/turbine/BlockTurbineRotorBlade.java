@@ -1,7 +1,5 @@
 package nc.block.turbine;
 
-import static nc.util.NCRenderHelper.PIXEL;
-
 import nc.multiblock.turbine.TurbineRotorBladeUtil;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import nc.tile.turbine.TileTurbineRotorBlade;
@@ -13,6 +11,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.*;
+
+import static nc.util.NCRenderHelper.PIXEL;
 
 public class BlockTurbineRotorBlade extends BlockTurbinePart implements IBlockRotorBlade {
 	
@@ -38,11 +38,11 @@ public class BlockTurbineRotorBlade extends BlockTurbinePart implements IBlockRo
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-        return switch (bladeType) {
-            case STEEL -> new TileTurbineRotorBlade.Steel();
-            case EXTREME -> new TileTurbineRotorBlade.Extreme();
-            case SIC_SIC_CMC -> new TileTurbineRotorBlade.SicSicCMC();
-        };
+		return switch (bladeType) {
+			case STEEL -> new TileTurbineRotorBlade.Steel();
+			case EXTREME -> new TileTurbineRotorBlade.Extreme();
+			case SIC_SIC_CMC -> new TileTurbineRotorBlade.SicSicCMC();
+		};
 	}
 	
 	@Override
@@ -50,13 +50,13 @@ public class BlockTurbineRotorBlade extends BlockTurbinePart implements IBlockRo
 		if (state.getBlock() != this) {
 			return super.getBoundingBox(state, source, pos);
 		}
-
-        return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
-            case X -> BLADE_AABB[0];
-            case Y -> BLADE_AABB[1];
-            case Z -> BLADE_AABB[2];
-            default -> super.getBoundingBox(state, source, pos);
-        };
+		
+		return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
+			case X -> BLADE_AABB[0];
+			case Y -> BLADE_AABB[1];
+			case Z -> BLADE_AABB[2];
+			default -> super.getBoundingBox(state, source, pos);
+		};
 	}
 	
 	@Override
@@ -69,18 +69,18 @@ public class BlockTurbineRotorBlade extends BlockTurbinePart implements IBlockRo
 		if (state.getBlock() != this) {
 			return super.getSelectedBoundingBox(state, worldIn, pos);
 		}
-
-        return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
-            case X -> BLADE_AABB[0].offset(pos);
-            case Y -> BLADE_AABB[1].offset(pos);
-            case Z -> BLADE_AABB[2].offset(pos);
-            default -> super.getSelectedBoundingBox(state, worldIn, pos);
-        };
+		
+		return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
+			case X -> BLADE_AABB[0].offset(pos);
+			case Y -> BLADE_AABB[1].offset(pos);
+			case Z -> BLADE_AABB[2].offset(pos);
+			default -> super.getSelectedBoundingBox(state, worldIn, pos);
+		};
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		return rightClickOnPart(world, pos, player, hand, facing);

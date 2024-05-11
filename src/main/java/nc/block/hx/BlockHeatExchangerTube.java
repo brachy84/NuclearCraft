@@ -29,11 +29,11 @@ public class BlockHeatExchangerTube extends BlockHeatExchangerPart implements ID
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-        return switch (tubeType) {
-            case COPPER -> new TileHeatExchangerTube.Copper();
-            case HARD_CARBON -> new TileHeatExchangerTube.HardCarbon();
-            case THERMOCONDUCTING -> new TileHeatExchangerTube.Thermoconducting();
-        };
+		return switch (tubeType) {
+			case COPPER -> new TileHeatExchangerTube.Copper();
+			case HARD_CARBON -> new TileHeatExchangerTube.HardCarbon();
+			case THERMOCONDUCTING -> new TileHeatExchangerTube.Thermoconducting();
+		};
 	}
 	
 	private static final PropertySidedEnum<HeatExchangerTubeSetting> DOWN = PropertySidedEnum.create("down", HeatExchangerTubeSetting.class, EnumFacing.DOWN);
@@ -76,7 +76,7 @@ public class BlockHeatExchangerTube extends BlockHeatExchangerPart implements ID
 		if (ItemMultitool.isMultitool(player.getHeldItem(hand))) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileHeatExchangerTube tube) {
-                EnumFacing side = player.isSneaking() ? facing.getOpposite() : facing;
+				EnumFacing side = player.isSneaking() ? facing.getOpposite() : facing;
 				tube.toggleTubeSetting(side);
 				if (!world.isRemote) {
 					player.sendMessage(getToggleMessage(player, tube, side));
@@ -112,7 +112,7 @@ public class BlockHeatExchangerTube extends BlockHeatExchangerPart implements ID
 		BlockPos from = pos.offset(placementSide);
 		TileEntity tile = world.getTileEntity(pos), otherTile = world.getTileEntity(from);
 		if (tile instanceof TileHeatExchangerTube tube && otherTile instanceof TileHeatExchangerTube other) {
-            // tube.setFluidConnections(FluidConnection.cloneArray(other.getFluidConnections()));
+			// tube.setFluidConnections(FluidConnection.cloneArray(other.getFluidConnections()));
 			tube.setTubeSettings(other.getTubeSettings().clone());
 			tube.markDirtyAndNotify(true);
 		}

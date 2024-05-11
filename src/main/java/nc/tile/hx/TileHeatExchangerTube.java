@@ -1,13 +1,13 @@
 package nc.tile.hx;
 
-import javax.annotation.Nonnull;
-
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.*;
 import nc.tile.internal.fluid.TankSorption;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nonnull;
 
 public class TileHeatExchangerTube extends TileHeatExchangerPart {
 	
@@ -16,9 +16,9 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart {
 	public EnumFacing flowDir = null;
 	
 	public final double conductivity;
-
+	
 	public static abstract class Variant extends TileHeatExchangerTube {
-
+		
 		protected Variant(HeatExchangerTubeType type) {
 			super(type.getConductivity());
 		}
@@ -130,7 +130,7 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart {
 				return;
 			}
 			else if (tile instanceof TileHeatExchangerTube tube) {
-                HeatExchangerTubeSetting tubeSetting = tube.getTubeSetting(side.getOpposite());
+				HeatExchangerTubeSetting tubeSetting = tube.getTubeSetting(side.getOpposite());
 				
 				if (thisSetting == HeatExchangerTubeSetting.INPUT_SPREAD && tubeSetting == HeatExchangerTubeSetting.DEFAULT || thisSetting == HeatExchangerTubeSetting.PRODUCT_OUT && (tubeSetting == HeatExchangerTubeSetting.DEFAULT || tubeSetting == HeatExchangerTubeSetting.INPUT_SPREAD)) {
 					flowDir = side;

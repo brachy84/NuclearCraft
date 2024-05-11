@@ -29,28 +29,28 @@ public class BlockMachineInterface extends BlockSimpleDummy<TileMachineInterface
 		
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileMachineInterface iface) {
-            if (iface.masterPosition == null) {
+			if (iface.masterPosition == null) {
 				iface.findMaster();
 			}
 			if (iface.masterPosition == null) {
 				return false;
 			}
 			BlockPos masterPos = iface.masterPosition;
-            TileEntity master = world.getTileEntity(masterPos);
-            if (master instanceof ITileFluid tileFluid) {
-                boolean accessedTanks = BlockHelper.accessTanks(player, hand, facing, tileFluid);
-                if (accessedTanks) {
-                    if (master instanceof IProcessor) {
-                        ((IProcessor<?, ?, ?>) master).refreshRecipe();
-                        ((IProcessor<?, ?, ?>) master).refreshActivity();
-                    }
-                    return true;
-                }
-            }
-            if (master instanceof ITileGui) {
-                ((ITileGui<?, ?, ?>) master).openGui(world, masterPos, player);
-            }
-        }
+			TileEntity master = world.getTileEntity(masterPos);
+			if (master instanceof ITileFluid tileFluid) {
+				boolean accessedTanks = BlockHelper.accessTanks(player, hand, facing, tileFluid);
+				if (accessedTanks) {
+					if (master instanceof IProcessor) {
+						((IProcessor<?, ?, ?>) master).refreshRecipe();
+						((IProcessor<?, ?, ?>) master).refreshActivity();
+					}
+					return true;
+				}
+			}
+			if (master instanceof ITileGui) {
+				((ITileGui<?, ?, ?>) master).openGui(world, masterPos, player);
+			}
+		}
 		return true;
 	}
 }

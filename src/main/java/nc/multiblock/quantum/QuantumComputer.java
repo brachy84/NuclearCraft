@@ -1,14 +1,5 @@
 package nc.multiblock.quantum;
 
-import static nc.config.NCConfig.*;
-import static nc.multiblock.quantum.QuantumGate.*;
-
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import org.apache.commons.io.FileUtils;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
@@ -24,6 +15,14 @@ import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static nc.config.NCConfig.*;
+import static nc.multiblock.quantum.QuantumGate.*;
 
 public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumComputerPart> {
 	
@@ -218,8 +217,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 					gate.run();
 					refresh = gate.shouldMarkDirty();
 				}
-			}
-			catch (OutOfMemoryError e) {
+			} catch (OutOfMemoryError e) {
 				if (controller != null) {
 					WORLD.removeTileEntity(controller.getPos());
 					WORLD.setBlockToAir(controller.getPos());
@@ -458,22 +456,30 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 		gate(single(Tdg, list(n)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void p(double angle, IntSet n) {
 		gate(single(QuantumGate.p(angle), list(n)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void rx(double angle, IntSet n) {
 		gate(single(QuantumGate.rx(angle), list(n)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void ry(double angle, IntSet n) {
 		gate(single(QuantumGate.ry(angle), list(n)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void rz(double angle, IntSet n) {
 		gate(single(QuantumGate.rz(angle), list(n)));
 	}
@@ -586,22 +592,30 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 		gate(control(Tdg, list(c), list(t)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void cp(double angle, IntSet c, IntSet t) {
 		gate(control(QuantumGate.p(angle), list(c), list(t)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void crx(double angle, IntSet c, IntSet t) {
 		gate(control(QuantumGate.rx(angle), list(c), list(t)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void cry(double angle, IntSet c, IntSet t) {
 		gate(control(QuantumGate.ry(angle), list(c), list(t)));
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public void crz(double angle, IntSet c, IntSet t) {
 		gate(control(QuantumGate.rz(angle), list(c), list(t)));
 	}
@@ -701,8 +715,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 				ITextComponent link = new TextComponentString(out.getName());
 				link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath())).setBold(true).setUnderlined(true);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qasm_print", link));
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qasm_error", out.getAbsolutePath()));
 			}
@@ -746,8 +759,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 				ITextComponent link = new TextComponentString(out.getName());
 				link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath())).setBold(true).setUnderlined(true);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qiskit_print", link));
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qiskit_error", out.getAbsolutePath()));
 			}

@@ -1,7 +1,5 @@
 package nc.worldgen.biome;
 
-import static nc.config.NCConfig.*;
-
 import nc.Global;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.*;
@@ -11,6 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import static nc.config.NCConfig.*;
 
 @ObjectHolder(Global.MOD_ID)
 public class NCBiomes {

@@ -1,15 +1,14 @@
 package nc.recipe.processor;
 
-import static nc.util.FissionHelper.FISSION_ORE_DICT;
-import static nc.util.OreDictHelper.*;
-
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import nc.recipe.ingredient.OreIngredient;
 import nc.util.OreDictHelper;
 import net.minecraft.init.*;
+
+import java.util.*;
+
+import static nc.util.FissionHelper.FISSION_ORE_DICT;
+import static nc.util.OreDictHelper.*;
 
 public class AlloyFurnaceRecipes extends BasicProcessorRecipeHandler {
 	

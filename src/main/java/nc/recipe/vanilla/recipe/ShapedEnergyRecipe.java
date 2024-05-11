@@ -1,7 +1,5 @@
 package nc.recipe.vanilla.recipe;
 
-import javax.annotation.Nonnull;
-
 import nc.item.energy.IChargableItem;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.util.NBTHelper;
@@ -9,6 +7,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nonnull;
 
 public class ShapedEnergyRecipe extends ShapedOreRecipe {
 	
@@ -33,8 +33,8 @@ public class ShapedEnergyRecipe extends ShapedOreRecipe {
 					energy += ((IChargableItem) stack.getItem()).getEnergyStored(stack);
 				}
 			}
-
-            new EnergyStorage(item.getMaxEnergyStored(result), item.getMaxTransfer(result), energy).writeToNBT(NBTHelper.getStackNBT(result), "energyStorage");
+			
+			new EnergyStorage(item.getMaxEnergyStored(result), item.getMaxTransfer(result), energy).writeToNBT(NBTHelper.getStackNBT(result), "energyStorage");
 		}
 		return result;
 	}

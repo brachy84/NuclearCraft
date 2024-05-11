@@ -1,13 +1,11 @@
 package nc.multiblock.hx;
 
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Lists;
-
 import nc.Global;
 import nc.tile.hx.*;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 public class CondenserLogic extends HeatExchangerLogic {
 	

@@ -1,11 +1,5 @@
 package nc.init;
 
-import static nc.config.NCConfig.register_cofh_fluids;
-
-import java.util.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import nc.*;
 import nc.block.fluid.NCBlockFluid;
 import nc.block.item.NCItemBlock;
@@ -16,6 +10,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
+
+import static nc.config.NCConfig.register_cofh_fluids;
 
 public class NCFluids {
 	
@@ -154,15 +153,14 @@ public class NCFluids {
 		addFluidPair(FluidType.FISSION, "europium_155", 0x74664A);
 	}
 	
-	private static <T extends Fluid, V extends NCBlockFluid> void addFluidPair(FluidType fluidType, Object... fluidArgs) {
-		T fluid = ReflectionHelper.newInstance(fluidType.getFluidClass(), fluidArgs);
-		V block = ReflectionHelper.newInstance(fluidType.getBlockClass(), fluid);
+	private static <T extends Fluid, V extends NCBlockFluid> void addFluidPair(FluidType type, Object... args) {
+		T fluid = ReflectionHelper.newInstance(type.getFluidClass(), args);
+		V block = ReflectionHelper.newInstance(type.getBlockClass(), fluid);
 		fluidPairList.add(Pair.of(fluid, block));
 	}
 	
 	public static void register() {
 		for (Pair<Fluid, NCBlockFluid> fluidPair : fluidPairList) {
-			
 			Fluid fluid = fluidPair.getLeft();
 			if (!FluidRegistry.registerFluid(fluid)) {
 				fluid = FluidRegistry.getFluid(fluid.getName());

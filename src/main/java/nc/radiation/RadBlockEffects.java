@@ -1,12 +1,11 @@
 package nc.radiation;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import nc.init.NCBlocks;
 import nc.recipe.BasicRecipeHandler;
 import net.minecraft.init.Blocks;
+
+import java.util.List;
 
 public class RadBlockEffects {
 	

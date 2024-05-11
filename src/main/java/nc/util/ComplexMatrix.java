@@ -1,11 +1,13 @@
 package nc.util;
 
-import java.util.Arrays;
-
 import it.unimi.dsi.fastutil.HashCommon;
 import net.minecraft.nbt.NBTTagCompound;
 
-/** Only handles square matrices! */
+import java.util.Arrays;
+
+/**
+ * Only handles square matrices!
+ */
 public class ComplexMatrix {
 	
 	public final int dim;
@@ -150,7 +152,9 @@ public class ComplexMatrix {
 		im[i2][j2] = imTemp;
 	}
 	
-	/** Modified from Srikanth A's answer at <a href="https://stackoverflow.com/a/45951007">...</a> */
+	/**
+	 * Modified from Srikanth A's answer at <a href="https://stackoverflow.com/a/45951007">...</a>
+	 */
 	public double[] det() {
 		if (dim == 0) {
 			return new double[] {1D, 0D};
@@ -340,8 +344,8 @@ public class ComplexMatrix {
 		if (!(obj instanceof ComplexMatrix other)) {
 			return false;
 		}
-
-        if (dim != other.dim) {
+		
+		if (dim != other.dim) {
 			return false;
 		}
 		
@@ -362,8 +366,8 @@ public class ComplexMatrix {
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-        StringBuilder v;
-        for (int i = 0; i < dim; ++i) {
+		StringBuilder v;
+		for (int i = 0; i < dim; ++i) {
 			v = new StringBuilder();
 			for (int j = 0; j < dim; ++j) {
 				v.append(", ").append(Complex.toString(re[i][j], im[i][j]));

@@ -1,9 +1,5 @@
 package nc.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.util.InfoHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +8,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class NCItem extends Item implements IInfoItem {
 	

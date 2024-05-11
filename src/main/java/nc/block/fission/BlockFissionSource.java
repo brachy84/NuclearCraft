@@ -1,9 +1,5 @@
 package nc.block.fission;
 
-import static nc.block.property.BlockProperties.*;
-
-import javax.annotation.Nullable;
-
 import nc.block.tile.IActivatable;
 import nc.render.BlockHighlightTracker;
 import nc.tile.fission.TileFissionSource;
@@ -18,6 +14,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
+
+import javax.annotation.Nullable;
+
+import static nc.block.property.BlockProperties.*;
 
 public abstract class BlockFissionSource extends BlockFissionPart implements IActivatable {
 	
@@ -61,7 +61,7 @@ public abstract class BlockFissionSource extends BlockFissionPart implements IAc
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFissionSource source) {
-            source.facing = state.getValue(FACING_ALL);
+			source.facing = state.getValue(FACING_ALL);
 			world.setBlockState(pos, state.withProperty(FACING_ALL, source.facing).withProperty(ACTIVE, source.getIsRedstonePowered()), 2);
 		}
 	}
@@ -74,7 +74,7 @@ public abstract class BlockFissionSource extends BlockFissionPart implements IAc
 		
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFissionSource source) {
-            if (!world.isRemote) {
+			if (!world.isRemote) {
 				PrimingTargetInfo targetInfo = source.getPrimingTarget(true);
 				if (targetInfo == null) {
 					player.sendMessage(new TextComponentString(Lang.localize("nuclearcraft.multiblock.fission_reactor_source.no_target")));

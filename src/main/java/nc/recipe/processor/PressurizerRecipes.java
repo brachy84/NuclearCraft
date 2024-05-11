@@ -1,13 +1,12 @@
 package nc.recipe.processor;
 
-import java.util.Set;
-
 import com.google.common.collect.*;
-
 import nc.init.NCItems;
 import nc.util.*;
 import net.minecraft.init.*;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Set;
 
 public class PressurizerRecipes extends BasicProcessorRecipeHandler {
 	

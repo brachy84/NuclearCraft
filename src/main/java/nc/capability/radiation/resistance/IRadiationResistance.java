@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.*;
 public interface IRadiationResistance extends ICapability<IRadiationResistance> {
 	
 	@CapabilityInject(IRadiationResistance.class)
-    Capability<IRadiationResistance> CAPABILITY_RADIATION_RESISTANCE = null;
+	Capability<IRadiationResistance> CAPABILITY_RADIATION_RESISTANCE = null;
 	
 	ResourceLocation CAPABILITY_RADIATION_RESISTANCE_NAME = new ResourceLocation(Global.MOD_ID, "capability_default_radiation_resistance");
 	

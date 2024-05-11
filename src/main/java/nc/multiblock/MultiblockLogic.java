@@ -1,9 +1,5 @@
 package nc.multiblock;
 
-import java.util.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.fission.*;
@@ -12,7 +8,7 @@ import nc.multiblock.turbine.*;
 import nc.tile.ITileFiltered;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.tile.internal.fluid.Tank;
-import nc.tile.multiblock.*;
+import nc.tile.multiblock.ITileLogicMultiblockPart;
 import nc.tile.multiblock.TilePartAbstract.SyncReason;
 import nc.tile.multiblock.manager.*;
 import nc.tile.multiblock.port.*;
@@ -23,6 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 
 public abstract class MultiblockLogic<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & ILogicMultiblock<MULTIBLOCK, LOGIC, T>, LOGIC extends MultiblockLogic<MULTIBLOCK, LOGIC, T>, T extends ITileLogicMultiblockPart<MULTIBLOCK, LOGIC, T>> implements IMultiblockLogic<MULTIBLOCK, LOGIC, T> {
 	
@@ -115,7 +114,7 @@ public abstract class MultiblockLogic<MULTIBLOCK extends Multiblock<MULTIBLOCK, 
 	public abstract List<Pair<Class<? extends T>, String>> getPartBlacklist();
 	
 	// Utility Methods
-
+	
 	@SuppressWarnings("unchecked")
 	public <PORT extends ITilePort<MULTIBLOCK, LOGIC, T, PORT, TARGET> & ITileFiltered, PRT extends T, TARGET extends ITilePortTarget<MULTIBLOCK, LOGIC, T, PORT, TARGET> & ITileFiltered, TRGT extends T> void refreshFilteredPorts(Class<PORT> portClass, Class<TARGET> targetClass) {
 		Long2ObjectMap<PORT> portMap = (Long2ObjectMap<PORT>) getPartMap(portClass.asSubclass(multiblock.tClass));
@@ -178,7 +177,7 @@ public abstract class MultiblockLogic<MULTIBLOCK extends Multiblock<MULTIBLOCK, 
 			entry.getValue().setTankCapacity(Math.max(entry.getValue().getTankBaseCapacity(), entry.getValue().getTankCapacityPerConnection() * targetCountMap.get(entry.getKey())));
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <MANAGER extends ITileManager<MULTIBLOCK, LOGIC, T, MANAGER, LISTENER>, LISTENER extends ITileManagerListener<MULTIBLOCK, LOGIC, T, MANAGER, LISTENER>> void refreshManagers(Class<MANAGER> managerClass) {
 		for (MANAGER manager : ((Long2ObjectMap<MANAGER>) getPartMap(managerClass.asSubclass(multiblock.tClass))).values()) {
@@ -240,10 +239,10 @@ public abstract class MultiblockLogic<MULTIBLOCK extends Multiblock<MULTIBLOCK, 
 		// FissionReactor.LOGIC_MAP.put("pebble_bed", PebbleBedFissionLogic::new);
 		FissionReactor.LOGIC_MAP.put("solid_fuel", SolidFuelFissionLogic::new);
 		FissionReactor.LOGIC_MAP.put("molten_salt", MoltenSaltFissionLogic::new);
-
+		
 		HeatExchanger.LOGIC_MAP.put("heat_exchanger", HeatExchangerLogic::new);
 		HeatExchanger.LOGIC_MAP.put("condenser", CondenserLogic::new);
-
+		
 		Turbine.LOGIC_MAP.put("turbine", TurbineLogic::new);
 	}
 }

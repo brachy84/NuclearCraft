@@ -1,10 +1,10 @@
 package nc.capability.radiation.resistance;
 
-import javax.annotation.*;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
+
+import javax.annotation.*;
 
 public class RadiationResistanceProvider implements ICapabilitySerializable<NBTBase> {
 	

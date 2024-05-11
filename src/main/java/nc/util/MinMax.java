@@ -45,7 +45,7 @@ public class MinMax<T> {
 		public byte getMax() {
 			return max;
 		}
-
+		
 		public byte getDiff() {
 			return (byte) (max - min);
 		}
@@ -73,7 +73,7 @@ public class MinMax<T> {
 		public short getMax() {
 			return max;
 		}
-
+		
 		public short getDiff() {
 			return (short) (max - min);
 		}
@@ -101,7 +101,7 @@ public class MinMax<T> {
 		public int getMax() {
 			return max;
 		}
-
+		
 		public int getDiff() {
 			return max - min;
 		}
@@ -129,7 +129,7 @@ public class MinMax<T> {
 		public long getMax() {
 			return max;
 		}
-
+		
 		public long getDiff() {
 			return max - min;
 		}
@@ -157,7 +157,7 @@ public class MinMax<T> {
 		public float getMax() {
 			return max;
 		}
-
+		
 		public float getDiff() {
 			return max - min;
 		}
@@ -185,7 +185,7 @@ public class MinMax<T> {
 		public double getMax() {
 			return max;
 		}
-
+		
 		public double getDiff() {
 			return max - min;
 		}

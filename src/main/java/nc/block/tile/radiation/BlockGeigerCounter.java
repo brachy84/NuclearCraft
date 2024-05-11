@@ -1,7 +1,5 @@
 package nc.block.tile.radiation;
 
-import static nc.config.NCConfig.radiation_lowest_rate;
-
 import nc.block.tile.BlockSimpleTile;
 import nc.radiation.RadiationHelper;
 import nc.tile.radiation.TileGeigerCounter;
@@ -13,6 +11,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+
+import static nc.config.NCConfig.radiation_lowest_rate;
 
 public class BlockGeigerCounter extends BlockSimpleTile<TileGeigerCounter> {
 	
@@ -31,7 +31,7 @@ public class BlockGeigerCounter extends BlockSimpleTile<TileGeigerCounter> {
 		if (player.getHeldItem(hand).isEmpty()) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (!world.isRemote && tile instanceof TileGeigerCounter geiger) {
-                double radiation = geiger.getChunkRadiationLevel();
+				double radiation = geiger.getChunkRadiationLevel();
 				player.sendMessage(new TextComponentString(RADIATION + " " + RadiationHelper.getRadiationTextColor(radiation) + (radiation < radiation_lowest_rate ? "0 Rad/t" : RadiationHelper.radsPrefix(radiation, true))));
 			}
 			return true;

@@ -1,7 +1,5 @@
 package nc.handler;
 
-import static nc.config.NCConfig.*;
-
 import nc.ModCheck;
 import nc.capability.radiation.entity.IEntityRads;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +7,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import vazkii.patchouli.common.item.ItemModBook;
+
+import static nc.config.NCConfig.*;
 
 public class PlayerRespawnHandler {
 	

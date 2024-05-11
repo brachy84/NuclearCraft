@@ -1,11 +1,9 @@
 package nc.tile.turbine;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.util.NCMath;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -13,10 +11,12 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
 
+import static nc.block.property.BlockProperties.FACING_ALL;
+
 public class TileTurbineController extends TileTurbinePart implements ITurbineController<TileTurbineController> {
-
+	
 	protected final TileContainerInfo<TileTurbineController> info = TileInfoHandler.getTileContainerInfo("turbine_controller");
-
+	
 	protected boolean isRenderer = false;
 	
 	public TileTurbineController() {
@@ -27,7 +27,7 @@ public class TileTurbineController extends TileTurbinePart implements ITurbineCo
 	public String getLogicID() {
 		return "turbine";
 	}
-
+	
 	@Override
 	public TileContainerInfo<TileTurbineController> getContainerInfo() {
 		return info;
@@ -51,7 +51,7 @@ public class TileTurbineController extends TileTurbinePart implements ITurbineCo
 	public int[] weakSidesToCheck(World worldIn, BlockPos posIn) {
 		return new int[] {2, 3, 4, 5};
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {

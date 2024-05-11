@@ -1,8 +1,8 @@
 package nc.recipe.processor;
 
-import static nc.util.FluidStackHelper.BUCKET_VOLUME;
-
 import java.util.*;
+
+import static nc.util.FluidStackHelper.BUCKET_VOLUME;
 
 public class SupercoolerRecipes extends BasicProcessorRecipeHandler {
 	

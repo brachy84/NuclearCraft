@@ -1,12 +1,8 @@
-/** Massive thanks to CrazyPants, maker of EnderIO and related mods, for letting me use this code! */
+/**
+ * Massive thanks to CrazyPants, maker of EnderIO and related mods, for letting me use this code!
+ */
 
 package nc.gui.element;
-
-import java.util.List;
-
-import javax.annotation.*;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -15,6 +11,10 @@ import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.*;
+import java.util.List;
 
 public class GuiBlockRenderer {
 	

@@ -1,8 +1,8 @@
 package nc.recipe;
 
-import javax.annotation.Nonnull;
-
 import it.unimi.dsi.fastutil.ints.IntList;
+
+import javax.annotation.Nonnull;
 
 public class RecipeInfo<T extends IRecipe> {
 	
@@ -15,12 +15,16 @@ public class RecipeInfo<T extends IRecipe> {
 		this.matchResult = matchResult;
 	}
 	
-	/** Already takes item input order into account! */
+	/**
+	 * Already takes item input order into account!
+	 */
 	public IntList getItemIngredientNumbers() {
 		return matchResult.itemIngredientNumbers;
 	}
 	
-	/** Already takes fluid input order into account! */
+	/**
+	 * Already takes fluid input order into account!
+	 */
 	public IntList getFluidIngredientNumbers() {
 		return matchResult.fluidIngredientNumbers;
 	}

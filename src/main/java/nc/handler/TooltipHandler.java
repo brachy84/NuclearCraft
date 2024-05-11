@@ -1,11 +1,6 @@
 package nc.handler;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import nc.NCInfo;
 import nc.capability.radiation.resistance.IRadiationResistance;
 import nc.capability.radiation.source.IRadiationSource;
@@ -21,6 +16,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.relauncher.*;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class TooltipHandler {
 	
@@ -131,7 +130,7 @@ public class TooltipHandler {
 			return;
 		}
 		tooltip.add(RadiationHelper.getRadiationTextColor(stackRadiation.getRadiationLevel() * stack.getCount()) + RADIATION + " " + RadiationHelper.radsPrefix(stackRadiation.getRadiationLevel() * stack.getCount(), true));
-    }
+	}
 	
 	@SideOnly(Side.CLIENT)
 	private static void addFoodRadiationTooltip(List<String> tooltip, ItemStack stack) {
@@ -156,5 +155,5 @@ public class TooltipHandler {
 		if (resistance != 0D) {
 			tooltip.add(RadiationHelper.getFoodResistanceTextColor(resistance) + RADIATION_RESISTANCE + " " + RadiationHelper.resistanceSigFigs(resistance));
 		}
-    }
+	}
 }

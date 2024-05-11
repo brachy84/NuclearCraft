@@ -1,10 +1,10 @@
 package nc.tile.internal.fluid;
 
-import java.util.*;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.*;
+
+import java.util.*;
 
 public class Tank extends FluidTank {
 	
@@ -72,7 +72,9 @@ public class Tank extends FluidTank {
 		fluid = stack;
 	}
 	
-	/** Ignores fluid capacity! */
+	/**
+	 * Ignores fluid capacity!
+	 */
 	public void setFluidAmount(int amount) {
 		if (amount <= 0) {
 			fluid = null;
@@ -83,7 +85,9 @@ public class Tank extends FluidTank {
 		fluid.amount = amount;
 	}
 	
-	/** Ignores fluid amount! */
+	/**
+	 * Ignores fluid amount!
+	 */
 	public void setTankCapacity(int newCapacity) {
 		capacity = Math.max(0, newCapacity);
 	}

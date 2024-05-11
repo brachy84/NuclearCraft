@@ -2,12 +2,8 @@ package nc.tile.turbine;
 
 import nc.block.turbine.BlockTurbineRotorBlade;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.turbine.Turbine;
-import nc.multiblock.turbine.TurbineRotorBladeUtil;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.IRotorBladeType;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.ITurbineRotorBlade;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorBladeType;
+import nc.multiblock.turbine.*;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -19,18 +15,20 @@ public class TileTurbineRotorBlade extends TileTurbinePart implements ITurbineRo
 	public IRotorBladeType bladeType = null;
 	protected TurbinePartDir dir = TurbinePartDir.Y;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileTurbineRotorBlade() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
-
+	
 	public static class Variant extends TileTurbineRotorBlade {
-
+		
 		protected Variant(TurbineRotorBladeType bladeType) {
 			super(bladeType);
 		}
 	}
-
+	
 	public static class Steel extends Variant {
 		
 		public Steel() {

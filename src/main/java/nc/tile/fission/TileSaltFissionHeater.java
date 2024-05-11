@@ -2,30 +2,20 @@ package nc.tile.fission;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import nc.Global;
-import nc.ModCheck;
+import it.unimi.dsi.fastutil.objects.*;
+import nc.*;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.PlacementRule;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.FissionCluster;
-import nc.multiblock.fission.FissionPlacement;
-import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.*;
 import nc.network.tile.multiblock.SaltFissionHeaterUpdatePacket;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.NCRecipes;
-import nc.recipe.RecipeInfo;
+import nc.recipe.*;
 import nc.tile.fission.IFissionFuelComponent.ModeratorBlockInfo;
-import nc.tile.fission.port.IFissionPortTarget;
-import nc.tile.fission.port.TileFissionHeaterPort;
-import nc.tile.fluid.ITileFilteredFluid;
-import nc.tile.fluid.ITileFluid;
+import nc.tile.fission.port.*;
+import nc.tile.fluid.*;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.fluid.Tank.TankInfo;
-import nc.tile.internal.inventory.InventoryConnection;
-import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
@@ -34,15 +24,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 import java.util.*;
 
 import static nc.config.NCConfig.enable_mek_gas;
@@ -51,7 +39,7 @@ import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
 import static nc.util.PosHelper.DEFAULT_NON;
 
 public class TileSaltFissionHeater extends TileFissionPart implements IBasicProcessor<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket>, ITileFilteredFluid, IFissionCoolingComponent, IFissionPortTarget<TileFissionHeaterPort, TileSaltFissionHeater> {
-
+	
 	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSaltFissionHeater, SaltFissionHeaterUpdatePacket> info;
 	
 	protected final @Nonnull String inventoryName;
@@ -94,7 +82,9 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 	protected BlockPos masterPortPos = DEFAULT_NON;
 	protected TileFissionHeaterPort masterPort = null;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileSaltFissionHeater() {
 		super(CuboidalPartPositionType.INTERIOR);
 		info = TileInfoHandler.getProcessorContainerInfo("salt_fission_heater");
@@ -445,7 +435,7 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void onClusterMeltdown(Iterator<IFissionComponent> componentIterator) {
-		
+	
 	}
 	
 	@Override
@@ -658,7 +648,7 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 	public double getPowerMultiplier() {
 		return 0D;
 	}
-
+	
 	@Override
 	public boolean isProcessing() {
 		return isProcessing(true, true);
@@ -667,7 +657,7 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 	public boolean isProcessing(boolean checkCluster, boolean checkValid) {
 		return readyToProcess(checkCluster, checkValid);
 	}
-
+	
 	@Override
 	public boolean readyToProcess() {
 		return readyToProcess(true, true);

@@ -1,7 +1,5 @@
 package nc.recipe;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.ModCheck;
 import nc.config.NCConfig;
@@ -10,9 +8,9 @@ import nc.integration.crafttweaker.CTRegistration.RegistrationInfo;
 import nc.integration.tconstruct.TConstructExtras;
 import nc.radiation.RadBlockEffects.*;
 import nc.radiation.RadSources;
-import nc.recipe.generator.*;
+import nc.recipe.generator.DecayGeneratorRecipes;
 import nc.recipe.multiblock.*;
-import nc.recipe.other.*;
+import nc.recipe.other.CollectorRecipes;
 import nc.recipe.processor.*;
 import nc.recipe.radiation.RadiationScrubberRecipes;
 import nc.recipe.vanilla.*;
@@ -20,6 +18,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.*;
 
 public class NCRecipes {
 	
@@ -93,7 +93,7 @@ public class NCRecipes {
 		putHandler(new RadiationScrubberRecipes());
 		putHandler(new RadiationBlockMutation());
 		putHandler(new RadiationBlockPurification());
-
+		
 		registerShortcuts();
 		
 		CraftingRecipeHandler.registerCraftingRecipes();
@@ -144,7 +144,7 @@ public class NCRecipes {
 	public static RadiationScrubberRecipes radiation_scrubber;
 	public static RadiationBlockMutation radiation_block_mutation;
 	public static RadiationBlockPurification radiation_block_purification;
-
+	
 	public void registerShortcuts() {
 		manufactory = getHandler("manufactory");
 		separator = getHandler("separator");
@@ -190,7 +190,7 @@ public class NCRecipes {
 		if (ModCheck.tinkersLoaded() && NCConfig.register_tic_recipes) {
 			TConstructExtras.init();
 		}
-
+		
 		if (ModCheck.gregtechLoaded() && NCConfig.gtce_recipe_integration_global) {
 			for (BasicRecipeHandler handler : getHandlers()) {
 				handler.addGTCERecipes();

@@ -1,7 +1,5 @@
 package nc.block.fission.manager;
 
-import static nc.block.property.BlockProperties.*;
-
 import nc.block.fission.BlockFissionPart;
 import nc.block.tile.IActivatable;
 import nc.tile.fission.manager.*;
@@ -12,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.*;
 
 public abstract class BlockFissionManager<MANAGER extends TileFissionManager<MANAGER, LISTENER>, LISTENER extends IFissionManagerListener<MANAGER, LISTENER>> extends BlockFissionPart implements IActivatable {
 	
@@ -56,7 +56,7 @@ public abstract class BlockFissionManager<MANAGER extends TileFissionManager<MAN
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		

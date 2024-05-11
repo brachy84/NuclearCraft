@@ -3,7 +3,7 @@ package nc.container.multiblock.controller;
 import nc.container.ContainerInfoTile;
 import nc.multiblock.*;
 import nc.network.multiblock.MultiblockUpdatePacket;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.tile.multiblock.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class ContainerMultiblockController<MULTIBLOCK extends Multiblock<MULTIBL
 	public ContainerMultiblockController(EntityPlayer player, GUITILE tile) {
 		super(tile);
 		this.tile = tile;
-
+		
 		tile.addTileUpdatePacketListener(player);
 	}
 	
@@ -27,7 +27,7 @@ public class ContainerMultiblockController<MULTIBLOCK extends Multiblock<MULTIBL
 	
 	@Override
 	public void putStackInSlot(int slot, ItemStack stack) {
-		
+	
 	}
 	
 	@Override

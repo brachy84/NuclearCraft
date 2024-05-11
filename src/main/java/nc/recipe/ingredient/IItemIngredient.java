@@ -1,24 +1,24 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import nc.util.StackHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.*;
+
 public interface IItemIngredient extends IIngredient<ItemStack> {
 	
 	@Override
-    default ItemStack getNextStack(int ingredientNumber) {
+	default ItemStack getNextStack(int ingredientNumber) {
 		ItemStack nextStack = getStack();
 		nextStack.setCount(getNextStackSize(ingredientNumber));
 		return nextStack;
 	}
 	
 	@Override
-    default List<ItemStack> getInputStackHashingList() {
+	default List<ItemStack> getInputStackHashingList() {
 		List<ItemStack> list = new ArrayList<>();
 		for (ItemStack stack : getInputStackList()) {
 			int meta = StackHelper.getMetadata(stack);
@@ -43,5 +43,5 @@ public interface IItemIngredient extends IIngredient<ItemStack> {
 	}
 	
 	@Override
-    IItemIngredient getFactoredIngredient(int factor);
+	IItemIngredient getFactoredIngredient(int factor);
 }

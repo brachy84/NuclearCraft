@@ -97,7 +97,7 @@ public class ModelFeralGhoul extends ModelBiped {
 		
 		if (isRiding) {
 			bipedRightArm.rotateAngleX += -0.3490658503988659F - (float) Math.PI / 5F;
-            bipedLeftArm.rotateAngleX -= ((float) Math.PI / 5F);
+			bipedLeftArm.rotateAngleX -= ((float) Math.PI / 5F);
 			bipedRightLeg.rotateAngleX = -1.4137167F;
 			bipedRightLeg.rotateAngleY = (float) Math.PI / 10F;
 			bipedRightLeg.rotateAngleZ = 0.07853982F;
@@ -186,7 +186,9 @@ public class ModelFeralGhoul extends ModelBiped {
 		bipedLeftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
 	}
 	
-	/** This is a helper function from Tabula to set the rotation of model parts */
+	/**
+	 * This is a helper function from Tabula to set the rotation of model parts
+	 */
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;

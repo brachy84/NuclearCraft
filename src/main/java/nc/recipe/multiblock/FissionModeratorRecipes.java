@@ -1,11 +1,11 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
+import nc.init.NCBlocks;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import nc.init.NCBlocks;
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.*;
 
 public class FissionModeratorRecipes extends BasicRecipeHandler {
 	

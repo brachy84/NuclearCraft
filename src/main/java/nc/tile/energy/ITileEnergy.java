@@ -1,17 +1,13 @@
 package nc.tile.energy;
 
-import static nc.config.NCConfig.*;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.*;
 import ic2.api.energy.event.*;
 import ic2.api.energy.tile.*;
 import mcjty.lib.api.power.IBigPower;
 import nc.ModCheck;
 import nc.tile.ITile;
-import nc.tile.internal.energy.*;
 import nc.tile.internal.energy.EnergyStorage;
+import nc.tile.internal.energy.*;
 import nc.tile.passive.ITilePassive;
 import nc.util.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +17,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.*;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.*;
+
+import static nc.config.NCConfig.*;
 
 @Optional.Interface(iface = "mcjty.lib.api.power.IBigPower", modid = "theoneprobe")
 public interface ITileEnergy extends ITile, IBigPower {
@@ -109,7 +109,7 @@ public interface ITileEnergy extends ITile, IBigPower {
 	void setIC2Reg(boolean ic2reg);
 	
 	@Optional.Method(modid = "ic2")
-    default void addTileToENet() {
+	default void addTileToENet() {
 		if (!getTileWorld().isRemote && enable_ic2_eu && !getIC2Reg() && this instanceof IEnergyTile) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
 			setIC2Reg(true);
@@ -117,7 +117,7 @@ public interface ITileEnergy extends ITile, IBigPower {
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default void removeTileFromENet() {
+	default void removeTileFromENet() {
 		if (!getTileWorld().isRemote && getIC2Reg() && this instanceof IEnergyTile) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
 			setIC2Reg(false);
@@ -129,42 +129,44 @@ public interface ITileEnergy extends ITile, IBigPower {
 	int getSourceTier();
 	
 	@Optional.Method(modid = "ic2")
-    default boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing side) {
+	default boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing side) {
 		return getEnergyConnection(side).canReceive();
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default double getDemandedEnergy() {
+	default double getDemandedEnergy() {
 		return Math.min(Math.pow(2, 2 * getSinkTier() + 3), (double) getEnergyStorage().receiveEnergy(getEnergyStorage().getMaxTransfer(), true) / (double) rf_per_eu);
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
+	default double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
 		int energyReceived = getEnergyStorage().receiveEnergy((int) (rf_per_eu * amount), true);
 		getEnergyStorage().receiveEnergy(energyReceived, false);
 		return amount - (double) energyReceived / (double) rf_per_eu;
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
+	default boolean emitsEnergyTo(IEnergyAcceptor receiver, EnumFacing side) {
 		return getEnergyConnection(side).canExtract();
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default double getOfferedEnergy() {
+	default double getOfferedEnergy() {
 		return Math.min(Math.pow(2, 2 * getSourceTier() + 3), (double) getEnergyStorage().extractEnergy(getEnergyStorage().getMaxTransfer(), true) / (double) rf_per_eu);
 	}
 	
 	@Optional.Method(modid = "ic2")
-    default void drawEnergy(double amount) {
+	default void drawEnergy(double amount) {
 		getEnergyStorage().extractEnergy((int) (rf_per_eu * amount), false);
 	}
 	
 	// Energy Wrappers
 	
-	@Nonnull EnergyTileWrapper[] getEnergySides();
+	@Nonnull
+	EnergyTileWrapper[] getEnergySides();
 	
-	@Nonnull EnergyTileWrapperGT[] getEnergySidesGT();
+	@Nonnull
+	EnergyTileWrapperGT[] getEnergySidesGT();
 	
 	default @Nonnull EnergyTileWrapper getEnergySide(@Nonnull EnumFacing side) {
 		return getEnergySides()[side.getIndex()];
@@ -236,7 +238,7 @@ public interface ITileEnergy extends ITile, IBigPower {
 			if (adjStorageGT != null && getEnergyStorage().canExtract()) {
 				int voltage = MathHelper.clamp(getEnergyStorage().getEnergyStored() / rf_per_eu, 1, EnergyHelper.getMaxEUFromTier(getSourceTier()));
 				getEnergyStorage().extractEnergy(NCMath.toInt(voltage * adjStorageGT.acceptEnergyFromNetwork(side.getOpposite(), voltage, 1) * rf_per_eu), false);
-            }
+			}
 		}
 	}
 	
@@ -278,13 +280,13 @@ public interface ITileEnergy extends ITile, IBigPower {
 	
 	@Override
 	@Optional.Method(modid = "theoneprobe")
-    default long getStoredPower() {
+	default long getStoredPower() {
 		return getEnergyStorage().getEnergyStoredLong();
 	}
 	
 	@Override
 	@Optional.Method(modid = "theoneprobe")
-    default long getCapacity() {
+	default long getCapacity() {
 		return getEnergyStorage().getMaxEnergyStoredLong();
 	}
 }

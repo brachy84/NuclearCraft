@@ -1,8 +1,5 @@
 package nc.integration.tconstruct;
 
-import static nc.config.NCConfig.*;
-import static nc.util.FluidStackHelper.INGOT_VOLUME;
-
 import nc.*;
 import nc.integration.tconstruct.trait.NCTraits;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -10,6 +7,9 @@ import slimeknights.tconstruct.library.*;
 import slimeknights.tconstruct.library.materials.*;
 import slimeknights.tconstruct.library.traits.ITrait;
 import slimeknights.tconstruct.tools.TinkerTraits;
+
+import static nc.config.NCConfig.*;
+import static nc.util.FluidStackHelper.INGOT_VOLUME;
 
 public class TConstructMaterials {
 	

@@ -1,8 +1,8 @@
 package nc.recipe.processor;
 
-import static nc.util.FluidStackHelper.GEM_VOLUME;
-
 import nc.radiation.RadSources;
+
+import static nc.util.FluidStackHelper.GEM_VOLUME;
 
 public class CrystallizerRecipes extends BasicProcessorRecipeHandler {
 	

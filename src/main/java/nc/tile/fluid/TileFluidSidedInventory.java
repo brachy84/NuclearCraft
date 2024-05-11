@@ -1,15 +1,14 @@
 package nc.tile.fluid;
 
-import java.util.List;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import nc.tile.internal.fluid.FluidConnection;
 import nc.tile.internal.inventory.InventoryConnection;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.*;
+import java.util.List;
 
 public abstract class TileFluidSidedInventory extends TileFluidInventory {
 	

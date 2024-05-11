@@ -1,8 +1,7 @@
-package nc.tile.info;
+package nc.tile;
 
 import nc.container.ContainerFunction;
-import nc.gui.GuiFunction;
-import nc.gui.GuiInfoTileFunction;
+import nc.gui.*;
 import nc.handler.GuiHandler;
 import nc.util.Lazy.LazyInt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +11,9 @@ public class TileContainerInfo<TILE extends TileEntity> {
 	
 	public final String modId;
 	public final String name;
-
+	
 	public final Class<TILE> tileClass;
-
+	
 	protected final ContainerFunction<TILE> containerFunction;
 	protected final GuiFunction<TILE> guiFunction;
 	
@@ -23,15 +22,15 @@ public class TileContainerInfo<TILE extends TileEntity> {
 	public TileContainerInfo(String modId, String name, Class<TILE> tileClass, ContainerFunction<TILE> containerFunction, GuiFunction<TILE> guiFunction) {
 		this.modId = modId;
 		this.name = name;
-
+		
 		this.tileClass = tileClass;
-
+		
 		this.containerFunction = containerFunction;
 		this.guiFunction = guiFunction;
 		
 		guiId = new LazyInt(() -> GuiHandler.getGuiId(name));
 	}
-
+	
 	public TileContainerInfo(String modId, String name, Class<TILE> tileClass, ContainerFunction<TILE> containerFunction, GuiInfoTileFunction<TILE> guiFunction) {
 		this(modId, name, tileClass, containerFunction, GuiFunction.of(modId, name, containerFunction, guiFunction));
 	}

@@ -1,11 +1,10 @@
 package nc.multiblock.turbine;
 
-import static nc.config.NCConfig.turbine_coil_conductivity;
-
-import nc.enumm.IMetaEnum;
-import nc.enumm.ITileEnum;
+import nc.enumm.*;
 import nc.tile.turbine.TileTurbineDynamoCoil;
 import net.minecraft.util.IStringSerializable;
+
+import static nc.config.NCConfig.turbine_coil_conductivity;
 
 public enum TurbineDynamoCoilType implements IStringSerializable, IMetaEnum, ITileEnum<TileTurbineDynamoCoil.Meta> {
 	
@@ -37,16 +36,16 @@ public enum TurbineDynamoCoilType implements IStringSerializable, IMetaEnum, ITi
 	public String toString() {
 		return getName();
 	}
-
+	
 	@Override
 	public int getID() {
 		return id;
 	}
-
+	
 	public double getConductivity() {
 		return conductivity;
 	}
-
+	
 	@Override
 	public Class<? extends TileTurbineDynamoCoil.Meta> getTileClass() {
 		return tileClass;

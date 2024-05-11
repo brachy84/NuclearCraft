@@ -1,7 +1,5 @@
 package nc.worldgen.decoration;
 
-import java.util.Random;
-
 import nc.util.NCMath;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +8,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
+
+import java.util.Random;
 
 public class BushGenerator implements IWorldGenerator {
 	

@@ -1,9 +1,5 @@
 package nc.gui.element;
 
-import java.awt.Color;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.*;
@@ -15,6 +11,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.ForgeModContainer;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
 
 public class GuiItemRenderer {
 	

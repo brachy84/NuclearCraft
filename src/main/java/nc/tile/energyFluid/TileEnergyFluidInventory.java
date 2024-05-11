@@ -1,9 +1,5 @@
 package nc.tile.energyFluid;
 
-import java.util.*;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import nc.Global;
 import nc.tile.internal.energy.EnergyConnection;
@@ -17,15 +13,21 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.*;
+import java.util.*;
+
 public abstract class TileEnergyFluidInventory extends TileEnergyFluid implements ITileInventory {
 	
-	private @Nonnull final String inventoryName;
+	private @Nonnull
+	final String inventoryName;
 	
-	private @Nonnull final NonNullList<ItemStack> inventoryStacks;
+	private @Nonnull
+	final NonNullList<ItemStack> inventoryStacks;
 	
 	private @Nonnull InventoryConnection[] inventoryConnections;
 	
-	private @Nonnull final List<ItemOutputSetting> itemOutputSettings;
+	private @Nonnull
+	final List<ItemOutputSetting> itemOutputSettings;
 	
 	public TileEnergyFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, long capacity, @Nonnull EnergyConnection[] energyConnections, int fluidCapacity, List<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		this(name, size, inventoryConnections, capacity, NCMath.toInt(capacity), energyConnections, fluidCapacity, allowedFluids, fluidConnections);

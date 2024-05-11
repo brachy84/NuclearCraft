@@ -1,10 +1,12 @@
 package nc.util;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 
-/** Modified from jjnguy's answer at <a href="https://stackoverflow.com/a/3522481">...</a> */
+import java.util.*;
+
+/**
+ * Modified from jjnguy's answer at <a href="https://stackoverflow.com/a/3522481">...</a>
+ */
 public class Vertex<T> {
 	
 	public T data;
@@ -38,7 +40,9 @@ public class Vertex<T> {
 		return v;
 	}
 	
-	/** Will be cut off if/when there is a cycle. */
+	/**
+	 * Will be cut off if/when there is a cycle.
+	 */
 	public List<T> getPath(boolean rootStart) {
 		ObjectSet<Vertex<T>> set = new ObjectOpenHashSet<>();
 		List<T> list = new ArrayList<>();
@@ -58,7 +62,9 @@ public class Vertex<T> {
 		ObjectSet<Vertex<T>> set = new ObjectOpenHashSet<>();
 		Vertex<T> v = this;
 		while (v != null) {
-			if (set.contains(v)) return true;
+			if (set.contains(v)) {
+				return true;
+			}
 			set.add(v);
 			v = v.parent;
 		}

@@ -1,7 +1,5 @@
 package nc.integration.tconstruct.conarm;
 
-import static nc.config.NCConfig.*;
-
 import c4.conarm.common.armor.traits.ArmorTraits;
 import c4.conarm.lib.materials.*;
 import nc.integration.tconstruct.TConstructHelper;
@@ -10,6 +8,8 @@ import nc.util.*;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 import slimeknights.tconstruct.library.traits.ITrait;
+
+import static nc.config.NCConfig.*;
 
 public class ConArmMaterials extends ArmorMaterials {
 	

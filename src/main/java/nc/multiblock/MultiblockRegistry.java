@@ -18,12 +18,12 @@ public class MultiblockRegistry {
 		}
 	}
 	
-	/** Register a new part in the system. The part has been created either through user action or via a chunk loading.
-	 * 
-	 * @param world
-	 *            The world into which this part is loading.
-	 * @param part
-	 *            The part being loaded. */
+	/**
+	 * Register a new part in the system. The part has been created either through user action or via a chunk loading.
+	 *
+	 * @param world The world into which this part is loading.
+	 * @param part  The part being loaded.
+	 */
 	public <MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> void onPartAdded(final World world, final T part) {
 		if (world == null) {
 			FMLLog.warning("Attempted to add a new multiblock part to a null world! Ignoring...");
@@ -33,24 +33,24 @@ public class MultiblockRegistry {
 		}
 	}
 	
-	/** Call to remove a part from world lists.
-	 * 
-	 * @param world
-	 *            The world from which a multiblock part is being removed.
-	 * @param part
-	 *            The part being removed. */
+	/**
+	 * Call to remove a part from world lists.
+	 *
+	 * @param world The world from which a multiblock part is being removed.
+	 * @param part  The part being removed.
+	 */
 	public <MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> void onPartRemovedFromWorld(final World world, final T part) {
 		if (_registries.containsKey(world)) {
 			_registries.get(world).onPartRemovedFromWorld(part);
 		}
 	}
 	
-	/** Call to mark a multiblock as dead. It should only be marked as dead when it has no connected parts. It will be removed after the next world tick.
-	 * 
-	 * @param world
-	 *            The world formerly containing the multiblock
-	 * @param multiblock
-	 *            The dead multiblock */
+	/**
+	 * Call to mark a multiblock as dead. It should only be marked as dead when it has no connected parts. It will be removed after the next world tick.
+	 *
+	 * @param world      The world formerly containing the multiblock
+	 * @param multiblock The dead multiblock
+	 */
 	public <MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> void addDeadMultiblock(final World world, final MULTIBLOCK multiblock) {
 		if (_registries.containsKey(world)) {
 			_registries.get(world).addDeadMultiblock(multiblock);
@@ -60,12 +60,12 @@ public class MultiblockRegistry {
 		}
 	}
 	
-	/** Call to mark a multiblock as dirty. Dirty means that parts have been added or removed this tick.
-	 * 
-	 * @param world
-	 *            The world containing the multiblock
-	 * @param multiblock
-	 *            The dirty multiblock */
+	/**
+	 * Call to mark a multiblock as dirty. Dirty means that parts have been added or removed this tick.
+	 *
+	 * @param world      The world containing the multiblock
+	 * @param multiblock The dirty multiblock
+	 */
 	public <MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> void addDirtyMultiblock(final World world, final MULTIBLOCK multiblock) {
 		if (!_registries.containsKey(world)) {
 			if (world == null) {
@@ -82,10 +82,11 @@ public class MultiblockRegistry {
 	
 	// Private implementation
 	
-	/** Called before Tile Entities are ticked in the world. Do bookkeeping here.
-	 * 
-	 * @param world
-	 *            The world being ticked */
+	/**
+	 * Called before Tile Entities are ticked in the world. Do bookkeeping here.
+	 *
+	 * @param world The world being ticked
+	 */
 	protected void tickStart(final World world) {
 		if (_registries.containsKey(world)) {
 			final MultiblockWorldRegistry registry = _registries.get(world);
@@ -94,24 +95,24 @@ public class MultiblockRegistry {
 		}
 	}
 	
-	/** Called when the world has finished loading a chunk.
-	 * 
-	 * @param world
-	 *            The world which has finished loading a chunk
-	 * @param chunkX
-	 *            The X coordinate of the chunk
-	 * @param chunkZ
-	 *            The Z coordinate of the chunk */
+	/**
+	 * Called when the world has finished loading a chunk.
+	 *
+	 * @param world  The world which has finished loading a chunk
+	 * @param chunkX The X coordinate of the chunk
+	 * @param chunkZ The Z coordinate of the chunk
+	 */
 	protected void onChunkLoaded(final World world, final int chunkX, final int chunkZ) {
 		if (_registries.containsKey(world)) {
 			_registries.get(world).onChunkLoaded(chunkX, chunkZ);
 		}
 	}
 	
-	/** Called whenever a world is unloaded. Unload the relevant registry, if we have one.
-	 * 
-	 * @param world
-	 *            The world being unloaded. */
+	/**
+	 * Called whenever a world is unloaded. Unload the relevant registry, if we have one.
+	 *
+	 * @param world The world being unloaded.
+	 */
 	protected void onWorldUnloaded(final World world) {
 		if (_registries.containsKey(world)) {
 			_registries.get(world).onWorldUnloaded();

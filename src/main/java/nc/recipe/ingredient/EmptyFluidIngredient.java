@@ -1,15 +1,14 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
 import nc.tile.internal.fluid.Tank;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class EmptyFluidIngredient implements IFluidIngredient {
 	
@@ -42,7 +41,7 @@ public class EmptyFluidIngredient implements IFluidIngredient {
 	
 	@Override
 	public void setMaxStackSize(int stackSize) {
-		
+	
 	}
 	
 	@Override

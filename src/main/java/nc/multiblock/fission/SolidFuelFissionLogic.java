@@ -1,15 +1,6 @@
 package nc.multiblock.fission;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import nc.Global;
@@ -23,6 +14,12 @@ import nc.tile.multiblock.TilePartAbstract.SyncReason;
 import nc.util.NCMath;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class SolidFuelFissionLogic extends FissionReactorLogic {
 	
@@ -36,7 +33,7 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	public SolidFuelFissionLogic(FissionReactorLogic oldLogic) {
 		super(oldLogic);
 		if (oldLogic instanceof SolidFuelFissionLogic oldSolidFuelLogic) {
-            heatingOutputRate = oldSolidFuelLogic.heatingOutputRate;
+			heatingOutputRate = oldSolidFuelLogic.heatingOutputRate;
 			effectiveHeating = oldSolidFuelLogic.effectiveHeating;
 			reservedEffectiveHeat = oldSolidFuelLogic.reservedEffectiveHeat;
 			heatingRecipeRate = oldSolidFuelLogic.heatingRecipeRate;
@@ -325,7 +322,7 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	public void onMultiblockUpdatePacket(FissionUpdatePacket message) {
 		super.onMultiblockUpdatePacket(message);
 		if (message instanceof SolidFissionUpdatePacket packet) {
-            effectiveHeating = packet.effectiveHeating;
+			effectiveHeating = packet.effectiveHeating;
 			heatingOutputRateFP = packet.heatingOutputRateFP;
 			reservedEffectiveHeat = packet.reservedEffectiveHeat;
 		}

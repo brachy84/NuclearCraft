@@ -1,7 +1,5 @@
 package nc;
 
-import java.io.IOException;
-
 import nc.config.NCConfig;
 import nc.handler.GuiHandler;
 import nc.proxy.CommonProxy;
@@ -11,6 +9,8 @@ import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.*;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+
+import java.io.IOException;
 
 @Mod(modid = Global.MOD_ID, name = Global.MOD_NAME, version = Global.VERSION, dependencies = Global.DEPENDENCIES, guiFactory = Global.GUI_FACTORY)
 public class NuclearCraft {

@@ -1,9 +1,5 @@
 package nc.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.enumm.IFissionFuelEnum;
 import nc.util.*;
 import net.minecraft.client.util.ITooltipFlag;
@@ -14,8 +10,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
 
-public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionFuelEnum> extends Item implements IInfoItem, IItemMeta<T> {
+import javax.annotation.Nullable;
+import java.util.List;
 
+public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionFuelEnum> extends Item implements IInfoItem, IItemMeta<T> {
+	
 	public final Class<T> enumm;
 	public final T[] values;
 	public String[] fixedInfo;
@@ -26,7 +25,7 @@ public class ItemFissionFuel<T extends Enum<T> & IStringSerializable & IFissionF
 		this.enumm = enumm;
 		values = enumm.getEnumConstants();
 	}
-
+	
 	public Class<T> getEnumClass() {
 		return enumm;
 	}

@@ -2,7 +2,7 @@ package nc.network.tile;
 
 import io.netty.buffer.ByteBuf;
 import nc.network.NCPacket;
-import nc.tile.*;
+import nc.tile.ITilePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

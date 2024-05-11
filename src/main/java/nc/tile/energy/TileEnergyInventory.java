@@ -1,9 +1,5 @@
 package nc.tile.energy;
 
-import java.util.*;
-
-import javax.annotation.*;
-
 import nc.Global;
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.inventory.*;
@@ -15,15 +11,21 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.*;
+import java.util.*;
+
 public abstract class TileEnergyInventory extends TileEnergy implements ITileInventory {
 	
-	private @Nonnull final String inventoryName;
+	private @Nonnull
+	final String inventoryName;
 	
-	private @Nonnull final NonNullList<ItemStack> inventoryStacks;
+	private @Nonnull
+	final NonNullList<ItemStack> inventoryStacks;
 	
 	private @Nonnull InventoryConnection[] inventoryConnections;
 	
-	private @Nonnull final List<ItemOutputSetting> itemOutputSettings;
+	private @Nonnull
+	final List<ItemOutputSetting> itemOutputSettings;
 	
 	public TileEnergyInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, long capacity, @Nonnull EnergyConnection[] energyConnections) {
 		this(name, size, inventoryConnections, capacity, NCMath.toInt(capacity), energyConnections);

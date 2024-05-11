@@ -1,9 +1,9 @@
 package nc.multiblock.internal;
 
-import java.util.*;
-
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.IStringSerializable;
+
+import java.util.*;
 
 public enum PropertyBlockFacing implements IStringSerializable {
 	

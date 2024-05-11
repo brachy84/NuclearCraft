@@ -4,8 +4,8 @@ import nc.container.ContainerInfoTile;
 import nc.multiblock.*;
 import nc.network.tile.TileUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
-import nc.tile.*;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
 import nc.tile.inventory.ITileFilteredInventory;
 import nc.tile.multiblock.ITileLogicMultiblockPart;
 import nc.tile.multiblock.port.*;
@@ -85,7 +85,7 @@ public abstract class ContainerPort<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 			}
 		}
 		else if (tile instanceof ITileFilteredInventory tileFiltered) {
-            NonNullList<ItemStack> filterStacks = tileFiltered.getFilterStacks();
+			NonNullList<ItemStack> filterStacks = tileFiltered.getFilterStacks();
 			for (int i = 0; i < filterStacks.size(); ++i) {
 				if (tileFiltered.canModifyFilter(i) && !filterStacks.get(i).isEmpty()) {
 					filterStacks.set(i, ItemStack.EMPTY);

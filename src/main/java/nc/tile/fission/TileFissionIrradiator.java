@@ -1,23 +1,18 @@
 package nc.tile.fission;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.FissionCluster;
-import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.*;
 import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
 import nc.recipe.*;
-import nc.tile.fission.port.IFissionPortTarget;
-import nc.tile.fission.port.TileFissionIrradiatorPort;
+import nc.tile.fission.port.*;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.InventoryConnection;
-import nc.tile.internal.inventory.ItemOutputSetting;
-import nc.tile.inventory.ITileFilteredInventory;
-import nc.tile.inventory.ITileInventory;
+import nc.tile.internal.inventory.*;
+import nc.tile.inventory.*;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.util.NBTHelper;
@@ -25,15 +20,12 @@ import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -157,7 +149,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void onClusterMeltdown(Iterator<IFissionComponent> componentIterator) {
-		
+	
 	}
 	
 	@Override
@@ -410,7 +402,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	public double getPowerMultiplier() {
 		return 0D;
 	}
-
+	
 	@Override
 	public boolean isProcessing() {
 		return isProcessing(true);
@@ -419,7 +411,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	public boolean isProcessing(boolean checkCluster) {
 		return readyToProcess(checkCluster) && flux > 0;
 	}
-
+	
 	@Override
 	public boolean readyToProcess() {
 		return readyToProcess(true);
@@ -457,7 +449,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 			}
 		}
 	}
-
+	
 	@Override
 	public int getItemProductCapacity(int slot, ItemStack stack) {
 		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getItemProductCapacity(slot, stack);
@@ -502,7 +494,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
 		return IBasicProcessor.super.isItemValidForSlot(slot, stack);
 	}
-
+	
 	@Override
 	public int getInventoryStackLimit() {
 		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getInventoryStackLimit();
@@ -510,8 +502,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void clearAllSlots() {
-        Collections.fill(inventoryStacks, ItemStack.EMPTY);
-        Collections.fill(consumedStacks, ItemStack.EMPTY);
+		Collections.fill(inventoryStacks, ItemStack.EMPTY);
+		Collections.fill(consumedStacks, ItemStack.EMPTY);
 		refreshAll();
 	}
 	

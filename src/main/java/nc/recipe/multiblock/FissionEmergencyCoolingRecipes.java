@@ -1,10 +1,10 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.fission_emergency_cooling_multiplier;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.fission_emergency_cooling_multiplier;
 
 public class FissionEmergencyCoolingRecipes extends BasicRecipeHandler {
 	

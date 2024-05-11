@@ -1,10 +1,8 @@
 package nc.gui.processor;
 
-import nc.network.tile.processor.EnergyProcessorUpdatePacket;
-import nc.network.tile.processor.ProcessorUpdatePacket;
+import nc.network.tile.processor.*;
 import nc.tile.ITileFiltered;
-import nc.tile.processor.IBasicProcessor;
-import nc.tile.processor.IUpgradableBasicProcessor;
+import nc.tile.processor.*;
 import nc.tile.processor.TileProcessorImpl.*;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.tile.radiation.TileRadiationScrubber;
@@ -13,42 +11,42 @@ import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 
 public class GuiProcessorImpl {
-
+	
 	public static class GuiBasicProcessor<TILE extends TileEntity & IBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket> extends GuiProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public GuiBasicProcessor(Container inventory, EntityPlayer player, TILE tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiBasicUpgradableProcessor<TILE extends TileEntity & IUpgradableBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket> extends GuiUpgradableProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public GuiBasicUpgradableProcessor(Container inventory, EntityPlayer player, TILE tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiBasicFilteredProcessor<TILE extends TileEntity & IBasicProcessor<TILE, PACKET> & ITileFiltered, PACKET extends ProcessorUpdatePacket> extends GuiFilteredProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public GuiBasicFilteredProcessor(Container inventory, EntityPlayer player, TILE tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiBasicEnergyProcessor<TILE extends TileBasicEnergyProcessor<TILE>> extends GuiBasicProcessor<TILE, EnergyProcessorUpdatePacket> {
-
+		
 		public GuiBasicEnergyProcessor(Container inventory, EntityPlayer player, TILE tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiBasicUpgradableEnergyProcessor<TILE extends TileBasicUpgradableEnergyProcessor<TILE>> extends GuiBasicUpgradableProcessor<TILE, EnergyProcessorUpdatePacket> {
-
+		
 		public GuiBasicUpgradableEnergyProcessor(Container inventory, EntityPlayer player, TILE tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiBasicEnergyProcessorDyn extends GuiBasicEnergyProcessor<TileBasicEnergyProcessorDyn> {
 		
 		public GuiBasicEnergyProcessorDyn(Container inventory, EntityPlayer player, TileBasicEnergyProcessorDyn tile, String textureLocation) {
@@ -188,16 +186,16 @@ public class GuiProcessorImpl {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiRockCrusher extends GuiBasicUpgradableEnergyProcessor<TileRockCrusher> {
-
+		
 		public GuiRockCrusher(Container inventory, EntityPlayer player, TileRockCrusher tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}
 	}
-
+	
 	public static class GuiElectricFurnace extends GuiBasicUpgradableEnergyProcessor<TileElectricFurnace> {
-
+		
 		public GuiElectricFurnace(Container inventory, EntityPlayer player, TileElectricFurnace tile, String textureLocation) {
 			super(inventory, player, tile, textureLocation);
 		}

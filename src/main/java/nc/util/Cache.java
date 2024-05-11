@@ -1,8 +1,8 @@
 package nc.util;
 
-import java.util.Map;
-
 import it.unimi.dsi.fastutil.objects.*;
+
+import java.util.Map;
 
 public abstract class Cache<K, V, M extends Map<K, V>> {
 	

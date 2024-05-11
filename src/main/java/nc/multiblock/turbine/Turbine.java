@@ -1,35 +1,21 @@
 package nc.multiblock.turbine;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.doubles.*;
+import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
 import nc.handler.SoundHandler.SoundInfo;
-import nc.multiblock.ILogicMultiblock;
-import nc.multiblock.IPacketMultiblock;
+import nc.multiblock.*;
 import nc.multiblock.cuboidal.CuboidalMultiblock;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.ITurbineRotorBlade;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
-import nc.network.multiblock.TurbineRenderPacket;
-import nc.network.multiblock.TurbineUpdatePacket;
-import nc.recipe.BasicRecipe;
-import nc.recipe.NCRecipes;
-import nc.recipe.RecipeInfo;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
+import nc.network.multiblock.*;
+import nc.recipe.*;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.multiblock.TilePartAbstract.SyncReason;
-import nc.tile.turbine.ITurbineController;
-import nc.tile.turbine.ITurbinePart;
-import nc.tile.turbine.TileTurbineRotorBlade;
-import nc.tile.turbine.TileTurbineRotorStator;
-import nc.util.NBTHelper;
-import nc.util.NCMath;
+import nc.tile.turbine.*;
+import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,13 +23,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.*;
 
 import javax.annotation.Nonnull;
 import javax.vecmath.Vector3f;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static nc.config.NCConfig.turbine_max_size;
@@ -266,11 +250,11 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 		if (flowDir == null) {
 			return TurbinePartDir.Y;
 		}
-        return switch (flowDir.getAxis()) {
-            case Y -> TurbinePartDir.Y;
-            case Z -> TurbinePartDir.Z;
-            case X -> TurbinePartDir.X;
-        };
+		return switch (flowDir.getAxis()) {
+			case Y -> TurbinePartDir.Y;
+			case Z -> TurbinePartDir.Z;
+			case X -> TurbinePartDir.X;
+		};
 	}
 	
 	public TurbinePartDir getBladeDir(PlaneDir planeDir) {
@@ -317,7 +301,7 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 	public enum PlaneDir {
 		U,
 		V
-    }
+	}
 	
 	// End of modified Kurtchekov stuff!
 	

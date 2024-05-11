@@ -1,8 +1,8 @@
-/** Massive thanks to McJty, maker of RFTools and many other mods, for letting me use this code! */
+/**
+ * Massive thanks to McJty, maker of RFTools and many other mods, for letting me use this code!
+ */
 
 package nc.util;
-
-import javax.annotation.Nonnull;
 
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.*;
@@ -10,6 +10,8 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureData;
+
+import javax.annotation.Nonnull;
 
 public class StructureHelper {
 	
@@ -103,8 +105,8 @@ public class StructureHelper {
 			if (!(o instanceof StructureCacheEntry that)) {
 				return false;
 			}
-
-            if (dimension != that.dimension) {
+			
+			if (dimension != that.dimension) {
 				return false;
 			}
 			if (chunkpos != that.chunkpos) {

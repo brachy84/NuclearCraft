@@ -1,17 +1,16 @@
 package nc;
 
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import nc.enumm.*;
 import nc.multiblock.turbine.TurbineDynamoCoilType;
 import nc.radiation.RadiationHelper;
 import nc.recipe.BasicRecipe;
 import nc.util.*;
 import net.minecraft.util.IStringSerializable;
+
+import java.util.List;
+
+import static nc.config.NCConfig.*;
 
 public class NCInfo {
 	
@@ -102,8 +101,7 @@ public class NCInfo {
 	}
 	
 	public static String[] neutronShieldStatInfo(double heatPerFlux, double efficiency) {
-		return new String[] {Lang.localize("info." + Global.MOD_ID + ".fission_shield.heat_per_flux.fixd", UnitHelper.prefix(heatPerFlux, 5, "H/N")), Lang.localize("info." + Global.MOD_ID + ".fission_shield.efficiency.fixd", NCMath.pcDecimalPlaces(efficiency, 1))
-		};
+		return new String[] {Lang.localize("info." + Global.MOD_ID + ".fission_shield.heat_per_flux.fixd", UnitHelper.prefix(heatPerFlux, 5, "H/N")), Lang.localize("info." + Global.MOD_ID + ".fission_shield.efficiency.fixd", NCMath.pcDecimalPlaces(efficiency, 1))};
 	}
 	
 	public static String[][] neutronShieldInfo() {
@@ -122,8 +120,7 @@ public class NCInfo {
 	// Fission Moderators
 	
 	public static String[] fissionModeratorFixedInfo(BasicRecipe moderatorInfo) {
-		return new String[] {Lang.localize("info." + Global.MOD_ID + ".moderator.fixd"), Lang.localize("info." + Global.MOD_ID + ".moderator.flux_factor.fixd", moderatorInfo.getFissionModeratorFluxFactor() + " N/t"), Lang.localize("info." + Global.MOD_ID + ".moderator.efficiency.fixd", NCMath.pcDecimalPlaces(moderatorInfo.getFissionModeratorEfficiency(), 1))
-		};
+		return new String[] {Lang.localize("info." + Global.MOD_ID + ".moderator.fixd"), Lang.localize("info." + Global.MOD_ID + ".moderator.flux_factor.fixd", moderatorInfo.getFissionModeratorFluxFactor() + " N/t"), Lang.localize("info." + Global.MOD_ID + ".moderator.efficiency.fixd", NCMath.pcDecimalPlaces(moderatorInfo.getFissionModeratorEfficiency(), 1))};
 	}
 	
 	public static String[] fissionModeratorInfo() {
@@ -133,8 +130,7 @@ public class NCInfo {
 	// Fission Reflectors
 	
 	public static String[] fissionReflectorFixedInfo(BasicRecipe reflectorInfo) {
-		return new String[] {Lang.localize("info." + Global.MOD_ID + ".reflector.fixd"), Lang.localize("info." + Global.MOD_ID + ".reflector.reflectivity.fixd", NCMath.pcDecimalPlaces(reflectorInfo.getFissionReflectorReflectivity(), 1)), Lang.localize("info." + Global.MOD_ID + ".reflector.efficiency.fixd", NCMath.pcDecimalPlaces(reflectorInfo.getFissionReflectorEfficiency(), 1))
-		};
+		return new String[] {Lang.localize("info." + Global.MOD_ID + ".reflector.fixd"), Lang.localize("info." + Global.MOD_ID + ".reflector.reflectivity.fixd", NCMath.pcDecimalPlaces(reflectorInfo.getFissionReflectorReflectivity(), 1)), Lang.localize("info." + Global.MOD_ID + ".reflector.efficiency.fixd", NCMath.pcDecimalPlaces(reflectorInfo.getFissionReflectorEfficiency(), 1))};
 	}
 	
 	public static String[] fissionReflectorInfo() {

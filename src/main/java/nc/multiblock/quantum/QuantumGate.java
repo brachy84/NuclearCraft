@@ -1,10 +1,10 @@
 package nc.multiblock.quantum;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.util.*;
+
+import java.util.*;
 
 public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 	
@@ -31,16 +31,20 @@ public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 		}
 	}
 	
-	/** Returns null if next gate can not be merged with this one */
+	/**
+	 * Returns null if next gate can not be merged with this one
+	 */
 	public abstract GATE mergeInternal(GATE next);
-
+	
 	public boolean shouldMarkDirty() {
 		return false;
 	}
 	
 	public abstract ComplexMatrix singleQubitOperation();
 	
-	/** Adds the required decomposition of this gate to the list. */
+	/**
+	 * Adds the required decomposition of this gate to the list.
+	 */
 	public abstract void addRequiredDecomposition(List<QuantumGate<?>> decomposition);
 	
 	public abstract List<String> getCode(int type);
@@ -1025,9 +1029,9 @@ public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 							repeat[2 * (c_size - 2) - i] = repeat[i];
 						}
 						repeat[c_size - 2] = new CX(qc, set(c_list.getInt(c_size - 2), c_list.getInt(c_size - 1)), set(anc.getInt(c_size - 3)));
-
-                        decomposition.addAll(Arrays.asList(repeat));
-                        decomposition.addAll(Arrays.asList(repeat));
+						
+						decomposition.addAll(Arrays.asList(repeat));
+						decomposition.addAll(Arrays.asList(repeat));
 					}
 					
 					else {
@@ -2010,23 +2014,31 @@ public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 	
 	public static final ComplexMatrix Tdg = new ComplexMatrix(new double[][] {new double[] {1D, 0D, 0D, 0D}, new double[] {0D, 0D, NCMath.INV_SQRT2, -NCMath.INV_SQRT2}});
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public static ComplexMatrix p(double angle) {
 		double[] p = Complex.phase_d(angle);
 		return new ComplexMatrix(new double[][] {new double[] {1D, 0D, 0D, 0D}, new double[] {0D, 0D, p[0], p[1]}});
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public static ComplexMatrix rx(double angle) {
 		return new ComplexMatrix(new double[][] {new double[] {NCMath.cos_d(angle / 2D), 0D, 0D, -NCMath.sin_d(angle / 2D)}, new double[] {0D, -NCMath.sin_d(angle / 2D), NCMath.cos_d(angle / 2D), 0D}});
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public static ComplexMatrix ry(double angle) {
 		return new ComplexMatrix(new double[][] {new double[] {NCMath.cos_d(angle / 2D), 0D, -NCMath.sin_d(angle / 2D), 0D}, new double[] {NCMath.sin_d(angle / 2D), 0D, NCMath.cos_d(angle / 2D), 0D}});
 	}
 	
-	/** Angle in degrees! */
+	/**
+	 * Angle in degrees!
+	 */
 	public static ComplexMatrix rz(double angle) {
 		double[] a = Complex.phase_d(-angle / 2D), b = Complex.phase_d(angle / 2D);
 		return new ComplexMatrix(new double[][] {new double[] {a[0], a[1], 0D, 0D}, new double[] {0D, 0D, b[0], b[1]}});
@@ -2073,7 +2085,9 @@ public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 		ZYZ_DECOMPOSITION_ANGLES_CACHE.put(Tdg, new double[] {-22.5D, -22.5D, 0D, -22.5D});
 	}
 	
-	/** Returns the phase and Euler angles for the gate in the ZYZ basis in degrees. Translated from <a href="https://qiskit.org/documentation/_modules/qiskit/quantum_info/synthesis/one_qubit_decompose.html#OneQubitEulerDecomposer">...</a> */
+	/**
+	 * Returns the phase and Euler angles for the gate in the ZYZ basis in degrees. Translated from <a href="https://qiskit.org/documentation/_modules/qiskit/quantum_info/synthesis/one_qubit_decompose.html#OneQubitEulerDecomposer">...</a>
+	 */
 	public static double[] getZYZDecompositionAngles(ComplexMatrix matrix) {
 		if (ZYZ_DECOMPOSITION_ANGLES_CACHE.containsKey(matrix)) {
 			return ZYZ_DECOMPOSITION_ANGLES_CACHE.get(matrix);
@@ -2091,7 +2105,9 @@ public abstract class QuantumGate<GATE extends QuantumGate<?>> {
 		return new double[] {-Math.toDegrees(Complex.arg(phase[0], phase[1])), Math.toDegrees((ppl + pml) / 2D), Math.toDegrees(2D * Math.atan2(Complex.abs(m.re[1][0], m.im[1][0]), Complex.abs(m.re[0][0], m.im[0][0]))), Math.toDegrees((ppl - pml) / 2D)};
 	}
 	
-	/** Adds the ZYZ decomposition of this gate to the list. Combines results from: <a href="https://arxiv.org/abs/quant-ph/9503016">...</a>, Nielsen, Michael A.; Chuang, Isaac L. Quantum Computation and Quantum Information */
+	/**
+	 * Adds the ZYZ decomposition of this gate to the list. Combines results from: <a href="https://arxiv.org/abs/quant-ph/9503016">...</a>, Nielsen, Michael A.; Chuang, Isaac L. Quantum Computation and Quantum Information
+	 */
 	public static <GATE extends QuantumGate<?> & IControl> void addZYZDecomposition(GATE gate, List<QuantumGate<?>> decomposition) {
 		IntSet t = gate.t();
 		if (t.isEmpty()) {

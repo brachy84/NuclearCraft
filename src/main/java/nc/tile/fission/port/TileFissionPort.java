@@ -1,10 +1,5 @@
 package nc.tile.fission.port;
 
-import static nc.block.property.BlockProperties.AXIS_ALL;
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.cuboidal.*;
 import nc.multiblock.fission.FissionReactor;
@@ -14,6 +9,11 @@ import net.minecraft.util.*;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+
+import javax.annotation.*;
+
+import static nc.block.property.BlockProperties.AXIS_ALL;
+import static nc.util.PosHelper.DEFAULT_NON;
 
 public abstract class TileFissionPort<PORT extends TileFissionPort<PORT, TARGET>, TARGET extends IFissionPortTarget<PORT, TARGET>> extends TileFissionPart implements ITickable, IFissionPort<PORT, TARGET> {
 	

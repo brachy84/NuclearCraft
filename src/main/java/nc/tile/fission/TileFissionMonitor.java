@@ -1,8 +1,5 @@
 package nc.tile.fission;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-import static nc.util.PosHelper.DEFAULT_NON;
-
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
 import nc.util.*;
@@ -13,6 +10,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.FACING_ALL;
+import static nc.util.PosHelper.DEFAULT_NON;
 
 public class TileFissionMonitor extends TileFissionPart {
 	
@@ -46,7 +46,7 @@ public class TileFissionMonitor extends TileFissionPart {
 	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		// TODO
 		if (player.isSneaking()) {
-			
+		
 		}
 		else {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool);

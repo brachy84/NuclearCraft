@@ -1,9 +1,5 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
-import org.lwjgl.opengl.GL11;
-
 import nc.Global;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.init.*;
@@ -23,6 +19,9 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.relauncher.*;
+import org.lwjgl.opengl.GL11;
+
+import static nc.config.NCConfig.*;
 
 @SideOnly(Side.CLIENT)
 public class RadiationRenders {
@@ -34,7 +33,9 @@ public class RadiationRenders {
 	private static final String IMMUNE = Lang.localize("hud.nuclearcraft.rad_immune");
 	private static final String IMMUNE_FOR = Lang.localize("hud.nuclearcraft.rad_immune_for");
 	
-	/** Originally from coolAlias' 'Tutorial-Demo' - tutorial.client.gui.GuiManaBar */
+	/**
+	 * Originally from coolAlias' 'Tutorial-Demo' - tutorial.client.gui.GuiManaBar
+	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void addRadiationInfo(RenderGameOverlayEvent.Post event) {
 		if (!radiation_enabled_public) {
@@ -95,7 +96,9 @@ public class RadiationRenders {
 		tessellator.draw();
 	}
 	
-	/** Thanks to dizzyd for this method! */
+	/**
+	 * Thanks to dizzyd for this method!
+	 */
 	@SubscribeEvent
 	public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
 		// Overlay renderer for the Geiger counter and radiation scrubber blocks

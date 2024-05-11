@@ -1,12 +1,11 @@
 package nc.worldgen.ore;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+
+import javax.annotation.Nullable;
 
 public class UniversalOrePredicate implements Predicate<IBlockState> {
 	

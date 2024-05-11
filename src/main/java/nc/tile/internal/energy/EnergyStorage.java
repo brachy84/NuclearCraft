@@ -1,10 +1,10 @@
 package nc.tile.internal.energy;
 
-import static nc.config.NCConfig.rf_per_eu;
-
 import nc.util.NCMath;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import static nc.config.NCConfig.rf_per_eu;
 
 public class EnergyStorage implements IEnergyStorage {
 	
@@ -89,12 +89,16 @@ public class EnergyStorage implements IEnergyStorage {
 		energyStored = NCMath.clamp(energyStored + energy, 0, energyCapacity);
 	}
 	
-	/** Ignores energy capacity! */
+	/**
+	 * Ignores energy capacity!
+	 */
 	public void setEnergyStored(long energy) {
 		energyStored = Math.max(0, energy);
 	}
 	
-	/** Ignores energy stored! */
+	/**
+	 * Ignores energy stored!
+	 */
 	public void setStorageCapacity(long newCapacity) {
 		energyCapacity = Math.max(newCapacity, rf_per_eu);
 		// cullEnergyStored();
@@ -104,7 +108,9 @@ public class EnergyStorage implements IEnergyStorage {
 		maxTransfer = Math.max(NCMath.toInt(newMaxTransfer), rf_per_eu);
 	}
 	
-	/** Use to remove excess stored energy */
+	/**
+	 * Use to remove excess stored energy
+	 */
 	public void cullEnergyStored() {
 		if (energyStored > energyCapacity) {
 			setEnergyStored(energyCapacity);

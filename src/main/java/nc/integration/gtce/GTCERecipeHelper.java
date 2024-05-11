@@ -1,19 +1,12 @@
 package nc.integration.gtce;
 
 import gregtech.api.items.metaitem.MetaItem;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeBuilder;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
-import gregtech.api.recipes.ingredients.IntCircuitIngredient;
+import gregtech.api.recipes.*;
+import gregtech.api.recipes.ingredients.*;
 import gregtech.common.items.MetaItems;
-import nc.recipe.BasicRecipe;
-import nc.recipe.RecipeHelper;
-import nc.recipe.RecipeTupleGenerator;
+import nc.recipe.*;
 import nc.recipe.ingredient.*;
-import nc.util.NCUtil;
-import nc.util.OreDictHelper;
+import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
@@ -24,7 +17,7 @@ import java.util.*;
 import static nc.config.NCConfig.gtce_recipe_logging;
 
 public class GTCERecipeHelper {
-
+	
 	// Thanks so much to Firew0lf for the original method!
 	@Optional.Method(modid = "gregtech")
 	public static void addGTCERecipe(String recipeName, BasicRecipe recipe) {
@@ -54,8 +47,9 @@ public class GTCERecipeHelper {
 				break;
 			case "melter":
 				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
-				if (recipeMap != null)
-				    builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
+				if (recipeMap != null) {
+					builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
+				}
 				break;
 			case "supercooler":
 				recipeMap = RecipeMaps.VACUUM_RECIPES;
@@ -101,8 +95,9 @@ public class GTCERecipeHelper {
 				break;
 			case "extractor":
 				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
-				if (recipeMap != null)
-				    builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
+				if (recipeMap != null) {
+					builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
+				}
 				break;
 			case "centrifuge":
 				recipeMap = RecipeMaps.CENTRIFUGE_RECIPES;
@@ -268,11 +263,11 @@ public class GTCERecipeHelper {
 	@Optional.Method(modid = "gregtech")
 	private static boolean isRecipeInvalid(RecipeMap<?> recipeMap, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
 		int itemInputCount = itemInputs.size(), fluidInputCount = fluidInputs.size();
-
+		
 		if (itemInputCount > recipeMap.getMaxInputs() || fluidInputCount > recipeMap.getMaxFluidInputs() || itemInputCount + fluidInputCount < 1) {
 			return true;
 		}
-
+		
 		return findRecipeInputConflict(recipeMap, itemInputs, fluidInputs);
 	}
 	
@@ -288,7 +283,8 @@ public class GTCERecipeHelper {
 	
 	@Optional.Method(modid = "gregtech")
 	private static boolean isRecipeInputConflict(Recipe recipe, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
-		itemLoop: for (ItemStack input : itemInputs) {
+		itemLoop:
+		for (ItemStack input : itemInputs) {
 			for (GTRecipeInput gtInput : recipe.getInputs()) {
 				if (gtInput.acceptsStack(input)) {
 					continue itemLoop;
@@ -296,8 +292,9 @@ public class GTCERecipeHelper {
 			}
 			return false;
 		}
-
-		fluidLoop: for (FluidStack input : fluidInputs) {
+		
+		fluidLoop:
+		for (FluidStack input : fluidInputs) {
 			for (GTRecipeInput gtInput : recipe.getFluidInputs()) {
 				if (gtInput.acceptsFluid(input)) {
 					continue fluidLoop;
@@ -305,7 +302,7 @@ public class GTCERecipeHelper {
 			}
 			return false;
 		}
-
+		
 		return true;
 	}
 	

@@ -1,9 +1,5 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.config.NCConfig;
@@ -17,6 +13,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class BlockFluidCorium extends BlockFluidFission {
 	

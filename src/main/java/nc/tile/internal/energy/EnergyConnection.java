@@ -22,27 +22,27 @@ public enum EnergyConnection implements IStringSerializable {
 	}
 	
 	public EnergyConnection next(Type type) {
-        return switch (type) {
-            case DEFAULT -> switch (this) {
-                case IN -> OUT;
-                case OUT -> NON;
-                case NON -> IN;
-                default -> NON;
-            };
-        };
+		return switch (type) {
+			case DEFAULT -> switch (this) {
+				case IN -> OUT;
+				case OUT -> NON;
+				case NON -> IN;
+				default -> NON;
+			};
+		};
 	}
 	
 	@Override
 	public String getName() {
-        return switch (this) {
-            case IN -> "in";
-            case OUT -> "out";
-            case BOTH -> "both";
-            case NON -> "non";
-        };
+		return switch (this) {
+			case IN -> "in";
+			case OUT -> "out";
+			case BOTH -> "both";
+			case NON -> "non";
+		};
 	}
 	
 	public enum Type {
 		DEFAULT
-    }
+	}
 }

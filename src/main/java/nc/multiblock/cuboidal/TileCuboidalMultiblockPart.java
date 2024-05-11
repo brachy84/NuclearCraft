@@ -1,11 +1,11 @@
 package nc.multiblock.cuboidal;
 
-import javax.annotation.*;
-
 import nc.multiblock.internal.BlockFacing;
 import nc.tile.multiblock.TileMultiblockPart;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.*;
 
 public abstract class TileCuboidalMultiblockPart<MULTIBLOCK extends CuboidalMultiblock<MULTIBLOCK, T>, T extends ITileCuboidalMultiblockPart<MULTIBLOCK, T>> extends TileMultiblockPart<MULTIBLOCK, T> implements ITileCuboidalMultiblockPart<MULTIBLOCK, T> {
 	
@@ -28,27 +28,33 @@ public abstract class TileCuboidalMultiblockPart<MULTIBLOCK extends CuboidalMult
 		return positionType;
 	}
 	
-	/** Get the position of the part in the formed multiblock
+	/**
+	 * Get the position of the part in the formed multiblock
 	 *
-	 * @return the position of the part */
+	 * @return the position of the part
+	 */
 	@Override
 	@Nonnull
 	public PartPosition getPartPosition() {
 		return partPosition;
 	}
 	
-	/** Get the outward facing of the part in the formed multiblock
+	/**
+	 * Get the outward facing of the part in the formed multiblock
 	 *
-	 * @return the outward facing of the part. A face is "set" in the BlockFacings object if that face is facing outward */
+	 * @return the outward facing of the part. A face is "set" in the BlockFacings object if that face is facing outward
+	 */
 	@Override
 	@Nonnull
 	public BlockFacing getOutwardsDir() {
 		return outwardFacings;
 	}
 	
-	/** Return the single direction this part is facing if the part is in one side of the multiblock
+	/**
+	 * Return the single direction this part is facing if the part is in one side of the multiblock
 	 *
-	 * @return the direction toward with the part is facing or null if the part is not in one side of the multiblock */
+	 * @return the direction toward with the part is facing or null if the part is not in one side of the multiblock
+	 */
 	@Override
 	@Nullable
 	public EnumFacing getOutwardFacing() {
@@ -63,9 +69,11 @@ public abstract class TileCuboidalMultiblockPart<MULTIBLOCK extends CuboidalMult
 		return facing;
 	}
 	
-	/** Return the single direction this part is facing based on it's position in the multiblock
+	/**
+	 * Return the single direction this part is facing based on it's position in the multiblock
 	 *
-	 * @return the direction toward with the part is facing or null if the part is not in one side of the multiblock */
+	 * @return the direction toward with the part is facing or null if the part is not in one side of the multiblock
+	 */
 	@Override
 	@Nullable
 	public EnumFacing getOutwardFacingFromWorldPosition() {

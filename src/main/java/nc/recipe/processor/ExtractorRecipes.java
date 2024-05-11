@@ -1,12 +1,11 @@
 package nc.recipe.processor;
 
-import static nc.util.FluidStackHelper.INGOT_VOLUME;
-
 import com.google.common.collect.Lists;
-
 import nc.init.NCItems;
 import nc.util.RegistryHelper;
 import net.minecraft.init.Blocks;
+
+import static nc.util.FluidStackHelper.INGOT_VOLUME;
 
 public class ExtractorRecipes extends BasicProcessorRecipeHandler {
 	

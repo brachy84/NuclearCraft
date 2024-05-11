@@ -1,9 +1,5 @@
 package nc.item.tool;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.item.IInfoItem;
 import nc.util.*;
 import net.minecraft.client.util.ITooltipFlag;
@@ -12,6 +8,9 @@ import net.minecraft.item.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class NCAxe extends ItemAxe implements IInfoItem {
 	

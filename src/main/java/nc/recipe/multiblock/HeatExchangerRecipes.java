@@ -1,11 +1,11 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
-import static nc.init.NCCoolantFluids.COOLANTS;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.*;
 
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.*;
+import static nc.init.NCCoolantFluids.COOLANTS;
 
 public class HeatExchangerRecipes extends BasicRecipeHandler {
 	

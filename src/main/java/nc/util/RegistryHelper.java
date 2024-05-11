@@ -1,7 +1,5 @@
 package nc.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.*;
@@ -9,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class RegistryHelper {
 	

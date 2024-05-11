@@ -1,9 +1,5 @@
 package nc.worldgen.ore;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Random;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.block.BlockMeta;
 import nc.enumm.MetaEnums;
@@ -15,12 +11,16 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+import java.util.Random;
+
+import static nc.config.NCConfig.*;
+
 public class OreGenerator implements IWorldGenerator {
 	
 	protected static IntSet ore_dim_set;
 	
 	protected final WorldGenOre[] ores;
-
+	
 	public static class WorldGenOre extends WorldGenMinable {
 		
 		public WorldGenOre(int meta) {

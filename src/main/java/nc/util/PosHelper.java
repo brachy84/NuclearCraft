@@ -1,13 +1,11 @@
 package nc.util;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.Lists;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class PosHelper {
 	
@@ -20,14 +18,14 @@ public class PosHelper {
 	private static final EnumFacing[] HORIZONTALS_Z = new EnumFacing[] {EnumFacing.DOWN, EnumFacing.UP, EnumFacing.WEST, EnumFacing.EAST};
 	
 	public static EnumFacing[] getHorizontals(EnumFacing dir) {
-        return switch (dir) {
-            case DOWN -> HORIZONTALS_Y;
-            case UP -> HORIZONTALS_Y;
-            case NORTH -> HORIZONTALS_Z;
-            case SOUTH -> HORIZONTALS_Z;
-            case WEST -> HORIZONTALS_X;
-            case EAST -> HORIZONTALS_X;
-        };
+		return switch (dir) {
+			case DOWN -> HORIZONTALS_Y;
+			case UP -> HORIZONTALS_Y;
+			case NORTH -> HORIZONTALS_Z;
+			case SOUTH -> HORIZONTALS_Z;
+			case WEST -> HORIZONTALS_X;
+			case EAST -> HORIZONTALS_X;
+		};
 	}
 	
 	// Axials
@@ -41,30 +39,27 @@ public class PosHelper {
 	}
 	
 	public static EnumFacing[] getAxialDirs(EnumFacing dir) {
-        return switch (dir) {
-            case DOWN -> AXIALS_Y;
-            case UP -> AXIALS_Y;
-            case NORTH -> AXIALS_Z;
-            case SOUTH -> AXIALS_Z;
-            case WEST -> AXIALS_X;
-            case EAST -> AXIALS_X;
-        };
+		return switch (dir) {
+			case DOWN -> AXIALS_Y;
+			case UP -> AXIALS_Y;
+			case NORTH -> AXIALS_Z;
+			case SOUTH -> AXIALS_Z;
+			case WEST -> AXIALS_X;
+			case EAST -> AXIALS_X;
+		};
 	}
 	
 	// Vertices
 	
-	public static final EnumFacing[][] VERTEX_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH, EnumFacing.EAST}
-	};
+	public static final EnumFacing[][] VERTEX_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH, EnumFacing.EAST}};
 	
 	// Edges
 	
-	public static final EnumFacing[][] EDGE_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.UP, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.SOUTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.SOUTH, EnumFacing.EAST}
-	};
+	public static final EnumFacing[][] EDGE_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.NORTH}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.DOWN, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.NORTH}, new EnumFacing[] {EnumFacing.UP, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.UP, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.UP, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.WEST}, new EnumFacing[] {EnumFacing.SOUTH, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.SOUTH, EnumFacing.EAST}};
 	
 	// Planes
 	
-	public static final EnumFacing[][] PLANE_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.WEST, EnumFacing.EAST, EnumFacing.DOWN, EnumFacing.UP}
-	};
+	public static final EnumFacing[][] PLANE_DIRS = new EnumFacing[][] {new EnumFacing[] {EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH}, new EnumFacing[] {EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST}, new EnumFacing[] {EnumFacing.WEST, EnumFacing.EAST, EnumFacing.DOWN, EnumFacing.UP}};
 	
 	// Axes
 	

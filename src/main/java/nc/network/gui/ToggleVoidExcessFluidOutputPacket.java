@@ -40,7 +40,7 @@ public class ToggleVoidExcessFluidOutputPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ToggleVoidExcessFluidOutputPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileFluid machine) {
-                machine.setTankOutputSetting(message.tankNumber, TankOutputSetting.values()[message.voidExcessFluidOutput]);
+				machine.setTankOutputSetting(message.tankNumber, TankOutputSetting.values()[message.voidExcessFluidOutput]);
 				tile.markDirty();
 			}
 		}

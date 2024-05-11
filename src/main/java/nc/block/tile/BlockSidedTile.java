@@ -1,7 +1,5 @@
 package nc.block.tile;
 
-import static nc.block.property.BlockProperties.FACING_HORIZONTAL;
-
 import nc.util.BlockHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.*;
@@ -9,6 +7,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.FACING_HORIZONTAL;
 
 public abstract class BlockSidedTile extends BlockTile {
 	

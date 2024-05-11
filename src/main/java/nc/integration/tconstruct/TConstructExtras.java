@@ -1,9 +1,5 @@
 package nc.integration.tconstruct;
 
-import static nc.util.FluidStackHelper.*;
-
-import java.util.*;
-
 import nc.init.NCItems;
 import nc.util.*;
 import net.minecraft.init.Items;
@@ -13,6 +9,10 @@ import slimeknights.mantle.util.RecipeMatch;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.smeltery.CastingRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import java.util.*;
+
+import static nc.util.FluidStackHelper.*;
 
 public class TConstructExtras {
 	

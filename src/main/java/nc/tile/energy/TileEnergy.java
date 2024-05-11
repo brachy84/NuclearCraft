@@ -1,9 +1,5 @@
 package nc.tile.energy;
 
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.*;
 import nc.ModCheck;
@@ -16,6 +12,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.*;
+
+import static nc.config.NCConfig.enable_gtce_eu;
+
 @Optional.InterfaceList({@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2"), @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")})
 public abstract class TileEnergy extends NCTile implements ITileEnergy, IEnergySink, IEnergySource {
 	
@@ -23,8 +23,10 @@ public abstract class TileEnergy extends NCTile implements ITileEnergy, IEnergyS
 	
 	private @Nonnull EnergyConnection[] energyConnections;
 	
-	private @Nonnull final EnergyTileWrapper[] energySides;
-	private @Nonnull final EnergyTileWrapperGT[] energySidesGT;
+	private @Nonnull
+	final EnergyTileWrapper[] energySides;
+	private @Nonnull
+	final EnergyTileWrapperGT[] energySidesGT;
 	
 	private boolean ic2reg = false;
 	

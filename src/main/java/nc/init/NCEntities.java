@@ -1,13 +1,13 @@
 package nc.init;
 
-import static nc.config.NCConfig.*;
-
 import nc.*;
 import nc.entity.EntityFeralGhoul;
 import nc.worldgen.biome.NCBiomes;
 import net.minecraft.entity.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+
+import static nc.config.NCConfig.*;
 
 public class NCEntities {
 	

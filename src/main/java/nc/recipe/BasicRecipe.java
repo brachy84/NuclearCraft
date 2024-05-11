@@ -1,9 +1,5 @@
 package nc.recipe;
 
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
 import crafttweaker.annotations.ZenRegister;
 import nc.multiblock.fission.FissionPlacement;
 import nc.recipe.ingredient.*;
@@ -13,7 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import stanhebben.zenscript.annotations.ZenClass;
 
-@ZenClass("mods.nuclearcraft.ProcessorRecipe")
+import java.util.List;
+
+import static nc.config.NCConfig.*;
+
+@ZenClass("mods.nuclearcraft.BasicRecipe")
 @ZenRegister
 public class BasicRecipe implements IRecipe {
 	

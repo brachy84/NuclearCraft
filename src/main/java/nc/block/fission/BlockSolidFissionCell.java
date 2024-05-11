@@ -25,14 +25,14 @@ public class BlockSolidFissionCell extends BlockFissionPart {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileSolidFissionCell cell) {
-                FissionReactor reactor = cell.getMultiblock();
+				FissionReactor reactor = cell.getMultiblock();
 				if (reactor != null) {
 					ItemStack heldStack = player.getHeldItem(hand);
 					if (cell.canModifyFilter(0) && cell.getInventoryStacks().get(0).isEmpty() && !heldStack.isItemEqual(cell.getFilterStacks().get(0)) && cell.isItemValidForSlotInternal(0, heldStack)) {
@@ -57,7 +57,7 @@ public class BlockSolidFissionCell extends BlockFissionPart {
 		if (!keepInventory) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileSolidFissionCell cell) {
-                dropItems(world, pos, cell.getInventoryStacksInternal());
+				dropItems(world, pos, cell.getInventoryStacksInternal());
 				/* world.updateComparatorOutputLevel(pos, this);
 				FissionReactor reactor = cell.getMultiblock();
 				world.removeTileEntity(pos);

@@ -1,7 +1,5 @@
 package nc.integration.jei;
 
-import java.util.List;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import mezz.jei.api.gui.*;
@@ -9,6 +7,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import nc.recipe.IngredientSorption;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.List;
 
 public class JEIHelper {
 	

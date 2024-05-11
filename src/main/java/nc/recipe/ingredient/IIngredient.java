@@ -1,15 +1,15 @@
 package nc.recipe.ingredient;
 
-import java.util.List;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import nc.recipe.*;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.List;
+
 public interface IIngredient<T> {
 	
 	default void init() {
-		
+	
 	}
 	
 	T getStack();
@@ -45,5 +45,5 @@ public interface IIngredient<T> {
 	// CraftTweaker
 	
 	@Optional.Method(modid = "crafttweaker")
-    crafttweaker.api.item.IIngredient ct();
+	crafttweaker.api.item.IIngredient ct();
 }

@@ -3,11 +3,11 @@ package nc.integration.crafttweaker;
 import crafttweaker.IAction;
 import nc.recipe.BasicRecipeHandler;
 
-public class CTClearRecipes implements IAction {
+public class CTRemoveAllRecipes implements IAction {
 	
 	protected final BasicRecipeHandler recipeHandler;
 	
-	public CTClearRecipes(BasicRecipeHandler recipeHandler) {
+	public CTRemoveAllRecipes(BasicRecipeHandler recipeHandler) {
 		this.recipeHandler = recipeHandler;
 	}
 	

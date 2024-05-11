@@ -1,9 +1,5 @@
 package nc.block.fission;
 
-import static nc.block.property.BlockProperties.*;
-
-import javax.annotation.Nullable;
-
 import nc.block.tile.IActivatable;
 import nc.enumm.MetaEnums;
 import nc.render.BlockHighlightTracker;
@@ -20,6 +16,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
+
+import javax.annotation.Nullable;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockFissionMetaSource extends BlockFissionMetaPart<MetaEnums.NeutronSourceType> implements IActivatable {
 	
@@ -39,7 +39,7 @@ public class BlockFissionMetaSource extends BlockFissionMetaPart<MetaEnums.Neutr
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFissionSource source) {
-            EnumFacing facing = source.getPartPosition().getFacing();
+			EnumFacing facing = source.getPartPosition().getFacing();
 			return state.withProperty(FACING_ALL, facing != null ? facing : source.facing).withProperty(ACTIVE, source.getIsRedstonePowered());
 		}
 		return state;
@@ -47,13 +47,13 @@ public class BlockFissionMetaSource extends BlockFissionMetaPart<MetaEnums.Neutr
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-        return switch (metadata) {
-            case 0 -> new TileFissionSource.RadiumBeryllium();
-            case 1 -> new TileFissionSource.PoloniumBeryllium();
-            case 2 -> new TileFissionSource.Californium();
-            default -> new TileFissionSource.RadiumBeryllium();
-        };
-    }
+		return switch (metadata) {
+			case 0 -> new TileFissionSource.RadiumBeryllium();
+			case 1 -> new TileFissionSource.PoloniumBeryllium();
+			case 2 -> new TileFissionSource.Californium();
+			default -> new TileFissionSource.RadiumBeryllium();
+		};
+	}
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
@@ -70,7 +70,7 @@ public class BlockFissionMetaSource extends BlockFissionMetaPart<MetaEnums.Neutr
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFissionSource source) {
-            source.facing = state.getValue(FACING_ALL);
+			source.facing = state.getValue(FACING_ALL);
 			world.setBlockState(pos, state.withProperty(FACING_ALL, source.facing).withProperty(ACTIVE, source.getIsRedstonePowered()), 2);
 		}
 	}
@@ -83,7 +83,7 @@ public class BlockFissionMetaSource extends BlockFissionMetaPart<MetaEnums.Neutr
 		
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFissionSource source) {
-            if (!world.isRemote) {
+			if (!world.isRemote) {
 				PrimingTargetInfo targetInfo = source.getPrimingTarget(true);
 				if (targetInfo == null) {
 					player.sendMessage(new TextComponentString(Lang.localize("nuclearcraft.multiblock.fission_reactor_source.no_target")));

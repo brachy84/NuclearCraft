@@ -1,7 +1,5 @@
 package nc.block.fission;
 
-import static nc.block.property.BlockProperties.*;
-
 import nc.advancement.NCCriterions;
 import nc.block.tile.IActivatable;
 import nc.tile.fission.TileSaltFissionController;
@@ -13,6 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockSaltFissionController extends BlockFissionPart implements IActivatable {
 	
@@ -59,14 +59,14 @@ public class BlockSaltFissionController extends BlockFissionPart implements IAct
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileSaltFissionController controller) {
-                if (controller.isMultiblockAssembled()) {
+				if (controller.isMultiblockAssembled()) {
 					NCCriterions.SALT_FISSION_ASSEMBLED.trigger((EntityPlayerMP) player);
 					controller.openGui(world, pos, player);
 					return true;

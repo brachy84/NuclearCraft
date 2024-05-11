@@ -1,12 +1,11 @@
 package nc.tile.internal.inventory;
 
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
 import it.unimi.dsi.fastutil.ints.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class InventoryConnection {
 	

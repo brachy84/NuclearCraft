@@ -1,7 +1,5 @@
 package nc.block.property;
 
-import javax.annotation.Nonnull;
-
 import nc.tile.energy.ITileEnergy;
 import nc.tile.internal.energy.EnergyConnection;
 import net.minecraft.block.Block;
@@ -10,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nonnull;
 
 public interface ISidedEnergy {
 	

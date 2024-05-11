@@ -35,7 +35,7 @@ public class ClearTankPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ClearTankPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileFluid machine) {
-                machine.clearTank(message.tank);
+				machine.clearTank(message.tank);
 				tile.markDirty();
 			}
 		}

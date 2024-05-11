@@ -1,7 +1,5 @@
 package nc.tile.hx;
 
-import javax.annotation.Nonnull;
-
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.*;
 import nc.tile.internal.fluid.TankSorption;
@@ -11,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import javax.annotation.Nonnull;
+
 public class TileCondenserTube extends TileHeatExchangerPart {
 	
 	protected @Nonnull HeatExchangerTubeSetting[] tubeSettings = new HeatExchangerTubeSetting[] {HeatExchangerTubeSetting.DISABLED, HeatExchangerTubeSetting.DISABLED, HeatExchangerTubeSetting.DISABLED, HeatExchangerTubeSetting.DISABLED, HeatExchangerTubeSetting.DISABLED, HeatExchangerTubeSetting.DISABLED};
@@ -18,9 +18,9 @@ public class TileCondenserTube extends TileHeatExchangerPart {
 	public int[] adjacentTemperatures = new int[] {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE};
 	
 	public final double conductivity;
-
+	
 	public static abstract class Variant extends TileCondenserTube {
-
+		
 		protected Variant(HeatExchangerTubeType type) {
 			super(type.getConductivity());
 		}

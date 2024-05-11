@@ -1,8 +1,8 @@
 package nc.util;
 
-import java.util.*;
-
 import net.minecraft.util.text.translation.I18n;
+
+import java.util.*;
 
 public class Lang {
 	

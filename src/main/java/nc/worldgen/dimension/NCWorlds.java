@@ -1,9 +1,9 @@
 package nc.worldgen.dimension;
 
-import static nc.config.NCConfig.*;
-
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+
+import static nc.config.NCConfig.*;
 
 public class NCWorlds {
 	

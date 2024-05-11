@@ -1,13 +1,11 @@
 package nc.gui.multiblock.port;
 
 import nc.gui.GuiInfoTile;
-import nc.gui.element.GuiFluidRenderer;
-import nc.gui.element.NCButton;
-import nc.network.gui.ClearFilterTankPacket;
-import nc.network.gui.ClearTankPacket;
+import nc.gui.element.*;
+import nc.network.gui.*;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
-import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.port.TileFissionVesselPort;
+import nc.tile.TileContainerInfo;
 import nc.tile.internal.fluid.Tank;
 import nc.util.NCUtil;
 import net.minecraft.client.gui.GuiButton;

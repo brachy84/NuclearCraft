@@ -1,7 +1,5 @@
 package nc.handler;
 
-import static nc.config.NCConfig.*;
-
 import nc.capability.radiation.entity.IEntityRads;
 import nc.init.NCSounds;
 import nc.radiation.*;
@@ -10,6 +8,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.*;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.*;
+
+import static nc.config.NCConfig.*;
 
 public class ItemUseHandler {
 	

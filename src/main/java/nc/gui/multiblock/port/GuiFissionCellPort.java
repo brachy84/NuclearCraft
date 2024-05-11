@@ -3,8 +3,8 @@ package nc.gui.multiblock.port;
 import nc.gui.GuiInfoTile;
 import nc.gui.element.GuiItemRenderer;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
-import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.port.TileFissionCellPort;
+import nc.tile.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
@@ -16,7 +16,7 @@ public class GuiFissionCellPort extends GuiInfoTile<TileFissionCellPort, ItemPor
 	
 	@Override
 	public void renderTooltips(int mouseX, int mouseY) {
-		
+	
 	}
 	
 	@Override
@@ -29,7 +29,7 @@ public class GuiFissionCellPort extends GuiInfoTile<TileFissionCellPort, ItemPor
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		defaultStateAndBind();
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
+		
 		new GuiItemRenderer(tile.getFilterStacks().get(0), guiLeft + 44, guiTop + 35, 0.5F).draw();
 	}
 	
@@ -40,6 +40,6 @@ public class GuiFissionCellPort extends GuiInfoTile<TileFissionCellPort, ItemPor
 	}
 	
 	public void initButtons() {
-		
+	
 	}
 }

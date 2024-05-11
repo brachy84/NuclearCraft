@@ -3,8 +3,6 @@ GroovyScript support
 Config localisation
 Patchouli documentation
 
-CT Registration of machines
-
 Add auto-outputting to machines
 
 Fix smart insertion for fluid recipes

@@ -10,15 +10,15 @@ repositories {
 		url = "http://maven.cil.li/"
 	}
 	maven {
-		name = "CoFH Maven"
+		name = "CoFH"
 		url = "http://maven.covers1624.net"
 	}
 	maven {
-		name = "CCL Maven"
+		name = "chickenbones"
 		url = "http://chickenbones.net/maven/"
 	}
 	maven {
-		name "tterrag Maven"
+		name "tterrag"
 		url "https://maven.tterrag.com/"
 	}
 	maven {
@@ -30,6 +30,7 @@ repositories {
 		url = "https://modmaven.dev/"
 	}
 	maven {
+	name = "Cleanroom"
 		url 'https://maven.cleanroommc.com'
 	}
 }

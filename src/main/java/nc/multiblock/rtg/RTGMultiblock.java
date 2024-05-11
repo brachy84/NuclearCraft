@@ -1,7 +1,5 @@
 package nc.multiblock.rtg;
 
-import javax.annotation.Nonnull;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.Multiblock;
 import nc.tile.internal.energy.EnergyStorage;
@@ -11,6 +9,8 @@ import nc.util.NCMath;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 public class RTGMultiblock extends Multiblock<RTGMultiblock, TileRTG> {
 	

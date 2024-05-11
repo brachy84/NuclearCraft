@@ -1,7 +1,5 @@
 package nc.tile.quantum;
 
-import static nc.config.NCConfig.quantum_max_qubits_code;
-
 import nc.multiblock.quantum.QuantumComputer;
 import nc.util.Lang;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +9,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+
+import static nc.config.NCConfig.quantum_max_qubits_code;
 
 public abstract class TileQuantumComputerCodeGenerator extends TileQuantumComputerPart {
 	

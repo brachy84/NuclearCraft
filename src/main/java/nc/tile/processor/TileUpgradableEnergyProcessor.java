@@ -1,13 +1,13 @@
 package nc.tile.processor;
 
-import static nc.config.NCConfig.*;
-
 import nc.init.NCItems;
-import nc.network.tile.processor.*;
+import nc.network.tile.processor.EnergyProcessorUpdatePacket;
 import nc.tile.ITileInstallable;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
+
+import static nc.config.NCConfig.*;
 
 public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableEnergyProcessor<TILE, INFO>, INFO extends UpgradableProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket, INFO>> extends TileEnergyProcessor<TILE, INFO> implements ITileInstallable {
 	

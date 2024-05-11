@@ -1,9 +1,5 @@
 package nc.tile.processor;
 
-import java.util.*;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import nc.config.NCConfig;
 import nc.network.tile.processor.ProcessorUpdatePacket;
@@ -24,6 +20,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
+
+import javax.annotation.*;
+import java.util.*;
 
 public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>> extends ITickable, ITileInventory, ITileFluid, IInterfaceable, ITileGui<TILE, PACKET, INFO> {
 	
@@ -51,9 +50,11 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		}
 	}
 	
-	@Nonnull NonNullList<ItemStack> getConsumedStacks();
+	@Nonnull
+	NonNullList<ItemStack> getConsumedStacks();
 	
-	@Nonnull List<Tank> getConsumedTanks();
+	@Nonnull
+	List<Tank> getConsumedTanks();
 	
 	default List<ItemStack> getItemInputs(boolean consumed) {
 		return consumed ? getConsumedStacks() : getInventoryStacks().subList(0, getContainerInfo().itemInputSize);
@@ -78,7 +79,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	default List<IFluidIngredient> getFluidProducts() {
 		return getRecipeInfo().recipe.getFluidProducts();
 	}
-
+	
 	default long getEnergyCapacity() {
 		return getContainerInfo().getEnergyCapacity(getSpeedMultiplier(), getPowerMultiplier());
 	}
@@ -285,11 +286,11 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		}
 		return true;
 	}
-
+	
 	default int getItemProductCapacity(int slot, ItemStack stack) {
 		return stack.getMaxStackSize();
 	}
-
+	
 	default int getFluidProductCapacity(Tank tank, FluidStack stack) {
 		return tank.getCapacity();
 	}
@@ -532,7 +533,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	// ITileInventory
 	
 	@Override
-    default ItemStack decrStackSize(int slot, int amount) {
+	default ItemStack decrStackSize(int slot, int amount) {
 		ItemStack stack = ITileInventory.super.decrStackSize(slot, amount);
 		if (!getTileWorld().isRemote) {
 			INFO info = getContainerInfo();
@@ -548,7 +549,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	@Override
-    default void setInventorySlotContents(int slot, ItemStack stack) {
+	default void setInventorySlotContents(int slot, ItemStack stack) {
 		ITileInventory.super.setInventorySlotContents(slot, stack);
 		if (!getTileWorld().isRemote) {
 			INFO info = getContainerInfo();
@@ -563,7 +564,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	@Override
-    default boolean isItemValidForSlot(int slot, ItemStack stack) {
+	default boolean isItemValidForSlot(int slot, ItemStack stack) {
 		INFO info = getContainerInfo();
 		if (stack.isEmpty() || (slot >= info.itemInputSize && slot < info.itemInputSize + info.itemOutputSize)) {
 			return false;
@@ -584,26 +585,26 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	@Override
-    default boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
+	default boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		return ITileInventory.super.canInsertItem(slot, stack, side) && isItemValidForSlot(slot, stack);
 	}
 	
 	@Override
-    default void clearAllSlots() {
+	default void clearAllSlots() {
 		ITileInventory.super.clearAllSlots();
 		@Nonnull NonNullList<ItemStack> consumedStacks = getConsumedStacks();
-        Collections.fill(consumedStacks, ItemStack.EMPTY);
+		Collections.fill(consumedStacks, ItemStack.EMPTY);
 		refreshAll();
 	}
 	
 	@Override
-    default NBTTagCompound writeInventory(NBTTagCompound nbt) {
+	default NBTTagCompound writeInventory(NBTTagCompound nbt) {
 		NBTHelper.writeAllItems(nbt, getInventoryStacks(), getConsumedStacks());
 		return nbt;
 	}
 	
 	@Override
-    default void readInventory(NBTTagCompound nbt) {
+	default void readInventory(NBTTagCompound nbt) {
 		if (nbt.hasKey("hasConsumed")) {
 			NBTHelper.readAllItems(nbt, getInventoryStacks(), getConsumedStacks());
 		}
@@ -615,7 +616,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	// ITileFluid
 	
 	@Override
-    default void clearAllTanks() {
+	default void clearAllTanks() {
 		ITileFluid.super.clearAllTanks();
 		for (Tank tank : getConsumedTanks()) {
 			tank.setFluidStored(null);
@@ -624,7 +625,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	@Override
-    default NBTTagCompound writeTanks(NBTTagCompound nbt) {
+	default NBTTagCompound writeTanks(NBTTagCompound nbt) {
 		ITileFluid.super.writeTanks(nbt);
 		@Nonnull List<Tank> consumedTanks = getConsumedTanks();
 		for (int i = 0; i < consumedTanks.size(); ++i) {
@@ -634,7 +635,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	@Override
-    default void readTanks(NBTTagCompound nbt) {
+	default void readTanks(NBTTagCompound nbt) {
 		ITileFluid.super.readTanks(nbt);
 		@Nonnull List<Tank> consumedTanks = getConsumedTanks();
 		for (int i = 0; i < consumedTanks.size(); ++i) {
@@ -645,7 +646,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	// IGui
 	
 	@Override
-    default void onTileUpdatePacket(PACKET message) {
+	default void onTileUpdatePacket(PACKET message) {
 		setIsProcessing(message.isProcessing);
 		setCurrentTime(message.time);
 		setBaseProcessTime(message.baseProcessTime);

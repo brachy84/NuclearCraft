@@ -1,11 +1,5 @@
 package nc.util;
 
-import static nc.config.NCConfig.processor_particles;
-
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import nc.block.property.BlockProperties;
 import nc.tile.fluid.ITileFluid;
 import net.minecraft.block.properties.PropertyEnum;
@@ -18,6 +12,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.*;
+
+import javax.annotation.Nullable;
+import java.util.Random;
+
+import static nc.config.NCConfig.processor_particles;
 
 public class BlockHelper {
 	

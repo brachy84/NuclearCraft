@@ -1,12 +1,12 @@
 package nc.recipe;
 
-import static nc.config.NCConfig.*;
-
 import nc.handler.TileInfoHandler;
 import nc.recipe.processor.BasicProcessorRecipeHandler;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.NCMath;
+
+import static nc.config.NCConfig.*;
 
 public class RecipeStats {
 	
@@ -39,7 +39,7 @@ public class RecipeStats {
 			}
 		}
 	}
-
+	
 	private static void setScrubberMaxStats() {
 		ProcessorContainerInfo<?, ?, ?> info = TileInfoHandler.getProcessorContainerInfo("radiation_scrubber");
 		info.maxBaseProcessTime = 1D;

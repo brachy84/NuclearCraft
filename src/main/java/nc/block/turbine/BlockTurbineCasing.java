@@ -1,7 +1,5 @@
 package nc.block.turbine;
 
-import static nc.block.property.BlockProperties.FRAME;
-
 import nc.tile.turbine.TileTurbineCasing;
 import net.minecraft.block.state.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.FRAME;
 
 public class BlockTurbineCasing extends BlockTurbinePart {
 	
@@ -39,7 +39,7 @@ public class BlockTurbineCasing extends BlockTurbinePart {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		return rightClickOnPart(world, pos, player, hand, facing);

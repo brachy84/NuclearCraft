@@ -1,7 +1,5 @@
 package nc.tile.multiblock;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.Global;
 import nc.multiblock.*;
@@ -12,7 +10,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLLog;
 
-/** Base logic class for Multiblock-connected tile entities. Most multiblock machines should derive from this and implement their game logic in certain abstract methods. */
+import java.util.*;
+
+/**
+ * Base logic class for Multiblock-connected tile entities. Most multiblock machines should derive from this and implement their game logic in certain abstract methods.
+ */
 public abstract class TileMultiblockPart<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> extends TilePartAbstract implements ITileMultiblockPart<MULTIBLOCK, T> {
 	
 	private MULTIBLOCK multiblock;
@@ -130,28 +132,34 @@ public abstract class TileMultiblockPart<MULTIBLOCK extends Multiblock<MULTIBLOC
 		}
 	}
 	
-	/** Called when a block is removed by game actions, such as a player breaking the block or the block being changed into another block.
-	 * 
-	 * @see net.minecraft.tileentity.TileEntity#invalidate() */
+	/**
+	 * Called when a block is removed by game actions, such as a player breaking the block or the block being changed into another block.
+	 *
+	 * @see net.minecraft.tileentity.TileEntity#invalidate()
+	 */
 	@Override
 	public void invalidate() {
 		super.invalidate();
 		detachSelf(false);
 	}
 	
-	/** Called from Minecraft's tile entity loop, after all tile entities have been ticked, as the chunk in which this tile entity is contained is unloading. Happens before the Forge TickEnd event.
-	 * 
-	 * @see net.minecraft.tileentity.TileEntity#onChunkUnload() */
+	/**
+	 * Called from Minecraft's tile entity loop, after all tile entities have been ticked, as the chunk in which this tile entity is contained is unloading. Happens before the Forge TickEnd event.
+	 *
+	 * @see net.minecraft.tileentity.TileEntity#onChunkUnload()
+	 */
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
 		detachSelf(true);
 	}
 	
-	/** This is called when a block is being marked as valid by the chunk, but has not yet fully been placed into the world's TileEntity cache. WORLD, xCoord, yCoord and zCoord have been initialized, but any attempts to read data about the world can cause infinite loops - if you call getTileEntity on this TileEntity's coordinate from within validate(), you will blow your call stack.
+	/**
+	 * This is called when a block is being marked as valid by the chunk, but has not yet fully been placed into the world's TileEntity cache. WORLD, xCoord, yCoord and zCoord have been initialized, but any attempts to read data about the world can cause infinite loops - if you call getTileEntity on this TileEntity's coordinate from within validate(), you will blow your call stack.
 	 * TL;DR: Here there be dragons.
-	 * 
-	 * @see net.minecraft.tileentity.TileEntity#validate() */
+	 *
+	 * @see net.minecraft.tileentity.TileEntity#validate()
+	 */
 	@Override
 	public void validate() {
 		super.validate();
@@ -314,7 +322,10 @@ public abstract class TileMultiblockPart<MULTIBLOCK extends Multiblock<MULTIBLOC
 	}
 	
 	// Private/Protected Logic Helpers
-	/** Detaches this block from its multiblock. Calls detachBlock() and clears the multiblock member. */
+	
+	/**
+	 * Detaches this block from its multiblock. Calls detachBlock() and clears the multiblock member.
+	 */
 	protected void detachSelf(boolean chunkUnloading) {
 		if (multiblock != null) {
 			// Clean part out of multiblock
@@ -328,7 +339,9 @@ public abstract class TileMultiblockPart<MULTIBLOCK extends Multiblock<MULTIBLOC
 		MultiblockRegistry.INSTANCE.onPartRemovedFromWorld(world, tClass.cast(this));
 	}
 	
-	/** IF the part is connected to a multiblock, marks the whole multiblock for a render update on the client. On the server, this does nothing */
+	/**
+	 * IF the part is connected to a multiblock, marks the whole multiblock for a render update on the client. On the server, this does nothing
+	 */
 	protected void markMultiblockForRenderUpdate() {
 		if (multiblock != null) {
 			multiblock.markMultiblockForRenderUpdate();

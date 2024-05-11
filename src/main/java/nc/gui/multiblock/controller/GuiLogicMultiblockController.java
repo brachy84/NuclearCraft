@@ -2,7 +2,7 @@ package nc.gui.multiblock.controller;
 
 import nc.multiblock.*;
 import nc.network.multiblock.MultiblockUpdatePacket;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.tile.multiblock.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -14,7 +14,7 @@ public abstract class GuiLogicMultiblockController<MULTIBLOCK extends Multiblock
 	
 	public GuiLogicMultiblockController(Container inventory, EntityPlayer player, CONTROLLER controller, String textureLocation) {
 		super(inventory, player, controller, textureLocation);
-
+		
 		logic = multiblock.getLogic();
 	}
 	

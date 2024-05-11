@@ -41,7 +41,7 @@ public class ResetItemSorptionsPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ResetItemSorptionsPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileInventory machine) {
-                for (EnumFacing side : EnumFacing.VALUES) {
+				for (EnumFacing side : EnumFacing.VALUES) {
 					if (message.defaults) {
 						machine.setItemSorption(side, message.slot, machine.getInventoryConnection(side).getDefaultItemSorption(message.slot));
 					}

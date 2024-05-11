@@ -1,3 +1,12 @@
 #loader nc_preinit
 
-//mods.nuclearcraft.Registration.registerFissionSink("extreme", 210, "exactly two axial conductors || one irradiator || one shield");
+import mods.nuclearcraft.ProcessorBuilderHelper.standardSlot;
+import mods.nuclearcraft.ProcessorBuilderHelper.bigSlot;
+
+mods.nuclearcraft.UpgradableEnergyProcessorBuilder("glowstone_aggregator")
+	.setParticles(["reddust", "depthsuspend"] as string[])
+	.setDefaultProcessTime(600.0)
+	.setDefaultProcessPower(100.0)
+	.setItemInputSlots([standardSlot(56, 35)] as int[][])
+	.setItemOutputSlots([bigSlot(112, 31)] as int[][])
+	.buildAndRegister();

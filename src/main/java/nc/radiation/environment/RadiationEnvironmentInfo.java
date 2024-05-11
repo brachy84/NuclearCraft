@@ -1,9 +1,9 @@
 package nc.radiation.environment;
 
-import java.util.concurrent.*;
-
 import nc.tile.radiation.ITileRadiationEnvironment;
 import nc.util.FourPos;
+
+import java.util.concurrent.*;
 
 public class RadiationEnvironmentInfo {
 	

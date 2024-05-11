@@ -13,7 +13,7 @@ public interface IChargableItem {
 		}
 		
 		NBTTagCompound nbt = NBTHelper.getStackNBT(stack);
-        if (!nbt.hasKey("energyStorage")) {
+		if (!nbt.hasKey("energyStorage")) {
 			new EnergyStorage(item.getMaxEnergyStored(stack), item.getMaxTransfer(stack), 0L).writeToNBT(nbt, "energyStorage");
 		}
 		

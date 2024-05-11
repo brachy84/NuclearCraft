@@ -1,7 +1,5 @@
 package nc.block.fission;
 
-import static nc.config.NCConfig.fission_heat_damage;
-
 import nc.block.multiblock.BlockMultiblockPart;
 import nc.multiblock.fission.FissionReactor;
 import nc.tab.NCTabs;
@@ -13,6 +11,8 @@ import net.minecraft.entity.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
+
+import static nc.config.NCConfig.fission_heat_damage;
 
 public abstract class BlockFissionPart extends BlockMultiblockPart {
 	
@@ -51,7 +51,7 @@ public abstract class BlockFissionPart extends BlockMultiblockPart {
 		if (fission_heat_damage && entity instanceof EntityLivingBase) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileFissionPart part) {
-                FissionReactor reactor = part.getMultiblock();
+				FissionReactor reactor = part.getMultiblock();
 				if (reactor != null) {
 					float damage;
 					if (part instanceof IFissionComponent && ((IFissionComponent) part).getCluster() != null) {

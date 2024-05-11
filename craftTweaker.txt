@@ -74,7 +74,7 @@ Note A: recipe extras in curly brackets `{...}` are optional, but must be in the
 to set a Manufactory recipe's power multiplier, you must also first set a time multiplier. Make sure to not actually
 include the curly brackets!
 
-Note B: input ingredients can be ORed together using CT's `<...>*x | <...>*y | ...` syntax!
+Note B: input ingredients can be ORed together using CraftTweaker's `<...>*x | <...>*y | ...` syntax!
 
 ---------------------------------------------------------------------------------------------------------------------------
 
@@ -488,7 +488,7 @@ mods.nuclearcraft.Radiation.setFuelRadiationLevel(String oreSuffix, double fuelR
 
 mods.nuclearcraft.Radiation.setFoodRadiationStats(IItemStack food, double radiation, double resistance);
 
-mods.nuclearcraft.Radiation.setRadiationImmunityGameStages(boolean defaultImmunity, String... stageNames);
+mods.nuclearcraft.Radiation.setRadiationImmunityGameStages(boolean defaultImmunity, String[] stageNames);
 
 ---------------------------------------------------------------------------------------------------------------------------
 
@@ -498,30 +498,40 @@ mods.nuclearcraft.Radiation.setRadiationImmunityGameStages(boolean defaultImmuni
 Recipe Handlers:
 ----------------
 
-If you want to get the recipe handler associated with a recipe type, use `getRecipeHandler()`. For example, if you want to
-get the Solid Fuel Fission recipe handler, use `mods.nuclearcraft.SolidFission.getRecipeHandler()`.
+To get the recipe handler associated with a recipe type, use `getRecipeHandler()`. For example, if you want to get the
+Alloy Furnace recipe handler, use `AlloyFurnace.getRecipeHandler()`.
+
+You can also get recipe handlers dynamically by using `BasicRecipeHandler.get(String name)`. For example, if you want to
+get the Chemical Reactor recipe handler, use `BasicRecipeHandler.get("chemical_reactor")`.
 
 
 Recipe Handler Methods:
 -----------------------
 
-RecipeHandler::getName();
-RecipeHandler::getRecipeList();
+BasicRecipeHandler::getName();
+BasicRecipeHandler::getRecipeList();
 
-RecipeHandler::getItemInputSize();
-RecipeHandler::getFluidInputSize();
-RecipeHandler::getItemOutputSize();
-RecipeHandler::getFluidOutputSize();
-RecipeHandler::isShapeless();
+BasicRecipeHandler::getItemInputSize();
+BasicRecipeHandler::getFluidInputSize();
+BasicRecipeHandler::getItemOutputSize();
+BasicRecipeHandler::getFluidOutputSize();
+BasicRecipeHandler::isShapeless();
+
+BasicRecipeHandler::addRecipe([...]);
+
+BasicRecipeHandler::removeRecipeWithInput(IIngredient[] ingredients);
+BasicRecipeHandler::removeRecipeWithOutput(IIngredient[] ingredients);
+
+BasicRecipeHandler::removeAllRecipes();
 
 
 Recipe Methods:
 ---------------
 
-Recipe::getItemIngredient(int index);
-Recipe::getFluidIngredient(int index);
-Recipe::getItemProduct(int index);
-Recipe::getFluidProduct(int index);
+BasicRecipe::getItemIngredient(int index);
+BasicRecipe::getFluidIngredient(int index);
+BasicRecipe::getItemProduct(int index);
+BasicRecipe::getFluidProduct(int index);
 ___________________________________________________________________________________________________________________________
 ---------------------------------------------------------------------------------------------------------------------------
 
@@ -553,6 +563,81 @@ mods.nuclearcraft.Registration.registerBattery(String batteryID, long capacity, 
 
 ---------------------------------------------------------------------------------------------------------------------------
 
+ Custom Processors:
+>------------------<
+
+Processor Builders:
+--------------------
+
+Custom processors are registered using a builder pattern. After constructing a new builder instance, the properties of the
+processor are modified by using its methods. Calling the `register()` method after defining the properties as desired will
+register the processor.
+
+
+Processor Builder Constructors:
+--------------------------------
+
+mods.nuclearcraft.EnergyProcessorBuilder(String processorID);
+mods.nuclearcraft.UpgradableEnergyProcessorBuilder(String processorID);
+
+
+Processor Builder Methods:
+--------------------------
+
+ProcessorBuilder::register();
+
+ProcessorBuilder::setGuiWH(int w, int h);
+
+ProcessorBuilder::setItemInputSlots(int[][] slots);
+ProcessorBuilder::setFluidInputSlots(int[][] slots);
+ProcessorBuilder::setItemOutputSlots(int[][] slots);
+ProcessorBuilder::setFluidOutputSlots(int[][] slots);
+
+ProcessorBuilder::setPlayerGuiXY(int x, int y);
+
+ProcessorBuilder::setProgressBarGuiXYWHUV(int x, int y, int w, int h, int u, int v);
+ProcessorBuilder::setEnergyBarGuiXYWHUV(int x, int y, int w, int h, int u, int v);
+
+ProcessorBuilder::setMachineConfigGuiXY(int x, int y);
+ProcessorBuilder::setRedstoneControlGuiXY(int x, int y);
+
+ProcessorBuilder::setRecipeHandlerName(String recipeHandlerName);
+
+ProcessorBuilder::setJeiCategoryEnabled(boolean jeiCategoryEnabled);
+ProcessorBuilder::setJeiCategoryUid(String jeiCategoryUid);
+ProcessorBuilder::setJeiTitle(String jeiTitle);
+ProcessorBuilder::setJeiTexture(String jeiTexture);
+
+ProcessorBuilder::setJeiBackgroundXYWH(int x, int y, int w, int h);
+ProcessorBuilder::setJeiTooltipXYWH(int x, int y, int w, int h);
+ProcessorBuilder::setJeiClickAreaXYWH(int x, int y, int w, int h);
+
+ProcessorBuilder::setStandardJeiAlternateTitle();
+ProcessorBuilder::setStandardJeiAlternateTexture();
+
+ProcessorBuilder::standardExtend(int x, int y);
+ProcessorBuilder::disableProgressBar();
+
+ProcessorBuilder::setCreativeTab(ICreativeTab tab);
+ProcessorBuilder::setParticles(String[] particles);
+
+ProcessorBuilder::setInputTankCapacity(int capacity);
+ProcessorBuilder::setOutputTankCapacity(int capacity);
+
+ProcessorBuilder::setDefaultProcessTime(double processTime);
+ProcessorBuilder::setDefaultProcessPower(double processPower);
+
+ProcessorBuilder::setIsGenerator(boolean isGenerator);
+ProcessorBuilder::setConsumesInputs(boolean consumesInputs);
+ProcessorBuilder::setLosesProgress(boolean losesProgress);
+
+ProcessorBuilder::setOCComponentName(String ocComponentName);
+
+UpgradableProcessorBuilder::setSpeedUpgradeSlot(int x, int y, int w, int h);
+UpgradableProcessorBuilder::setEnergyUpgradeSlot(int x, int y, int w, int h);
+
+---------------------------------------------------------------------------------------------------------------------------
+
  Fission Materials
 >-----------------<
 
@@ -565,6 +650,9 @@ ________________________________________________________________________________
  Helper Methods
 #==============#
 
+Color Helper:
+-------------
+
 mods.nuclearcraft.ColorHelper.getAlpha(int color);
 mods.nuclearcraft.ColorHelper.getRed(int color);
 mods.nuclearcraft.ColorHelper.getGreen(int color);
@@ -574,11 +662,20 @@ mods.nuclearcraft.ColorHelper.blend(int color1, int color2, float blendRatio);
 mods.nuclearcraft.ColorHelper.glow(int color1, int color2, float glowFactor);
 
 mods.nuclearcraft.ColorHelper.waterBlend(int soluteColor, float blendRatio);
+
 mods.nuclearcraft.ColorHelper.getNAKColor(int color);
 mods.nuclearcraft.ColorHelper.getFluorideColor(int color);
 mods.nuclearcraft.ColorHelper.getFLIBEColor(int color);
 mods.nuclearcraft.ColorHelper.getZAColor(int color);
 
+
+Processor Builder Helper:
+-------------------------
+
+mods.nuclearcraft.ProcessorBuilderHelper.standardSlot(int x, int y);
+mods.nuclearcraft.ProcessorBuilderHelper.bigSlot(int x, int y);
+
+mods.nuclearcraft.ProcessorBuilderHelper.getCreativeTabNC(String name);
 ___________________________________________________________________________________________________________________________
 ---------------------------------------------------------------------------------------------------------------------------
 

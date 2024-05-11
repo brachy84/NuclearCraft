@@ -29,37 +29,37 @@ public class BlockSaltFissionMetaHeater2 extends BlockFissionMetaPart<MetaEnums.
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-        return switch (metadata) {
-            case 0 -> new TileSaltFissionHeater.Tin();
-            case 1 -> new TileSaltFissionHeater.Lead();
-            case 2 -> new TileSaltFissionHeater.Boron();
-            case 3 -> new TileSaltFissionHeater.Lithium();
-            case 4 -> new TileSaltFissionHeater.Magnesium();
-            case 5 -> new TileSaltFissionHeater.Manganese();
-            case 6 -> new TileSaltFissionHeater.Aluminum();
-            case 7 -> new TileSaltFissionHeater.Silver();
-            case 8 -> new TileSaltFissionHeater.Fluorite();
-            case 9 -> new TileSaltFissionHeater.Villiaumite();
-            case 10 -> new TileSaltFissionHeater.Carobbiite();
-            case 11 -> new TileSaltFissionHeater.Arsenic();
-            case 12 -> new TileSaltFissionHeater.LiquidNitrogen();
-            case 13 -> new TileSaltFissionHeater.LiquidHelium();
-            case 14 -> new TileSaltFissionHeater.Enderium();
-            case 15 -> new TileSaltFissionHeater.Cryotheum();
-            default -> new TileSaltFissionHeater.Tin();
-        };
-    }
+		return switch (metadata) {
+			case 0 -> new TileSaltFissionHeater.Tin();
+			case 1 -> new TileSaltFissionHeater.Lead();
+			case 2 -> new TileSaltFissionHeater.Boron();
+			case 3 -> new TileSaltFissionHeater.Lithium();
+			case 4 -> new TileSaltFissionHeater.Magnesium();
+			case 5 -> new TileSaltFissionHeater.Manganese();
+			case 6 -> new TileSaltFissionHeater.Aluminum();
+			case 7 -> new TileSaltFissionHeater.Silver();
+			case 8 -> new TileSaltFissionHeater.Fluorite();
+			case 9 -> new TileSaltFissionHeater.Villiaumite();
+			case 10 -> new TileSaltFissionHeater.Carobbiite();
+			case 11 -> new TileSaltFissionHeater.Arsenic();
+			case 12 -> new TileSaltFissionHeater.LiquidNitrogen();
+			case 13 -> new TileSaltFissionHeater.LiquidHelium();
+			case 14 -> new TileSaltFissionHeater.Enderium();
+			case 15 -> new TileSaltFissionHeater.Cryotheum();
+			default -> new TileSaltFissionHeater.Tin();
+		};
+	}
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileSaltFissionHeater heater) {
-                FissionReactor reactor = heater.getMultiblock();
+				FissionReactor reactor = heater.getMultiblock();
 				if (reactor != null) {
 					FluidStack fluidStack = FluidStackHelper.getFluid(player.getHeldItem(hand));
 					if (heater.canModifyFilter(0) && heater.getTanks().get(0).isEmpty() && fluidStack != null && !FluidStackHelper.stacksEqual(heater.getFilterTanks().get(0).getFluid(), fluidStack) && heater.getTanks().get(0).canFillFluidType(fluidStack)) {

@@ -1,9 +1,5 @@
 package nc.block;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
 import nc.enumm.*;
 import nc.tab.NCTabs;
 import nc.tile.ITile;
@@ -25,8 +21,11 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.*;
 
-public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends Block implements IBlockMeta<T> {
+import javax.annotation.Nullable;
+import java.util.List;
 
+public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends Block implements IBlockMeta<T> {
+	
 	public final Class<T> enumm;
 	public final T[] values;
 	public final PropertyEnum<T> type;
@@ -127,12 +126,12 @@ public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlock
 			return new BlockStateContainer(this, TYPE);
 		}
 	}
-
+	
 	@Override
 	public Class<T> getEnumClass() {
 		return enumm;
 	}
-
+	
 	@Override
 	public T[] getValues() {
 		return values;
@@ -144,9 +143,9 @@ public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlock
 	}
 	
 	public void setMetaHarvestLevels() {
-        for (T next : values) {
-            setHarvestLevel(next.getHarvestTool(), next.getHarvestLevel(), getStateFromMeta(next.getID()));
-        }
+		for (T next : values) {
+			setHarvestLevel(next.getHarvestTool(), next.getHarvestLevel(), getStateFromMeta(next.getID()));
+		}
 	}
 	
 	@Override

@@ -1,14 +1,13 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.mc1120.item.MCItemStack;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class EmptyItemIngredient implements IItemIngredient {
 	
@@ -41,7 +40,7 @@ public class EmptyItemIngredient implements IItemIngredient {
 	
 	@Override
 	public void setMaxStackSize(int stackSize) {
-		
+	
 	}
 	
 	@Override

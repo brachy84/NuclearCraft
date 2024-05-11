@@ -1,11 +1,11 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.util.RegistryHelper;
 import net.minecraft.world.biome.Biome;
+
+import static nc.config.NCConfig.*;
 
 public class RadBiomes {
 	

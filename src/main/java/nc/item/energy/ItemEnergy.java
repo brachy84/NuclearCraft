@@ -1,9 +1,5 @@
 package nc.item.energy;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import ic2.api.item.*;
 import nc.item.NCItem;
 import nc.tile.internal.energy.EnergyConnection;
@@ -16,6 +12,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 @Optional.InterfaceList(value = {@Optional.Interface(iface = "ic2.api.item.ISpecialElectricItem", modid = "ic2")})
 public class ItemEnergy extends NCItem implements ISpecialElectricItem, IChargableItem {

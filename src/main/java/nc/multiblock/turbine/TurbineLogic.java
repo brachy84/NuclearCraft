@@ -1,13 +1,5 @@
 package nc.multiblock.turbine;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.vecmath.Vector3f;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import it.unimi.dsi.fastutil.doubles.*;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.*;
@@ -37,6 +29,12 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.vecmath.Vector3f;
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbinePart> implements IPacketMultiblockLogic<Turbine, TurbineLogic, ITurbinePart, TurbineUpdatePacket> {
 	
@@ -1007,14 +1005,14 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 	protected double[] particleSpawnPos(BlockPos pos) {
 		double offsetU = 0.5D + (rand.nextDouble() - 0.5D) / 2D;
 		double offsetV = 0.5D + (rand.nextDouble() - 0.5D) / 2D;
-        return switch (getTurbine().flowDir) {
-            case DOWN -> new double[]{pos.getX() + offsetV, pos.getY() + 1D, pos.getZ() + offsetU};
-            case UP -> new double[]{pos.getX() + offsetV, pos.getY(), pos.getZ() + offsetU};
-            case NORTH -> new double[]{pos.getX() + offsetU, pos.getY() + offsetV, pos.getZ() + 1D};
-            case SOUTH -> new double[]{pos.getX() + offsetU, pos.getY() + offsetV, pos.getZ()};
-            case WEST -> new double[]{pos.getX() + 1D, pos.getY() + offsetU, pos.getZ() + offsetV};
-            case EAST -> new double[]{pos.getX(), pos.getY() + offsetU, pos.getZ() + offsetV};
-        };
+		return switch (getTurbine().flowDir) {
+			case DOWN -> new double[] {pos.getX() + offsetV, pos.getY() + 1D, pos.getZ() + offsetU};
+			case UP -> new double[] {pos.getX() + offsetV, pos.getY(), pos.getZ() + offsetU};
+			case NORTH -> new double[] {pos.getX() + offsetU, pos.getY() + offsetV, pos.getZ() + 1D};
+			case SOUTH -> new double[] {pos.getX() + offsetU, pos.getY() + offsetV, pos.getZ()};
+			case WEST -> new double[] {pos.getX() + 1D, pos.getY() + offsetU, pos.getZ() + offsetV};
+			case EAST -> new double[] {pos.getX(), pos.getY() + offsetU, pos.getZ() + offsetV};
+		};
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -1161,12 +1159,12 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 	
 	@Override
 	public void writeToLogicTag(NBTTagCompound logicTag, SyncReason syncReason) {
-		
+	
 	}
 	
 	@Override
 	public void readFromLogicTag(NBTTagCompound logicTag, SyncReason syncReason) {
-		
+	
 	}
 	
 	// Packets

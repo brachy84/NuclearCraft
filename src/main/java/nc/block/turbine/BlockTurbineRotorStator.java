@@ -1,7 +1,5 @@
 package nc.block.turbine;
 
-import static nc.util.NCRenderHelper.PIXEL;
-
 import nc.multiblock.turbine.TurbineRotorBladeUtil;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import nc.tile.turbine.TileTurbineRotorStator;
@@ -14,12 +12,14 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.*;
 
+import static nc.util.NCRenderHelper.PIXEL;
+
 public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockRotorBlade {
 	
 	private static final AxisAlignedBB[] STATOR_AABB = {new AxisAlignedBB(0D, PIXEL * 2D, PIXEL * 7D, PIXEL * 16D, PIXEL * 14D, PIXEL * 9D), new AxisAlignedBB(PIXEL * 7D, 0D, PIXEL * 2D, PIXEL * 9D, PIXEL * 16D, PIXEL * 14D), new AxisAlignedBB(PIXEL * 7D, PIXEL * 2D, 0D, PIXEL * 9D, PIXEL * 14D, PIXEL * 16D)};
-
+	
 	private final TurbineRotorStatorType statorType;
-
+	
 	public BlockTurbineRotorStator(TurbineRotorStatorType statorType) {
 		super();
 		setDefaultState(blockState.getBaseState().withProperty(TurbineRotorBladeUtil.DIR, TurbinePartDir.Y));
@@ -39,8 +39,8 @@ public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockR
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		return switch (statorType) {
-            case STANDARD -> new TileTurbineRotorStator.Standard();
-        };
+			case STANDARD -> new TileTurbineRotorStator.Standard();
+		};
 	}
 	
 	@Override
@@ -48,13 +48,13 @@ public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockR
 		if (state.getBlock() != this) {
 			return super.getBoundingBox(state, source, pos);
 		}
-
-        return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
-            case X -> STATOR_AABB[0];
-            case Y -> STATOR_AABB[1];
-            case Z -> STATOR_AABB[2];
-            default -> super.getBoundingBox(state, source, pos);
-        };
+		
+		return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
+			case X -> STATOR_AABB[0];
+			case Y -> STATOR_AABB[1];
+			case Z -> STATOR_AABB[2];
+			default -> super.getBoundingBox(state, source, pos);
+		};
 	}
 	
 	@Override
@@ -67,18 +67,18 @@ public class BlockTurbineRotorStator extends BlockTurbinePart implements IBlockR
 		if (state.getBlock() != this) {
 			return super.getSelectedBoundingBox(state, worldIn, pos);
 		}
-
-        return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
-            case X -> STATOR_AABB[0].offset(pos);
-            case Y -> STATOR_AABB[1].offset(pos);
-            case Z -> STATOR_AABB[2].offset(pos);
-            default -> super.getSelectedBoundingBox(state, worldIn, pos);
-        };
+		
+		return switch (state.getValue(TurbineRotorBladeUtil.DIR)) {
+			case X -> STATOR_AABB[0].offset(pos);
+			case Y -> STATOR_AABB[1].offset(pos);
+			case Z -> STATOR_AABB[2].offset(pos);
+			default -> super.getSelectedBoundingBox(state, worldIn, pos);
+		};
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		return rightClickOnPart(world, pos, player, hand, facing);

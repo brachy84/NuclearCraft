@@ -1,9 +1,5 @@
 package nc.tile.generator;
 
-import static nc.config.NCConfig.machine_update_rate;
-
-import java.util.Random;
-
 import nc.recipe.*;
 import nc.tile.dummy.IInterfaceable;
 import nc.tile.energy.*;
@@ -14,6 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
+
+import static nc.config.NCConfig.machine_update_rate;
 
 public class TileDecayGenerator extends TileEnergy implements ITickable, IInterfaceable {
 	

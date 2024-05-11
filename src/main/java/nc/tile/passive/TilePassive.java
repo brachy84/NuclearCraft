@@ -1,10 +1,10 @@
 package nc.tile.passive;
 
-import static nc.config.NCConfig.*;
-
 import nc.recipe.ingredient.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
+import static nc.config.NCConfig.*;
 
 public class TilePassive {
 	

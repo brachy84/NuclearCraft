@@ -3,15 +3,10 @@ package nc.gui.multiblock.controller;
 import nc.Global;
 import nc.gui.element.MultiblockButton;
 import nc.multiblock.hx.HeatExchanger;
-import nc.network.multiblock.ClearAllMaterialPacket;
-import nc.network.multiblock.HeatExchangerUpdatePacket;
-import nc.tile.info.TileContainerInfo;
-import nc.tile.hx.IHeatExchangerPart;
-import nc.tile.hx.TileHeatExchangerController;
-import nc.util.Lang;
-import nc.util.NCMath;
-import nc.util.NCUtil;
-import nc.util.StringHelper;
+import nc.network.multiblock.*;
+import nc.tile.hx.*;
+import nc.tile.TileContainerInfo;
+import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -19,8 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GuiHeatExchangerController extends GuiMultiblockController<HeatExchanger, IHeatExchangerPart, HeatExchangerUpdatePacket, TileHeatExchangerController, TileContainerInfo<TileHeatExchangerController>> {
 	

@@ -1,7 +1,5 @@
 package nc.block.fission;
 
-import static nc.block.property.BlockProperties.*;
-
 import nc.block.tile.IActivatable;
 import nc.item.ItemMultitool;
 import nc.multiblock.fission.*;
@@ -15,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockFissionMonitor extends BlockFissionPart implements IActivatable {
 	
@@ -61,14 +61,14 @@ public class BlockFissionMonitor extends BlockFissionPart implements IActivatabl
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote && !ItemMultitool.isMultitool(player.getHeldItem(hand))) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileFissionMonitor monitor) {
-                FissionReactor reactor = monitor.getMultiblock();
+				FissionReactor reactor = monitor.getMultiblock();
 				if (reactor != null) {
 					IFissionComponent component = reactor.getPartMap(IFissionComponent.class).get(monitor.getComponentPos().toLong());
 					if (component != null) {

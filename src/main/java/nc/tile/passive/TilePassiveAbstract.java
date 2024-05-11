@@ -1,11 +1,6 @@
 package nc.tile.passive;
 
-import static nc.config.NCConfig.*;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-
 import gregtech.api.capability.GregtechCapabilities;
 import nc.ModCheck;
 import nc.capability.radiation.source.IRadiationSource;
@@ -29,6 +24,10 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nullable;
+
+import static nc.config.NCConfig.*;
 
 public abstract class TilePassiveAbstract extends TileEnergyFluidSidedInventory implements ITilePassive {
 	
@@ -167,7 +166,7 @@ public abstract class TilePassiveAbstract extends TileEnergyFluidSidedInventory 
 					getInventoryStacks().get(0).grow(itemChange);
 				}
 			}
-        }
+		}
 		else {
 			if (getInventoryStacks().get(0).getCount() < Math.abs(itemChange)) {
 				return false;
@@ -180,9 +179,9 @@ public abstract class TilePassiveAbstract extends TileEnergyFluidSidedInventory 
 					getInventoryStacks().set(0, ItemStack.EMPTY);
 				}
 			}
-        }
-        return true;
-    }
+		}
+		return true;
+	}
 	
 	protected boolean changeFluid(boolean simulateChange) {
 		if (fluidRate == 0) {

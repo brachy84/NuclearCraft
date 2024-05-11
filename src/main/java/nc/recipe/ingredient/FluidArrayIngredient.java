@@ -1,14 +1,13 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.item.IngredientOr;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class FluidArrayIngredient implements IFluidIngredient {
 	
@@ -100,7 +99,8 @@ public class FluidArrayIngredient implements IFluidIngredient {
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption sorption) {
 		if (object instanceof FluidArrayIngredient) {
-			loop: for (IFluidIngredient ingredient : ingredientList) {
+			loop:
+			for (IFluidIngredient ingredient : ingredientList) {
 				for (IFluidIngredient ingr : ((FluidArrayIngredient) object).ingredientList) {
 					if (ingredient.match(ingr, sorption).matches()) {
 						continue loop;

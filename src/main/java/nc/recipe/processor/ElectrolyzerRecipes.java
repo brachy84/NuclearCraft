@@ -1,9 +1,9 @@
 package nc.recipe.processor;
 
+import java.util.*;
+
 import static nc.util.FissionHelper.FISSION_FLUID;
 import static nc.util.FluidStackHelper.*;
-
-import java.util.*;
 
 public class ElectrolyzerRecipes extends BasicProcessorRecipeHandler {
 	

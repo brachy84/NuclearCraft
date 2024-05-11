@@ -1,9 +1,6 @@
 package nc.recipe.ingredient;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
@@ -11,6 +8,8 @@ import nc.tile.internal.fluid.Tank;
 import nc.util.FluidStackHelper;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.List;
 
 public class FluidIngredient implements IFluidIngredient {
 	
@@ -80,7 +79,7 @@ public class FluidIngredient implements IFluidIngredient {
 			object = ((Tank) object).getFluid();
 		}
 		if (object instanceof FluidStack fluidstack) {
-            if (!fluidstack.isFluidEqual(stack) || !FluidStack.areFluidStackTagsEqual(fluidstack, stack)) {
+			if (!fluidstack.isFluidEqual(stack) || !FluidStack.areFluidStackTagsEqual(fluidstack, stack)) {
 				return IngredientMatchResult.FAIL;
 			}
 			return new IngredientMatchResult(type.checkStackSize(stack.amount, fluidstack.amount), 0);

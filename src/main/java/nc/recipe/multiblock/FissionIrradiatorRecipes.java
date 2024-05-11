@@ -1,13 +1,12 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
+import com.google.common.collect.Lists;
+import nc.radiation.RadSources;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import nc.radiation.RadSources;
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.*;
 
 public class FissionIrradiatorRecipes extends BasicRecipeHandler {
 	

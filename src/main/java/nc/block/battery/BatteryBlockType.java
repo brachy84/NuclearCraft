@@ -39,15 +39,15 @@ public enum BatteryBlockType implements IBatteryBlockType {
 	
 	@Override
 	public TileEntity getTile() {
-        return switch (this) {
-            case VOLTAIC_PILE_BASIC -> new TileBattery.VoltaicPileBasic();
-            case VOLTAIC_PILE_ADVANCED -> new TileBattery.VoltaicPileAdvanced();
-            case VOLTAIC_PILE_DU -> new TileBattery.VoltaicPileDU();
-            case VOLTAIC_PILE_ELITE -> new TileBattery.VoltaicPileElite();
-            case LITHIUM_ION_BATTERY_BASIC -> new TileBattery.LithiumIonBatteryBasic();
-            case LITHIUM_ION_BATTERY_ADVANCED -> new TileBattery.LithiumIonBatteryAdvanced();
-            case LITHIUM_ION_BATTERY_DU -> new TileBattery.LithiumIonBatteryDU();
-            case LITHIUM_ION_BATTERY_ELITE -> new TileBattery.LithiumIonBatteryElite();
-        };
+		return switch (this) {
+			case VOLTAIC_PILE_BASIC -> new TileBattery.VoltaicPileBasic();
+			case VOLTAIC_PILE_ADVANCED -> new TileBattery.VoltaicPileAdvanced();
+			case VOLTAIC_PILE_DU -> new TileBattery.VoltaicPileDU();
+			case VOLTAIC_PILE_ELITE -> new TileBattery.VoltaicPileElite();
+			case LITHIUM_ION_BATTERY_BASIC -> new TileBattery.LithiumIonBatteryBasic();
+			case LITHIUM_ION_BATTERY_ADVANCED -> new TileBattery.LithiumIonBatteryAdvanced();
+			case LITHIUM_ION_BATTERY_DU -> new TileBattery.LithiumIonBatteryDU();
+			case LITHIUM_ION_BATTERY_ELITE -> new TileBattery.LithiumIonBatteryElite();
+		};
 	}
 }

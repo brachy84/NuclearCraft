@@ -1,11 +1,11 @@
 package nc.integration.crafttweaker;
 
-import java.util.*;
-
 import crafttweaker.*;
 import crafttweaker.api.item.IIngredient;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
+
+import java.util.*;
 
 public class CTAddRecipe implements IAction {
 	

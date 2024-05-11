@@ -1,32 +1,23 @@
 package nc.recipe;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.objects.*;
+import nc.integration.crafttweaker.*;
 import nc.integration.gtce.GTCERecipeHelper;
-import nc.recipe.ingredient.IFluidIngredient;
-import nc.recipe.ingredient.IItemIngredient;
-import nc.util.NCMath;
-import nc.util.NCUtil;
-import nc.util.PermutationHelper;
-import nc.util.StackHelper;
+import nc.recipe.ingredient.*;
+import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Optional;
 import org.apache.commons.lang3.tuple.Pair;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
+import stanhebben.zenscript.annotations.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.*;
+import java.util.*;
 
-import static nc.config.NCConfig.factor_recipes;
-import static nc.config.NCConfig.gtce_recipe_integration;
+import static nc.config.NCConfig.*;
 
 @ZenClass("mods.nuclearcraft.BasicRecipeHandler")
 @ZenRegister
@@ -245,6 +236,11 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		return name;
 	}
 	
+	@ZenMethod
+	public static BasicRecipeHandler get(String name) {
+		return NCRecipes.getHandler(name);
+	}
+	
 	@Override
 	@ZenMethod
 	public List<BasicRecipe> getRecipeList() {
@@ -274,6 +270,30 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	@ZenMethod
 	public boolean isShapeless() {
 		return isShapeless;
+	}
+	
+	@ZenMethod(value = "addRecipe")
+	@Optional.Method(modid = "crafttweaker")
+	public void ctAddRecipe(Object... objects) {
+		CraftTweakerAPI.apply(new CTAddRecipe(this, Arrays.asList(objects)));
+	}
+	
+	@ZenMethod(value = "removeRecipeWithInput")
+	@Optional.Method(modid = "crafttweaker")
+	public void ctRemoveRecipeWithInput(crafttweaker.api.item.IIngredient... ctIngredients) {
+		CraftTweakerAPI.apply(new CTRemoveRecipe(this, IngredientSorption.INPUT, Arrays.asList(ctIngredients)));
+	}
+	
+	@ZenMethod(value = "removeRecipeWithOutput")
+	@Optional.Method(modid = "crafttweaker")
+	public void ctRemoveRecipeWithOutput(crafttweaker.api.item.IIngredient... ctIngredients) {
+		CraftTweakerAPI.apply(new CTRemoveRecipe(this, IngredientSorption.OUTPUT, Arrays.asList(ctIngredients)));
+	}
+	
+	@ZenMethod(value = "removeAllRecipes")
+	@Optional.Method(modid = "crafttweaker")
+	public void ctRemoveAllRecipes() {
+		CraftTweakerAPI.apply(new CTRemoveAllRecipes(this));
 	}
 	
 	@Override
@@ -354,7 +374,9 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		return false;
 	}
 	
-	/** Smart item insertion - don't insert if matching item is already present in another input slot */
+	/**
+	 * Smart item insertion - don't insert if matching item is already present in another input slot
+	 */
 	public boolean isValidItemInput(int slot, ItemStack stack, RecipeInfo<BasicRecipe> recipeInfo, List<ItemStack> allInputs, List<ItemStack> otherInputs) {
 		ItemStack slotStack = allInputs.get(slot);
 		if (otherInputs.isEmpty() || (stack.isItemEqual(slotStack) && StackHelper.areItemStackTagsEqual(stack, slotStack))) {
@@ -374,9 +396,11 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		
 		if (recipeInfo == null) {
 			List<BasicRecipe> recipes = new ArrayList<>(recipeList);
-			recipeLoop: for (BasicRecipe recipe : recipeList) {
+			recipeLoop:
+			for (BasicRecipe recipe : recipeList) {
 				if (isShapeless) {
-					stackLoop: for (ItemStack inputStack : allInputs) {
+					stackLoop:
+					for (ItemStack inputStack : allInputs) {
 						if (!inputStack.isEmpty()) {
 							for (IItemIngredient recipeInput : recipe.getItemIngredients()) {
 								if (recipeInput.match(inputStack, IngredientSorption.NEUTRAL).matches()) {

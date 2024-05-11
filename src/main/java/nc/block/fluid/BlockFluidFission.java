@@ -1,7 +1,5 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
 import nc.fluid.FluidFission;
 import nc.init.NCBlocks;
 import nc.util.PotionHelper;
@@ -12,6 +10,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+
+import java.util.Random;
 
 public class BlockFluidFission extends BlockFluidMolten {
 	

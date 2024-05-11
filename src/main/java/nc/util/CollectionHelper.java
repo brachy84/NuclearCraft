@@ -1,13 +1,9 @@
 package nc.util;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.doubles.DoubleList;
-import it.unimi.dsi.fastutil.floats.FloatArrayList;
-import it.unimi.dsi.fastutil.floats.FloatList;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongList;
+import it.unimi.dsi.fastutil.doubles.*;
+import it.unimi.dsi.fastutil.floats.*;
+import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.*;
@@ -29,7 +25,7 @@ public class CollectionHelper {
 	
 	@SafeVarargs
 	public static <T> List<T> intersect(List<T> first, List<T>... rest) {
-        List<T> tList = new ArrayList<>(first);
+		List<T> tList = new ArrayList<>(first);
 		for (List<T> list : rest) {
 			tList = intersect(tList, list);
 		}
@@ -72,7 +68,7 @@ public class CollectionHelper {
 	
 	@SafeVarargs
 	public static <T> List<T> concatenate(List<T> first, List<T>... rest) {
-        List<T> result = new ArrayList<>(first);
+		List<T> result = new ArrayList<>(first);
 		for (List<T> list : rest) {
 			result.addAll(list);
 		}
@@ -252,9 +248,9 @@ public class CollectionHelper {
 		}
 		return array;
 	}
-
+	
 	// Iteration
-
+	
 	public static <T> void forEachIndexed(Iterable<T> iterable, ObjIntConsumer<T> consumer) {
 		int i = 0;
 		for (T t : iterable) {
@@ -288,7 +284,9 @@ public class CollectionHelper {
 		return increasingList(0, length);
 	}
 	
-	/** Returns true if only the selected entries are true */
+	/**
+	 * Returns true if only the selected entries are true
+	 */
 	public static boolean arrayXAND(boolean[] array, int... i) {
 		for (int j = 0; j < array.length; ++j) {
 			boolean b = 2 * i.length > array.length;

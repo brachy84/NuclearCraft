@@ -1,8 +1,7 @@
 package nc.radiation;
 
 import baubles.api.BaubleType;
-import baubles.api.cap.BaublesCapabilities;
-import baubles.api.cap.IBaublesItemHandler;
+import baubles.api.cap.*;
 import ic2.api.reactor.IReactor;
 import nc.ModCheck;
 import nc.capability.radiation.IRadiation;
@@ -12,14 +11,10 @@ import nc.capability.radiation.source.IRadiationSource;
 import nc.init.NCItems;
 import nc.tile.dummy.TileDummy;
 import nc.tile.radiation.ITileRadiationEnvironment;
-import nc.util.ArmorHelper;
-import nc.util.NCMath;
-import nc.util.UnitHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import nc.util.*;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -29,11 +24,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.items.*;
 
 import java.util.List;
 
@@ -91,7 +83,9 @@ public class RadiationHelper {
 		source.setRadiationBuffer(source.getRadiationBuffer() + addedRadiation);
 	}
 	
-	/** Only use for radiation leaks, etc. */
+	/**
+	 * Only use for radiation leaks, etc.
+	 */
 	public static void addToSourceRadiation(IRadiationSource source, double addedRadiation) {
 		source.setRadiationLevel(source.getRadiationLevel() + addedRadiation);
 	}

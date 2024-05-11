@@ -45,7 +45,7 @@ public class ToggleItemSorptionPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ToggleItemSorptionPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileInventory machine) {
-                machine.setItemSorption(EnumFacing.byIndex(message.side), message.slot, ItemSorption.values()[message.sorption]);
+				machine.setItemSorption(EnumFacing.byIndex(message.side), message.slot, ItemSorption.values()[message.sorption]);
 				machine.markDirtyAndNotify(true);
 			}
 		}

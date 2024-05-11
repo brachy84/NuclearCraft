@@ -1,13 +1,6 @@
 package nc.tile.energyFluid;
 
-import static nc.config.NCConfig.enable_mek_gas;
-
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.ModCheck;
 import nc.tile.energy.TileEnergy;
@@ -19,6 +12,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
+import javax.annotation.*;
+import java.util.*;
+
+import static nc.config.NCConfig.enable_mek_gas;
 
 public abstract class TileEnergyFluid extends TileEnergy implements ITileFluid {
 	

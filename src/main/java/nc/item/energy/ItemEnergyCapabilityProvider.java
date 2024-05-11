@@ -1,9 +1,5 @@
 package nc.item.energy;
 
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import nc.ModCheck;
 import nc.tile.internal.energy.*;
@@ -13,6 +9,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.energy.CapabilityEnergy;
+
+import javax.annotation.*;
+
+import static nc.config.NCConfig.enable_gtce_eu;
 
 public class ItemEnergyCapabilityProvider implements ICapabilityProvider {
 	

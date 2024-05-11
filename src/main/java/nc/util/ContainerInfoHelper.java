@@ -1,10 +1,8 @@
-package nc.tile.info;
+package nc.util;
 
 import java.util.List;
 
-import nc.util.StreamHelper;
-
-public class TileContainerInfoHelper {
+public class ContainerInfoHelper {
 	
 	public static int[] standardSlot(int x, int y) {
 		return new int[] {x, y, 16, 16};
@@ -15,7 +13,7 @@ public class TileContainerInfoHelper {
 	}
 	
 	public static List<int[]> stackXYList(List<int[]> slotXYWHList) {
-		return StreamHelper.map(slotXYWHList, TileContainerInfoHelper::stackXY);
+		return StreamHelper.map(slotXYWHList, ContainerInfoHelper::stackXY);
 	}
 	
 	public static int[] stackXY(int[] slotXYWH) {

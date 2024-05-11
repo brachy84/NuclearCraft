@@ -1,14 +1,13 @@
 package nc.recipe.processor;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import com.google.common.collect.*;
-
 import nc.radiation.RadSources;
-import nc.recipe.*;
+import nc.recipe.RecipeHelper;
 import nc.util.*;
+
+import java.util.Set;
+
+import static nc.config.NCConfig.*;
 
 public class DecayHastenerRecipes extends BasicProcessorRecipeHandler {
 	

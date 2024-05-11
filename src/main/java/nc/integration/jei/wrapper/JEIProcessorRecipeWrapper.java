@@ -1,7 +1,5 @@
 package nc.integration.jei.wrapper;
 
-import java.util.*;
-
 import mezz.jei.api.IGuiHelper;
 import nc.handler.TileInfoHandler;
 import nc.integration.jei.category.JEIProcessorRecipeCategory;
@@ -15,8 +13,10 @@ import nc.util.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 
-public abstract class JEIProcessorRecipeWrapper<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, WRAPPER extends JEIProcessorRecipeWrapper<TILE, PACKET, INFO, WRAPPER>> extends JEIRecipeWrapper {
+import java.util.*;
 
+public abstract class JEIProcessorRecipeWrapper<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, WRAPPER extends JEIProcessorRecipeWrapper<TILE, PACKET, INFO, WRAPPER>> extends JEIRecipeWrapper {
+	
 	protected final INFO info;
 	
 	protected final int tooltipX, tooltipY, tooltipW, tooltipH;

@@ -7,35 +7,29 @@ import nc.handler.TileInfoHandler;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
 import nc.tile.ITileGui;
-import nc.tile.info.TileContainerInfo;
-import nc.tile.fluid.ITileFilteredFluid;
-import nc.tile.fluid.ITileFluid;
+import nc.tile.fluid.*;
+import nc.tile.TileContainerInfo;
 import nc.tile.internal.fluid.*;
-import nc.util.CapabilityHelper;
-import nc.util.Lang;
+import nc.util.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.*;
+import java.util.*;
 
 import static nc.config.NCConfig.enable_mek_gas;
 import static nc.util.PosHelper.DEFAULT_NON;
 
 public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<PORT, TARGET> & ITileFilteredFluid, TARGET extends IFissionPortTarget<PORT, TARGET> & ITileFilteredFluid> extends TileFissionPort<PORT, TARGET> implements ITileFilteredFluid, ITileGui<PORT, FluidPortUpdatePacket, TileContainerInfo<PORT>> {
-
+	
 	protected final TileContainerInfo<PORT> info;
-
+	
 	protected final @Nonnull List<Tank> tanks;
 	protected final @Nonnull List<Tank> filterTanks;
 	protected final int capacity;
@@ -47,33 +41,33 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	protected @Nonnull GasTileWrapper gasWrapper;
 	
 	protected final BasicRecipeHandler recipeHandler;
-
+	
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
 	public TileFissionFluidPort(String name, Class<PORT> portClass, int capacity, List<String> validFluids, BasicRecipeHandler recipeHandler) {
 		super(portClass);
 		info = TileInfoHandler.getTileContainerInfo(name);
-
+		
 		tanks = Lists.newArrayList(new Tank(capacity, validFluids), new Tank(capacity, new ArrayList<>()));
 		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ArrayList<>()));
 		this.capacity = capacity;
-
+		
 		fluidSides = ITileFluid.getDefaultFluidSides(this);
 		gasWrapper = new GasTileWrapper(this);
-
+		
 		this.recipeHandler = recipeHandler;
 	}
-
+	
 	@Override
 	public TileContainerInfo<PORT> getContainerInfo() {
 		return info;
 	}
-
+	
 	@Override
 	public int getTankCapacityPerConnection() {
 		return 36;
 	}
-
+	
 	@Override
 	public Object getFilterKey() {
 		return getFilterTanks().get(0).getFluidName();
@@ -180,19 +174,19 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	public boolean hasConfigurableFluidConnections() {
 		return true;
 	}
-
+	
 	// ITileGui
-
+	
 	@Override
 	public Set<EntityPlayer> getTileUpdatePacketListeners() {
 		return updatePacketListeners;
 	}
-
+	
 	@Override
 	public FluidPortUpdatePacket getTileUpdatePacket() {
 		return new FluidPortUpdatePacket(pos, masterPortPos, getTanks(), getFilterTanks());
 	}
-
+	
 	@Override
 	public void onTileUpdatePacket(FluidPortUpdatePacket message) {
 		masterPortPos = message.masterPortPos;
@@ -208,7 +202,7 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	@Override
 	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
-			
+		
 		}
 		else {
 			if (getMultiblock() != null) {

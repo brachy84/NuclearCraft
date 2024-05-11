@@ -1,11 +1,11 @@
 package nc.block.tile;
 
-import static nc.block.property.BlockProperties.ACTIVE;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static nc.block.property.BlockProperties.ACTIVE;
 
 public interface IActivatable extends IDynamicState {
 	

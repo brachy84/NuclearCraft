@@ -1,7 +1,5 @@
 package nc.tile.turbine;
 
-import java.util.Iterator;
-
 import nc.block.turbine.BlockTurbineRotorStator;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.*;
@@ -10,23 +8,27 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Iterator;
+
 public class TileTurbineRotorStator extends TileTurbinePart implements ITurbineRotorBlade<TileTurbineRotorStator> {
 	
 	public IRotorStatorType statorType = null;
 	protected TurbinePartDir dir = TurbinePartDir.Y;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileTurbineRotorStator() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
-
+	
 	public static class Variant extends TileTurbineRotorStator {
-
+		
 		protected Variant(TurbineRotorStatorType statorType) {
 			super(statorType);
 		}
 	}
-
+	
 	public static class Standard extends Variant {
 		
 		public Standard() {

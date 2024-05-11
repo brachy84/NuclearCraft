@@ -1,7 +1,5 @@
 package nc.block.fission.port;
 
-import static nc.block.property.BlockProperties.*;
-
 import nc.block.fission.BlockFissionPart;
 import nc.block.tile.IActivatable;
 import nc.tile.fission.port.*;
@@ -12,6 +10,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+
+import static nc.block.property.BlockProperties.*;
 
 public abstract class BlockFissionPort<PORT extends TileFissionPort<PORT, TARGET>, TARGET extends IFissionPortTarget<PORT, TARGET>> extends BlockFissionPart implements IActivatable {
 	

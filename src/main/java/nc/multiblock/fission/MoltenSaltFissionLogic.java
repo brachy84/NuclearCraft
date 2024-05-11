@@ -1,15 +1,6 @@
 package nc.multiblock.fission;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
@@ -24,6 +15,12 @@ import nc.util.NCMath;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	
@@ -39,7 +36,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	public MoltenSaltFissionLogic(FissionReactorLogic oldLogic) {
 		super(oldLogic);
 		if (oldLogic instanceof MoltenSaltFissionLogic oldMoltenSaltLogic) {
-            heaterCount = oldMoltenSaltLogic.heaterCount;
+			heaterCount = oldMoltenSaltLogic.heaterCount;
 			meanHeatingSpeedMultiplier = oldMoltenSaltLogic.meanHeatingSpeedMultiplier;
 			totalHeatingSpeedMultiplier = oldMoltenSaltLogic.totalHeatingSpeedMultiplier;
 		}
@@ -203,7 +200,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 			int clusterHeaters = 0;
 			for (IFissionComponent component : cluster.getComponentMap().values()) {
 				if (component instanceof TileSaltFissionHeater heater) {
-                    heater.heatingSpeedMultiplier = cluster.meanEfficiency * getReactor().sparsityEfficiencyMult * (cluster.rawHeating >= cluster.cooling ? 1D : (double) cluster.rawHeating / (double) cluster.cooling);
+					heater.heatingSpeedMultiplier = cluster.meanEfficiency * getReactor().sparsityEfficiencyMult * (cluster.rawHeating >= cluster.cooling ? 1D : (double) cluster.rawHeating / (double) cluster.cooling);
 					cluster.totalHeatingSpeedMultiplier += heater.heatingSpeedMultiplier;
 					++clusterHeaters;
 				}
@@ -254,7 +251,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 			refreshRecipe();
 			if (canProcessInputs()) {
 				produceProducts();
-            }
+			}
 		}
 	}
 	
@@ -401,7 +398,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	public void onMultiblockUpdatePacket(FissionUpdatePacket message) {
 		super.onMultiblockUpdatePacket(message);
 		if (message instanceof SaltFissionUpdatePacket packet) {
-            meanHeatingSpeedMultiplier = packet.meanHeatingSpeedMultiplier;
+			meanHeatingSpeedMultiplier = packet.meanHeatingSpeedMultiplier;
 			totalHeatingSpeedMultiplier = packet.totalHeatingSpeedMultiplier;
 		}
 	}

@@ -1,17 +1,16 @@
 package nc.recipe.processor;
 
-import static nc.config.NCConfig.ore_processing;
-import static nc.util.FissionHelper.*;
-import static nc.util.FluidStackHelper.*;
-
-import java.util.*;
-
 import com.google.common.collect.*;
-
 import nc.init.NCItems;
 import nc.util.*;
 import net.minecraft.init.*;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.util.*;
+
+import static nc.config.NCConfig.ore_processing;
+import static nc.util.FissionHelper.*;
+import static nc.util.FluidStackHelper.*;
 
 public class MelterRecipes extends BasicProcessorRecipeHandler {
 	

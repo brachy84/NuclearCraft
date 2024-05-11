@@ -1,14 +1,13 @@
 package nc.tile.fission;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class TileFissionConductor extends TileFissionPart implements IFissionComponent {
 	
@@ -72,7 +71,7 @@ public class TileFissionConductor extends TileFissionPart implements IFissionCom
 	
 	@Override
 	public void onClusterMeltdown(Iterator<IFissionComponent> componentIterator) {
-		
+	
 	}
 	
 	@Override

@@ -1,7 +1,5 @@
 package nc.item;
 
-import static nc.config.NCConfig.*;
-
 import nc.capability.radiation.entity.IEntityRads;
 import nc.capability.radiation.resistance.IRadiationResistance;
 import nc.enumm.MetaEnums;
@@ -18,6 +16,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.*;
+
+import static nc.config.NCConfig.*;
 
 public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 	

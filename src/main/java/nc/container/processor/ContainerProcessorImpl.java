@@ -1,18 +1,10 @@
 package nc.container.processor;
 
-import nc.network.tile.multiblock.FissionIrradiatorUpdatePacket;
-import nc.network.tile.multiblock.SaltFissionHeaterUpdatePacket;
-import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
-import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
-import nc.network.tile.processor.EnergyProcessorUpdatePacket;
-import nc.network.tile.processor.ProcessorUpdatePacket;
-import nc.tile.fission.TileFissionIrradiator;
-import nc.tile.fission.TileSaltFissionHeater;
-import nc.tile.fission.TileSaltFissionVessel;
-import nc.tile.fission.TileSolidFissionCell;
+import nc.network.tile.multiblock.*;
+import nc.network.tile.processor.*;
+import nc.tile.fission.*;
 import nc.tile.inventory.ITileFilteredInventory;
-import nc.tile.processor.IBasicProcessor;
-import nc.tile.processor.IUpgradableBasicProcessor;
+import nc.tile.processor.*;
 import nc.tile.processor.TileProcessorImpl.*;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.tile.radiation.TileRadiationScrubber;
@@ -20,28 +12,28 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 public class ContainerProcessorImpl {
-
+	
 	public static class ContainerBasicProcessor<TILE extends TileEntity & IBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket> extends ContainerProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public ContainerBasicProcessor(EntityPlayer player, TILE tile) {
 			super(player, tile);
 		}
 	}
-
+	
 	public static class ContainerBasicUpgradableProcessor<TILE extends TileEntity & IUpgradableBasicProcessor<TILE, PACKET>, PACKET extends ProcessorUpdatePacket> extends ContainerUpgradableProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public ContainerBasicUpgradableProcessor(EntityPlayer player, TILE tile) {
 			super(player, tile);
 		}
 	}
-
+	
 	public static class ContainerBasicFilteredProcessor<TILE extends TileEntity & IBasicProcessor<TILE, PACKET> & ITileFilteredInventory, PACKET extends ProcessorUpdatePacket> extends ContainerFilteredProcessor<TILE, PACKET, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, PACKET>> {
-
+		
 		public ContainerBasicFilteredProcessor(EntityPlayer player, TILE tile) {
 			super(player, tile);
 		}
 	}
-
+	
 	public static class ContainerBasicEnergyProcessor<TILE extends TileBasicEnergyProcessor<TILE>> extends ContainerBasicProcessor<TILE, EnergyProcessorUpdatePacket> {
 		
 		public ContainerBasicEnergyProcessor(EntityPlayer player, TILE tile) {
@@ -195,16 +187,16 @@ public class ContainerProcessorImpl {
 			super(player, tile);
 		}
 	}
-
+	
 	public static class ContainerRockCrusher extends ContainerBasicUpgradableEnergyProcessor<TileRockCrusher> {
-
+		
 		public ContainerRockCrusher(EntityPlayer player, TileRockCrusher tile) {
 			super(player, tile);
 		}
 	}
-
+	
 	public static class ContainerElectricFurnace extends ContainerBasicUpgradableEnergyProcessor<TileElectricFurnace> {
-
+		
 		public ContainerElectricFurnace(EntityPlayer player, TileElectricFurnace tile) {
 			super(player, tile);
 		}

@@ -3,8 +3,8 @@ package nc.gui.multiblock.port;
 import nc.gui.GuiInfoTile;
 import nc.gui.element.GuiItemRenderer;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
-import nc.tile.info.TileContainerInfo;
 import nc.tile.fission.port.TileFissionIrradiatorPort;
+import nc.tile.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
@@ -16,7 +16,7 @@ public class GuiFissionIrradiatorPort extends GuiInfoTile<TileFissionIrradiatorP
 	
 	@Override
 	public void renderTooltips(int mouseX, int mouseY) {
-		
+	
 	}
 	
 	@Override
@@ -40,6 +40,6 @@ public class GuiFissionIrradiatorPort extends GuiInfoTile<TileFissionIrradiatorP
 	}
 	
 	public void initButtons() {
-		
+	
 	}
 }

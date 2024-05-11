@@ -1,10 +1,6 @@
 package nc.gui;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import nc.container.slot.SlotFiltered;
 import nc.gui.element.NCButton;
 import nc.tile.internal.fluid.Tank;
@@ -18,6 +14,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.io.IOException;
+import java.util.List;
 
 public abstract class NCGui extends GuiContainer {
 	

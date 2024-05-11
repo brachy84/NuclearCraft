@@ -1,8 +1,6 @@
 package nc.multiblock.cuboidal;
 
-import javax.vecmath.Vector3f;
-
-import nc.multiblock.*;
+import nc.multiblock.Multiblock;
 import nc.multiblock.internal.MultiblockValidationError;
 import nc.util.NCMath;
 import net.minecraft.tileentity.TileEntity;
@@ -11,13 +9,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
+import javax.vecmath.Vector3f;
+
 public abstract class CuboidalMultiblock<MULTIBLOCK extends CuboidalMultiblock<MULTIBLOCK, T>, T extends ITileCuboidalMultiblockPart<MULTIBLOCK, T>> extends Multiblock<MULTIBLOCK, T> {
 	
 	protected CuboidalMultiblock(World world, Class<MULTIBLOCK> multiblockClass, Class<T> tClass) {
 		super(world, multiblockClass, tClass);
 	}
 	
-	/** @return True if the machine is "whole" and should be assembled. False otherwise. */
+	/**
+	 * @return True if the machine is "whole" and should be assembled. False otherwise.
+	 */
 	@Override
 	protected boolean isMachineWhole() {
 		
@@ -273,15 +275,15 @@ public abstract class CuboidalMultiblock<MULTIBLOCK extends CuboidalMultiblock<M
 		if (dir == null) {
 			return getInteriorLengthY();
 		}
-
-        return switch (dir) {
-            case DOWN -> getInteriorLengthY();
-            case UP -> getInteriorLengthY();
-            case NORTH -> getInteriorLengthZ();
-            case SOUTH -> getInteriorLengthZ();
-            case WEST -> getInteriorLengthX();
-            case EAST -> getInteriorLengthX();
-        };
+		
+		return switch (dir) {
+			case DOWN -> getInteriorLengthY();
+			case UP -> getInteriorLengthY();
+			case NORTH -> getInteriorLengthZ();
+			case SOUTH -> getInteriorLengthZ();
+			case WEST -> getInteriorLengthX();
+			case EAST -> getInteriorLengthX();
+		};
 	}
 	
 	protected abstract int getMinimumInteriorLength();
@@ -351,105 +353,93 @@ public abstract class CuboidalMultiblock<MULTIBLOCK extends CuboidalMultiblock<M
 		if (axis == null) {
 			return BlockPos.getAllInBoxMutable(getExtremeCoord(false, false, false), getExtremeCoord(false, false, false));
 		}
-
-        return switch (axis) {
-            case X -> getWallMinX();
-            case Y -> getWallMinY();
-            case Z -> getWallMinZ();
-        };
+		
+		return switch (axis) {
+			case X -> getWallMinX();
+			case Y -> getWallMinY();
+			case Z -> getWallMinZ();
+		};
 	}
 	
 	public Iterable<MutableBlockPos> getWallMax(EnumFacing.Axis axis) {
 		if (axis == null) {
 			return BlockPos.getAllInBoxMutable(getExtremeCoord(true, true, true), getExtremeCoord(true, true, true));
 		}
-
-        return switch (axis) {
-            case X -> getWallMaxX();
-            case Y -> getWallMaxY();
-            case Z -> getWallMaxZ();
-        };
+		
+		return switch (axis) {
+			case X -> getWallMaxX();
+			case Y -> getWallMaxY();
+			case Z -> getWallMaxZ();
+		};
 	}
 	
 	public boolean isInMinWall(EnumFacing.Axis axis, BlockPos pos) {
 		if (axis == null) {
 			return false;
 		}
-
-        return switch (axis) {
-            case X -> pos.getX() == getMinX();
-            case Y -> pos.getY() == getMinY();
-            case Z -> pos.getZ() == getMinZ();
-        };
+		
+		return switch (axis) {
+			case X -> pos.getX() == getMinX();
+			case Y -> pos.getY() == getMinY();
+			case Z -> pos.getZ() == getMinZ();
+		};
 	}
 	
 	public boolean isInMaxWall(EnumFacing.Axis axis, BlockPos pos) {
 		if (axis == null) {
 			return false;
 		}
-
-        return switch (axis) {
-            case X -> pos.getX() == getMaxX();
-            case Y -> pos.getY() == getMaxY();
-            case Z -> pos.getZ() == getMaxZ();
-        };
+		
+		return switch (axis) {
+			case X -> pos.getX() == getMaxX();
+			case Y -> pos.getY() == getMaxY();
+			case Z -> pos.getZ() == getMaxZ();
+		};
 	}
 	
 	public boolean isInWall(EnumFacing side, BlockPos pos) {
 		if (side == null) {
 			return false;
 		}
-
-        return switch (side) {
-            case DOWN -> pos.getY() == getMinY();
-            case UP -> pos.getY() == getMaxY();
-            case NORTH -> pos.getZ() == getMinZ();
-            case SOUTH -> pos.getZ() == getMaxZ();
-            case WEST -> pos.getX() == getMinX();
-            case EAST -> pos.getX() == getMaxX();
-        };
+		
+		return switch (side) {
+			case DOWN -> pos.getY() == getMinY();
+			case UP -> pos.getY() == getMaxY();
+			case NORTH -> pos.getZ() == getMinZ();
+			case SOUTH -> pos.getZ() == getMaxZ();
+			case WEST -> pos.getX() == getMinX();
+			case EAST -> pos.getX() == getMaxX();
+		};
 	}
 	
 	public BlockPos getMinimumInteriorPlaneCoord(EnumFacing normal, int depth, int uCushion, int vCushion) {
 		if (normal == null) {
 			return getExtremeInteriorCoord(false, false, false);
 		}
-
-        return switch (normal) {
-            case DOWN ->
-                    getExtremeInteriorCoord(false, false, false).offset(EnumFacing.UP, depth).offset(EnumFacing.SOUTH, uCushion).offset(EnumFacing.EAST, vCushion);
-            case UP ->
-                    getExtremeInteriorCoord(false, true, false).offset(EnumFacing.DOWN, depth).offset(EnumFacing.SOUTH, uCushion).offset(EnumFacing.EAST, vCushion);
-            case NORTH ->
-                    getExtremeInteriorCoord(false, false, false).offset(EnumFacing.SOUTH, depth).offset(EnumFacing.EAST, uCushion).offset(EnumFacing.UP, vCushion);
-            case SOUTH ->
-                    getExtremeInteriorCoord(false, false, true).offset(EnumFacing.NORTH, depth).offset(EnumFacing.EAST, uCushion).offset(EnumFacing.UP, vCushion);
-            case WEST ->
-                    getExtremeInteriorCoord(false, false, false).offset(EnumFacing.EAST, depth).offset(EnumFacing.UP, uCushion).offset(EnumFacing.SOUTH, vCushion);
-            case EAST ->
-                    getExtremeInteriorCoord(true, false, false).offset(EnumFacing.WEST, depth).offset(EnumFacing.UP, uCushion).offset(EnumFacing.SOUTH, vCushion);
-        };
+		
+		return switch (normal) {
+			case DOWN -> getExtremeInteriorCoord(false, false, false).offset(EnumFacing.UP, depth).offset(EnumFacing.SOUTH, uCushion).offset(EnumFacing.EAST, vCushion);
+			case UP -> getExtremeInteriorCoord(false, true, false).offset(EnumFacing.DOWN, depth).offset(EnumFacing.SOUTH, uCushion).offset(EnumFacing.EAST, vCushion);
+			case NORTH -> getExtremeInteriorCoord(false, false, false).offset(EnumFacing.SOUTH, depth).offset(EnumFacing.EAST, uCushion).offset(EnumFacing.UP, vCushion);
+			case SOUTH -> getExtremeInteriorCoord(false, false, true).offset(EnumFacing.NORTH, depth).offset(EnumFacing.EAST, uCushion).offset(EnumFacing.UP, vCushion);
+			case WEST -> getExtremeInteriorCoord(false, false, false).offset(EnumFacing.EAST, depth).offset(EnumFacing.UP, uCushion).offset(EnumFacing.SOUTH, vCushion);
+			case EAST -> getExtremeInteriorCoord(true, false, false).offset(EnumFacing.WEST, depth).offset(EnumFacing.UP, uCushion).offset(EnumFacing.SOUTH, vCushion);
+		};
 	}
 	
 	public BlockPos getMaximumInteriorPlaneCoord(EnumFacing normal, int depth, int uCushion, int vCushion) {
 		if (normal == null) {
 			return getExtremeInteriorCoord(false, false, false);
 		}
-
-        return switch (normal) {
-            case DOWN ->
-                    getExtremeInteriorCoord(true, false, true).offset(EnumFacing.UP, depth).offset(EnumFacing.NORTH, uCushion).offset(EnumFacing.WEST, vCushion);
-            case UP ->
-                    getExtremeInteriorCoord(true, true, true).offset(EnumFacing.DOWN, depth).offset(EnumFacing.NORTH, uCushion).offset(EnumFacing.WEST, vCushion);
-            case NORTH ->
-                    getExtremeInteriorCoord(true, true, false).offset(EnumFacing.SOUTH, depth).offset(EnumFacing.WEST, uCushion).offset(EnumFacing.DOWN, vCushion);
-            case SOUTH ->
-                    getExtremeInteriorCoord(true, true, true).offset(EnumFacing.NORTH, depth).offset(EnumFacing.WEST, uCushion).offset(EnumFacing.DOWN, vCushion);
-            case WEST ->
-                    getExtremeInteriorCoord(false, true, true).offset(EnumFacing.EAST, depth).offset(EnumFacing.DOWN, uCushion).offset(EnumFacing.NORTH, vCushion);
-            case EAST ->
-                    getExtremeInteriorCoord(true, true, true).offset(EnumFacing.WEST, depth).offset(EnumFacing.DOWN, uCushion).offset(EnumFacing.NORTH, vCushion);
-        };
+		
+		return switch (normal) {
+			case DOWN -> getExtremeInteriorCoord(true, false, true).offset(EnumFacing.UP, depth).offset(EnumFacing.NORTH, uCushion).offset(EnumFacing.WEST, vCushion);
+			case UP -> getExtremeInteriorCoord(true, true, true).offset(EnumFacing.DOWN, depth).offset(EnumFacing.NORTH, uCushion).offset(EnumFacing.WEST, vCushion);
+			case NORTH -> getExtremeInteriorCoord(true, true, false).offset(EnumFacing.SOUTH, depth).offset(EnumFacing.WEST, uCushion).offset(EnumFacing.DOWN, vCushion);
+			case SOUTH -> getExtremeInteriorCoord(true, true, true).offset(EnumFacing.NORTH, depth).offset(EnumFacing.WEST, uCushion).offset(EnumFacing.DOWN, vCushion);
+			case WEST -> getExtremeInteriorCoord(false, true, true).offset(EnumFacing.EAST, depth).offset(EnumFacing.DOWN, uCushion).offset(EnumFacing.NORTH, vCushion);
+			case EAST -> getExtremeInteriorCoord(true, true, true).offset(EnumFacing.WEST, depth).offset(EnumFacing.DOWN, uCushion).offset(EnumFacing.NORTH, vCushion);
+		};
 	}
 	
 	public Vector3f getMiddleInteriorPlaneCoord(EnumFacing normal, int depth, int minUCushion, int minVCushion, int maxUCushion, int maxVCushion) {
@@ -486,14 +476,14 @@ public abstract class CuboidalMultiblock<MULTIBLOCK extends CuboidalMultiblock<M
 		if (normal == null) {
 			return BlockPos.getAllInBoxMutable(getExtremeInteriorCoord(false, false, false), getExtremeInteriorCoord(false, false, false));
 		}
-
-        return switch (normal) {
-            case DOWN -> getInteriorPlaneMinY(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-            case UP -> getInteriorPlaneMaxY(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-            case NORTH -> getInteriorPlaneMinZ(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-            case SOUTH -> getInteriorPlaneMaxZ(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-            case WEST -> getInteriorPlaneMinX(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-            case EAST -> getInteriorPlaneMaxX(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
-        };
+		
+		return switch (normal) {
+			case DOWN -> getInteriorPlaneMinY(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+			case UP -> getInteriorPlaneMaxY(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+			case NORTH -> getInteriorPlaneMinZ(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+			case SOUTH -> getInteriorPlaneMaxZ(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+			case WEST -> getInteriorPlaneMinX(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+			case EAST -> getInteriorPlaneMaxX(depth, minUCushion, minVCushion, maxUCushion, maxVCushion);
+		};
 	}
 }

@@ -1,9 +1,5 @@
 package nc.tile.fission;
 
-import static nc.config.NCConfig.fission_max_size;
-
-import javax.annotation.Nonnull;
-
 import nc.enumm.MetaEnums;
 import nc.multiblock.cuboidal.*;
 import nc.multiblock.fission.*;
@@ -14,13 +10,19 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
+import static nc.config.NCConfig.fission_max_size;
+
 public class TileFissionSource extends TileFissionPart {
 	
 	protected double efficiency;
 	
 	public EnumFacing facing = EnumFacing.DOWN;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileFissionSource() {
 		super(CuboidalPartPositionType.WALL);
 	}
@@ -128,7 +130,7 @@ public class TileFissionSource extends TileFissionPart {
 				return null;
 			}
 			if (component instanceof IFissionFuelComponent fuelComponent) {
-                if (simulate) {
+				if (simulate) {
 					return new PrimingTargetInfo(fuelComponent, false);
 				}
 				else if (fuelComponent.isAcceptingFlux(posFacing)) {

@@ -1,7 +1,5 @@
 package nc.block.fission.port;
 
-import static nc.block.property.BlockProperties.*;
-
 import nc.block.fission.BlockFissionMetaPart;
 import nc.block.tile.IActivatable;
 import nc.enumm.IBlockMetaEnum;
@@ -16,6 +14,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.*;
+
+import static nc.block.property.BlockProperties.*;
 
 public abstract class BlockFissionMetaPort<PORT extends TileFissionPort<PORT, TARGET>, TARGET extends IFissionPortTarget<PORT, TARGET>, T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends BlockFissionMetaPart<T> implements IActivatable {
 	
@@ -63,7 +63,7 @@ public abstract class BlockFissionMetaPort<PORT extends TileFissionPort<PORT, TA
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		return rightClickOnPart(world, pos, player, hand, facing);

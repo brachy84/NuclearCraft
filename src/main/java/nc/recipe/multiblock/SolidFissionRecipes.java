@@ -1,15 +1,15 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.recipe.BasicRecipeHandler;
 import nc.recipe.ingredient.*;
 import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class SolidFissionRecipes extends BasicRecipeHandler {
 	

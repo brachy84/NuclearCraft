@@ -2,22 +2,18 @@ package nc.init;
 
 import nc.Global;
 import nc.item.IInfoItem;
-import nc.item.armor.ItemHazmatSuit;
-import nc.item.armor.NCItemArmor;
+import nc.item.armor.*;
 import nc.tab.NCTabs;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.init.*;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static nc.config.NCConfig.*;
@@ -54,7 +50,7 @@ public class NCArmor {
 	public static Item chest_hazmat;
 	public static Item legs_hazmat;
 	public static Item boots_hazmat;
-
+	
 	public static List<ItemRegistrationInfo<?>> registrationList = new ArrayList<>();
 	
 	public static void init() {
@@ -103,19 +99,19 @@ public class NCArmor {
 			registration.registerRender.run();
 		}
 	}
-
+	
 	// Factory
-
+	
 	public static <T extends Item & IInfoItem> T addWithName(String modId, String name, T item, Consumer<ItemRegistrationInfo<T>> registerItem, Consumer<ItemRegistrationInfo<T>> registerRender) {
 		item = NCItems.withName(modId, name, item);
 		registrationList.add(new ItemRegistrationInfo<>(modId, name, item, registerItem, registerRender));
 		return item;
 	}
-
+	
 	public static <T extends Item & IInfoItem> T addWithName(String modId, String name, T item, CreativeTabs tab) {
 		return addWithName(modId, name, item, x -> NCItems.registerItem(x.item, tab), x -> NCItems.registerRender(x.item));
 	}
-
+	
 	// Auxiliary
 	
 	public static ArmorMaterial armorMaterial(String modId, String name, int id, int[] durability, SoundEvent equipSound, ItemStack repairStack) {

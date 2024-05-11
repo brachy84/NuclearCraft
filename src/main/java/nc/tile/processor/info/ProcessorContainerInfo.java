@@ -1,23 +1,17 @@
 package nc.tile.processor.info;
 
-import java.util.*;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.container.ContainerFunction;
 import nc.gui.GuiFunction;
 import nc.integration.jei.category.info.JEIContainerConnection;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.recipe.*;
-import nc.tile.info.TileContainerInfo;
-import nc.tile.info.TileContainerInfoHelper;
+import nc.tile.TileContainerInfo;
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.inventory.ItemSorption;
 import nc.tile.processor.IProcessor;
-import nc.util.CollectionHelper;
+import nc.util.*;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
@@ -25,14 +19,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 
-public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>> extends TileContainerInfo<TILE> {
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.function.Consumer;
 
+public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>> extends TileContainerInfo<TILE> {
+	
 	protected final Class<? extends Container> containerClass;
 	protected final Class<? extends GuiContainer> guiClass;
-
+	
 	protected final ContainerFunction<TILE> configContainerFunction;
 	protected final GuiFunction<TILE> configGuiFunction;
-
+	
 	public final String recipeHandlerName;
 	
 	public final int itemInputSize;
@@ -118,19 +116,19 @@ public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcesso
 	public final int jeiClickAreaY;
 	public final int jeiClickAreaW;
 	public final int jeiClickAreaH;
-
+	
 	public double maxBaseProcessTime = 1D;
 	public double maxBaseProcessPower = 0D;
-
+	
 	protected ProcessorContainerInfo(String modId, String name, Class<TILE> tileClass, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiFunction<TILE> guiFunction, ContainerFunction<TILE> configContainerFunction, GuiFunction<TILE> configGuiFunction, String recipeHandlerName, int inputTankCapacity, int outputTankCapacity, double defaultProcessTime, double defaultProcessPower, boolean isGenerator, boolean consumesInputs, boolean losesProgress, String ocComponentName, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, int[] energyBarGuiXYWHUV, int[] machineConfigGuiXY, int[] redstoneControlGuiXY, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH, int[] jeiClickAreaXYWH) {
 		super(modId, name, tileClass, containerFunction, guiFunction);
-
+		
 		this.containerClass = containerClass;
 		this.guiClass = guiClass;
-
+		
 		this.configContainerFunction = configContainerFunction;
 		this.configGuiFunction = configGuiFunction;
-
+		
 		this.recipeHandlerName = recipeHandlerName;
 		
 		itemInputSize = itemInputGuiXYWH.size();
@@ -165,8 +163,8 @@ public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcesso
 		this.itemOutputGuiXYWH = itemOutputGuiXYWH;
 		this.fluidOutputGuiXYWH = fluidOutputGuiXYWH;
 		
-		itemInputStackXY = TileContainerInfoHelper.stackXYList(itemInputGuiXYWH);
-		itemOutputStackXY = TileContainerInfoHelper.stackXYList(itemOutputGuiXYWH);
+		itemInputStackXY = ContainerInfoHelper.stackXYList(itemInputGuiXYWH);
+		itemOutputStackXY = ContainerInfoHelper.stackXYList(itemOutputGuiXYWH);
 		
 		itemInputSorptionButtonID = CollectionHelper.increasingArray(itemInputSize);
 		fluidInputSorptionButtonID = CollectionHelper.increasingArray(itemInputSize, fluidInputSize);
@@ -334,11 +332,11 @@ public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcesso
 			addSlotToContainer.accept(new Slot(player.inventory, i, playerGuiX + 18 * i, 58 + playerGuiY));
 		}
 	}
-
+	
 	public long getEnergyCapacity(double speedMultiplier, double powerMultiplier) {
 		return (long) (Math.ceil(maxBaseProcessTime / speedMultiplier) * Math.ceil(maxBaseProcessPower * powerMultiplier));
 	}
-
+	
 	public JEIContainerConnection getJEIContainerConnection() {
 		return new JEIContainerConnection(containerClass, guiClass, 0, itemInputSize, getInventorySize(), jeiClickAreaX, jeiClickAreaY, jeiClickAreaW, jeiClickAreaH);
 	}

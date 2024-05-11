@@ -1,10 +1,10 @@
 package nc.capability.radiation.entity;
 
-import static nc.config.NCConfig.max_player_rads;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
+
+import static nc.config.NCConfig.max_player_rads;
 
 public class PlayerRads implements IEntityRads {
 	

@@ -1,13 +1,13 @@
 package nc.render;
 
-import javax.annotation.Nullable;
-
 import nc.block.fluid.NCBlockFluid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
 
 public class ColorRenderer {
 	

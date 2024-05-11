@@ -1,9 +1,5 @@
 package nc.init;
 
-import static nc.config.NCConfig.register_fluid_blocks;
-
-import java.util.*;
-
 import nc.*;
 import nc.block.fluid.*;
 import nc.block.item.NCItemBlock;
@@ -14,6 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.util.*;
+
+import static nc.config.NCConfig.register_fluid_blocks;
 
 public class NCFissionFluids {
 	

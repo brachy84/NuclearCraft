@@ -1,8 +1,8 @@
 package nc.gui;
 
 import nc.network.NCPacket;
-import nc.tile.*;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.ITileGui;
+import nc.tile.TileContainerInfo;
 import nc.util.Lazy;
 import nc.util.Lazy.LazyInt;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,7 +36,7 @@ public abstract class GuiInfoTile<TILE extends TileEntity & ITileGui<TILE, PACKE
 		guiName = new Lazy<>(() -> tile.getDisplayName().getUnformattedText());
 		nameWidth = new LazyInt(() -> fontRenderer.getStringWidth(guiName.get()));
 	}
-
+	
 	protected void defaultStateAndBind() {
 		GlStateManager.color(1F, 1F, 1F, 1F);
 		mc.getTextureManager().bindTexture(guiTextures);

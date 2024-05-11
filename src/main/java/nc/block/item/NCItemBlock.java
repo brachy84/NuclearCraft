@@ -1,9 +1,5 @@
 package nc.block.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.util.InfoHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -11,6 +7,9 @@ import net.minecraft.item.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class NCItemBlock extends ItemBlock {
 	

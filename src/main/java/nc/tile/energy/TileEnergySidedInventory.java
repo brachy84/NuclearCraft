@@ -1,12 +1,12 @@
 package nc.tile.energy;
 
-import javax.annotation.*;
-
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.inventory.InventoryConnection;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.*;
 
 public abstract class TileEnergySidedInventory extends TileEnergyInventory {
 	

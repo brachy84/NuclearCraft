@@ -1,9 +1,5 @@
 package nc.render.tile;
 
-import static nc.config.NCConfig.*;
-
-import javax.vecmath.Vector3f;
-
 import nc.multiblock.turbine.*;
 import nc.multiblock.turbine.Turbine.PlaneDir;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
@@ -18,6 +14,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.vecmath.Vector3f;
+
+import static nc.config.NCConfig.*;
 
 @SideOnly(Side.CLIENT)
 public class RenderTurbineRotor extends TileEntitySpecialRenderer<TileTurbineController> {

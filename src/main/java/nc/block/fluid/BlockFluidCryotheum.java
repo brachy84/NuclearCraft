@@ -1,7 +1,5 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
 import nc.fluid.FluidCryotheum;
 import nc.util.DamageSources;
 import net.minecraft.block.material.Material;
@@ -10,6 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockFluidCryotheum extends NCBlockFluid {
 	

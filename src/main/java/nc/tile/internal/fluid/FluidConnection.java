@@ -1,11 +1,10 @@
 package nc.tile.internal.fluid;
 
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 public class FluidConnection {
 	

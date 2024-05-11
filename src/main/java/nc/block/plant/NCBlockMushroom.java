@@ -1,9 +1,5 @@
 package nc.block.plant;
 
-import static nc.config.NCConfig.mushroom_spread_rate;
-
-import java.util.Random;
-
 import nc.util.NCMath;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +8,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.EnumPlantType;
+
+import java.util.Random;
+
+import static nc.config.NCConfig.mushroom_spread_rate;
 
 public abstract class NCBlockMushroom extends BlockMushroom {
 	

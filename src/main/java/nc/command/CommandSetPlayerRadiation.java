@@ -29,8 +29,7 @@ public class CommandSetPlayerRadiation extends CommandBase {
 			double newRadiation;
 			try {
 				newRadiation = Double.parseDouble(args[0]);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				throw new WrongUsageException(getUsage(sender));
 			}
 			

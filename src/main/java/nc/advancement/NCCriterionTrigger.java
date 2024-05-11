@@ -1,15 +1,14 @@
 package nc.advancement;
 
-import java.util.*;
-
 import com.google.gson.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.*;
 
 public class NCCriterionTrigger implements ICriterionTrigger<NCCriterionTrigger.NCCriterion> {
 	

@@ -1,13 +1,13 @@
 package nc.integration.crafttweaker;
 
-import static nc.recipe.IngredientSorption.INPUT;
-
-import java.util.*;
-
 import crafttweaker.*;
 import crafttweaker.api.item.IIngredient;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
+
+import java.util.*;
+
+import static nc.recipe.IngredientSorption.INPUT;
 
 public class CTRemoveRecipe implements IAction {
 	

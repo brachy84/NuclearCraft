@@ -9,7 +9,7 @@ import net.minecraftforge.common.capabilities.*;
 public interface IRadiationSource extends IRadiation, ICapability<IRadiationSource> {
 	
 	@CapabilityInject(IRadiationSource.class)
-    Capability<IRadiationSource> CAPABILITY_RADIATION_SOURCE = null;
+	Capability<IRadiationSource> CAPABILITY_RADIATION_SOURCE = null;
 	
 	ResourceLocation CAPABILITY_RADIATION_SOURCE_NAME = new ResourceLocation(Global.MOD_ID, "capability_radiation_source");
 	

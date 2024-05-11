@@ -1,10 +1,10 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.radiation_structures;
+import it.unimi.dsi.fastutil.objects.*;
 
 import java.util.*;
 
-import it.unimi.dsi.fastutil.objects.*;
+import static nc.config.NCConfig.radiation_structures;
 
 public class RadStructures {
 	

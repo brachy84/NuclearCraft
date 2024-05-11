@@ -1,11 +1,11 @@
 package nc.tile.processor.info;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 import nc.block.tile.info.BlockTileInfo;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 public class ProcessorBlockInfo<TILE extends TileEntity> extends BlockTileInfo<TILE> {
 	

@@ -1,7 +1,5 @@
 package nc.block.quantum;
 
-import javax.annotation.Nullable;
-
 import nc.enumm.IBlockMetaEnum;
 import nc.item.ItemMultitool;
 import nc.multiblock.quantum.QuantumGateEnums;
@@ -13,6 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
+
+import javax.annotation.Nullable;
 
 public abstract class BlockQuantumComputerGate<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends BlockQuantumComputerMetaPart<T> {
 	
@@ -79,7 +79,7 @@ public abstract class BlockQuantumComputerGate<T extends Enum<T> & IStringSerial
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND) {
+		if (hand != EnumHand.MAIN_HAND) {
 			return false;
 		}
 		

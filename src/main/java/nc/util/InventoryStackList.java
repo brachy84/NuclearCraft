@@ -1,9 +1,9 @@
 package nc.util;
 
-import java.util.*;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import java.util.*;
 
 public class InventoryStackList extends NonNullList<ItemStack> {
 	

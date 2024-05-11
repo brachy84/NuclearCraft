@@ -1,13 +1,6 @@
 package nc.init;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Lists;
-
 import nc.*;
 import nc.block.fluid.*;
 import nc.block.item.NCItemBlock;
@@ -18,6 +11,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class NCCoolantFluids {
 	

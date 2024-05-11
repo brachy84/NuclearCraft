@@ -1,17 +1,15 @@
 package nc.recipe.ingredient;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public class ItemIngredient implements IItemIngredient {
 	
@@ -71,13 +69,13 @@ public class ItemIngredient implements IItemIngredient {
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption type) {
 		if (object instanceof ItemStack itemstack) {
-            if (!(StackHelper.isWildcard(stack) ? itemstack.getItem() == stack.getItem() : itemstack.isItemEqual(stack)) || !StackHelper.areItemStackTagsEqual(itemstack, stack)) {
+			if (!(StackHelper.isWildcard(stack) ? itemstack.getItem() == stack.getItem() : itemstack.isItemEqual(stack)) || !StackHelper.areItemStackTagsEqual(itemstack, stack)) {
 				return IngredientMatchResult.FAIL;
 			}
 			return new IngredientMatchResult(type.checkStackSize(stack.getCount(), itemstack.getCount()), 0);
 		}
 		else if (object instanceof OreIngredient oreStack) {
-            // return oreStack.matches(this, type);
+			// return oreStack.matches(this, type);
 			
 			for (ItemStack itemStack : oreStack.cachedStackList) {
 				if (match(itemStack, type).matches()) {

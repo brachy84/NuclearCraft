@@ -1,29 +1,25 @@
 package nc.integration.crafttweaker;
 
-import static nc.config.NCConfig.turbine_mb_per_blade;
-import static nc.util.FluidStackHelper.*;
-
-import java.io.*;
-import java.util.*;
-
-import nc.Global;
-import nc.block.item.NCItemBlock;
-import org.apache.commons.io.FileUtils;
-
+import com.google.common.collect.Lists;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.mc1120.util.CraftTweakerPlatformUtils;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
-import nc.NCInfo;
+import mezz.jei.api.IGuiHelper;
+import nc.*;
 import nc.block.battery.BlockBattery;
 import nc.block.fission.*;
 import nc.block.fission.port.BlockFissionFluidPort;
+import nc.block.item.NCItemBlock;
 import nc.block.item.energy.ItemBlockBattery;
 import nc.block.rtg.BlockRTG;
+import nc.block.tile.processor.BlockProcessor;
 import nc.block.turbine.*;
-import nc.handler.OreDictHandler;
+import nc.handler.*;
 import nc.init.*;
+import nc.integration.jei.category.info.JEIProcessorCategoryInfo;
+import nc.integration.jei.wrapper.JEIProcessorRecipeWrapper;
 import nc.item.NCItemMetaArray;
 import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
@@ -31,13 +27,17 @@ import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import nc.radiation.RadSources;
 import nc.recipe.*;
 import nc.recipe.ingredient.EmptyFluidIngredient;
+import nc.recipe.processor.BasicProcessorRecipeHandler;
 import nc.tab.NCTabs;
 import nc.tile.battery.TileBattery;
 import nc.tile.fission.*;
 import nc.tile.fission.port.TileFissionHeaterPort;
+import nc.tile.processor.info.ProcessorContainerInfo;
+import nc.tile.processor.info.builder.ProcessorContainerInfoBuilder;
 import nc.tile.rtg.TileRTG;
 import nc.tile.turbine.*;
 import nc.util.*;
+import nc.util.ReflectionHelper.ConstructorWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
@@ -46,8 +46,16 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import stanhebben.zenscript.annotations.*;
+import org.apache.commons.io.FileUtils;
 import stanhebben.zenscript.annotations.Optional;
+import stanhebben.zenscript.annotations.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.Function;
+
+import static nc.config.NCConfig.turbine_mb_per_blade;
+import static nc.util.FluidStackHelper.*;
 
 @ZenClass("mods.nuclearcraft.Registration")
 @ZenRegister
@@ -61,13 +69,13 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerFissionSink(String sinkID, int cooling, String rule) {
 		
-		Block sink = NCBlocks.withName(Global.MOD_ID, "solid_fission_sink_" + sinkID, new BlockSolidFissionSink() {
+		Lazy<Block> sink = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "solid_fission_sink_" + sinkID, new BlockSolidFissionSink() {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileSolidFissionSink(sinkID, cooling, sinkID + "_sink");
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new FissionSinkRegistrationInfo(sink, sinkID, cooling, rule));
 		CraftTweakerAPI.logInfo("Registered fission heat sink with ID \"" + sinkID + "\", cooling rate " + cooling + " H/t and placement rule \"" + rule + "\"");
@@ -76,21 +84,21 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerFissionHeater(String heaterID, String fluidInput, int inputAmount, String fluidOutput, int outputAmount, int cooling, String rule) {
 		
-		Block port = NCBlocks.withName(Global.MOD_ID, "fission_heater_port_" + heaterID, new BlockFissionFluidPort<>(TileFissionHeaterPort.class) {
+		Lazy<Block> port = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "fission_heater_port_" + heaterID, new BlockFissionFluidPort<>(TileFissionHeaterPort.class) {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileFissionHeaterPort(heaterID, fluidInput);
 			}
-		});
+		}));
 		
-		Block heater = NCBlocks.withName(Global.MOD_ID, "salt_fission_heater_" + heaterID, new BlockSaltFissionHeater() {
+		Lazy<Block> heater = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "salt_fission_heater_" + heaterID, new BlockSaltFissionHeater() {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileSaltFissionHeater(heaterID, fluidInput);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new FissionHeaterPortRegistrationInfo(port, heaterID));
 		INFO_LIST.add(new FissionHeaterRegistrationInfo(heater, heaterID, fluidInput, inputAmount, fluidOutput, outputAmount, cooling, rule));
@@ -100,13 +108,13 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerFissionSource(String sourceID, double efficiency) {
 		
-		Block source = NCBlocks.withName(Global.MOD_ID, "fission_source_" + sourceID, new BlockFissionSource() {
+		Lazy<Block> source = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "fission_source_" + sourceID, new BlockFissionSource() {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileFissionSource(efficiency);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new FissionSourceRegistrationInfo(source, efficiency));
 		CraftTweakerAPI.logInfo("Registered fission neutron source with ID \"" + sourceID + "\" and efficiency " + efficiency);
@@ -115,13 +123,13 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerFissionShield(String shieldID, double heatPerFlux, double efficiency) {
 		
-		Block shield = NCBlocks.withName(Global.MOD_ID, "fission_shield_" + shieldID, new BlockFissionShield() {
+		Lazy<Block> shield = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "fission_shield_" + shieldID, new BlockFissionShield() {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileFissionShield(heatPerFlux, efficiency);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new FissionShieldRegistrationInfo(shield, heatPerFlux, efficiency));
 		CraftTweakerAPI.logInfo("Registered fission neutron shield with ID \"" + shieldID + "\", heat per flux " + heatPerFlux + " H/N and efficiency " + efficiency);
@@ -130,13 +138,13 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerTurbineCoil(String coilID, double conductivity, String rule) {
 		
-		Block coil = NCBlocks.withName(Global.MOD_ID, "turbine_dynamo_coil_" + coilID, new BlockTurbineDynamoCoil() {
+		Lazy<Block> coil = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "turbine_dynamo_coil_" + coilID, new BlockTurbineDynamoCoil() {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileTurbineDynamoCoil(coilID, conductivity, coilID + "_coil");
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new TurbineCoilRegistrationInfo(coil, coilID, conductivity, rule));
 		CraftTweakerAPI.logInfo("Registered turbine dynamo coil with ID \"" + coilID + "\", conductivity " + conductivity + " and placement rule \"" + rule + "\"");
@@ -164,13 +172,13 @@ public class CTRegistration {
 			
 		};
 		
-		Block blade = NCBlocks.withName(Global.MOD_ID, "turbine_rotor_blade_" + bladeID, new BlockTurbineRotorBlade(null) {
+		Lazy<Block> blade = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "turbine_rotor_blade_" + bladeID, new BlockTurbineRotorBlade(null) {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileTurbineRotorBlade(bladeType);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new TurbineBladeRegistrationInfo(blade, efficiency, expansionCoefficient));
 		CraftTweakerAPI.logInfo("Registered turbine rotor blade with ID \"" + bladeID + "\", efficiency " + efficiency + " and expansion coefficient " + expansionCoefficient);
@@ -193,13 +201,13 @@ public class CTRegistration {
 			
 		};
 		
-		Block stator = NCBlocks.withName(Global.MOD_ID, "turbine_rotor_stator_" + statorID, new BlockTurbineRotorStator(null) {
+		Lazy<Block> stator = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "turbine_rotor_stator_" + statorID, new BlockTurbineRotorStator(null) {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileTurbineRotorStator(statorType);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new TurbineStatorRegistrationInfo(stator, expansionCoefficient));
 		CraftTweakerAPI.logInfo("Registered turbine rotor stator with ID \"" + statorID + "\" and expansion coefficient " + expansionCoefficient);
@@ -208,13 +216,13 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerRTG(String rtgID, long power, double radiation) {
 		
-		Block rtg = NCBlocks.withName(Global.MOD_ID, "rtg_" + rtgID, new BlockRTG(null) {
+		Lazy<Block> rtg = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "rtg_" + rtgID, new BlockRTG(null) {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileRTG(power, radiation);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new RTGRegistrationInfo(rtg, power));
 		CraftTweakerAPI.logInfo("Registered RTG with ID \"" + rtgID + "\", power " + power + " RF/t and radiation " + radiation + " Rad/t");
@@ -223,16 +231,30 @@ public class CTRegistration {
 	@ZenMethod
 	public static void registerBattery(String batteryID, long capacity, int energyTier) {
 		
-		Block battery = NCBlocks.withName(Global.MOD_ID, "battery_" + batteryID, new BlockBattery(null) {
+		Lazy<Block> battery = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "battery_" + batteryID, new BlockBattery(null) {
 			
 			@Override
 			public TileEntity createNewTileEntity(World world, int metadata) {
 				return new TileBattery(capacity, energyTier);
 			}
-		});
+		}));
 		
 		INFO_LIST.add(new BatteryRegistrationInfo(battery, capacity, energyTier));
 		CraftTweakerAPI.logInfo("Registered battery with ID \"" + batteryID + "\", capacity " + capacity + " RF/t and energy tier " + energyTier);
+	}
+	
+	public static void registerProcessor(ProcessorContainerInfoBuilder<?, ?, ?, ?> builder, Function<String, TileEntity> tileFunction, Class<? extends JEIProcessorRecipeWrapper<?, ?, ?, ?>> jeiWrapperClassSuper) {
+		
+		Lazy<Block> processor = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, builder.name, new BlockProcessor<>(builder.name) {
+			
+			@Override
+			public TileEntity createNewTileEntity(World world, int metadata) {
+				return tileFunction.apply(builder.name);
+			}
+		}));
+		
+		INFO_LIST.add(new ProcessorRegistrationInfo(processor, builder, jeiWrapperClassSuper));
+		CraftTweakerAPI.logInfo("Registered processor with ID \"" + builder.name + "\"");
 	}
 	
 	private static void addFissionIsotopeItem(FissionIsotopeRegistrationInfo info, String name, String model, String ore) {
@@ -243,10 +265,10 @@ public class CTRegistration {
 	}
 	
 	@ZenMethod
-	public static void registerFissionIsotope(String item_, String name_, String model, String ore_, double radiation, boolean raw, boolean carbide, boolean oxide, boolean nitride, boolean zirconiumAlloy, @Optional(valueLong = Long.MIN_VALUE) long fluidColor) {
-		final String item = item_.toLowerCase(Locale.ROOT);
-		final String name = name_.toLowerCase(Locale.ROOT);
-		final String ore = StringHelper.capitalize(ore_);
+	public static void registerFissionIsotope(String item, String name, String model, String ore, double radiation, boolean raw, boolean carbide, boolean oxide, boolean nitride, boolean zirconiumAlloy, @Optional(valueLong = Long.MIN_VALUE) long fluidColor) {
+		item = item.toLowerCase(Locale.ROOT);
+		name = name.toLowerCase(Locale.ROOT);
+		ore = StringHelper.capitalize(ore);
 		
 		FissionIsotopeRegistrationInfo info;
 		if (FISSION_ISOTOPE_INFO_MAP.containsKey(item)) {
@@ -296,7 +318,8 @@ public class CTRegistration {
 			addFissionIsotopeItem(info, name + "_za", model, "ingot" + ore + "ZA");
 		}
 		
-		RadSources.RUNNABLES.add(() -> RadSources.putIsotope(radiation, ore, name));
+		String ore_ = ore, name_ = name;
+		RadSources.RUNNABLES.add(() -> RadSources.putIsotope(radiation, ore_, name_));
 		
 		CraftTweakerAPI.logInfo("Registered fission isotope with name \"" + name + "\", ore dict base entry \"" + ore + "\" and radiation " + radiation + " Rad/t");
 	}
@@ -330,10 +353,10 @@ public class CTRegistration {
 	}
 	
 	@ZenMethod
-	public static void registerFissionFuel(String item_, String name_, String model, String ore_, int time, int heat, double efficiency, int crit, double decay, boolean prime, double fissionRadiation, double fuelRadiation, double depletedRadiation, boolean raw, boolean carbide, boolean triso, boolean oxide, boolean nitride, boolean zirconiumAlloy, @Optional(valueLong = Long.MIN_VALUE) long fluidColor, @Optional(valueLong = Long.MIN_VALUE) long depletedFluidColor) {
-		final String item = item_.toLowerCase(Locale.ROOT);
-		final String name = name_.toLowerCase(Locale.ROOT);
-		final String ore = StringHelper.capitalize(ore_);
+	public static void registerFissionFuel(String item, String name, String model, String ore, int time, int heat, double efficiency, int crit, double decay, boolean prime, double fissionRadiation, double fuelRadiation, double depletedRadiation, boolean raw, boolean carbide, boolean triso, boolean oxide, boolean nitride, boolean zirconiumAlloy, @Optional(valueLong = Long.MIN_VALUE) long fluidColor, @Optional(valueLong = Long.MIN_VALUE) long depletedFluidColor) {
+		item = item.toLowerCase(Locale.ROOT);
+		name = name.toLowerCase(Locale.ROOT);
+		ore = StringHelper.capitalize(ore);
 		
 		FissionFuelRegistrationInfo info;
 		if (FISSION_FUEL_INFO_MAP.containsKey(item)) {
@@ -407,7 +430,8 @@ public class CTRegistration {
 			addFissionFuelItem(info, "depleted_" + name + "_za", model, "ingotDepleted" + ore + "ZA");
 		}
 		
-		RadSources.RUNNABLES.add(() -> RadSources.putFuel(fuelRadiation, depletedRadiation, ore, name));
+		String ore_ = ore, name_ = name;
+		RadSources.RUNNABLES.add(() -> RadSources.putFuel(fuelRadiation, depletedRadiation, ore_, name_));
 		
 		CraftTweakerAPI.logInfo("Registered fission fuel with name \"" + name + "\", item model \"" + model + "\", ore dict base entry \"" + ore + "\", radiation " + fuelRadiation + " Rad/t and depleted radiation " + depletedRadiation + " Rad/t");
 	}
@@ -427,9 +451,9 @@ public class CTRegistration {
 	
 	public static class BlockRegistrationInfo extends RegistrationInfo {
 		
-		protected final Block block;
+		protected final Lazy<Block> block;
 		
-		public BlockRegistrationInfo(Block block) {
+		public BlockRegistrationInfo(Lazy<Block> block) {
 			this.block = block;
 		}
 		
@@ -443,11 +467,11 @@ public class CTRegistration {
 		}
 		
 		public void registerBlock() {
-			NCBlocks.registerBlock(block);
+			NCBlocks.registerBlock(block.get());
 		}
 		
 		public void registerRender() {
-			NCBlocks.registerRender(block);
+			NCBlocks.registerRender(block.get());
 		}
 		
 		@Override
@@ -462,7 +486,7 @@ public class CTRegistration {
 	
 	public static class TileBlockRegistrationInfo extends BlockRegistrationInfo {
 		
-		public TileBlockRegistrationInfo(Block block) {
+		public TileBlockRegistrationInfo(Lazy<Block> block) {
 			super(block);
 		}
 	}
@@ -472,7 +496,7 @@ public class CTRegistration {
 		protected final String sinkID, rule;
 		protected final int cooling;
 		
-		FissionSinkRegistrationInfo(Block block, String sinkID, int cooling, String rule) {
+		FissionSinkRegistrationInfo(Lazy<Block> block, String sinkID, int cooling, String rule) {
 			super(block);
 			this.sinkID = sinkID;
 			this.cooling = cooling;
@@ -481,7 +505,7 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, TextFormatting.BLUE, NCInfo.coolingRateInfo(cooling, "solid_fission_sink"), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), TextFormatting.BLUE, NCInfo.coolingRateInfo(cooling, "solid_fission_sink"), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
 		}
 		
 		@Override
@@ -496,7 +520,7 @@ public class CTRegistration {
 		protected final String heaterID, fluidInput, fluidOutput, rule;
 		protected final int inputAmount, outputAmount, cooling;
 		
-		FissionHeaterRegistrationInfo(Block block, String heaterID, String fluidInput, int inputAmount, String fluidOutput, int outputAmount, int cooling, String rule) {
+		FissionHeaterRegistrationInfo(Lazy<Block> block, String heaterID, String fluidInput, int inputAmount, String fluidOutput, int outputAmount, int cooling, String rule) {
 			super(block);
 			this.heaterID = heaterID;
 			this.fluidInput = fluidInput;
@@ -509,7 +533,7 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, TextFormatting.BLUE, NCInfo.coolingRateInfo(cooling, "salt_fission_heater"), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), TextFormatting.BLUE, NCInfo.coolingRateInfo(cooling, "salt_fission_heater"), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
 		}
 		
 		@Override
@@ -526,13 +550,8 @@ public class CTRegistration {
 	
 	public static class FissionHeaterPortRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		FissionHeaterPortRegistrationInfo(Block block, String heaterID) {
+		FissionHeaterPortRegistrationInfo(Lazy<Block> block, String heaterID) {
 			super(block);
-		}
-		
-		@Override
-		public void registerBlock() {
-			NCBlocks.registerBlock(block);
 		}
 	}
 	
@@ -540,14 +559,14 @@ public class CTRegistration {
 		
 		protected final double efficiency;
 		
-		FissionSourceRegistrationInfo(Block block, double efficiency) {
+		FissionSourceRegistrationInfo(Lazy<Block> block, double efficiency) {
 			super(block);
 			this.efficiency = efficiency;
 		}
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceEfficiencyInfo(efficiency), TextFormatting.AQUA, NCInfo.neutronSourceDescriptionInfo()));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceEfficiencyInfo(efficiency), TextFormatting.AQUA, NCInfo.neutronSourceDescriptionInfo()));
 		}
 	}
 	
@@ -555,7 +574,7 @@ public class CTRegistration {
 		
 		protected final double heatPerFlux, efficiency;
 		
-		FissionShieldRegistrationInfo(Block block, double heatPerFlux, double efficiency) {
+		FissionShieldRegistrationInfo(Lazy<Block> block, double heatPerFlux, double efficiency) {
 			super(block);
 			this.heatPerFlux = heatPerFlux;
 			this.efficiency = efficiency;
@@ -563,7 +582,7 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldStatInfo(heatPerFlux, efficiency), TextFormatting.AQUA, NCInfo.neutronShieldDescriptionInfo()));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldStatInfo(heatPerFlux, efficiency), TextFormatting.AQUA, NCInfo.neutronShieldDescriptionInfo()));
 		}
 	}
 	
@@ -572,7 +591,7 @@ public class CTRegistration {
 		protected final String coilID, rule;
 		protected final double conductivity;
 		
-		TurbineCoilRegistrationInfo(Block block, String coilID, double conductivity, String rule) {
+		TurbineCoilRegistrationInfo(Lazy<Block> block, String coilID, double conductivity, String rule) {
 			super(block);
 			this.coilID = coilID;
 			this.conductivity = conductivity;
@@ -581,7 +600,7 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, TextFormatting.LIGHT_PURPLE, NCInfo.coilConductivityInfo(conductivity), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), TextFormatting.LIGHT_PURPLE, NCInfo.coilConductivityInfo(conductivity), TextFormatting.AQUA, InfoHelper.NULL_ARRAY));
 		}
 		
 		@Override
@@ -595,7 +614,7 @@ public class CTRegistration {
 		
 		protected final double efficiency, expansionCoefficient;
 		
-		TurbineBladeRegistrationInfo(Block block, double efficiency, double expansionCoefficient) {
+		TurbineBladeRegistrationInfo(Lazy<Block> block, double efficiency, double expansionCoefficient) {
 			super(block);
 			this.efficiency = efficiency;
 			this.expansionCoefficient = expansionCoefficient;
@@ -603,7 +622,7 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(efficiency, 1)), Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(expansionCoefficient, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1))));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(efficiency, 1)), Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(expansionCoefficient, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1))));
 		}
 	}
 	
@@ -611,14 +630,14 @@ public class CTRegistration {
 		
 		protected final double expansionCoefficient;
 		
-		TurbineStatorRegistrationInfo(Block block, double expansionCoefficient) {
+		TurbineStatorRegistrationInfo(Lazy<Block> block, double expansionCoefficient) {
 			super(block);
 			this.expansionCoefficient = expansionCoefficient;
 		}
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new NCItemBlock(block, TextFormatting.GRAY, new String[] {Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_stator_expansion"), NCMath.pcDecimalPlaces(expansionCoefficient, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "turbine_rotor_stator"))));
+			NCBlocks.registerBlock(block.get(), new NCItemBlock(block.get(), TextFormatting.GRAY, new String[] {Lang.localize(NCBlocks.fixedLine(Global.MOD_ID, "turbine_rotor_stator_expansion"), NCMath.pcDecimalPlaces(expansionCoefficient, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "turbine_rotor_stator"))));
 		}
 	}
 	
@@ -626,14 +645,14 @@ public class CTRegistration {
 		
 		protected final long power;
 		
-		RTGRegistrationInfo(Block block, long power) {
+		RTGRegistrationInfo(Lazy<Block> block, long power) {
 			super(block);
 			this.power = power;
 		}
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "rtg"), UnitHelper.prefix(power, 5, "RF/t")));
+			NCBlocks.registerBlock(block.get(), InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "rtg"), UnitHelper.prefix(power, 5, "RF/t")));
 		}
 	}
 	
@@ -642,7 +661,7 @@ public class CTRegistration {
 		protected final long capacity;
 		protected final int energyTier;
 		
-		BatteryRegistrationInfo(Block block, long capacity, int energyTier) {
+		BatteryRegistrationInfo(Lazy<Block> block, long capacity, int energyTier) {
 			super(block);
 			this.capacity = capacity;
 			this.energyTier = energyTier;
@@ -650,7 +669,47 @@ public class CTRegistration {
 		
 		@Override
 		public void registerBlock() {
-			NCBlocks.registerBlock(block, new ItemBlockBattery(block, capacity, NCMath.toInt(capacity), energyTier, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "energy_storage"))));
+			NCBlocks.registerBlock(block.get(), new ItemBlockBattery(block.get(), capacity, NCMath.toInt(capacity), energyTier, InfoHelper.formattedInfo(NCBlocks.infoLine(Global.MOD_ID, "energy_storage"))));
+		}
+	}
+	
+	public static class ProcessorRegistrationInfo extends TileBlockRegistrationInfo {
+		
+		protected final ProcessorContainerInfoBuilder<?, ?, ?, ?> builder;
+		protected final Class<? extends JEIProcessorRecipeWrapper<?, ?, ?, ?>> jeiWrapperClassSuper;
+		
+		protected ProcessorContainerInfo<?, ?, ?> info = null;
+		
+		ProcessorRegistrationInfo(Lazy<Block> block, ProcessorContainerInfoBuilder<?, ?, ?, ?> builder, Class<? extends JEIProcessorRecipeWrapper<?, ?, ?, ?>> jeiWrapperClassSuper) {
+			super(block);
+			this.builder = builder;
+			this.jeiWrapperClassSuper = jeiWrapperClassSuper;
+		}
+		
+		@Override
+		public void preInit() {
+			TileInfoHandler.registerBlockTileInfo(builder.buildBlockInfo());
+			TileInfoHandler.registerContainerInfo(info = builder.buildContainerInfo());
+			super.preInit();
+		}
+		
+		@Override
+		public void recipeInit() {
+			super.recipeInit();
+			NCRecipes.putHandler(new BasicProcessorRecipeHandler(info.name, info.itemInputSize, info.fluidInputSize, info.itemOutputSize, info.fluidOutputSize) {
+				
+				@Override
+				public void addRecipes() {}
+			});
+		}
+		
+		@SuppressWarnings({"rawtypes", "unchecked"})
+		@Override
+		public void init() {
+			super.init();
+			Class<? extends JEIProcessorRecipeWrapper> jeiWrapperClass = ReflectionHelper.cloneClass(jeiWrapperClassSuper, info.name + "RecipeWrapper");
+			ConstructorWrapper<? extends JEIProcessorRecipeWrapper> constructor = new ConstructorWrapper<>(jeiWrapperClass, String.class, IGuiHelper.class, BasicRecipe.class);
+			TileInfoHandler.registerJEICategoryInfo(new JEIProcessorCategoryInfo(info.name, jeiWrapperClass, constructor::newInstance, Lists.newArrayList(block.get())));
 		}
 	}
 	
@@ -727,8 +786,7 @@ public class CTRegistration {
 			
 			try {
 				FileUtils.writeStringToFile(new File("resources/nuclearcraft/blockstates/items/" + name + ".json"), builder.toString());
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 			}
 		}

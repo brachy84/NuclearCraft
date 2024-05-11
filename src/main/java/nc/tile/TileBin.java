@@ -1,9 +1,5 @@
 package nc.tile;
 
-import static nc.config.NCConfig.*;
-
-import javax.annotation.Nullable;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.event.*;
 import ic2.api.energy.tile.*;
@@ -23,6 +19,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
+import javax.annotation.Nullable;
+
+import static nc.config.NCConfig.*;
 
 @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2")
 public class TileBin extends NCTile implements IInventory, IEnergySink, IInterfaceable {
@@ -138,7 +138,7 @@ public class TileBin extends NCTile implements IInventory, IEnergySink, IInterfa
 	
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		
+	
 	}
 	
 	@Override
@@ -153,12 +153,12 @@ public class TileBin extends NCTile implements IInventory, IEnergySink, IInterfa
 	
 	@Override
 	public void openInventory(EntityPlayer player) {
-		
+	
 	}
 	
 	@Override
 	public void closeInventory(EntityPlayer player) {
-		
+	
 	}
 	
 	@Override
@@ -173,7 +173,7 @@ public class TileBin extends NCTile implements IInventory, IEnergySink, IInterfa
 	
 	@Override
 	public void setField(int id, int value) {
-		
+	
 	}
 	
 	@Override
@@ -183,7 +183,7 @@ public class TileBin extends NCTile implements IInventory, IEnergySink, IInterfa
 	
 	@Override
 	public void clear() {
-		
+	
 	}
 	
 	// Capability

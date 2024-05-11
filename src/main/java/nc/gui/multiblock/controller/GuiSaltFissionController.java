@@ -2,14 +2,10 @@ package nc.gui.multiblock.controller;
 
 import nc.Global;
 import nc.gui.element.MultiblockButton;
-import nc.multiblock.fission.FissionReactor;
-import nc.multiblock.fission.FissionReactorLogic;
-import nc.multiblock.fission.MoltenSaltFissionLogic;
-import nc.network.multiblock.ClearAllMaterialPacket;
-import nc.network.multiblock.FissionUpdatePacket;
-import nc.tile.info.TileContainerInfo;
-import nc.tile.fission.IFissionPart;
-import nc.tile.fission.TileSaltFissionController;
+import nc.multiblock.fission.*;
+import nc.network.multiblock.*;
+import nc.tile.fission.*;
+import nc.tile.TileContainerInfo;
 import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GuiSaltFissionController extends GuiLogicMultiblockController<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket, TileSaltFissionController, TileContainerInfo<TileSaltFissionController>, MoltenSaltFissionLogic> {
 	

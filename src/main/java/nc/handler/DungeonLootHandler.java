@@ -1,7 +1,5 @@
 package nc.handler;
 
-import static nc.config.NCConfig.dungeon_loot;
-
 import nc.Global;
 import nc.init.NCItems;
 import net.minecraft.world.storage.loot.*;
@@ -9,6 +7,8 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.*;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import static nc.config.NCConfig.dungeon_loot;
 
 public class DungeonLootHandler {
 	

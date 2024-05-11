@@ -1,10 +1,10 @@
 package nc.tab;
 
-import static nc.config.NCConfig.register_processor;
-
 import nc.init.NCBlocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+
+import static nc.config.NCConfig.register_processor;
 
 public class TabMachine extends CreativeTabs {
 	

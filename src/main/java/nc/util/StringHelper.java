@@ -1,9 +1,9 @@
 package nc.util;
 
-import java.util.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
+
+import java.util.*;
 
 public class StringHelper {
 	
@@ -55,7 +55,9 @@ public class StringHelper {
 		return s.contains("*") || s.contains("?") || s.contains(".") || s.contains("\\");
 	}
 	
-	/** Converts wildcards to a regular expressions */
+	/**
+	 * Converts wildcards to a regular expressions
+	 */
 	public static String regex(String glob) {
 		StringBuilder out = new StringBuilder("^");
 		for (int i = 0; i < glob.length(); ++i) {

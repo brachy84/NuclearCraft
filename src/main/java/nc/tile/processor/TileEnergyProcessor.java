@@ -1,15 +1,11 @@
 package nc.tile.processor;
 
-import java.util.*;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import li.cil.oc.api.network.SimpleComponent;
 import nc.ModCheck;
 import nc.handler.TileInfoHandler;
-import nc.network.tile.processor.*;
+import nc.network.tile.processor.EnergyProcessorUpdatePacket;
 import nc.recipe.*;
 import nc.tile.energy.ITileEnergy;
 import nc.tile.energyFluid.TileEnergyFluidSidedInventory;
@@ -25,10 +21,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.Optional;
 
+import javax.annotation.*;
+import java.util.*;
+
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE, INFO>, INFO extends ProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket, INFO>> extends TileEnergyFluidSidedInventory implements IProcessor<TILE, EnergyProcessorUpdatePacket, INFO>, SimpleComponent {
 	
-	protected final INFO info;
+	protected INFO info;
 	
 	protected final @Nonnull NonNullList<ItemStack> consumedStacks;
 	protected final @Nonnull List<Tank> consumedTanks;
@@ -303,6 +302,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	public NBTTagCompound writeAll(NBTTagCompound nbt) {
 		super.writeAll(nbt);
 		writeProcessorNBT(nbt);
+		nbt.setString("infoName", info.name);
 		return nbt;
 	}
 	
@@ -310,10 +310,13 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	public void readAll(NBTTagCompound nbt) {
 		super.readAll(nbt);
 		readProcessorNBT(nbt);
+		if (nbt.hasKey("infoName")) {
+			info = TileInfoHandler.getProcessorContainerInfo(nbt.getString("infoName"));
+		}
 	}
-
+	
 	// OpenComputers
-
+	
 	@Override
 	@Optional.Method(modid = "opencomputers")
 	public String getComponentName() {

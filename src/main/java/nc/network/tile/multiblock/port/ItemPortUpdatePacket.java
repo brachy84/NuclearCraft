@@ -1,13 +1,13 @@
 package nc.network.tile.multiblock.port;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.ITilePacket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class ItemPortUpdatePacket extends TileUpdatePacket {
 	

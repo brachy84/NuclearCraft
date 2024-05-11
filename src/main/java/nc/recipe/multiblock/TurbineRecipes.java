@@ -1,10 +1,10 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.*;
 
 public class TurbineRecipes extends BasicRecipeHandler {
 	

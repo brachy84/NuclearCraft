@@ -1,7 +1,5 @@
 package nc.network.tile.multiblock;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.fission.FissionCluster;
 import nc.network.tile.TileUpdatePacket;
@@ -11,6 +9,8 @@ import nc.tile.internal.fluid.Tank;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class SolidFissionCellUpdatePacket extends ProcessorUpdatePacket {
 	

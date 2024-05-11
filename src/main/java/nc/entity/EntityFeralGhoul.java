@@ -1,11 +1,5 @@
 package nc.entity;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Calendar;
-
-import javax.annotation.Nullable;
-
 import nc.capability.radiation.entity.IEntityRads;
 import nc.config.NCConfig;
 import nc.entity.ai.EntityAIFeralGhoulLeap;
@@ -32,6 +26,11 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nullable;
+import java.util.Calendar;
+
+import static nc.config.NCConfig.*;
 
 public class EntityFeralGhoul extends EntityZombie {
 	
@@ -150,7 +149,7 @@ public class EntityFeralGhoul extends EntityZombie {
 		boolean flag = super.attackEntityAsMob(entityIn);
 		
 		if (flag && entityIn instanceof EntityLivingBase target && !(entityIn instanceof IMob)) {
-            int mult = (int) (30F * MathHelper.clamp(world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty(), 1F, 2.5F));
+			int mult = (int) (30F * MathHelper.clamp(world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty(), 1F, 2.5F));
 			target.addPotionEffect(new PotionEffect(MobEffects.POISON, mult));
 			
 			IEntityRads entityRads = RadiationHelper.getEntityRadiation(target);
@@ -507,7 +506,7 @@ public class EntityFeralGhoul extends EntityZombie {
 	
 	@Override
 	public void setChild(boolean childZombie) {
-		
+	
 	}
 	
 	@Override
@@ -517,7 +516,7 @@ public class EntityFeralGhoul extends EntityZombie {
 	
 	@Override
 	public void setArmsRaised(boolean armsRaised) {
-		
+	
 	}
 	
 	@Override
@@ -526,6 +525,6 @@ public class EntityFeralGhoul extends EntityZombie {
 	}
 	
 	static class Data implements IEntityLivingData {
-		
+	
 	}
 }

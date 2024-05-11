@@ -1,14 +1,5 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.fission_heater_cooling_rate;
-import static nc.init.NCCoolantFluids.COOLANTS;
-
-import java.util.*;
-
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.init.NCBlocks;
 import nc.recipe.*;
@@ -17,6 +8,13 @@ import nc.tile.internal.fluid.Tank;
 import nc.util.PermutationHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static nc.config.NCConfig.fission_heater_cooling_rate;
+import static nc.init.NCCoolantFluids.COOLANTS;
 
 public class CoolantHeaterRecipes extends BasicRecipeHandler {
 	
@@ -48,7 +46,7 @@ public class CoolantHeaterRecipes extends BasicRecipeHandler {
 			ObjectSet<BasicRecipe> set = recipeCache.get(hash);
 			for (BasicRecipe recipe : set) {
 				if (recipe instanceof CoolantHeaterRecipe heaterRecipe) {
-                    RecipeMatchResult matchResult = heaterRecipe.matchHeaterInputs(heaterType, fluidInputs);
+					RecipeMatchResult matchResult = heaterRecipe.matchHeaterInputs(heaterType, fluidInputs);
 					if (matchResult.isMatch) {
 						return new RecipeInfo<>(heaterRecipe, matchResult);
 					}

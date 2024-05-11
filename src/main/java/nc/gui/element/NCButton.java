@@ -1,15 +1,14 @@
 package nc.gui.element;
 
-import javax.annotation.Nonnull;
-
-import org.lwjgl.opengl.GL11;
-
 import nc.Global;
 import nc.util.NCUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.*;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public abstract class NCButton extends GuiButton {

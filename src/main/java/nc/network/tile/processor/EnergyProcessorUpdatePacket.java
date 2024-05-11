@@ -1,11 +1,11 @@
 package nc.network.tile.processor;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import nc.tile.ITilePacket;
 import nc.tile.internal.fluid.Tank;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class EnergyProcessorUpdatePacket extends ProcessorUpdatePacket {
 	

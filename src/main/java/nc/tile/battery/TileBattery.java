@@ -1,9 +1,5 @@
 package nc.tile.battery;
 
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.*;
 import nc.ModCheck;
@@ -19,6 +15,10 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.*;
+
+import static nc.config.NCConfig.enable_gtce_eu;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2"), @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")})
 public class TileBattery extends TileMultiblockPart<BatteryMultiblock, TileBattery> implements ITickable, ITileEnergy, IEnergySink, IEnergySource, IInterfaceable {
@@ -81,11 +81,14 @@ public class TileBattery extends TileMultiblockPart<BatteryMultiblock, TileBatte
 	
 	protected final EnergyStorage backupStorage = new EnergyStorage(1);
 	
-	protected @Nonnull final EnergyConnection[] energyConnections;
+	protected @Nonnull
+	final EnergyConnection[] energyConnections;
 	protected boolean[] ignoreSide = new boolean[] {false, false, false, false, false, false};
 	
-	protected @Nonnull final EnergyTileWrapper[] energySides;
-	protected @Nonnull final EnergyTileWrapperGT[] energySidesGT;
+	protected @Nonnull
+	final EnergyTileWrapper[] energySides;
+	protected @Nonnull
+	final EnergyTileWrapperGT[] energySidesGT;
 	
 	protected boolean ic2reg = false;
 	
@@ -93,7 +96,9 @@ public class TileBattery extends TileMultiblockPart<BatteryMultiblock, TileBatte
 	public long capacity;
 	protected int energyTier;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileBattery() {
 		super(BatteryMultiblock.class, TileBattery.class);
 		energyConnections = ITileEnergy.energyConnectionAll(EnergyConnection.IN);

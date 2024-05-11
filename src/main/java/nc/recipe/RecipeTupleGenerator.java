@@ -1,11 +1,10 @@
 package nc.recipe;
 
-import java.util.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 
 public class RecipeTupleGenerator {
 	

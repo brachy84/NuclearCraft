@@ -38,8 +38,8 @@ public class FourPos {
 		if (!(obj instanceof FourPos fourPos)) {
 			return false;
 		}
-
-        if (dim != fourPos.dim) {
+		
+		if (dim != fourPos.dim) {
 			return false;
 		}
 		return Objects.equals(pos, fourPos.pos);

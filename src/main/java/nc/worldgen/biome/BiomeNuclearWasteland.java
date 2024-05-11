@@ -1,7 +1,5 @@
 package nc.worldgen.biome;
 
-import java.util.Random;
-
 import nc.entity.EntityFeralGhoul;
 import nc.init.NCBlocks;
 import net.minecraft.block.BlockTallGrass;
@@ -12,6 +10,8 @@ import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.feature.*;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.*;
+
+import java.util.Random;
 
 public class BiomeNuclearWasteland extends NCBiome {
 	
@@ -83,7 +83,7 @@ public class BiomeNuclearWasteland extends NCBiome {
 			super.genDecorations(biomeIn, worldIn, random);
 			
 			if (biomeIn instanceof BiomeNuclearWasteland wasteland) {
-                if (random.nextInt(wasteland.portalGenChance) == 0) {
+				if (random.nextInt(wasteland.portalGenChance) == 0) {
 					int x = random.nextInt(16) + 8;
 					int y = random.nextInt(worldIn.getHeight());
 					int z = random.nextInt(16) + 8;

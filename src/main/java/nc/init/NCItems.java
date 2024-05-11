@@ -1,10 +1,7 @@
 package nc.init;
 
-import static nc.config.NCConfig.*;
-
 import nc.*;
-import nc.enumm.IMetaEnum;
-import nc.enumm.MetaEnums;
+import nc.enumm.*;
 import nc.item.*;
 import nc.item.bauble.*;
 import nc.item.energy.battery.*;
@@ -15,15 +12,14 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
+
+import static nc.config.NCConfig.*;
 
 public class NCItems {
 	
@@ -120,9 +116,9 @@ public class NCItems {
 	public static Item record_end_of_the_world;
 	public static Item record_money_for_nothing;
 	public static Item record_hyperspace;
-
+	
 	public static List<ItemRegistrationInfo<?>> registrationList = new ArrayList<>();
-
+	
 	public static void init() {
 		ingot = addWithNameMeta(Global.MOD_ID, "ingot", new NCItemMeta<>(MetaEnums.IngotType.class), NCTabs.material);
 		dust = addWithNameMeta(Global.MOD_ID, "dust", new NCItemMeta<>(MetaEnums.DustType.class), NCTabs.material);
@@ -230,29 +226,29 @@ public class NCItems {
 			registration.registerRender.run();
 		}
 	}
-
+	
 	// Factory
-
+	
 	public static <T extends Item & IInfoItem> T addWithName(String modId, String name, T item, Consumer<ItemRegistrationInfo<T>> registerItem, Consumer<ItemRegistrationInfo<T>> registerRender) {
 		item = withName(modId, name, item);
 		registrationList.add(new ItemRegistrationInfo<>(modId, name, item, registerItem, registerRender));
 		return item;
 	}
-
+	
 	public static <T extends Item & IInfoItem> T addWithName(String modId, String name, T item, CreativeTabs tab) {
 		return addWithName(modId, name, item, x -> registerItem(x.item, tab), x -> registerRender(x.item));
 	}
-
+	
 	public static <T extends Item & IInfoItem & IItemMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> T addWithNameMeta(String modId, String name, T item, CreativeTabs tab) {
 		return addWithName(modId, name, item, x -> registerItem(x.item, tab), x -> registerRenderMeta(x.modId, x.item, x.item.getEnumClass().getEnumConstants()));
 	}
-
+	
 	// Auxiliary
-
+	
 	public static String fixedLine(String modId, String name) {
 		return "item." + modId + "." + name + ".fixd";
 	}
-
+	
 	public static String infoLine(String modId, String name) {
 		return "item." + modId + "." + name + ".desc";
 	}
@@ -271,11 +267,11 @@ public class NCItems {
 	public static void registerRender(Item item) {
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
-
+	
 	public static <T extends IStringSerializable> void registerRenderMeta(String modId, Item item, T[] types) {
 		registerRenderMeta(modId, item, StreamHelper.map(Arrays.asList(types), IStringSerializable::getName));
 	}
-
+	
 	public static void registerRenderMeta(String modId, Item item, List<String> types) {
 		ResourceLocation itemLocation = new ResourceLocation(modId, "items/" + item.getRegistryName().getPath());
 		for (int i = 0; i < types.size(); ++i) {

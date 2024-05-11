@@ -1,11 +1,5 @@
 package nc.tile.fission;
 
-import static nc.util.PosHelper.DEFAULT_NON;
-
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import nc.enumm.MetaEnums;
@@ -13,14 +7,18 @@ import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.*;
 import nc.tile.fission.IFissionFuelComponent.*;
 import nc.tile.fission.manager.*;
-import nc.util.NCMath;
-import nc.util.PosHelper;
+import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+
+import static nc.util.PosHelper.DEFAULT_NON;
 
 public class TileFissionShield extends TileFissionPart implements IFissionHeatingComponent, IFissionManagerListener<TileFissionShieldManager, TileFissionShield> {
 	
@@ -37,7 +35,9 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	protected BlockPos managerPos = DEFAULT_NON;
 	protected TileFissionShieldManager manager = null;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileFissionShield() {
 		super(CuboidalPartPositionType.INTERIOR);
 	}
@@ -124,7 +124,7 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	
 	@Override
 	public void onClusterMeltdown(Iterator<IFissionComponent> componentIterator) {
-		
+	
 	}
 	
 	@Override

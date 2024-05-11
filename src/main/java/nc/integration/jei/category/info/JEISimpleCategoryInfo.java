@@ -1,11 +1,9 @@
 package nc.integration.jei.category.info;
 
 import nc.integration.jei.category.JEISimpleRecipeCategory;
-import nc.integration.jei.wrapper.JEIRecipeWrapperFunction;
-import nc.integration.jei.wrapper.JEISimpleRecipeWrapper;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.NCRecipes;
-import nc.tile.info.TileContainerInfoHelper;
+import nc.integration.jei.wrapper.*;
+import nc.recipe.*;
+import nc.util.ContainerInfoHelper;
 import nc.util.CollectionHelper;
 
 import java.util.List;
@@ -62,7 +60,7 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 	
 	public JEISimpleCategoryInfo(String modId, String name, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, JEISimpleRecipeCategory<WRAPPER>, JEISimpleCategoryInfo<WRAPPER>> jeiRecipeFunction, List<Object> jeiCrafters, List<JEIContainerConnection> jeiContainerConnections, int[] guiWH, List<int[]> itemInputGuiXYWH, List<int[]> fluidInputGuiXYWH, List<int[]> itemOutputGuiXYWH, List<int[]> fluidOutputGuiXYWH, int[] playerGuiXY, int[] progressBarGuiXYWHUV, boolean jeiCategoryEnabled, String jeiCategoryUid, String jeiTitle, String jeiTexture, int[] jeiBackgroundXYWH, int[] jeiTooltipXYWH) {
 		super(modId, name, JEISimpleRecipeCategory::new, jeiRecipeClass, jeiRecipeFunction, jeiCrafters, jeiContainerConnections);
-
+		
 		itemInputSize = itemInputGuiXYWH.size();
 		fluidInputSize = fluidInputGuiXYWH.size();
 		itemOutputSize = itemOutputGuiXYWH.size();
@@ -82,8 +80,8 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 		this.itemOutputGuiXYWH = itemOutputGuiXYWH;
 		this.fluidOutputGuiXYWH = fluidOutputGuiXYWH;
 		
-		itemInputStackXY = TileContainerInfoHelper.stackXYList(itemInputGuiXYWH);
-		itemOutputStackXY = TileContainerInfoHelper.stackXYList(itemOutputGuiXYWH);
+		itemInputStackXY = ContainerInfoHelper.stackXYList(itemInputGuiXYWH);
+		itemOutputStackXY = ContainerInfoHelper.stackXYList(itemOutputGuiXYWH);
 		
 		playerGuiX = playerGuiXY[0];
 		playerGuiY = playerGuiXY[1];
@@ -186,7 +184,7 @@ public class JEISimpleCategoryInfo<WRAPPER extends JEISimpleRecipeWrapper<WRAPPE
 	public List<int[]> getItemOutputStackXY() {
 		return itemOutputStackXY;
 	}
-
+	
 	@Override
 	public BasicRecipeHandler getRecipeHandler() {
 		return NCRecipes.getHandler(getName());

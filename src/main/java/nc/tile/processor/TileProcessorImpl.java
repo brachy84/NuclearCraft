@@ -24,12 +24,20 @@ public class TileProcessorImpl {
 		public TileBasicEnergyProcessorDyn() {
 			super("basic_energy_processor_dyn");
 		}
+		
+		public TileBasicEnergyProcessorDyn(String name) {
+			super(name);
+		}
 	}
 	
 	public static class TileBasicUpgradableEnergyProcessorDyn extends TileBasicUpgradableEnergyProcessor<TileBasicUpgradableEnergyProcessorDyn> {
 		
 		public TileBasicUpgradableEnergyProcessorDyn() {
 			super("basic_upgradable_energy_processor_dyn");
+		}
+		
+		public TileBasicUpgradableEnergyProcessorDyn(String name) {
+			super(name);
 		}
 	}
 	
@@ -158,16 +166,16 @@ public class TileProcessorImpl {
 			super("centrifuge");
 		}
 	}
-
+	
 	public static class TileRockCrusher extends TileBasicUpgradableEnergyProcessor<TileRockCrusher> {
-
+		
 		public TileRockCrusher() {
 			super("rock_crusher");
 		}
 	}
-
+	
 	public static class TileElectricFurnace extends TileBasicUpgradableEnergyProcessor<TileElectricFurnace> {
-
+		
 		public TileElectricFurnace() {
 			super("electric_furnace");
 		}

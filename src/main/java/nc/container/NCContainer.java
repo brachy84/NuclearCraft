@@ -1,12 +1,12 @@
 package nc.container;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
 
 public abstract class NCContainer extends Container {
 	

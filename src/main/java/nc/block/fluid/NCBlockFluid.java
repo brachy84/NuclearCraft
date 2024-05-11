@@ -1,9 +1,5 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.*;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public abstract class NCBlockFluid extends BlockFluidClassic {
 	
@@ -69,11 +68,11 @@ public abstract class NCBlockFluid extends BlockFluidClassic {
 				if (level == 0) {
 					world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, getSourceMixingState(world, pos, state)));
 					triggerMixEffects(world, pos);
-                }
+				}
 				else {
 					world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, getFlowingMixingState(world, pos, state)));
 					triggerMixEffects(world, pos);
-                }
+				}
 			}
 		}
 	}

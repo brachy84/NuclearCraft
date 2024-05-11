@@ -1,9 +1,5 @@
 package nc.tile.energyFluid;
 
-import java.util.List;
-
-import javax.annotation.*;
-
 import it.unimi.dsi.fastutil.ints.IntList;
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.fluid.FluidConnection;
@@ -12,6 +8,9 @@ import nc.util.NCMath;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.*;
+import java.util.List;
 
 public abstract class TileEnergyFluidSidedInventory extends TileEnergyFluidInventory {
 	

@@ -1,8 +1,7 @@
 package nc.multiblock.hx;
 
 import nc.enumm.ITileEnum;
-import nc.tile.hx.TileCondenserTube;
-import nc.tile.hx.TileHeatExchangerTube;
+import nc.tile.hx.*;
 
 import static nc.config.NCConfig.heat_exchanger_conductivity;
 
@@ -28,16 +27,16 @@ public enum HeatExchangerTubeType implements ITileEnum<TileHeatExchangerTube.Var
 	public String toString() {
 		return name;
 	}
-
+	
 	public double getConductivity() {
 		return conductivity;
 	}
-
+	
 	@Override
 	public Class<? extends TileHeatExchangerTube.Variant> getTileClass() {
 		return tileClass;
 	}
-
+	
 	public Class<? extends TileCondenserTube.Variant> getCondenserClass() {
 		return condenserClass;
 	}

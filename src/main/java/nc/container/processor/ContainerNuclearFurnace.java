@@ -1,14 +1,12 @@
 package nc.container.processor;
 
 import nc.container.ContainerInfoTile;
-import nc.container.slot.SlotFurnace;
-import nc.container.slot.SlotNuclearFuel;
+import nc.container.slot.*;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.processor.TileNuclearFurnace;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
@@ -36,7 +34,9 @@ public class ContainerNuclearFurnace extends ContainerInfoTile<TileNuclearFurnac
 		}
 	}
 	
-	/** Looks for changes made in the container, sends them to every listener */
+	/**
+	 * Looks for changes made in the container, sends them to every listener
+	 */
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();

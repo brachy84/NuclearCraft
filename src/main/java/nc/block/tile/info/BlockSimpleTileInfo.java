@@ -1,9 +1,9 @@
 package nc.block.tile.info;
 
-import java.util.function.Supplier;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.function.Supplier;
 
 public class BlockSimpleTileInfo<TILE extends TileEntity> extends BlockTileInfo<TILE> {
 	

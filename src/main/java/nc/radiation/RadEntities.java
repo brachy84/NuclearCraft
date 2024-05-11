@@ -1,11 +1,11 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.max_entity_rads;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.util.RegistryHelper;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+
+import static nc.config.NCConfig.max_entity_rads;
 
 public class RadEntities {
 	

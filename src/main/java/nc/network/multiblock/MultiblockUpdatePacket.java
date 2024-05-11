@@ -3,7 +3,7 @@ package nc.network.multiblock;
 import io.netty.buffer.ByteBuf;
 import nc.multiblock.*;
 import nc.network.NCPacket;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.tile.multiblock.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;

@@ -1,15 +1,14 @@
 package nc.integration.projecte;
 
-import static nc.util.OreDictHelper.*;
-
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import moze_intel.projecte.api.ProjectEAPI;
 import nc.init.NCBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
+
+import static nc.util.OreDictHelper.*;
 
 public class NCProjectE {
 	

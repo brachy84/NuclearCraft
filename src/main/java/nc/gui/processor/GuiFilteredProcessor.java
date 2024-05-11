@@ -1,7 +1,6 @@
 package nc.gui.processor;
 
-import nc.gui.element.GuiFluidRenderer;
-import nc.gui.element.GuiItemRenderer;
+import nc.gui.element.*;
 import nc.network.gui.ClearFilterTankPacket;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.ITileFiltered;

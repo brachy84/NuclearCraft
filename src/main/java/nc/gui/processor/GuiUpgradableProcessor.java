@@ -1,14 +1,12 @@
 package nc.gui.processor;
 
-import nc.gui.element.GuiItemRenderer;
-import nc.gui.element.NCButton;
+import nc.gui.element.*;
 import nc.init.NCItems;
 import nc.network.gui.OpenTileGuiPacket;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
-import nc.util.Lang;
-import nc.util.NCMath;
+import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -42,7 +40,7 @@ public abstract class GuiUpgradableProcessor<TILE extends TileEntity & IProcesso
 	protected void drawUpgradeRenderers() {
 		int[] stackXY = info.speedUpgradeStackXY;
 		new GuiItemRenderer(NCItems.upgrade, 0, guiLeft + stackXY[0], guiTop + stackXY[1], 0.5F).draw();
-
+		
 		stackXY = info.energyUpgradeStackXY;
 		new GuiItemRenderer(NCItems.upgrade, 1, guiLeft + stackXY[0], guiTop + stackXY[1], 0.5F).draw();
 	}

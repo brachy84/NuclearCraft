@@ -22,7 +22,7 @@ public class RadiationCapabilityHandler {
 	@SubscribeEvent
 	public void attachEntityRadiationCapability(AttachCapabilitiesEvent<Entity> event) {
 		Entity entity = event.getObject();
-
+		
 		if (entity instanceof EntityPlayer) {
 			addCapability(event, IEntityRads.CAPABILITY_ENTITY_RADS_NAME, new EntityRadsProvider());
 		}
@@ -57,7 +57,7 @@ public class RadiationCapabilityHandler {
 			addCapability(event, IRadiationResistance.CAPABILITY_RADIATION_RESISTANCE_NAME, new RadiationResistanceStackProvider(stack));
 		}
 	}
-
+	
 	public static <T> void addCapability(AttachCapabilitiesEvent<T> event, ResourceLocation key, ICapabilityProvider capabilityProvider) {
 		if (!event.getCapabilities().containsKey(key)) {
 			event.addCapability(key, capabilityProvider);

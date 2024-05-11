@@ -1,9 +1,5 @@
 package nc.block.tile.processor;
 
-import static nc.block.property.BlockProperties.*;
-
-import java.util.Random;
-
 import nc.block.tile.*;
 import nc.handler.TileInfoHandler;
 import nc.tile.processor.info.ProcessorBlockInfo;
@@ -17,6 +13,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
+
+import java.util.Random;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockProcessor<TILE extends TileEntity> extends BlockSidedTile implements IActivatable, ITileType {
 	

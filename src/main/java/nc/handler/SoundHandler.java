@@ -1,7 +1,5 @@
 package nc.handler;
 
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.*;
 import nc.init.NCSounds;
 import net.minecraft.client.Minecraft;
@@ -12,7 +10,11 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.relauncher.*;
 
-/** TE sound handling - thanks to the Mekanism devs for this system! */
+import javax.annotation.Nullable;
+
+/**
+ * TE sound handling - thanks to the Mekanism devs for this system!
+ */
 @SideOnly(Side.CLIENT)
 public class SoundHandler {
 	

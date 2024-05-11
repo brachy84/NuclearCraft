@@ -1,12 +1,12 @@
 package nc.tile.internal.fluid;
 
-import javax.annotation.Nullable;
-
 import mekanism.api.gas.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.*;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.Nullable;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "mekanism.api.gas.ITubeConnection", modid = "mekanism"), @Optional.Interface(iface = "mekanism.api.gas.IGasHandler", modid = "mekanism")})
 public class TankVoid implements IFluidTank, IFluidHandler, ITubeConnection, IGasHandler {

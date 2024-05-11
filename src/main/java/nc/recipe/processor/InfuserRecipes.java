@@ -1,14 +1,13 @@
 package nc.recipe.processor;
 
-import static nc.util.FissionHelper.FISSION_ORE_DICT;
-import static nc.util.FluidStackHelper.*;
-
 import com.google.common.collect.Lists;
-
 import nc.init.*;
 import nc.util.*;
 import net.minecraft.init.*;
 import net.minecraft.item.ItemStack;
+
+import static nc.util.FissionHelper.FISSION_ORE_DICT;
+import static nc.util.FluidStackHelper.*;
 
 public class InfuserRecipes extends BasicProcessorRecipeHandler {
 	

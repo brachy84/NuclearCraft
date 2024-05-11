@@ -1,12 +1,11 @@
 package nc.block.property;
 
-import java.util.Collection;
-
 import com.google.common.base.*;
 import com.google.common.collect.*;
-
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.*;
+
+import java.util.Collection;
 
 public class PropertySidedEnum<T extends Enum<T> & IStringSerializable> extends PropertyEnum<T> {
 	

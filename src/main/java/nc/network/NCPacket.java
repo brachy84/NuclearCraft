@@ -1,72 +1,69 @@
 package nc.network;
 
-import java.util.*;
-
 import io.netty.buffer.ByteBuf;
 import nc.init.NCPackets;
 import nc.tile.internal.fluid.Tank.TankInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.network.*;
+import net.minecraftforge.fml.common.network.simpleimpl.*;
+
+import java.util.*;
 
 public abstract class NCPacket implements IMessage {
 	
 	public NCPacket() {}
-
+	
 	public SimpleNetworkWrapper getWrapper() {
 		return NCPackets.wrapper;
 	}
-
+	
 	public void sendToAll() {
 		getWrapper().sendToAll(this);
 	}
-
+	
 	public void sendTo(EntityPlayer player) {
 		if (player instanceof EntityPlayerMP playerMP) {
 			getWrapper().sendTo(this, playerMP);
 		}
 	}
-
+	
 	public <T extends EntityPlayer> void sendTo(Iterable<T> players) {
 		for (T player : players) {
 			sendTo(player);
 		}
 	}
-
+	
 	public void sendToAllAround(NetworkRegistry.TargetPoint point) {
 		getWrapper().sendToAllAround(this, point);
 	}
-
+	
 	public void sendToAllTracking(NetworkRegistry.TargetPoint point) {
 		getWrapper().sendToAllTracking(this, point);
 	}
-
+	
 	public void sendToAllTracking(Entity entity) {
 		getWrapper().sendToAllTracking(this, entity);
 	}
-
+	
 	public void sendToDimension(int dimensionId) {
 		getWrapper().sendToDimension(this, dimensionId);
 	}
-
+	
 	public void sendToServer() {
 		getWrapper().sendToServer(this);
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		
+	
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
-		
+	
 	}
 	
 	protected static String readString(ByteBuf buf) {

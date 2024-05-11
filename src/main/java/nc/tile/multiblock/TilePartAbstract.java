@@ -1,7 +1,5 @@
 package nc.tile.multiblock;
 
-import javax.annotation.Nullable;
-
 import nc.block.tile.IDynamicState;
 import nc.capability.radiation.source.*;
 import nc.tile.ITile;
@@ -20,6 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
 
 public abstract class TilePartAbstract extends TileEntity implements ITile {
 	
@@ -157,42 +157,44 @@ public abstract class TilePartAbstract extends TileEntity implements ITile {
 	
 	// GUI management
 	
-	/** Check if the tile entity has a GUI or not Override in derived classes to return true if your tile entity got a GUI */
+	/**
+	 * Check if the tile entity has a GUI or not Override in derived classes to return true if your tile entity got a GUI
+	 */
 	public boolean canOpenGui(World worldIn, BlockPos position, IBlockState state) {
 		return false;
 	}
 	
-	/** Open the specified GUI
+	/**
+	 * Open the specified GUI
 	 *
-	 * @param player
-	 *            the player currently interacting with your block/tile entity
-	 * @param guiId
-	 *            the GUI to open
-	 * @return true if the GUI was opened, false otherwise */
+	 * @param player the player currently interacting with your block/tile entity
+	 * @param guiId  the GUI to open
+	 * @return true if the GUI was opened, false otherwise
+	 */
 	public boolean openGui(Object mod, EntityPlayer player, int guiId) {
 		
 		player.openGui(mod, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	
-	/** Returns a Server side Container to be displayed to the user.
+	/**
+	 * Returns a Server side Container to be displayed to the user.
 	 *
-	 * @param guiId
-	 *            the GUI ID number
-	 * @param player
-	 *            the player currently interacting with your block/tile entity
-	 * @return A GuiScreen/Container to be displayed to the user, null if none. */
+	 * @param guiId  the GUI ID number
+	 * @param player the player currently interacting with your block/tile entity
+	 * @return A GuiScreen/Container to be displayed to the user, null if none.
+	 */
 	public Object getServerGuiElement(int guiId, EntityPlayer player) {
 		return null;
 	}
 	
-	/** Returns a Container to be displayed to the user. On the client side, this needs to return an instance of GuiScreen On the server side, this needs to return an instance of Container
+	/**
+	 * Returns a Container to be displayed to the user. On the client side, this needs to return an instance of GuiScreen On the server side, this needs to return an instance of Container
 	 *
-	 * @param guiId
-	 *            the GUI ID number
-	 * @param player
-	 *            the player currently interacting with your block/tile entity
-	 * @return A GuiScreen/Container to be displayed to the user, null if none. */
+	 * @param guiId  the GUI ID number
+	 * @param player the player currently interacting with your block/tile entity
+	 * @return A GuiScreen/Container to be displayed to the user, null if none.
+	 */
 	public Object getClientGuiElement(int guiId, EntityPlayer player) {
 		return null;
 	}
@@ -284,20 +286,20 @@ public abstract class TilePartAbstract extends TileEntity implements ITile {
 		}
 	}
 	
-	/** Sync tile entity data from the given NBT compound
-	 * 
-	 * @param data
-	 *            the data
-	 * @param syncReason
-	 *            the reason why the synchronization is necessary */
+	/**
+	 * Sync tile entity data from the given NBT compound
+	 *
+	 * @param data       the data
+	 * @param syncReason the reason why the synchronization is necessary
+	 */
 	protected abstract void syncDataFrom(NBTTagCompound data, SyncReason syncReason);
 	
-	/** Sync tile entity data to the given NBT compound
-	 * 
-	 * @param data
-	 *            the data
-	 * @param syncReason
-	 *            the reason why the synchronization is necessary */
+	/**
+	 * Sync tile entity data to the given NBT compound
+	 *
+	 * @param data       the data
+	 * @param syncReason the reason why the synchronization is necessary
+	 */
 	protected abstract void syncDataTo(NBTTagCompound data, SyncReason syncReason);
 	
 	// TESR

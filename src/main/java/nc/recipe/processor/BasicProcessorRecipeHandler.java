@@ -1,10 +1,9 @@
 package nc.recipe.processor;
 
-import java.util.List;
+import nc.recipe.BasicRecipeHandler;
 
 import javax.annotation.Nonnull;
-
-import nc.recipe.*;
+import java.util.List;
 
 public abstract class BasicProcessorRecipeHandler extends BasicRecipeHandler {
 	

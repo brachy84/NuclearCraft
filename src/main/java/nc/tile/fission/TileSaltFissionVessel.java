@@ -1,53 +1,36 @@
 package nc.tile.fission;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
-import nc.Global;
-import nc.ModCheck;
+import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.objects.*;
+import nc.*;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.FissionCluster;
-import nc.multiblock.fission.FissionReactor;
-import nc.multiblock.fission.SaltFissionVesselBunch;
+import nc.multiblock.fission.*;
 import nc.network.tile.multiblock.SaltFissionVesselUpdatePacket;
 import nc.radiation.RadiationHelper;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.NCRecipes;
-import nc.recipe.RecipeInfo;
-import nc.tile.fission.port.IFissionPortTarget;
-import nc.tile.fission.port.TileFissionVesselPort;
-import nc.tile.fluid.ITileFilteredFluid;
-import nc.tile.fluid.ITileFluid;
+import nc.recipe.*;
+import nc.tile.fission.port.*;
+import nc.tile.fluid.*;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.fluid.Tank.TankInfo;
-import nc.tile.internal.inventory.InventoryConnection;
-import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
-import nc.util.CapabilityHelper;
-import nc.util.NCMath;
+import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 import java.util.*;
 
 import static nc.config.NCConfig.*;
@@ -183,7 +166,8 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	@Override
 	public void resetStats() {
 		vesselBunch.sources = vesselBunch.flux = 0L;
-		/* primed = */ fluxSearched = false;
+		/* primed = */
+		fluxSearched = false;
 		flux = heatMult = 0;
 		undercoolingLifetimeFactor = 1D;
 		// sourceEfficiency = null;
@@ -246,7 +230,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void addToPrimedCache(final ObjectSet<IFissionFuelComponent> primedCache) {
-        primedCache.addAll(vesselBunch.getPartMap().values());
+		primedCache.addAll(vesselBunch.getPartMap().values());
 	}
 	
 	@Override
@@ -346,13 +330,17 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		return activeReflectorCache;
 	}
 	
-	/** DON'T USE IN REACTOR LOGIC! */
+	/**
+	 * DON'T USE IN REACTOR LOGIC!
+	 */
 	@Override
 	public long getRawHeating() {
 		return isProcessing ? baseProcessHeat * vesselBunch.getHeatMultiplier() / getVesselBunchSize() : 0L;
 	}
 	
-	/** DON'T USE IN REACTOR LOGIC! */
+	/**
+	 * DON'T USE IN REACTOR LOGIC!
+	 */
 	@Override
 	public long getRawHeatingIgnoreCoolingPenalty() {
 		return isProcessing ? 0L : getDecayHeating();
@@ -368,7 +356,9 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		return isProcessing ? 0D : getFloatingPointDecayHeating();
 	}
 	
-	/** DON'T USE IN REACTOR LOGIC! */
+	/**
+	 * DON'T USE IN REACTOR LOGIC!
+	 */
 	@Override
 	public long getHeatMultiplier() {
 		return vesselBunch.getHeatMultiplier() / getVesselBunchSize();
@@ -409,7 +399,9 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		return selfPriming;
 	}
 	
-	/** Fix to force adjacent moderators to be active */
+	/**
+	 * Fix to force adjacent moderators to be active
+	 */
 	@Override
 	public void defaultRefreshModerators(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
 		if (isProcessing) {
@@ -747,7 +739,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	public double getPowerMultiplier() {
 		return 0D;
 	}
-
+	
 	@Override
 	public boolean isProcessing() {
 		return isProcessing(true);
@@ -756,7 +748,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	public boolean isProcessing(boolean checkCluster) {
 		return readyToProcess(checkCluster) && hasEnoughFlux();
 	}
-
+	
 	@Override
 	public boolean readyToProcess() {
 		return readyToProcess(true);

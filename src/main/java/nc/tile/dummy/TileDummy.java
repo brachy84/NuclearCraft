@@ -1,9 +1,5 @@
 package nc.tile.dummy;
 
-import java.util.List;
-
-import javax.annotation.*;
-
 import nc.tile.energy.ITileEnergy;
 import nc.tile.energyFluid.TileEnergyFluidSidedInventory;
 import nc.tile.fluid.ITileFluid;
@@ -20,6 +16,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.*;
+
+import javax.annotation.*;
+import java.util.List;
 
 public abstract class TileDummy<MASTER extends IDummyMaster> extends TileEnergyFluidSidedInventory implements ITickable {
 	
@@ -356,7 +355,9 @@ public abstract class TileDummy<MASTER extends IDummyMaster> extends TileEnergyF
 	
 	// Find Master
 	
-	/** Find the BlockPos of the master tile entity */
+	/**
+	 * Find the BlockPos of the master tile entity
+	 */
 	public abstract void findMaster();
 	
 	public boolean hasMaster() {

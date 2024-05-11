@@ -1,51 +1,35 @@
 package nc.tile.fission;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.Global;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.handler.TileInfoHandler;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
-import nc.multiblock.fission.FissionCluster;
-import nc.multiblock.fission.FissionReactor;
+import nc.multiblock.fission.*;
 import nc.network.tile.multiblock.SolidFissionCellUpdatePacket;
 import nc.radiation.RadiationHelper;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.NCRecipes;
-import nc.recipe.RecipeInfo;
-import nc.tile.fission.port.IFissionPortTarget;
-import nc.tile.fission.port.TileFissionCellPort;
+import nc.recipe.*;
+import nc.tile.fission.port.*;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.InventoryConnection;
-import nc.tile.internal.inventory.ItemOutputSetting;
-import nc.tile.inventory.ITileFilteredInventory;
-import nc.tile.inventory.ITileInventory;
+import nc.tile.internal.inventory.*;
+import nc.tile.inventory.*;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
-import nc.util.NBTHelper;
-import nc.util.NCMath;
+import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -377,7 +361,9 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 		return selfPriming;
 	}
 	
-	/** Fix to force adjacent moderators to be active */
+	/**
+	 * Fix to force adjacent moderators to be active
+	 */
 	@Override
 	public void defaultRefreshModerators(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
 		if (isProcessing) {
@@ -715,7 +701,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	public double getPowerMultiplier() {
 		return 0D;
 	}
-
+	
 	@Override
 	public boolean isProcessing() {
 		return isProcessing(true);
@@ -724,7 +710,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	public boolean isProcessing(boolean checkCluster) {
 		return readyToProcess(checkCluster) && hasEnoughFlux();
 	}
-
+	
 	@Override
 	public boolean readyToProcess() {
 		return readyToProcess(true);
@@ -774,7 +760,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 			}
 		}
 	}
-
+	
 	@Override
 	public int getItemProductCapacity(int slot, ItemStack stack) {
 		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getItemProductCapacity(slot, stack);
@@ -819,7 +805,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
 		return IBasicProcessor.super.isItemValidForSlot(slot, stack);
 	}
-
+	
 	@Override
 	public int getInventoryStackLimit() {
 		return !DEFAULT_NON.equals(masterPortPos) ? masterPort.getInventoryStackLimit() : IBasicProcessor.super.getInventoryStackLimit();
@@ -827,8 +813,8 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	
 	@Override
 	public void clearAllSlots() {
-        Collections.fill(inventoryStacks, ItemStack.EMPTY);
-        Collections.fill(consumedStacks, ItemStack.EMPTY);
+		Collections.fill(inventoryStacks, ItemStack.EMPTY);
+		Collections.fill(consumedStacks, ItemStack.EMPTY);
 		refreshAll();
 	}
 	

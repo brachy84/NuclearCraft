@@ -1,15 +1,15 @@
 package nc.config;
 
-import java.util.*;
-
 import nc.Global;
 import nc.util.Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.config.*;
 import net.minecraftforge.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import net.minecraftforge.fml.client.config.*;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.*;
+
+import java.util.*;
 
 public class NCConfigGuiFactory implements IModGuiFactory {
 	

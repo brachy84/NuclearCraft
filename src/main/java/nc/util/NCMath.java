@@ -1,10 +1,10 @@
 package nc.util;
 
+import net.minecraft.util.math.MathHelper;
+
 import java.math.*;
 import java.text.DecimalFormat;
 import java.util.*;
-
-import net.minecraft.util.math.MathHelper;
 
 public class NCMath {
 	
@@ -206,7 +206,7 @@ public class NCMath {
 		else {
 			int[] next = new int[l - 1];
 			next[0] = hcf;
-            System.arraycopy(arr, 2, next, 1, l - 1 - 1);
+			System.arraycopy(arr, 2, next, 1, l - 1 - 1);
 			return hcf(next);
 		}
 	}
@@ -233,7 +233,7 @@ public class NCMath {
 		else {
 			int[] next = new int[l - 1];
 			next[0] = lcm;
-            System.arraycopy(arr, 2, next, 1, l - 1 - 1);
+			System.arraycopy(arr, 2, next, 1, l - 1 - 1);
 			return lcm(next);
 		}
 	}

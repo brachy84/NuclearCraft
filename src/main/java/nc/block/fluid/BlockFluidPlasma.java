@@ -1,11 +1,5 @@
 package nc.block.fluid;
 
-import static nc.config.NCConfig.fusion_plasma_craziness;
-
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import nc.fluid.FluidPlasma;
 import nc.util.*;
 import net.minecraft.block.material.*;
@@ -15,6 +9,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
+
+import static nc.config.NCConfig.fusion_plasma_craziness;
 
 public class BlockFluidPlasma extends NCBlockFluid {
 	

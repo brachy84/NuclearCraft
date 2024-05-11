@@ -7,7 +7,9 @@ import net.minecraft.world.World;
 
 public class TileTurbineDynamoCoil extends TileTurbineDynamoPart {
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileTurbineDynamoCoil() {
 		super();
 	}
@@ -15,7 +17,7 @@ public class TileTurbineDynamoCoil extends TileTurbineDynamoPart {
 	public TileTurbineDynamoCoil(String coilName, Double conductivity, String ruleID) {
 		super(coilName, conductivity, ruleID);
 	}
-
+	
 	public static class Meta extends TileTurbineDynamoCoil {
 		
 		protected Meta(TurbineDynamoCoilType coilType) {

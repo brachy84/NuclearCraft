@@ -1,53 +1,47 @@
 package nc.integration.jei.category.info;
 
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.IJeiHelpers;
-import mezz.jei.api.IModRegistry;
+import mezz.jei.api.*;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import nc.integration.jei.category.JEIRecipeCategory;
-import nc.integration.jei.category.JEIRecipeCategoryFunction;
-import nc.integration.jei.wrapper.JEIRecipeWrapper;
-import nc.integration.jei.wrapper.JEIRecipeWrapperFunction;
-import nc.recipe.BasicRecipe;
-import nc.recipe.BasicRecipeHandler;
-import nc.util.StackHelper;
-import nc.util.StreamHelper;
+import nc.integration.jei.category.*;
+import nc.integration.jei.wrapper.*;
+import nc.recipe.*;
+import nc.util.*;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY extends JEIRecipeCategory<WRAPPER, CATEGORY, CATEGORY_INFO>, CATEGORY_INFO extends JEICategoryInfo<WRAPPER, CATEGORY, CATEGORY_INFO>> {
-
+	
 	public final String modId;
 	public final String name;
-
+	
 	public final JEIRecipeCategoryFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiCategoryFunction;
 	
 	public final Class<WRAPPER> jeiRecipeClass;
 	public final JEIRecipeWrapperFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiRecipeWrapperFunction;
 	
 	public final List<Object> jeiCrafters;
-
+	
 	public final List<JEIContainerConnection> jeiContainerConnections;
 	
 	protected JEICategoryInfo(String modId, String name, JEIRecipeCategoryFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiCategoryFunction, Class<WRAPPER> jeiRecipeClass, JEIRecipeWrapperFunction<WRAPPER, CATEGORY, CATEGORY_INFO> jeiRecipeWrapperFunction, List<Object> jeiCrafters, List<JEIContainerConnection> jeiContainerConnections) {
 		this.modId = modId;
 		this.name = name;
-
+		
 		this.jeiCategoryFunction = jeiCategoryFunction;
 		
 		this.jeiRecipeClass = jeiRecipeClass;
 		this.jeiRecipeWrapperFunction = jeiRecipeWrapperFunction;
 		
 		this.jeiCrafters = jeiCrafters;
-
+		
 		this.jeiContainerConnections = jeiContainerConnections;
 	}
-
+	
 	public String getModId() {
 		return modId;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -81,7 +75,7 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 	public abstract List<int[]> getItemInputStackXY();
 	
 	public abstract List<int[]> getItemOutputStackXY();
-
+	
 	public abstract BasicRecipeHandler getRecipeHandler();
 	
 	public abstract String getJEICategoryUid();
@@ -142,7 +136,7 @@ public abstract class JEICategoryInfo<WRAPPER extends JEIRecipeWrapper, CATEGORY
 			}
 		}
 	}
-
+	
 	public void addRecipeClickAreas(IModRegistry registry) {
 		for (JEIContainerConnection connection : jeiContainerConnections) {
 			registry.addRecipeClickArea(connection.guiClass, connection.jeiClickAreaX, connection.jeiClickAreaY, connection.jeiClickAreaW, connection.jeiClickAreaH, getJEICategoryUid());

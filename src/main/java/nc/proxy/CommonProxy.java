@@ -1,8 +1,7 @@
 package nc.proxy;
 
 import crafttweaker.CraftTweakerAPI;
-import nc.Global;
-import nc.ModCheck;
+import nc.*;
 import nc.capability.radiation.RadiationCapabilityHandler;
 import nc.command.CommandHandler;
 import nc.config.NCConfig;
@@ -12,22 +11,16 @@ import nc.integration.crafttweaker.CTRegistration;
 import nc.integration.crafttweaker.CTRegistration.RegistrationInfo;
 import nc.integration.hwyla.NCHWLYA;
 import nc.integration.projecte.NCProjectE;
-import nc.integration.tconstruct.TConstructIMC;
-import nc.integration.tconstruct.TConstructMaterials;
+import nc.integration.tconstruct.*;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
-import nc.multiblock.MultiblockHandler;
-import nc.multiblock.MultiblockLogic;
-import nc.multiblock.PlacementRule;
+import nc.multiblock.*;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
-import nc.recipe.NCRecipes;
-import nc.recipe.RecipeStats;
+import nc.recipe.*;
 import nc.recipe.vanilla.CraftingRecipeHandler;
 import nc.tab.NCTabs;
-import nc.util.GasHelper;
-import nc.util.OreDictHelper;
-import nc.util.StructureHelper;
+import nc.util.*;
 import nc.worldgen.biome.NCBiomes;
 import nc.worldgen.decoration.MushroomGenerator;
 import nc.worldgen.dimension.NCWorlds;
@@ -36,8 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -105,7 +97,7 @@ public class CommonProxy {
 		
 		if (ModCheck.tinkersLoaded()) {
 			TConstructMaterials.init();
-
+			
 			if (NCConfig.register_tic_recipes) {
 				TConstructIMC.init();
 			}
@@ -153,7 +145,7 @@ public class CommonProxy {
 		for (RegistrationInfo info : CTRegistration.INFO_LIST) {
 			info.init();
 		}
-
+		
 		TileInfoHandler.init();
 		
 		NCAdvancements.init();
@@ -180,11 +172,11 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new PlayerRespawnHandler());
 		
 		MinecraftForge.EVENT_BUS.register(new ItemUseHandler());
-
+		
 		NCRecipes.postInit();
 		
 		PlacementRule.postInit();
-
+		
 		RecipeStats.init();
 		
 		if (ModCheck.projectELoaded() && NCConfig.register_projecte_emc) {
@@ -235,22 +227,22 @@ public class CommonProxy {
 	// Fluid Colours
 	
 	public void registerFluidBlockRendering(Block block, String name) {
-		
+	
 	}
 	
 	public void initFluidColors() {
-		
+	
 	}
 	
 	// TiC
 	
 	@Optional.Method(modid = "tconstruct")
 	public void setRenderInfo(Material mat, int color) {
-		
+	
 	}
 	
 	@Optional.Method(modid = "tconstruct")
 	public void setRenderInfo(Material mat, int lo, int mid, int hi) {
-		
+	
 	}
 }

@@ -1,7 +1,5 @@
 package nc.tile.dummy;
 
-import static nc.config.NCConfig.machine_update_rate;
-
 import nc.tile.energy.ITileEnergy;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.energy.EnergyConnection;
@@ -10,6 +8,8 @@ import nc.tile.internal.inventory.ItemSorption;
 import nc.tile.inventory.ITileInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import static nc.config.NCConfig.machine_update_rate;
 
 public class TileMachineInterface extends TileDummy<IInterfaceable> {
 	

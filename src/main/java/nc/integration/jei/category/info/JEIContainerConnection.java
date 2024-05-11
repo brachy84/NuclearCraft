@@ -4,30 +4,30 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 
 public class JEIContainerConnection {
-
-    public final Class<? extends Container> containerClass;
-    public final Class<? extends GuiContainer> guiClass;
-
-    public final int itemInputStart;
-    public final int itemInputEnd;
-    public final int playerInventoryStart;
-
-    public final int jeiClickAreaX;
-    public final int jeiClickAreaY;
-    public final int jeiClickAreaW;
-    public final int jeiClickAreaH;
-
-    public JEIContainerConnection(Class<? extends Container> containerClass, Class<? extends GuiContainer> guiClass, int itemInputStart, int itemInputEnd, int playerInventoryStart, int jeiClickAreaX, int jeiClickAreaY, int jeiClickAreaW, int jeiClickAreaH) {
-        this.containerClass = containerClass;
-        this.guiClass = guiClass;
-
-        this.itemInputStart = itemInputStart;
-        this.itemInputEnd = itemInputEnd;
-        this.playerInventoryStart = playerInventoryStart;
-
-        this.jeiClickAreaX = jeiClickAreaX;
-        this.jeiClickAreaY = jeiClickAreaY;
-        this.jeiClickAreaW = jeiClickAreaW;
-        this.jeiClickAreaH = jeiClickAreaH;
-    }
+	
+	public final Class<? extends Container> containerClass;
+	public final Class<? extends GuiContainer> guiClass;
+	
+	public final int itemInputStart;
+	public final int itemInputEnd;
+	public final int playerInventoryStart;
+	
+	public final int jeiClickAreaX;
+	public final int jeiClickAreaY;
+	public final int jeiClickAreaW;
+	public final int jeiClickAreaH;
+	
+	public JEIContainerConnection(Class<? extends Container> containerClass, Class<? extends GuiContainer> guiClass, int itemInputStart, int itemInputEnd, int playerInventoryStart, int jeiClickAreaX, int jeiClickAreaY, int jeiClickAreaW, int jeiClickAreaH) {
+		this.containerClass = containerClass;
+		this.guiClass = guiClass;
+		
+		this.itemInputStart = itemInputStart;
+		this.itemInputEnd = itemInputEnd;
+		this.playerInventoryStart = playerInventoryStart;
+		
+		this.jeiClickAreaX = jeiClickAreaX;
+		this.jeiClickAreaY = jeiClickAreaY;
+		this.jeiClickAreaW = jeiClickAreaW;
+		this.jeiClickAreaH = jeiClickAreaH;
+	}
 }

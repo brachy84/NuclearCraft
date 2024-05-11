@@ -1,8 +1,8 @@
 package nc.util;
 
-import static nc.config.NCConfig.rf_per_eu;
-
 import nc.ModCheck;
+
+import static nc.config.NCConfig.rf_per_eu;
 
 public class EnergyHelper {
 	

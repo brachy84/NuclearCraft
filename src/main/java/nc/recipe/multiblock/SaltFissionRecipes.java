@@ -1,11 +1,11 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
-import static nc.util.FluidStackHelper.INGOT_VOLUME;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.*;
 
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.*;
+import static nc.util.FluidStackHelper.INGOT_VOLUME;
 
 public class SaltFissionRecipes extends BasicRecipeHandler {
 	

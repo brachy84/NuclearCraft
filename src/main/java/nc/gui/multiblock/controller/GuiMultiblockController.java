@@ -1,13 +1,10 @@
 package nc.gui.multiblock.controller;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import nc.gui.GuiInfoTile;
 import nc.multiblock.*;
 import nc.network.multiblock.MultiblockUpdatePacket;
-import nc.tile.info.TileContainerInfo;
+import nc.tile.TileContainerInfo;
 import nc.tile.multiblock.*;
 import nc.util.Lang;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,13 +14,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
-public abstract class GuiMultiblockController<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & IPacketMultiblock<MULTIBLOCK, T, PACKET>, T extends ITileMultiblockPart<MULTIBLOCK, T>, PACKET extends MultiblockUpdatePacket, CONTROLLER extends TileEntity & IMultiblockGuiPart<MULTIBLOCK, T, PACKET, CONTROLLER, INFO>, INFO extends TileContainerInfo<CONTROLLER>> extends GuiInfoTile<CONTROLLER, PACKET, INFO> {
+import java.util.List;
 
+public abstract class GuiMultiblockController<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & IPacketMultiblock<MULTIBLOCK, T, PACKET>, T extends ITileMultiblockPart<MULTIBLOCK, T>, PACKET extends MultiblockUpdatePacket, CONTROLLER extends TileEntity & IMultiblockGuiPart<MULTIBLOCK, T, PACKET, CONTROLLER, INFO>, INFO extends TileContainerInfo<CONTROLLER>> extends GuiInfoTile<CONTROLLER, PACKET, INFO> {
+	
 	protected final MULTIBLOCK multiblock;
 	
 	public GuiMultiblockController(Container inventory, EntityPlayer player, CONTROLLER controller, String textureLocation) {
 		super(inventory, player, controller, textureLocation);
-
+		
 		this.multiblock = controller.getMultiblock();
 	}
 	

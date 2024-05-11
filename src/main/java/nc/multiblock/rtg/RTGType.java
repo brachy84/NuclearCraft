@@ -1,10 +1,10 @@
 package nc.multiblock.rtg;
 
-import static nc.config.NCConfig.rtg_power;
-
 import nc.radiation.RadSources;
 import nc.tile.rtg.TileRTG;
 import net.minecraft.tileentity.TileEntity;
+
+import static nc.config.NCConfig.rtg_power;
 
 public enum RTGType {
 	
@@ -30,11 +30,11 @@ public enum RTGType {
 	}
 	
 	public TileEntity getTile() {
-        return switch (this) {
-            case URANIUM -> new TileRTG.Uranium();
-            case PLUTONIUM -> new TileRTG.Plutonium();
-            case AMERICIUM -> new TileRTG.Americium();
-            case CALIFORNIUM -> new TileRTG.Californium();
-        };
+		return switch (this) {
+			case URANIUM -> new TileRTG.Uranium();
+			case PLUTONIUM -> new TileRTG.Plutonium();
+			case AMERICIUM -> new TileRTG.Americium();
+			case CALIFORNIUM -> new TileRTG.Californium();
+		};
 	}
 }

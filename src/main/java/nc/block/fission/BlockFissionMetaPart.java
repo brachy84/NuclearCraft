@@ -1,7 +1,5 @@
 package nc.block.fission;
 
-import static nc.config.NCConfig.fission_heat_damage;
-
 import nc.block.multiblock.BlockMultiblockMetaPart;
 import nc.enumm.IBlockMetaEnum;
 import nc.tab.NCTabs;
@@ -13,6 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
+
+import static nc.config.NCConfig.fission_heat_damage;
 
 public abstract class BlockFissionMetaPart<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends BlockMultiblockMetaPart<T> {
 	

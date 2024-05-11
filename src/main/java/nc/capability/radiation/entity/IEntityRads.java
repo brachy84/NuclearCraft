@@ -1,17 +1,17 @@
 package nc.capability.radiation.entity;
 
-import static nc.config.NCConfig.radiation_lowest_rate;
-
 import nc.Global;
 import nc.capability.ICapability;
 import nc.capability.radiation.IRadiation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.*;
 
+import static nc.config.NCConfig.radiation_lowest_rate;
+
 public interface IEntityRads extends IRadiation, ICapability<IEntityRads> {
 	
 	@CapabilityInject(IEntityRads.class)
-    Capability<IEntityRads> CAPABILITY_ENTITY_RADS = null;
+	Capability<IEntityRads> CAPABILITY_ENTITY_RADS = null;
 	
 	ResourceLocation CAPABILITY_ENTITY_RADS_NAME = new ResourceLocation(Global.MOD_ID, "capability_entity_rads");
 	

@@ -1,9 +1,9 @@
 package nc.block.plant;
 
-import java.util.Random;
-
 import net.minecraft.block.*;
 import net.minecraft.block.material.*;
+
+import java.util.Random;
 
 public class NCBlockHugeMushroom extends BlockHugeMushroom {
 	

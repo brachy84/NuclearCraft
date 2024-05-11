@@ -1,13 +1,6 @@
 package nc.recipe;
 
-import java.util.*;
-
-import javax.annotation.*;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.annotations.ZenRegister;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.*;
@@ -18,7 +11,11 @@ import nc.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
 import net.minecraftforge.fluids.*;
+import org.apache.commons.lang3.tuple.Pair;
 import stanhebben.zenscript.annotations.*;
+
+import javax.annotation.*;
+import java.util.*;
 
 @ZenClass("mods.nuclearcraft.AbstractRecipeHandler")
 @ZenRegister
@@ -176,7 +173,7 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static boolean isValidItemInputType(Object itemInput) {
 		for (Class<?> itemInputType : validItemInputs) {
 			if (itemInput instanceof ArrayList<?> list && itemInputType == ArrayList.class) {
-                for (Object obj : list) {
+				for (Object obj : list) {
 					if (isValidItemInputType(obj)) {
 						return true;
 					}
@@ -192,7 +189,7 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static boolean isValidFluidInputType(Object fluidInput) {
 		for (Class<?> fluidInputType : validFluidInputs) {
 			if (fluidInput instanceof ArrayList<?> list && fluidInputType == ArrayList.class) {
-                for (Object obj : list) {
+				for (Object obj : list) {
 					if (isValidFluidInputType(obj)) {
 						return true;
 					}

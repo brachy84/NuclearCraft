@@ -1,9 +1,5 @@
 package nc.item.tool;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.item.IInfoItem;
 import nc.util.*;
@@ -20,6 +16,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class NCSpaxelhoe extends ItemTool implements IInfoItem {
 	

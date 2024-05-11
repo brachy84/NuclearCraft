@@ -1,14 +1,6 @@
 package nc.tile.fission;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-import static nc.config.NCConfig.enable_mek_gas;
-
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import nc.ModCheck;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
@@ -26,15 +18,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.*;
 
+import javax.annotation.*;
+import java.util.*;
+
+import static nc.block.property.BlockProperties.FACING_ALL;
+import static nc.config.NCConfig.enable_mek_gas;
+
 public class TileFissionVent extends TileFissionPart implements ITickable, ITileFluid {
 	
 	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ArrayList<>()), new Tank(1, new ArrayList<>()));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(Lists.newArrayList(TankSorption.IN, TankSorption.NON));
 	
-	private @Nonnull final FluidTileWrapper[] fluidSides;
+	private @Nonnull
+	final FluidTileWrapper[] fluidSides;
 	
-	private @Nonnull final GasTileWrapper gasWrapper;
+	private @Nonnull
+	final GasTileWrapper gasWrapper;
 	
 	public TileFissionVent() {
 		super(CuboidalPartPositionType.WALL);
@@ -155,7 +155,7 @@ public class TileFissionVent extends TileFissionPart implements ITickable, ITile
 	@Override
 	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
-			
+		
 		}
 		else {
 			if (getMultiblock() != null) {

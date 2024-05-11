@@ -1,9 +1,5 @@
 package nc.item;
 
-import static nc.config.NCConfig.quantum_angle_precision;
-
-import java.util.*;
-
 import nc.tile.IMultitoolLogic;
 import nc.util.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +12,15 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.*;
 
+import java.util.*;
+
+import static nc.config.NCConfig.quantum_angle_precision;
+
 public class ItemMultitool extends NCItem {
 	
-	/** List of all multitool right-click logic. Earlier entries are prioritised! */
+	/**
+	 * List of all multitool right-click logic. Earlier entries are prioritised!
+	 */
 	public static final List<MultitoolRightClickLogic> MULTITOOL_RIGHT_CLICK_LOGIC = new LinkedList<>();
 	
 	public ItemMultitool(String... tooltip) {

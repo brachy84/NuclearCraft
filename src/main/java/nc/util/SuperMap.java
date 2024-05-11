@@ -1,9 +1,9 @@
 package nc.util;
 
+import it.unimi.dsi.fastutil.objects.*;
+
 import java.util.Map;
 import java.util.Map.Entry;
-
-import it.unimi.dsi.fastutil.objects.*;
 
 public abstract class SuperMap<KEY, T, M extends Map<KEY, ? extends T>> {
 	

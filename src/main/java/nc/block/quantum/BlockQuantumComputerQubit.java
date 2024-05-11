@@ -1,7 +1,5 @@
 package nc.block.quantum;
 
-import javax.annotation.Nullable;
-
 import nc.item.ItemMultitool;
 import nc.tile.quantum.TileQuantumComputerQubit;
 import nc.util.Lang;
@@ -12,6 +10,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
+
+import javax.annotation.Nullable;
 
 public class BlockQuantumComputerQubit extends BlockQuantumComputerPart {
 	
@@ -26,7 +26,7 @@ public class BlockQuantumComputerQubit extends BlockQuantumComputerPart {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND) {
+		if (hand != EnumHand.MAIN_HAND) {
 			return false;
 		}
 		

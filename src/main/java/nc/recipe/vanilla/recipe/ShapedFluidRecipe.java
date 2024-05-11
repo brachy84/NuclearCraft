@@ -1,7 +1,5 @@
 package nc.recipe.vanilla.recipe;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -9,6 +7,8 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nonnull;
 
 public class ShapedFluidRecipe extends ShapedOreRecipe {
 	
@@ -21,7 +21,9 @@ public class ShapedFluidRecipe extends ShapedOreRecipe {
 		return true;
 	}
 	
-	/** Originally from KingLemming's CoFHCore: cofh.core.util.crafting.ShapelessFluidRecipeFactory */
+	/**
+	 * Originally from KingLemming's CoFHCore: cofh.core.util.crafting.ShapelessFluidRecipeFactory
+	 */
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
 		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);

@@ -1,12 +1,12 @@
 package nc.recipe.vanilla.ingredient;
 
-import javax.annotation.Nullable;
-
 import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+
+import javax.annotation.Nullable;
 
 public class BucketIngredient extends Ingredient {
 	

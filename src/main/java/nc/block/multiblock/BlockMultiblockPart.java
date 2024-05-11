@@ -1,10 +1,8 @@
 package nc.block.multiblock;
 
-import javax.annotation.Nullable;
-
 import nc.Global;
 import nc.block.NCBlock;
-import nc.multiblock.*;
+import nc.multiblock.Multiblock;
 import nc.multiblock.internal.MultiblockValidationError;
 import nc.render.BlockHighlightTracker;
 import nc.tile.fluid.ITileFluid;
@@ -25,6 +23,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
 
 public abstract class BlockMultiblockPart extends NCBlock implements ITileEntityProvider {
 	
@@ -49,7 +49,7 @@ public abstract class BlockMultiblockPart extends NCBlock implements ITileEntity
 	protected boolean rightClickOnPart(World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, boolean prioritiseGui) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof ITileFluid tileFluid && FluidUtil.getFluidHandler(player.getHeldItem(hand)) != null) {
-            if (BlockHelper.accessTanks(player, hand, facing, tileFluid)) {
+			if (BlockHelper.accessTanks(player, hand, facing, tileFluid)) {
 				return true;
 			}
 		}

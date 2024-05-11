@@ -1,12 +1,11 @@
 package nc.util;
 
-import static nc.config.NCConfig.ctrl_info;
-
+import it.unimi.dsi.fastutil.objects.*;
+import nc.Global;
 import org.apache.logging.log4j.*;
 import org.lwjgl.input.Keyboard;
 
-import it.unimi.dsi.fastutil.objects.*;
-import nc.Global;
+import static nc.config.NCConfig.ctrl_info;
 
 public class NCUtil {
 	

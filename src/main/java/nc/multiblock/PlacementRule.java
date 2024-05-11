@@ -1,12 +1,6 @@
 package nc.multiblock;
 
-import java.util.*;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.fission.FissionPlacement;
@@ -15,6 +9,10 @@ import nc.recipe.BasicRecipeHandler;
 import nc.tile.multiblock.ITileMultiblockPart;
 import nc.util.*;
 import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> {
 	
@@ -40,7 +38,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 	
 	public void incrementMinimalAdjacencies(Int2IntMap adjacencyMap) {}
 	
-	/** Return true if an ambiguity is guaranteed. */
+	/**
+	 * Return true if an ambiguity is guaranteed.
+	 */
 	public abstract boolean isCycle(Object2BooleanMap<String> boolMap);
 	
 	public boolean requiresRecheck() {
@@ -85,7 +85,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 	
 	public static abstract class RuleParser<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> {
 		
-		/** Returns non-null PlacementRule if the string is successfully parsed. */
+		/**
+		 * Returns non-null PlacementRule if the string is successfully parsed.
+		 */
 		protected abstract @Nullable PlacementRule<MULTIBLOCK, T> parseRule(String s);
 	}
 	
@@ -349,7 +351,8 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 					return count == amount / 2;
 				}
 				else {
-					loop: for (EnumFacing[] axialDirs : PosHelper.axialDirsList()) {
+					loop:
+					for (EnumFacing[] axialDirs : PosHelper.axialDirsList()) {
 						for (EnumFacing dir : axialDirs) {
 							if (!satisfied(tile, dir)) {
 								continue loop;
@@ -385,7 +388,8 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 						return false;
 					}
 					
-					loop: for (EnumFacing[] typeDirs : (adjType == AdjacencyType.VERTEX ? PosHelper.VERTEX_DIRS : PosHelper.EDGE_DIRS)) {
+					loop:
+					for (EnumFacing[] typeDirs : (adjType == AdjacencyType.VERTEX ? PosHelper.VERTEX_DIRS : PosHelper.EDGE_DIRS)) {
 						for (EnumFacing dir : typeDirs) {
 							if (!dirs[dir.getIndex()]) {
 								continue loop;
@@ -393,9 +397,10 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 						}
 						return true;
 					}
-                }
+				}
 				else {
-					loop: for (EnumFacing[] typeDirs : (adjType == AdjacencyType.VERTEX ? PosHelper.VERTEX_DIRS : PosHelper.EDGE_DIRS)) {
+					loop:
+					for (EnumFacing[] typeDirs : (adjType == AdjacencyType.VERTEX ? PosHelper.VERTEX_DIRS : PosHelper.EDGE_DIRS)) {
 						for (EnumFacing dir : typeDirs) {
 							if (!satisfied(tile, dir)) {
 								continue loop;
@@ -403,9 +408,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 						}
 						return true;
 					}
-                }
-                return false;
-            }
+				}
+				return false;
+			}
 		}
 		
 		public abstract boolean satisfied(T tile, EnumFacing dir);
@@ -419,12 +424,12 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		EDGE;
 		
 		public String tooltipSubstring(int amount) {
-            return switch (this) {
-                case STANDARD -> "";
-                case AXIAL -> amount == 2 ? "_along_axis" : "_along_axes";
-                case VERTEX -> "_at_vertex";
-                case EDGE -> "_along_edge";
-            };
+			return switch (this) {
+				case STANDARD -> "";
+				case AXIAL -> amount == 2 ? "_along_axis" : "_along_axes";
+				case VERTEX -> "_at_vertex";
+				case EDGE -> "_along_edge";
+			};
 		}
 	}
 	
@@ -439,11 +444,11 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		}
 		
 		public String tooltipSubstring(int amount) {
-            return switch (this) {
-                case AT_LEAST -> "at_least";
-                case EXACTLY -> "exactly";
-                case AT_MOST -> "at_most";
-            };
+			return switch (this) {
+				case AT_LEAST -> "at_least";
+				case EXACTLY -> "exactly";
+				case AT_MOST -> "at_most";
+			};
 		}
 	}
 	
@@ -600,7 +605,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 	
 	public static abstract class TooltipBuilder<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> {
 		
-		/** Returns non-null PlacementRule if the tooltip is successfully built. */
+		/**
+		 * Returns non-null PlacementRule if the tooltip is successfully built.
+		 */
 		public abstract String buildTooltip(PlacementRule<MULTIBLOCK, T> rule);
 	}
 	
@@ -645,7 +652,8 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 				setupAmbiguityChecks();
 			}
 			
-			loop: for (int i = 0; i < p_patterns.size(); ++i) {
+			loop:
+			for (int i = 0; i < p_patterns.size(); ++i) {
 				boolean p = false;
 				String[] p_split = p_splits.get(i);
 				boolean[] p_inv = p_invs.get(i);
@@ -667,8 +675,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 							break;
 						}
 					}
-					if (!p)
+					if (!p) {
 						continue;
+					}
 				}
 				
 				String[] l_split = l_splits.get(i);

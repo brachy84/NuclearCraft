@@ -1,0 +1,30 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "nuclearcraft:machine",
+		"textures": {
+			"top": "nuclearcraft:blocks/glowstone_aggregator_top",
+			"bottom": "nuclearcraft:blocks/glowstone_aggregator_side",
+			"front": "nuclearcraft:blocks/glowstone_aggregator_front_off",
+			"side": "nuclearcraft:blocks/glowstone_aggregator_side",
+			"back": "nuclearcraft:blocks/glowstone_aggregator_side"
+		}
+	},
+	"variants": {
+		"inventory": [{}],
+		"active": {
+			"false": {},
+			"true": {
+				"textures": {
+					"front": "nuclearcraft:blocks/glowstone_aggregator_front_on"
+				}
+			}
+		},
+		"facing": {
+			"north": {},
+			"east": {"y": 90},
+			"south": {"y": 180},
+			"west": {"y": 270}
+		}
+	}
+}

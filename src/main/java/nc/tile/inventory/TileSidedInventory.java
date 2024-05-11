@@ -1,11 +1,11 @@
 package nc.tile.inventory;
 
-import javax.annotation.*;
-
 import nc.tile.internal.inventory.InventoryConnection;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.*;
 
 public abstract class TileSidedInventory extends TileInventory {
 	

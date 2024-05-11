@@ -1,32 +1,24 @@
 package nc.config;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import nc.Global;
-import nc.ModCheck;
+import nc.*;
 import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
 import nc.recipe.BasicRecipeHandler;
-import nc.util.Lang;
-import nc.util.NCMath;
+import nc.util.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
+import net.minecraftforge.common.config.*;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import static nc.util.CollectionHelper.arrayCopies;
@@ -89,7 +81,7 @@ public class NCConfig {
 	public static boolean ore_processing;
 	public static int[] manufactory_wood;
 	public static boolean rock_crusher_alternate;
-
+	
 	public static boolean gtce_recipe_integration_global;
 	public static boolean[] gtce_recipe_integration;
 	public static boolean gtce_recipe_logging;
@@ -356,7 +348,7 @@ public class NCConfig {
 	public static String[] radiation_shielding_item_blacklist;
 	public static String[] radiation_shielding_custom_stacks;
 	public static String[] radiation_shielding_default_levels;
-
+	
 	public static boolean radiation_tile_entities;
 	public static boolean radiation_hardcore_stacks;
 	public static double radiation_hardcore_containers;
@@ -517,7 +509,7 @@ public class NCConfig {
 		ore_processing = sync(CATEGORY_PROCESSOR, "ore_processing", true);
 		manufactory_wood = sync(CATEGORY_PROCESSOR, "manufactory_wood", new int[] {6, 4}, 1, 64, ARRAY);
 		rock_crusher_alternate = sync(CATEGORY_PROCESSOR, "rock_crusher_alternate", false);
-
+		
 		gtce_recipe_integration_global = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration_global", true);
 		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
@@ -1002,13 +994,13 @@ public class NCConfig {
 		}
 		int[] newList = new int[defaultLength];
 		if (currentLength > defaultLength) {
-            System.arraycopy(currentList, 0, newList, 0, defaultLength);
+			System.arraycopy(currentList, 0, newList, 0, defaultLength);
 		}
 		else {
-            System.arraycopy(currentList, 0, newList, 0, currentLength);
+			System.arraycopy(currentList, 0, newList, 0, currentLength);
 			property.setToDefault();
 			int[] defaultList = property.getIntList();
-            System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
+			System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
 		}
 		return newList;
 	}
@@ -1023,13 +1015,13 @@ public class NCConfig {
 		}
 		boolean[] newList = new boolean[defaultLength];
 		if (currentLength > defaultLength) {
-            System.arraycopy(currentList, 0, newList, 0, defaultLength);
+			System.arraycopy(currentList, 0, newList, 0, defaultLength);
 		}
 		else {
-            System.arraycopy(currentList, 0, newList, 0, currentLength);
+			System.arraycopy(currentList, 0, newList, 0, currentLength);
 			property.setToDefault();
 			boolean[] defaultList = property.getBooleanList();
-            System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
+			System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
 		}
 		return newList;
 	}
@@ -1044,13 +1036,13 @@ public class NCConfig {
 		}
 		double[] newList = new double[defaultLength];
 		if (currentLength > defaultLength) {
-            System.arraycopy(currentList, 0, newList, 0, defaultLength);
+			System.arraycopy(currentList, 0, newList, 0, defaultLength);
 		}
 		else {
-            System.arraycopy(currentList, 0, newList, 0, currentLength);
+			System.arraycopy(currentList, 0, newList, 0, currentLength);
 			property.setToDefault();
 			double[] defaultList = property.getDoubleList();
-            System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
+			System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
 		}
 		return newList;
 	}
@@ -1065,13 +1057,13 @@ public class NCConfig {
 		}
 		String[] newList = new String[defaultLength];
 		if (currentLength > defaultLength) {
-            System.arraycopy(currentList, 0, newList, 0, defaultLength);
+			System.arraycopy(currentList, 0, newList, 0, defaultLength);
 		}
 		else {
-            System.arraycopy(currentList, 0, newList, 0, currentLength);
+			System.arraycopy(currentList, 0, newList, 0, currentLength);
 			property.setToDefault();
 			String[] defaultList = property.getStringList();
-            System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
+			System.arraycopy(defaultList, currentLength, newList, currentLength, defaultLength - currentLength);
 		}
 		return newList;
 	}
@@ -1091,7 +1083,7 @@ public class NCConfig {
 			new ConfigUpdatePacket(radiation_enabled, radiation_horse_armor).sendTo(event.player);
 		}
 	}
-
+	
 	public static void onConfigPacket(ConfigUpdatePacket message) {
 		if (!radiation_enabled_public && message.radiation_enabled) {
 			String unloc = "message.nuclearcraft.radiation_config_info" + (ModCheck.jeiLoaded() ? "_jei" : "");

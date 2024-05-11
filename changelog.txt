@@ -1,5 +1,7 @@
 v2o.7.2
 
++ Added CT methods to define and register custom processors
+
 + Added Radiation Scrubber GUI (shift-click to see radiation removal rate)
 
 + Added back GTCEu recipe integration
@@ -10,6 +12,7 @@ v2o.7.2
 
 + Added config to entirely disable all GTCEu recipe integration
 + Added config to disable all miscellaneous TiC recipes
+* Fixed processor registration configs disabling the wrong crafting recipes
 
 * Simplified registration logic
 

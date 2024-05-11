@@ -1,16 +1,12 @@
 package nc.container.multiblock.port;
 
-import nc.container.slot.SlotFiltered;
-import nc.container.slot.SlotFurnace;
-import nc.multiblock.fission.FissionReactor;
-import nc.multiblock.fission.FissionReactorLogic;
+import nc.container.slot.*;
+import nc.multiblock.fission.*;
 import nc.network.tile.multiblock.port.ItemPortUpdatePacket;
-import nc.recipe.BasicRecipeHandler;
-import nc.recipe.NCRecipes;
-import nc.tile.info.TileContainerInfo;
-import nc.tile.fission.IFissionPart;
-import nc.tile.fission.TileFissionIrradiator;
+import nc.recipe.*;
+import nc.tile.fission.*;
 import nc.tile.fission.port.TileFissionIrradiatorPort;
+import nc.tile.TileContainerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 

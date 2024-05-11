@@ -1,14 +1,13 @@
 package nc.recipe.ingredient;
 
-import java.util.*;
-
 import com.google.common.collect.Lists;
-
 import crafttweaker.api.item.IngredientOr;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.*;
 
 public class ItemArrayIngredient implements IItemIngredient {
 	
@@ -100,7 +99,8 @@ public class ItemArrayIngredient implements IItemIngredient {
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption sorption) {
 		if (object instanceof ItemArrayIngredient) {
-			loop: for (IItemIngredient ingredient : ingredientList) {
+			loop:
+			for (IItemIngredient ingredient : ingredientList) {
 				for (IItemIngredient ingr : ((ItemArrayIngredient) object).ingredientList) {
 					if (ingredient.match(ingr, sorption).matches()) {
 						continue loop;

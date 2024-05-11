@@ -1,9 +1,5 @@
 package nc.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import nc.enumm.IMetaEnum;
 import nc.util.*;
 import net.minecraft.client.util.ITooltipFlag;
@@ -14,8 +10,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.*;
 
-public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends Item implements IInfoItem, IItemMeta<T> {
+import javax.annotation.Nullable;
+import java.util.List;
 
+public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> extends Item implements IInfoItem, IItemMeta<T> {
+	
 	public final Class<T> enumm;
 	public final T[] values;
 	
@@ -34,11 +33,11 @@ public class NCItemMeta<T extends Enum<T> & IStringSerializable & IMetaEnum> ext
 	public NCItemMeta(Class<T> enumm, String[]... tooltips) {
 		this(enumm, TextFormatting.AQUA, tooltips);
 	}
-
+	
 	public Class<T> getEnumClass() {
 		return enumm;
 	}
-
+	
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (isInCreativeTab(tab)) {

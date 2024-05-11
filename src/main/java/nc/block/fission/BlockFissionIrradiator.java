@@ -25,14 +25,14 @@ public class BlockFissionIrradiator extends BlockFissionPart {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileFissionIrradiator irradiator) {
-                FissionReactor reactor = irradiator.getMultiblock();
+				FissionReactor reactor = irradiator.getMultiblock();
 				if (reactor != null) {
 					ItemStack heldStack = player.getHeldItem(hand);
 					if (irradiator.canModifyFilter(0) && irradiator.getInventoryStacks().get(0).isEmpty() && !heldStack.isItemEqual(irradiator.getFilterStacks().get(0)) && irradiator.isItemValidForSlotInternal(0, heldStack)) {
@@ -57,7 +57,7 @@ public class BlockFissionIrradiator extends BlockFissionPart {
 		if (!keepInventory) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileFissionIrradiator irradiator) {
-                dropItems(world, pos, irradiator.getInventoryStacksInternal());
+				dropItems(world, pos, irradiator.getInventoryStacksInternal());
 				// world.updateComparatorOutputLevel(pos, this);
 				// FissionReactor reactor = irradiator.getMultiblock();
 				// world.removeTileEntity(pos);

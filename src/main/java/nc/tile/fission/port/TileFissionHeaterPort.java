@@ -15,7 +15,9 @@ public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeate
 	
 	protected String heaterType, coolantName;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileFissionHeaterPort() {
 		super("fission_heater_port", TileFissionHeaterPort.class, INGOT_BLOCK_VOLUME, null, NCRecipes.coolant_heater);
 	}

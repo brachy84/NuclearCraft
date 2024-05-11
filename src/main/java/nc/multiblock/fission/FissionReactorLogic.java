@@ -1,14 +1,5 @@
 package nc.multiblock.fission;
 
-import static nc.block.property.BlockProperties.*;
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.*;
@@ -29,6 +20,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+
+import static nc.block.property.BlockProperties.*;
+import static nc.config.NCConfig.*;
 
 public class FissionReactorLogic extends MultiblockLogic<FissionReactor, FissionReactorLogic, IFissionPart> implements IPacketMultiblockLogic<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket> {
 	
@@ -176,7 +174,7 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 			final ObjectSet<IFissionFuelComponent> primedCache = new ObjectOpenHashSet<>();
 			for (IFissionComponent component : getParts(IFissionComponent.class)) {
 				if (component instanceof IFissionFuelComponent fuelComponent) {
-                    fuelComponent.refreshIsProcessing(false);
+					fuelComponent.refreshIsProcessing(false);
 					if ((fuelComponent.isFunctional() || fuelComponent.isSelfPriming()) && !primedFailCache.containsKey(fuelComponent.getTilePos().toLong())) {
 						fuelComponent.tryPriming(getReactor(), false);
 						if (fuelComponent.isPrimed()) {
@@ -326,7 +324,7 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		
 		for (IFissionComponent component : cluster.getComponentMap().values()) {
 			if (component instanceof IFissionFuelComponent fuelComponent) {
-                fuelComponent.setUndercoolingLifetimeFactor(cluster.undercoolingLifetimeFactor);
+				fuelComponent.setUndercoolingLifetimeFactor(cluster.undercoolingLifetimeFactor);
 			}
 		}
 	}
@@ -407,7 +405,7 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 	}
 	
 	public void updateRedstone() {
-		
+	
 	}
 	
 	public void playFuelComponentSounds(Class<? extends IFissionFuelComponent> clazz) {
@@ -447,10 +445,10 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		
 		// TODO - explosions if vents with water are present, melt casing if not
 		if (getPartMap(TileFissionVent.class).isEmpty()) {
-			
+		
 		}
 		else {
-			
+		
 		}
 		
 		MultiblockRegistry.INSTANCE.addDirtyMultiblock(getWorld(), getReactor());

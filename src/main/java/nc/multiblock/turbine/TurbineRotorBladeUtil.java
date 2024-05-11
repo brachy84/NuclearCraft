@@ -1,16 +1,15 @@
 package nc.multiblock.turbine;
 
-import static nc.config.NCConfig.*;
-
-import java.util.Iterator;
-
 import nc.enumm.ITileEnum;
-import nc.tile.turbine.TileTurbineRotorBlade;
-import nc.tile.turbine.TileTurbineRotorStator;
+import nc.tile.turbine.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Iterator;
+
+import static nc.config.NCConfig.*;
 
 public class TurbineRotorBladeUtil {
 	
@@ -46,12 +45,12 @@ public class TurbineRotorBladeUtil {
 		public double getEfficiency() {
 			return efficiency;
 		}
-
+		
 		@Override
 		public double getExpansionCoefficient() {
 			return expansion;
 		}
-
+		
 		@Override
 		public Class<? extends TileTurbineRotorBlade.Variant> getTileClass() {
 			return tileClass;
@@ -97,7 +96,7 @@ public class TurbineRotorBladeUtil {
 		public double getExpansionCoefficient() {
 			return expansion;
 		}
-
+		
 		@Override
 		public Class<? extends TileTurbineRotorStator.Variant> getTileClass() {
 			return tileClass;
@@ -107,7 +106,7 @@ public class TurbineRotorBladeUtil {
 	public interface IRotorStatorType extends IRotorBladeType {
 		
 		@Override
-        default double getEfficiency() {
+		default double getEfficiency() {
 			return -1D;
 		}
 	}
@@ -128,7 +127,7 @@ public class TurbineRotorBladeUtil {
 	}
 	
 	public interface IBlockRotorBlade {
-		
+	
 	}
 	
 	public enum TurbinePartDir implements IStringSerializable {
@@ -155,11 +154,11 @@ public class TurbineRotorBladeUtil {
 		}
 		
 		public static TurbinePartDir fromFacingAxis(EnumFacing.Axis axis) {
-            return switch (axis) {
-                case X -> X;
-                case Y -> Y;
-                case Z -> Z;
-            };
+			return switch (axis) {
+				case X -> X;
+				case Y -> Y;
+				case Z -> Z;
+			};
 		}
 	}
 	

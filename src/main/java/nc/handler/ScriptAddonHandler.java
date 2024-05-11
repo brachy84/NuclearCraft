@@ -1,12 +1,11 @@
 package nc.handler;
 
-import java.io.*;
-import java.util.*;
-
-import org.apache.commons.io.FileUtils;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.util.*;
+import org.apache.commons.io.FileUtils;
+
+import java.io.*;
+import java.util.Locale;
 
 public class ScriptAddonHandler {
 	
@@ -69,7 +68,8 @@ public class ScriptAddonHandler {
 	}
 	
 	public static void extractAddons(File dir) throws IOException {
-		fileLoop: for (File f : dir.listFiles()) {
+		fileLoop:
+		for (File f : dir.listFiles()) {
 			if (f.isFile() && IOHelper.isZip(f)) {
 				String fileName = f.getName();
 				String fileNameLowerCase = fileName.toLowerCase(Locale.ROOT);
@@ -113,50 +113,50 @@ public class ScriptAddonHandler {
 						break;
 					}
 				}
-
-                switch (f.getName()) {
-                    case "lang" -> {
-                        copyLangs(dir, f);
-                        SCRIPT_ADDON_DIRS.add(dir);
-                    }
-                    case "scripts" -> {
-                        File legacy = new File("scripts/nuclearcraft/" + dirName);
-                        if (legacy.exists()) {
-                            FileUtils.deleteDirectory(legacy);
-                        }
-
-                        FileUtils.copyDirectory(f, new File("scripts/nc_script_addons/" + removeVersionSuffix(dirName)));
-                        SCRIPT_ADDON_DIRS.add(dir);
-                    }
-                    case "contenttweaker" -> {
-                        FileUtils.copyDirectory(f, new File("resources/contenttweaker"));
-                        SCRIPT_ADDON_DIRS.add(dir);
-                    }
-                    case "modularmachinery" -> {
-                        FileUtils.copyDirectory(f, new File("config/modularmachinery/machinery"));
-                        SCRIPT_ADDON_DIRS.add(dir);
-                    }
-                    default -> {
-                        boolean a = false;
-                        for (File d : f.listFiles()) {
-                            if (d.isDirectory()) {
-                                boolean b = false;
-                                for (String s : ADDON_ASSETS) {
-                                    if (d.getName().equals(s)) {
-                                        if (!a) {
-                                            copyAddons(f);
-                                            a = true;
-                                        }
-                                        b = true;
-                                    }
-                                }
-                                if (!b) {
-                                    copyAddons(d);
-                                }
-                            }
-                        }
-                    }
-                }
+				
+				switch (f.getName()) {
+					case "lang" -> {
+						copyLangs(dir, f);
+						SCRIPT_ADDON_DIRS.add(dir);
+					}
+					case "scripts" -> {
+						File legacy = new File("scripts/nuclearcraft/" + dirName);
+						if (legacy.exists()) {
+							FileUtils.deleteDirectory(legacy);
+						}
+						
+						FileUtils.copyDirectory(f, new File("scripts/nc_script_addons/" + removeVersionSuffix(dirName)));
+						SCRIPT_ADDON_DIRS.add(dir);
+					}
+					case "contenttweaker" -> {
+						FileUtils.copyDirectory(f, new File("resources/contenttweaker"));
+						SCRIPT_ADDON_DIRS.add(dir);
+					}
+					case "modularmachinery" -> {
+						FileUtils.copyDirectory(f, new File("config/modularmachinery/machinery"));
+						SCRIPT_ADDON_DIRS.add(dir);
+					}
+					default -> {
+						boolean a = false;
+						for (File d : f.listFiles()) {
+							if (d.isDirectory()) {
+								boolean b = false;
+								for (String s : ADDON_ASSETS) {
+									if (d.getName().equals(s)) {
+										if (!a) {
+											copyAddons(f);
+											a = true;
+										}
+										b = true;
+									}
+								}
+								if (!b) {
+									copyAddons(d);
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

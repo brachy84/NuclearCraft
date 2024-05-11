@@ -1,7 +1,5 @@
 package nc.block;
 
-import java.util.Random;
-
 import nc.util.BlockHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import net.minecraftforge.common.util.ITeleporter;
+
+import java.util.Random;
 
 public abstract class NCBlockPortal extends NCBlock {
 	

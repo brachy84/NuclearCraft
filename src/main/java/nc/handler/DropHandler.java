@@ -1,9 +1,5 @@
 package nc.handler;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import nc.capability.radiation.resistance.IRadiationResistance;
 import nc.entity.EntityFeralGhoul;
@@ -23,6 +19,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class DropHandler {
 	

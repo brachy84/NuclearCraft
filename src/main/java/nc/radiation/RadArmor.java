@@ -1,13 +1,13 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.init.NCItems;
 import nc.recipe.vanilla.CraftingRecipeHandler;
 import nc.util.*;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.item.ItemStack;
+
+import static nc.config.NCConfig.*;
 
 public class RadArmor {
 	

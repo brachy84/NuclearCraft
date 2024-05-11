@@ -1,9 +1,5 @@
 package nc.tile.fission;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import nc.multiblock.fission.FissionCluster;
@@ -18,9 +14,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.Iterator;
+
 public interface IFissionComponent extends IFissionPart {
 	
-	@Nullable FissionCluster getCluster();
+	@Nullable
+	FissionCluster getCluster();
 	
 	default FissionCluster newCluster(int id) {
 		return new FissionCluster(getMultiblock(), id);
@@ -42,8 +42,10 @@ public interface IFissionComponent extends IFissionPart {
 		return getCluster() != null;
 	}
 	
-	/** Unlike {@link IFissionComponent#isFunctional}, includes checking logic during clusterSearch if necessary! */
-    boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache);
+	/**
+	 * Unlike {@link IFissionComponent#isFunctional}, includes checking logic during clusterSearch if necessary!
+	 */
+	boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache);
 	
 	boolean isFunctional();
 	
@@ -103,13 +105,19 @@ public interface IFissionComponent extends IFissionPart {
 		return null;
 	}
 	
-	/** The moderator line does not necessarily have to be complete! */
+	/**
+	 * The moderator line does not necessarily have to be complete!
+	 */
 	default void onAddedToModeratorCache(ModeratorBlockInfo thisInfo) {}
 	
-	/** Called if and only if the moderator line from the fuel component searching in the dir direction is complete! */
+	/**
+	 * Called if and only if the moderator line from the fuel component searching in the dir direction is complete!
+	 */
 	default void onModeratorLineComplete(ModeratorLine line, ModeratorBlockInfo thisInfo, EnumFacing dir) {}
 	
-	/** Called during cluster searches! */
+	/**
+	 * Called during cluster searches!
+	 */
 	default boolean isActiveModerator() {
 		return false;
 	}
@@ -117,7 +125,7 @@ public interface IFissionComponent extends IFissionPart {
 	// IMultitoolLogic
 	
 	@Override
-    default boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	default boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool);
 			if (nbt != null) {
@@ -127,7 +135,7 @@ public interface IFissionComponent extends IFissionPart {
 			}
 		}
 		else {
-			
+		
 		}
 		return IFissionPart.super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
 	}

@@ -1,9 +1,5 @@
 package nc.block.fluid;
 
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import nc.fluid.FluidSteam;
 import nc.util.DamageSources;
 import net.minecraft.block.material.*;
@@ -12,6 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class BlockFluidSteam extends NCBlockFluid {
 	

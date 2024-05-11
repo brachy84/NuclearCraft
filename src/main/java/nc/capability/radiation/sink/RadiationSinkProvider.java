@@ -1,10 +1,10 @@
 package nc.capability.radiation.sink;
 
-import javax.annotation.*;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
+
+import javax.annotation.*;
 
 public class RadiationSinkProvider implements ICapabilitySerializable<NBTBase> {
 	

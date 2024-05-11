@@ -1,11 +1,11 @@
 package nc.capability.radiation.entity;
 
-import javax.annotation.*;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.*;
+
+import javax.annotation.*;
 
 public class EntityRadsProvider implements ICapabilitySerializable<NBTBase> {
 	

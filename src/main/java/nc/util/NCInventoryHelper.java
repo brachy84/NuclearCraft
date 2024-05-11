@@ -1,7 +1,5 @@
 package nc.util;
 
-import java.util.*;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -9,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.*;
+
+import java.util.*;
 
 public class NCInventoryHelper {
 	
@@ -50,11 +50,11 @@ public class NCInventoryHelper {
 	}
 	
 	private static void dropInventoryItems(World worldIn, double x, double y, double z, List<ItemStack> stacks) {
-        for (ItemStack itemstack : stacks) {
-            if (!itemstack.isEmpty()) {
-                spawnItemStack(worldIn, x, y, z, itemstack);
-            }
-        }
+		for (ItemStack itemstack : stacks) {
+			if (!itemstack.isEmpty()) {
+				spawnItemStack(worldIn, x, y, z, itemstack);
+			}
+		}
 	}
 	
 	private static void spawnItemStack(World world, double x, double y, double z, ItemStack stack) {
@@ -72,7 +72,9 @@ public class NCInventoryHelper {
 		}
 	}
 	
-	/** Returns the stack remaining after insertion */
+	/**
+	 * Returns the stack remaining after insertion
+	 */
 	public static ItemStack addStackToInventory(IItemHandler inv, ItemStack stack) {
 		if (stack.isEmpty()) {
 			return ItemStack.EMPTY;

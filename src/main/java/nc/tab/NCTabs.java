@@ -1,9 +1,9 @@
 package nc.tab;
 
-import static nc.config.NCConfig.*;
-
 import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.creativetab.CreativeTabs;
+
+import static nc.config.NCConfig.*;
 
 public class NCTabs {
 	

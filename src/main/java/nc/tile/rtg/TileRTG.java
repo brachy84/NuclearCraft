@@ -1,9 +1,5 @@
 package nc.tile.rtg;
 
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.*;
 import nc.ModCheck;
@@ -17,6 +13,10 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.*;
+
+import static nc.config.NCConfig.enable_gtce_eu;
 
 @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")
 public class TileRTG extends TileMultiblockPart<RTGMultiblock, TileRTG> implements ITickable, ITileEnergy, IEnergySource {
@@ -51,17 +51,22 @@ public class TileRTG extends TileMultiblockPart<RTGMultiblock, TileRTG> implemen
 	
 	private final EnergyStorage backupStorage = new EnergyStorage(1);
 	
-	private @Nonnull final EnergyConnection[] energyConnections;
+	private @Nonnull
+	final EnergyConnection[] energyConnections;
 	private boolean[] ignoreSide = new boolean[] {false, false, false, false, false, false};
 	
-	private @Nonnull final EnergyTileWrapper[] energySides;
-	private @Nonnull final EnergyTileWrapperGT[] energySidesGT;
+	private @Nonnull
+	final EnergyTileWrapper[] energySides;
+	private @Nonnull
+	final EnergyTileWrapperGT[] energySidesGT;
 	
 	private boolean ic2reg = false;
 	
 	public long power;
 	
-	/** Don't use this constructor! */
+	/**
+	 * Don't use this constructor!
+	 */
 	public TileRTG() {
 		super(RTGMultiblock.class, TileRTG.class);
 		energyConnections = ITileEnergy.energyConnectionAll(EnergyConnection.OUT);
@@ -90,7 +95,7 @@ public class TileRTG extends TileMultiblockPart<RTGMultiblock, TileRTG> implemen
 	
 	@Override
 	public void onMachineBroken() {
-		
+	
 	}
 	
 	@Override

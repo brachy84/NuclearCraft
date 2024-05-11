@@ -1,8 +1,8 @@
 package nc.tile.generator;
 
-import static nc.config.NCConfig.solar_power;
-
 import net.minecraft.util.EnumFacing;
+
+import static nc.config.NCConfig.solar_power;
 
 public class TileSolarPanel extends TilePassiveGenerator {
 	

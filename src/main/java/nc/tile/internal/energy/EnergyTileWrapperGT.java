@@ -1,13 +1,13 @@
 package nc.tile.internal.energy;
 
-import static nc.config.NCConfig.rf_per_eu;
-
 import gregtech.api.capability.IEnergyContainer;
 import nc.tile.energy.ITileEnergy;
 import nc.util.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Optional;
+
+import static nc.config.NCConfig.rf_per_eu;
 
 @Optional.Interface(iface = "gregtech.api.capability.IEnergyContainer", modid = "gregtech")
 public class EnergyTileWrapperGT implements IEnergyContainer {

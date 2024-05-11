@@ -1,10 +1,5 @@
 package nc.tile.fission;
 
-import static nc.block.property.BlockProperties.FACING_ALL;
-import static nc.config.NCConfig.enable_gtce_eu;
-
-import javax.annotation.*;
-
 import gregtech.api.capability.GregtechCapabilities;
 import ic2.api.energy.tile.*;
 import nc.ModCheck;
@@ -22,6 +17,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
+
+import javax.annotation.*;
+
+import static nc.block.property.BlockProperties.FACING_ALL;
+import static nc.config.NCConfig.enable_gtce_eu;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2"), @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")})
 public class TileFissionPowerPort extends TileFissionPart implements ITickable, ITileEnergy, IEnergySink, IEnergySource {
@@ -173,7 +173,7 @@ public class TileFissionPowerPort extends TileFissionPart implements ITickable, 
 	@Override
 	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
-			
+		
 		}
 		else {
 			if (getMultiblock() != null) {

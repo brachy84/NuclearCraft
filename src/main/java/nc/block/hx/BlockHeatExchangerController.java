@@ -1,10 +1,5 @@
 package nc.block.hx;
 
-import static nc.block.property.BlockProperties.*;
-
-import javax.annotation.Nullable;
-
-import nc.NuclearCraft;
 import nc.advancement.NCCriterions;
 import nc.block.tile.IActivatable;
 import nc.tile.hx.TileHeatExchangerController;
@@ -16,6 +11,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
+
+import javax.annotation.Nullable;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockHeatExchangerController extends BlockHeatExchangerPart implements IActivatable {
 	
@@ -64,14 +63,14 @@ public class BlockHeatExchangerController extends BlockHeatExchangerPart impleme
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
+		if (hand != EnumHand.MAIN_HAND || player.isSneaking()) {
 			return false;
 		}
 		
 		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileHeatExchangerController controller) {
-                if (controller.isMultiblockAssembled()) {
+				if (controller.isMultiblockAssembled()) {
 					NCCriterions.HEAT_EXCHANGER_ASSEMBLED.trigger((EntityPlayerMP) player);
 					controller.openGui(world, pos, player);
 					return true;

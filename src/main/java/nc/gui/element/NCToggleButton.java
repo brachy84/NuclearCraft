@@ -1,9 +1,5 @@
 package nc.gui.element;
 
-import javax.annotation.Nonnull;
-
-import org.lwjgl.opengl.GL11;
-
 import nc.Global;
 import nc.tile.ITile;
 import nc.tile.fluid.ITileFluid;
@@ -11,6 +7,9 @@ import nc.tile.internal.fluid.TankOutputSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.*;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public abstract class NCToggleButton extends NCButton {

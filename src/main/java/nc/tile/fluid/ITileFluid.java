@@ -1,11 +1,6 @@
 package nc.tile.fluid;
 
-import java.util.List;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import mekanism.api.gas.GasStack;
 import nc.tile.ITile;
 import nc.tile.internal.fluid.*;
@@ -19,15 +14,21 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 
+import javax.annotation.*;
+import java.util.List;
+
 public interface ITileFluid extends ITile {
 	
 	// Tanks
 	
-	@Nonnull List<Tank> getTanks();
+	@Nonnull
+	List<Tank> getTanks();
 	
 	// Tank Logic
 	
-	/** Only concerns ordering, not whether fluid is actually valid for the tank due to filters or sorption */
+	/**
+	 * Only concerns ordering, not whether fluid is actually valid for the tank due to filters or sorption
+	 */
 	default boolean isNextToFill(@Nonnull EnumFacing side, int tankNumber, FluidStack resource) {
 		if (!getInputTanksSeparated()) {
 			return true;
@@ -58,7 +59,8 @@ public interface ITileFluid extends ITile {
 	
 	// Fluid Connections
 	
-	@Nonnull FluidConnection[] getFluidConnections();
+	@Nonnull
+	FluidConnection[] getFluidConnections();
 	
 	void setFluidConnections(@Nonnull FluidConnection[] connections);
 	
@@ -164,7 +166,8 @@ public interface ITileFluid extends ITile {
 	
 	// Fluid Wrappers
 	
-	@Nonnull FluidTileWrapper[] getFluidSides();
+	@Nonnull
+	FluidTileWrapper[] getFluidSides();
 	
 	default @Nonnull FluidTileWrapper getFluidSide(@Nonnull EnumFacing side) {
 		return getFluidSides()[side.getIndex()];
@@ -222,7 +225,8 @@ public interface ITileFluid extends ITile {
 	
 	// Mekanism Gas Wrapper
 	
-	@Nonnull GasTileWrapper getGasWrapper();
+	@Nonnull
+	GasTileWrapper getGasWrapper();
 	
 	// Fluid Distribution
 	

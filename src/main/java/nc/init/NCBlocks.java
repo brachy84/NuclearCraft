@@ -1,57 +1,40 @@
 package nc.init;
 
-import nc.Global;
-import nc.NCInfo;
+import nc.*;
 import nc.block.*;
-import nc.block.battery.BatteryBlockType;
-import nc.block.battery.BlockBattery;
+import nc.block.battery.*;
 import nc.block.fission.*;
 import nc.block.fission.manager.BlockFissionShieldManager;
 import nc.block.fission.port.*;
 import nc.block.hx.*;
-import nc.block.item.ItemBlockMeta;
-import nc.block.item.NCItemBlock;
+import nc.block.item.*;
 import nc.block.item.energy.ItemBlockBattery;
-import nc.block.plant.BlockGlowingMushroom;
-import nc.block.plant.BlockHugeGlowingMushroom;
+import nc.block.plant.*;
 import nc.block.quantum.*;
 import nc.block.rtg.BlockRTG;
-import nc.block.tile.BlockPortalWasteland;
-import nc.block.tile.BlockSimpleTile;
-import nc.block.tile.ITileType;
+import nc.block.tile.*;
 import nc.block.tile.dummy.BlockMachineInterface;
-import nc.block.tile.processor.BlockNuclearFurnace;
-import nc.block.tile.processor.BlockProcessor;
-import nc.block.tile.radiation.BlockGeigerCounter;
-import nc.block.tile.radiation.BlockRadiationScrubber;
+import nc.block.tile.processor.*;
+import nc.block.tile.radiation.*;
 import nc.block.turbine.*;
-import nc.enumm.IMetaEnum;
-import nc.enumm.MetaEnums;
+import nc.enumm.*;
 import nc.multiblock.hx.HeatExchangerTubeType;
 import nc.multiblock.rtg.RTGType;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorBladeType;
-import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorStatorType;
+import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import nc.radiation.RadiationHelper;
 import nc.tab.NCTabs;
 import nc.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.*;
+import net.minecraft.util.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.UnaryOperator;
+import java.util.*;
+import java.util.function.*;
 
 import static nc.config.NCConfig.*;
 
@@ -211,7 +194,7 @@ public class NCBlocks {
 	public static Block quantum_computer_connector;
 	
 	public static Block quantum_computer_code_generator;
-
+	
 	public static List<BlockRegistrationInfo<?>> registrationList = new ArrayList<>();
 	
 	public static void init() {
@@ -295,7 +278,7 @@ public class NCBlocks {
 		rtg_plutonium = addWithName(Global.MOD_ID, "rtg_plutonium", new BlockRTG(RTGType.PLUTONIUM), rtgInfo.apply(1));
 		rtg_americium = addWithName(Global.MOD_ID, "rtg_americium", new BlockRTG(RTGType.AMERICIUM), rtgInfo.apply(2));
 		rtg_californium = addWithName(Global.MOD_ID, "rtg_californium", new BlockRTG(RTGType.CALIFORNIUM), rtgInfo.apply(3));
-
+		
 		IntFunction<String[]> solarPanelInfo = x -> InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "solar_panel"), UnitHelper.prefix(solar_power[x], 5, "RF/t"));
 		solar_panel_basic = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_basic"), solarPanelInfo.apply(0));
 		solar_panel_advanced = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_advanced"), solarPanelInfo.apply(1));
@@ -303,7 +286,7 @@ public class NCBlocks {
 		solar_panel_elite = addWithName(Global.MOD_ID, new BlockSimpleTile<>("solar_panel_elite"), solarPanelInfo.apply(3));
 		
 		decay_generator = addWithName(Global.MOD_ID, new BlockSimpleTile<>("decay_generator"));
-
+		
 		Function<BlockBattery, ItemBlockBattery> itemBlockBatteryFunction = x -> new ItemBlockBattery(x, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "energy_storage")));
 		if (register_battery[0]) {
 			voltaic_pile_basic = addWithName(Global.MOD_ID, "voltaic_pile_basic", new BlockBattery(BatteryBlockType.VOLTAIC_PILE_BASIC), itemBlockBatteryFunction);
@@ -330,9 +313,9 @@ public class NCBlocks {
 		fission_irradiator = addWithName(Global.MOD_ID, "fission_irradiator", new BlockFissionIrradiator());
 		fission_source = addWithNameMeta(Global.MOD_ID, "fission_source", new BlockFissionMetaSource(), x -> new ItemBlockMeta<>(x, TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceFixedInfo(), TextFormatting.AQUA, NCInfo.neutronSourceInfo()), x -> "active=false,facing=south,type=" + x);
 		fission_shield = addWithNameMeta(Global.MOD_ID, "fission_shield", new BlockFissionMetaShield(), x -> new ItemBlockMeta<>(x, new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldFixedInfo(), TextFormatting.AQUA, NCInfo.neutronShieldInfo()), x -> "active=true,type=" + x);
-
+		
 		fission_computer_port = addWithName(Global.MOD_ID, "fission_computer_port", new BlockFissionComputerPort());
-
+		
 		fission_irradiator_port = addWithName(Global.MOD_ID, "fission_irradiator_port", new BlockFissionIrradiatorPort());
 		fission_cell_port = addWithName(Global.MOD_ID, "fission_cell_port", new BlockFissionCellPort());
 		
@@ -356,16 +339,16 @@ public class NCBlocks {
 		heat_exchanger_casing = addWithName(Global.MOD_ID, "heat_exchanger_casing", new BlockHeatExchangerCasing());
 		heat_exchanger_glass = addWithName(Global.MOD_ID, "heat_exchanger_glass", new BlockHeatExchangerGlass());
 		heat_exchanger_vent = addWithName(Global.MOD_ID, "heat_exchanger_vent", new BlockHeatExchangerVent());
-
+		
 		TriFunction<Block, String, Integer, NCItemBlock> hxTubeItemBlockFunction = (x, y, z) -> new NCItemBlock(x, TextFormatting.BLUE, InfoHelper.formattedInfo(fixedLine(Global.MOD_ID, y), NCMath.pcDecimalPlaces(heat_exchanger_conductivity[z], 1)), TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, y)));
 		heat_exchanger_tube_copper = addWithName(Global.MOD_ID, "heat_exchanger_tube_copper", new BlockHeatExchangerTube(HeatExchangerTubeType.COPPER), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 0));
 		heat_exchanger_tube_hard_carbon = addWithName(Global.MOD_ID, "heat_exchanger_tube_hard_carbon", new BlockHeatExchangerTube(HeatExchangerTubeType.HARD_CARBON), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 1));
 		heat_exchanger_tube_thermoconducting = addWithName(Global.MOD_ID, "heat_exchanger_tube_thermoconducting", new BlockHeatExchangerTube(HeatExchangerTubeType.THERMOCONDUCTING), x -> hxTubeItemBlockFunction.apply(x, "heat_exchanger_tube", 2));
-
+		
 		heat_exchanger_computer_port = addWithName(Global.MOD_ID, "heat_exchanger_computer_port", new BlockHeatExchangerComputerPort());
 		
 		condenser_controller = addWithName(Global.MOD_ID, "condenser_controller", new BlockCondenserController());
-
+		
 		condenser_tube_copper = addWithName(Global.MOD_ID, "condenser_tube_copper", new BlockCondenserTube(HeatExchangerTubeType.COPPER), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 0));
 		condenser_tube_hard_carbon = addWithName(Global.MOD_ID, "condenser_tube_hard_carbon", new BlockCondenserTube(HeatExchangerTubeType.HARD_CARBON), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 1));
 		condenser_tube_thermoconducting = addWithName(Global.MOD_ID, "condenser_tube_thermoconducting", new BlockCondenserTube(HeatExchangerTubeType.THERMOCONDUCTING), x -> hxTubeItemBlockFunction.apply(x, "condenser_tube", 2));
@@ -374,20 +357,20 @@ public class NCBlocks {
 		turbine_casing = addWithName(Global.MOD_ID, "turbine_casing", new BlockTurbineCasing());
 		turbine_glass = addWithName(Global.MOD_ID, "turbine_glass", new BlockTurbineGlass());
 		turbine_rotor_shaft = addWithName(Global.MOD_ID, "turbine_rotor_shaft", new BlockTurbineRotorShaft());
-
+		
 		PrimitiveFunction.ObjIntFunction<Block, ItemBlock> turbineBladeItemBlockFunction = (x, y) -> new NCItemBlock(x, new TextFormatting[] {TextFormatting.LIGHT_PURPLE, TextFormatting.GRAY}, new String[] {Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_blade_efficiency"), NCMath.pcDecimalPlaces(turbine_blade_efficiency[y], 1)), Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_blade_expansion"), NCMath.pcDecimalPlaces(turbine_blade_expansion[y], 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "turbine_rotor_blade"), UnitHelper.prefix(turbine_mb_per_blade, 5, "B/t", -1)));
 		turbine_rotor_blade_steel = addWithName(Global.MOD_ID, "turbine_rotor_blade_steel", new BlockTurbineRotorBlade(TurbineRotorBladeType.STEEL), x -> turbineBladeItemBlockFunction.apply(x, 0));
 		turbine_rotor_blade_extreme = addWithName(Global.MOD_ID, "turbine_rotor_blade_extreme", new BlockTurbineRotorBlade(TurbineRotorBladeType.EXTREME), x -> turbineBladeItemBlockFunction.apply(x, 1));
 		turbine_rotor_blade_sic_sic_cmc = addWithName(Global.MOD_ID, "turbine_rotor_blade_sic_sic_cmc", new BlockTurbineRotorBlade(TurbineRotorBladeType.SIC_SIC_CMC), x -> turbineBladeItemBlockFunction.apply(x, 2));
-
+		
 		turbine_rotor_stator = addWithName(Global.MOD_ID, "turbine_rotor_stator", new BlockTurbineRotorStator(TurbineRotorStatorType.STANDARD), x -> new NCItemBlock(x, TextFormatting.GRAY, new String[] {Lang.localize(fixedLine(Global.MOD_ID, "turbine_rotor_stator_expansion"), NCMath.pcDecimalPlaces(turbine_stator_expansion, 1))}, TextFormatting.AQUA, InfoHelper.formattedInfo(infoLine(Global.MOD_ID, "turbine_rotor_stator"))));
-
+		
 		turbine_rotor_bearing = addWithName(Global.MOD_ID, "turbine_rotor_bearing", new BlockTurbineRotorBearing());
 		turbine_dynamo_coil = addWithNameMeta(Global.MOD_ID, "turbine_dynamo_coil", new BlockTurbineMetaDynamoCoil(), x -> new ItemBlockMeta<>(x, TextFormatting.LIGHT_PURPLE, NCInfo.dynamoCoilFixedInfo(), TextFormatting.AQUA, InfoHelper.NULL_ARRAYS), x -> "type=" + x);
 		turbine_coil_connector = addWithName(Global.MOD_ID, "turbine_coil_connector", new BlockTurbineCoilConnector());
 		turbine_inlet = addWithName(Global.MOD_ID, "turbine_inlet", new BlockTurbineInlet());
 		turbine_outlet = addWithName(Global.MOD_ID, "turbine_outlet", new BlockTurbineOutlet());
-
+		
 		turbine_computer_port = addWithName(Global.MOD_ID, "turbine_computer_port", new BlockTurbineComputerPort());
 		
 		if (register_passive[0]) {
@@ -453,45 +436,45 @@ public class NCBlocks {
 			registration.registerRender.run();
 		}
 	}
-
+	
 	// Factory
-
+	
 	public static <T extends Block> T addWithName(String modId, String name, T block, Consumer<BlockRegistrationInfo<T>> registerBlock, Consumer<BlockRegistrationInfo<T>> registerRender) {
 		block = withName(modId, name, block);
 		registrationList.add(new BlockRegistrationInfo<>(modId, name, block, registerBlock, registerRender));
 		return block;
 	}
-
+	
 	public static <T extends Block> T addWithName(String modId, String name, T block, String... tooltip) {
 		return addWithName(modId, name, block, x -> registerBlock(x.block, tooltip), x -> registerRender(x.block));
 	}
-
+	
 	public static <T extends Block & ITileType> T addWithName(String modId, T block, String... tooltip) {
 		return addWithName(modId, block.getTileName(), block, x -> registerBlock(x.block, tooltip), x -> registerRender(x.block));
 	}
-
+	
 	public static <T extends Block> T addWithName(String modId, String name, T block, Function<T, ? extends ItemBlock> itemBlockFunction) {
 		return addWithName(modId, name, block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRender(x.block));
 	}
-
+	
 	public static <T extends Block & ITileType> T addWithName(String modId, T block, Function<T, ? extends ItemBlock> itemBlockFunction) {
 		return addWithName(modId, block.getTileName(), block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRender(x.block));
 	}
-
+	
 	public static <T extends Block & IBlockMeta<V>, U extends ItemBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> T addWithNameMeta(String modId, String name, T block, Function<T, U> itemBlockFunction, UnaryOperator<String> variantFunction) {
 		return addWithName(modId, name, block, x -> registerBlock(x.block, itemBlockFunction.apply(x.block)), x -> registerRenderMeta(x.modId, x.block, variantFunction));
 	}
-
+	
 	public static <T extends Block & IBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> T addWithNameMeta(String modId, String name, T block) {
 		return addWithNameMeta(modId, name, block, ItemBlockMeta<V>::new, x -> "type=" + x);
 	}
-
+	
 	// Auxiliary
-
+	
 	public static String fixedLine(String modId, String name) {
 		return "tile." + modId + "." + name + ".fixd";
 	}
-
+	
 	public static String infoLine(String modId, String name) {
 		return "tile." + modId + "." + name + ".desc";
 	}
@@ -504,7 +487,7 @@ public class NCBlocks {
 	public static <T extends Block & ITileType> T withName(String modId, T block) {
 		return withName(modId, block.getTileName(), block);
 	}
-
+	
 	public static void registerBlock(Block block, String... tooltip) {
 		registerBlock(block, new NCItemBlock(block, TextFormatting.RED, InfoHelper.EMPTY_ARRAY, TextFormatting.AQUA, tooltip));
 	}
@@ -517,7 +500,7 @@ public class NCBlocks {
 	public static void registerRender(Block block) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
 	}
-
+	
 	public static <T extends Block & IBlockMeta<V>, V extends Enum<V> & IStringSerializable & IMetaEnum> void registerRenderMeta(String modId, T block, UnaryOperator<String> variantFunction) {
 		registerRenderMeta(modId, block, StreamHelper.map(Arrays.asList(block.getValues()), IStringSerializable::getName), variantFunction);
 	}

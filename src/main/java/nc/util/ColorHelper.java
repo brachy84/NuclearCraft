@@ -1,10 +1,10 @@
 package nc.util;
 
-import java.awt.Color;
-
 import crafttweaker.annotations.ZenRegister;
 import net.minecraft.util.math.MathHelper;
 import stanhebben.zenscript.annotations.*;
+
+import java.awt.*;
 
 @ZenClass("mods.nuclearcraft.ColorHelper")
 @ZenRegister

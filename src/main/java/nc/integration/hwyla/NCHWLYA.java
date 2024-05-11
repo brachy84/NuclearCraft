@@ -1,16 +1,15 @@
 package nc.integration.hwyla;
 
-import static nc.config.NCConfig.hwyla_enabled;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.api.impl.ModuleRegistrar;
 import nc.tile.ITile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+import static nc.config.NCConfig.hwyla_enabled;
 
 public class NCHWLYA {
 	

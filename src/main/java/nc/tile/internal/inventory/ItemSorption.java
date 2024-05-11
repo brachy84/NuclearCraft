@@ -25,76 +25,76 @@ public enum ItemSorption implements IStringSerializable, IGuiButton {
 	
 	public ItemSorption next(Type type, boolean reverse) {
 		if (reverse) {
-            return switch (type) {
-                case INPUT -> switch (this) {
-                    case IN -> NON;
-                    case NON -> OUT;
-                    case OUT -> IN;
-                    default -> IN;
-                };
-                case OUTPUT -> switch (this) {
-                    case OUT -> NON;
-                    case NON -> OUT;
-                    default -> OUT;
-                };
-                default -> switch (this) {
-                    case IN -> NON;
-                    case NON -> BOTH;
-                    case BOTH -> OUT;
-                    case OUT -> IN;
-                };
-            };
+			return switch (type) {
+				case INPUT -> switch (this) {
+					case IN -> NON;
+					case NON -> OUT;
+					case OUT -> IN;
+					default -> IN;
+				};
+				case OUTPUT -> switch (this) {
+					case OUT -> NON;
+					case NON -> OUT;
+					default -> OUT;
+				};
+				default -> switch (this) {
+					case IN -> NON;
+					case NON -> BOTH;
+					case BOTH -> OUT;
+					case OUT -> IN;
+				};
+			};
 		}
 		else {
-            return switch (type) {
-                case INPUT -> switch (this) {
-                    case IN -> OUT;
-                    case OUT -> NON;
-                    case NON -> IN;
-                    default -> IN;
-                };
-                case OUTPUT -> switch (this) {
-                    case OUT -> NON;
-                    case NON -> OUT;
-                    default -> OUT;
-                };
-                default -> switch (this) {
-                    case IN -> OUT;
-                    case OUT -> BOTH;
-                    case BOTH -> NON;
-                    case NON -> IN;
-                };
-            };
+			return switch (type) {
+				case INPUT -> switch (this) {
+					case IN -> OUT;
+					case OUT -> NON;
+					case NON -> IN;
+					default -> IN;
+				};
+				case OUTPUT -> switch (this) {
+					case OUT -> NON;
+					case NON -> OUT;
+					default -> OUT;
+				};
+				default -> switch (this) {
+					case IN -> OUT;
+					case OUT -> BOTH;
+					case BOTH -> NON;
+					case NON -> IN;
+				};
+			};
 		}
 	}
 	
 	@Override
 	public String getName() {
-        return switch (this) {
-            case IN -> "in";
-            case OUT -> "out";
-            case BOTH -> "both";
-            case NON -> "non";
-        };
+		return switch (this) {
+			case IN -> "in";
+			case OUT -> "out";
+			case BOTH -> "both";
+			case NON -> "non";
+		};
 	}
 	
 	public TextFormatting getTextColor() {
-        return switch (this) {
-            case IN -> TextFormatting.BLUE;
-            case OUT -> TextFormatting.GOLD;
-            case BOTH -> TextFormatting.BOLD;
-            case NON -> TextFormatting.GRAY;
-        };
+		return switch (this) {
+			case IN -> TextFormatting.BLUE;
+			case OUT -> TextFormatting.GOLD;
+			case BOTH -> TextFormatting.BOLD;
+			case NON -> TextFormatting.GRAY;
+		};
 	}
 	
 	@Override
 	public int getTextureX() {
-        return switch (this) {
-            case IN -> 108;
-            case OUT -> 126;
-            case NON -> 144;
-            default -> 144;
-        };
+		return switch (this) {
+			case IN -> 108;
+			case OUT -> 126;
+			case NON -> 144;
+			default -> 144;
+		};
 	}
 	
 	@Override
@@ -116,5 +116,5 @@ public enum ItemSorption implements IStringSerializable, IGuiButton {
 		DEFAULT,
 		INPUT,
 		OUTPUT
-    }
+	}
 }

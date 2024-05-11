@@ -1,13 +1,13 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.*;
-
-import java.util.List;
-
 import nc.enumm.MetaEnums;
 import nc.init.NCBlocks;
 import nc.recipe.BasicRecipeHandler;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
+
+import static nc.config.NCConfig.*;
 
 public class FissionReflectorRecipes extends BasicRecipeHandler {
 	

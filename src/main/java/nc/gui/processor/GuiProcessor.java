@@ -1,27 +1,19 @@
 package nc.gui.processor;
 
 import nc.gui.GuiInfoTile;
-import nc.gui.element.GuiFluidRenderer;
-import nc.gui.element.NCButton;
-import nc.gui.element.NCToggleButton;
-import nc.network.gui.ClearTankPacket;
-import nc.network.gui.OpenSideConfigGuiPacket;
-import nc.network.gui.OpenTileGuiPacket;
-import nc.network.gui.ToggleRedstoneControlPacket;
+import nc.gui.element.*;
+import nc.network.gui.*;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.processor.IProcessor;
 import nc.tile.processor.info.ProcessorContainerInfo;
-import nc.util.Lang;
-import nc.util.NCUtil;
-import nc.util.UnitHelper;
+import nc.util.*;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.energy.*;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.IOException;

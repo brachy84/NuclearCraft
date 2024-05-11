@@ -35,7 +35,7 @@ public class ToggleInputTanksSeparatedPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ToggleInputTanksSeparatedPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileFluid machine) {
-                machine.setInputTanksSeparated(message.inputTanksSeparated);
+				machine.setInputTanksSeparated(message.inputTanksSeparated);
 				tile.markDirty();
 			}
 		}

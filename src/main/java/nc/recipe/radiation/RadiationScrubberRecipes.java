@@ -1,10 +1,10 @@
 package nc.recipe.radiation;
 
-import static nc.config.NCConfig.*;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import nc.recipe.*;
+import static nc.config.NCConfig.*;
 
 public class RadiationScrubberRecipes extends BasicRecipeHandler {
 	

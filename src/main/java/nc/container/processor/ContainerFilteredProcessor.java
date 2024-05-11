@@ -1,6 +1,6 @@
 package nc.container.processor;
 
-import nc.container.slot.*;
+import nc.container.slot.SlotFiltered;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.tile.inventory.ITileFilteredInventory;
 import nc.tile.processor.IProcessor;

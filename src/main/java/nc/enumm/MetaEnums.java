@@ -1,13 +1,10 @@
 package nc.enumm;
 
-import static nc.config.NCConfig.*;
-
-import nc.tile.fission.TileFissionShield;
-import nc.tile.fission.TileFissionSource;
-import nc.tile.fission.TileSaltFissionHeater;
-import nc.tile.fission.TileSolidFissionSink;
+import nc.tile.fission.*;
 import nc.tile.fission.port.TileFissionHeaterPort;
 import net.minecraft.util.IStringSerializable;
+
+import static nc.config.NCConfig.*;
 
 public class MetaEnums {
 	
@@ -317,7 +314,7 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileFissionSource.Meta> getTileClass() {
 			return tileClass;
@@ -475,7 +472,7 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileFissionShield.Meta> getTileClass() {
 			return tileClass;
@@ -567,7 +564,7 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileSolidFissionSink.Meta> getTileClass() {
 			return tileClass;
@@ -659,7 +656,7 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileSolidFissionSink.Meta> getTileClass() {
 			return tileClass;
@@ -753,12 +750,12 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileSaltFissionHeater.Meta> getTileClass() {
 			return tileClass;
 		}
-
+		
 		public Class<? extends TileFissionHeaterPort.Meta> getPortClass() {
 			return portClass;
 		}
@@ -851,12 +848,12 @@ public class MetaEnums {
 		public int getLightValue() {
 			return lightValue;
 		}
-
+		
 		@Override
 		public Class<? extends TileSaltFissionHeater.Meta> getTileClass() {
 			return tileClass;
 		}
-
+		
 		public Class<? extends TileFissionHeaterPort.Meta> getPortClass() {
 			return portClass;
 		}

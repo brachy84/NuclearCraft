@@ -20,7 +20,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 		return GUI_ID_MAP.getInt(name);
 	}
-
+	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -30,7 +30,7 @@ public class GuiHandler implements IGuiHandler {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {

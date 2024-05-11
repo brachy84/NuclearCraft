@@ -1,11 +1,11 @@
 package nc.tile.internal.inventory;
 
-import javax.annotation.Nonnull;
-
 import nc.tile.inventory.ITileInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.*;
+
+import javax.annotation.Nonnull;
 
 public class ItemHandler<T extends ITileInventory> implements IItemHandlerModifiable {
 	
@@ -72,12 +72,12 @@ public class ItemHandler<T extends ITileInventory> implements IItemHandlerModifi
 					ItemStack copy = stack.splitStack(m);
 					copy.grow(stackInSlot.getCount());
 					setInventorySlotContents(slot1, copy);
-                }
+				}
 				else {
 					stack.shrink(m);
-                }
-                return stack;
-            }
+				}
+				return stack;
+			}
 		}
 		else {
 			if (side != null && !tile.canInsertItem(slot1, stack, side) || !tile.isItemValidForSlot(slot1, stack)) {
@@ -91,12 +91,12 @@ public class ItemHandler<T extends ITileInventory> implements IItemHandlerModifi
 				stack = stack.copy();
 				if (!simulate) {
 					setInventorySlotContents(slot1, stack.splitStack(m));
-                }
+				}
 				else {
 					stack.shrink(m);
-                }
-                return stack;
-            }
+				}
+				return stack;
+			}
 			else {
 				if (!simulate) {
 					setInventorySlotContents(slot1, stack);
@@ -172,7 +172,9 @@ public class ItemHandler<T extends ITileInventory> implements IItemHandlerModifi
 		tile.setInventorySlotContents(slot, stack);
 	}
 	
-	/** Returns -1 if slot number is out of bounds */
+	/**
+	 * Returns -1 if slot number is out of bounds
+	 */
 	public int getSlot(int slot) {
 		return side == null ? slot < getSlots() ? slot : -1 : slot < getSlots() ? tile.getSlotsForFace(side)[slot] : -1;
 	}
@@ -183,7 +185,7 @@ public class ItemHandler<T extends ITileInventory> implements IItemHandlerModifi
 			return true;
 		}
 		if (obj instanceof ItemHandler<?> handler) {
-            return tile.equals(handler.tile) && side == handler.side;
+			return tile.equals(handler.tile) && side == handler.side;
 		}
 		return false;
 	}

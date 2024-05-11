@@ -1,9 +1,9 @@
 package nc.tile.turbine;
 
-import java.util.Iterator;
-
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
+
+import java.util.Iterator;
 
 public class TileTurbineRotorBearing extends TileTurbinePart {
 	

@@ -22,7 +22,9 @@ public class GuiNuclearFurnace extends NCGui {
 		this.furnace = furnace;
 	}
 	
-	/** Draw the foreground layer for the GuiContainer (everything in front of the items) */
+	/**
+	 * Draw the foreground layer for the GuiContainer (everything in front of the items)
+	 */
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String s = furnace.getDisplayName().getUnformattedText();
@@ -30,7 +32,9 @@ public class GuiNuclearFurnace extends NCGui {
 		fontRenderer.drawString(playerInventory.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 	}
 	
-	/** Draws the background layer of this container (behind the items) */
+	/**
+	 * Draws the background layer of this container (behind the items)
+	 */
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1F, 1F, 1F, 1F);

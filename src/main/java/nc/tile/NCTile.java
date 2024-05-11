@@ -1,7 +1,5 @@
 package nc.tile;
 
-import javax.annotation.Nullable;
-
 import nc.block.tile.IDynamicState;
 import nc.capability.radiation.source.*;
 import nc.util.NCMath;
@@ -18,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.*;
+
+import javax.annotation.Nullable;
 
 public abstract class NCTile extends TileEntity implements ITile {
 	

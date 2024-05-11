@@ -40,7 +40,7 @@ public class ToggleTankOutputSettingPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(ToggleTankOutputSettingPacket message, EntityPlayerMP player, TileEntity tile) {
 			if (tile instanceof ITileFluid machine) {
-                TankOutputSetting setting = TankOutputSetting.values()[message.setting];
+				TankOutputSetting setting = TankOutputSetting.values()[message.setting];
 				machine.setTankOutputSetting(message.tank, setting);
 				if (setting == TankOutputSetting.VOID) {
 					machine.clearTank(message.tank);

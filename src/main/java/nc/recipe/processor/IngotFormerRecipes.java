@@ -1,16 +1,15 @@
 package nc.recipe.processor;
 
-import static nc.util.FissionHelper.*;
-import static nc.util.FluidStackHelper.*;
-
-import java.util.*;
-
 import com.google.common.collect.Sets;
-
 import nc.init.NCItems;
 import nc.util.*;
 import net.minecraft.init.*;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.util.*;
+
+import static nc.util.FissionHelper.*;
+import static nc.util.FluidStackHelper.*;
 
 public class IngotFormerRecipes extends BasicProcessorRecipeHandler {
 	

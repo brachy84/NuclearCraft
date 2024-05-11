@@ -3,7 +3,9 @@ package nc.multiblock;
 import net.minecraft.util.math.*;
 import net.minecraft.world.chunk.IChunkProvider;
 
-/** Chunk and block update helpers */
+/**
+ * Chunk and block update helpers
+ */
 public final class MultiblockWorldHelper {
 	
 	public static int getChunkXFromBlock(int blockX) {

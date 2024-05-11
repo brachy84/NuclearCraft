@@ -1,11 +1,5 @@
 package nc.tile.radiation;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.*;
-
 import li.cil.oc.api.machine.*;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.radiation.*;
@@ -18,6 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.concurrent.*;
+
+import static nc.config.NCConfig.*;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 public class TileRadiationScrubber extends TileBasicEnergyProcessor<TileRadiationScrubber> implements ITileRadiationEnvironment {

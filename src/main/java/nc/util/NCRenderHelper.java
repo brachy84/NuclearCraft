@@ -1,10 +1,9 @@
 package nc.util;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 public class NCRenderHelper {
 	

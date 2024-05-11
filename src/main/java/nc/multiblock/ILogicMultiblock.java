@@ -9,7 +9,8 @@ import java.util.function.UnaryOperator;
 
 public interface ILogicMultiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & ILogicMultiblock<MULTIBLOCK, LOGIC, T>, LOGIC extends MultiblockLogic<MULTIBLOCK, LOGIC, T>, T extends ITileLogicMultiblockPart<MULTIBLOCK, LOGIC, T>> extends IMultiblock<MULTIBLOCK, T> {
 	
-	@Nonnull LOGIC getLogic();
+	@Nonnull
+	LOGIC getLogic();
 	
 	void setLogic(String logicID);
 	

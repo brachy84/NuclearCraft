@@ -1,11 +1,6 @@
 package nc.tile.fluid;
 
-import java.util.*;
-
-import javax.annotation.*;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.Global;
 import nc.tile.internal.fluid.FluidConnection;
@@ -17,15 +12,21 @@ import net.minecraft.util.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.*;
+import java.util.*;
+
 public abstract class TileFluidInventory extends TileFluid implements ITileInventory {
 	
-	private @Nonnull final String inventoryName;
+	private @Nonnull
+	final String inventoryName;
 	
-	private @Nonnull final NonNullList<ItemStack> inventoryStacks;
+	private @Nonnull
+	final NonNullList<ItemStack> inventoryStacks;
 	
 	private @Nonnull InventoryConnection[] inventoryConnections;
 	
-	private @Nonnull final List<ItemOutputSetting> itemOutputSettings;
+	private @Nonnull
+	final List<ItemOutputSetting> itemOutputSettings;
 	
 	public TileFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, int capacity, List<String> allowedFluidsList, @Nonnull FluidConnection[] fluidConnections) {
 		this(name, size, inventoryConnections, new IntArrayList(new int[] {capacity}), Lists.<List<String>>newArrayList(allowedFluidsList), fluidConnections);

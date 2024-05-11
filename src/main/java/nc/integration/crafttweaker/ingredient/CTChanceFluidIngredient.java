@@ -1,7 +1,5 @@
 package nc.integration.crafttweaker.ingredient;
 
-import java.util.List;
-
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.*;
 import crafttweaker.api.liquid.ILiquidStack;
@@ -9,6 +7,8 @@ import crafttweaker.api.player.IPlayer;
 import nc.integration.crafttweaker.CTHelper;
 import nc.recipe.ingredient.ChanceFluidIngredient;
 import stanhebben.zenscript.annotations.*;
+
+import java.util.List;
 
 @ZenClass("mods.nuclearcraft.ChanceFluidIngredient")
 @ZenRegister

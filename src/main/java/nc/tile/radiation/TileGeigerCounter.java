@@ -1,7 +1,5 @@
 package nc.tile.radiation;
 
-import static nc.config.NCConfig.radiation_geiger_block_redstone;
-
 import li.cil.oc.api.machine.*;
 import li.cil.oc.api.network.SimpleComponent;
 import nc.capability.radiation.source.IRadiationSource;
@@ -10,6 +8,8 @@ import nc.tile.NCTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.Optional;
+
+import static nc.config.NCConfig.radiation_geiger_block_redstone;
 
 @Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")
 public class TileGeigerCounter extends NCTile implements ITickable, SimpleComponent {

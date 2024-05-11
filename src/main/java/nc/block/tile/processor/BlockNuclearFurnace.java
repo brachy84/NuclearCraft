@@ -1,10 +1,5 @@
 package nc.block.tile.processor;
 
-import static nc.block.property.BlockProperties.*;
-
-import java.util.Random;
-
-import nc.NuclearCraft;
 import nc.block.tile.IActivatable;
 import nc.tab.NCTabs;
 import nc.tile.processor.TileNuclearFurnace;
@@ -20,8 +15,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.relauncher.*;
+
+import java.util.Random;
+
+import static nc.block.property.BlockProperties.*;
 
 public class BlockNuclearFurnace extends Block implements ITileEntityProvider, IActivatable {
 	

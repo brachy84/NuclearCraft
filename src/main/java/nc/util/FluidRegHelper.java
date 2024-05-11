@@ -1,8 +1,8 @@
 package nc.util;
 
-import java.util.Locale;
-
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.util.Locale;
 
 public class FluidRegHelper {
 	

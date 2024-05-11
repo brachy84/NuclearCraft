@@ -1,7 +1,5 @@
 package nc.tile.quantum;
 
-import static nc.multiblock.quantum.QuantumGate.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.multiblock.quantum.*;
 import nc.util.*;
@@ -13,6 +11,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+
+import static nc.multiblock.quantum.QuantumGate.*;
 
 public abstract class TileQuantumComputerGate extends TileQuantumComputerPart implements ITickable {
 	

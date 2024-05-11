@@ -1,12 +1,6 @@
 package nc.recipe;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
-
 import it.unimi.dsi.fastutil.ints.*;
 import nc.ModCheck;
 import nc.config.NCConfig;
@@ -21,6 +15,10 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class RecipeHelper {
 	
@@ -198,7 +196,7 @@ public class RecipeHelper {
 			return checkedItemIngredient((IItemIngredient) object);
 		}
 		else if (object instanceof List<?> list) {
-            List<IItemIngredient> buildList = new ArrayList<>();
+			List<IItemIngredient> buildList = new ArrayList<>();
 			if (!list.isEmpty()) {
 				for (Object listObject : list) {
 					if (listObject instanceof IItemIngredient) {
@@ -239,17 +237,17 @@ public class RecipeHelper {
 		if (AbstractRecipeHandler.requiresFluidFixing(object)) {
 			object = RecipeHelper.fixFluidStack(object);
 		}
-
+		
 		boolean mekanismExpansion = fluidNeedsMekanismExpansion(), techRebornExpansion = fluidNeedsTechRebornExpansion();
 		if ((mekanismExpansion || techRebornExpansion) && object instanceof FluidIngredient) {
 			return checkedFluidIngredient(buildFluidIngredient(expandedFluidStackList((FluidIngredient) object, mekanismExpansion, techRebornExpansion)));
 		}
-
+		
 		if (object instanceof IFluidIngredient) {
 			return checkedFluidIngredient((IFluidIngredient) object);
 		}
 		else if (object instanceof List<?> list) {
-            List<IFluidIngredient> buildList = new ArrayList<>();
+			List<IFluidIngredient> buildList = new ArrayList<>();
 			if (!list.isEmpty()) {
 				for (Object listObject : list) {
 					if (listObject instanceof IFluidIngredient) {
@@ -288,12 +286,14 @@ public class RecipeHelper {
 	private static boolean fluidNeedsMekanismExpansion() {
 		return NCConfig.enable_fluid_recipe_expansion[0] && ModCheck.mekanismLoaded();
 	}
-
+	
 	private static boolean fluidNeedsTechRebornExpansion() {
 		return NCConfig.enable_fluid_recipe_expansion[1] && ModCheck.techRebornLoaded();
 	}
 	
-	/** For Mekanism and Tech Reborn fluids */
+	/**
+	 * For Mekanism and Tech Reborn fluids
+	 */
 	public static List<FluidIngredient> expandedFluidStackList(FluidIngredient stack, boolean mekanismExpansion, boolean techRebornExpansion) {
 		List<FluidIngredient> fluidStackList = Lists.newArrayList(stack);
 		
@@ -344,7 +344,8 @@ public class RecipeHelper {
 		}
 		else {
 			List<IItemIngredient> itemIngredientsRemaining = new ArrayList<>(itemIngredients);
-			itemInputs: for (int i = 0; i < items.size(); ++i) {
+			itemInputs:
+			for (int i = 0; i < items.size(); ++i) {
 				for (int j = 0; j < itemIngredients.size(); ++j) {
 					IItemIngredient itemIngredient = itemIngredientsRemaining.get(j);
 					if (itemIngredient == null) {
@@ -361,7 +362,8 @@ public class RecipeHelper {
 				return RecipeMatchResult.FAIL;
 			}
 			List<IFluidIngredient> fluidIngredientsRemaining = new ArrayList<>(fluidIngredients);
-			fluidInputs: for (int i = 0; i < fluids.size(); ++i) {
+			fluidInputs:
+			for (int i = 0; i < fluids.size(); ++i) {
 				Object fluid = fluids.get(i) instanceof Tank ? ((Tank) fluids.get(i)).getFluid() : fluids.get(i);
 				for (int j = 0; j < fluidIngredients.size(); ++j) {
 					IFluidIngredient fluidIngredient = fluidIngredientsRemaining.get(j);
@@ -513,23 +515,23 @@ public class RecipeHelper {
 	
 	public static long hashMaterialsRaw(List<ItemStack> items, List<Tank> fluids) {
 		long hash = 1L;
-        for (ItemStack stack : items) {
-            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
-        }
-        for (Tank tank : fluids) {
-            hash = 31L * hash + (tank == null || tank.getFluid() == null ? 0L : tank.getFluid().getFluid().getName().hashCode());
-        }
+		for (ItemStack stack : items) {
+			hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
+		}
+		for (Tank tank : fluids) {
+			hash = 31L * hash + (tank == null || tank.getFluid() == null ? 0L : tank.getFluid().getFluid().getName().hashCode());
+		}
 		return hash;
 	}
 	
 	public static long hashMaterials(List<ItemStack> items, List<FluidStack> fluids) {
 		long hash = 1L;
-        for (ItemStack stack : items) {
-            hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
-        }
-        for (FluidStack stack : fluids) {
-            hash = 31L * hash + (stack == null ? 0L : stack.getFluid().getName().hashCode());
-        }
+		for (ItemStack stack : items) {
+			hash = 31L * hash + (stack == null || stack.isEmpty() ? 0L : (StackHelper.isWildcard(stack) ? 1L : RecipeItemHelper.pack(stack)));
+		}
+		for (FluidStack stack : fluids) {
+			hash = 31L * hash + (stack == null ? 0L : stack.getFluid().getName().hashCode());
+		}
 		return hash;
 	}
 	
@@ -558,7 +560,7 @@ public class RecipeHelper {
 			
 			@Override
 			public void onCraftMatrixChanged(IInventory inventory) {
-				
+			
 			}
 			
 			@Override

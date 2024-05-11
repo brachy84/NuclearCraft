@@ -1,11 +1,9 @@
 package nc.block.multiblock;
 
-import javax.annotation.Nullable;
-
 import nc.Global;
 import nc.block.BlockMeta;
 import nc.enumm.IBlockMetaEnum;
-import nc.multiblock.*;
+import nc.multiblock.Multiblock;
 import nc.multiblock.internal.MultiblockValidationError;
 import nc.render.BlockHighlightTracker;
 import nc.tile.fluid.ITileFluid;
@@ -26,6 +24,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 
+import javax.annotation.Nullable;
+
 public abstract class BlockMultiblockMetaPart<T extends Enum<T> & IStringSerializable & IBlockMetaEnum> extends BlockMeta<T> implements ITileEntityProvider {
 	
 	public BlockMultiblockMetaPart(Class<T> enumm, PropertyEnum<T> property, Material material, CreativeTabs tab) {
@@ -43,7 +43,7 @@ public abstract class BlockMultiblockMetaPart<T extends Enum<T> & IStringSeriali
 	protected boolean rightClickOnPart(World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, boolean prioritiseGui) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof ITileFluid tileFluid && FluidUtil.getFluidHandler(player.getHeldItem(hand)) != null) {
-            if (BlockHelper.accessTanks(player, hand, facing, tileFluid)) {
+			if (BlockHelper.accessTanks(player, hand, facing, tileFluid)) {
 				return true;
 			}
 		}

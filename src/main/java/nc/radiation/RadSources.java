@@ -1,9 +1,5 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.*;
-
-import java.util.*;
-
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.ModCheck;
@@ -14,6 +10,10 @@ import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.item.*;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.*;
+
+import static nc.config.NCConfig.*;
 
 public class RadSources {
 	

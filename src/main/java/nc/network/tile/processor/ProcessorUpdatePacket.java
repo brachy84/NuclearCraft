@@ -1,12 +1,12 @@
 package nc.network.tile.processor;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import nc.network.tile.TileUpdatePacket;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.internal.fluid.Tank.TankInfo;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public abstract class ProcessorUpdatePacket extends TileUpdatePacket {
 	

@@ -1,12 +1,11 @@
 package nc.recipe.multiblock;
 
-import static nc.config.NCConfig.rf_per_eu;
+import com.google.common.collect.Lists;
+import nc.recipe.BasicRecipeHandler;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import nc.recipe.BasicRecipeHandler;
+import static nc.config.NCConfig.rf_per_eu;
 
 public class FissionHeatingRecipes extends BasicRecipeHandler {
 	
