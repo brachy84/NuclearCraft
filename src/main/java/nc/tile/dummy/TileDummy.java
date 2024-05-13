@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.*;
 
 import javax.annotation.*;
-import java.util.List;
+import java.util.*;
 
 public abstract class TileDummy<MASTER extends IDummyMaster> extends TileEnergyFluidSidedInventory implements ITickable {
 	
@@ -29,35 +29,35 @@ public abstract class TileDummy<MASTER extends IDummyMaster> extends TileEnergyF
 	
 	protected final Class<MASTER> tClass;
 	
-	public TileDummy(Class<MASTER> tClass, String name, int updateRate, List<String> allowedFluids) {
+	public TileDummy(Class<MASTER> tClass, String name, int updateRate, Set<String> allowedFluids) {
 		this(tClass, name, ITileInventory.inventoryConnectionAll(ItemSorption.NON), ITileEnergy.energyConnectionAll(EnergyConnection.NON), updateRate, allowedFluids, ITileFluid.fluidConnectionAll(TankSorption.NON));
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull EnergyConnection[] energyConnections, int updateRate, List<String> allowedFluids) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull EnergyConnection[] energyConnections, int updateRate, Set<String> allowedFluids) {
 		this(tClass, name, ITileInventory.inventoryConnectionAll(ItemSorption.NON), energyConnections, updateRate, allowedFluids, ITileFluid.fluidConnectionAll(TankSorption.NON));
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, int updateRate, List<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+	public TileDummy(Class<MASTER> tClass, String name, int updateRate, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		this(tClass, name, ITileInventory.inventoryConnectionAll(ItemSorption.NON), ITileEnergy.energyConnectionAll(EnergyConnection.NON), updateRate, allowedFluids, fluidConnections);
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull EnergyConnection[] energyConnections, int updateRate, List<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull EnergyConnection[] energyConnections, int updateRate, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		this(tClass, name, ITileInventory.inventoryConnectionAll(ItemSorption.NON), energyConnections, updateRate, allowedFluids, fluidConnections);
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, int updateRate, List<String> allowedFluids) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, int updateRate, Set<String> allowedFluids) {
 		this(tClass, name, inventoryConnections, ITileEnergy.energyConnectionAll(EnergyConnection.NON), updateRate, allowedFluids, ITileFluid.fluidConnectionAll(TankSorption.NON));
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull EnergyConnection[] energyConnections, int updateRate, List<String> allowedFluids) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull EnergyConnection[] energyConnections, int updateRate, Set<String> allowedFluids) {
 		this(tClass, name, inventoryConnections, energyConnections, updateRate, allowedFluids, ITileFluid.fluidConnectionAll(TankSorption.NON));
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, int updateRate, List<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, int updateRate, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		this(tClass, name, inventoryConnections, ITileEnergy.energyConnectionAll(EnergyConnection.NON), updateRate, allowedFluids, fluidConnections);
 	}
 	
-	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull EnergyConnection[] energyConnections, int updateRate, List<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+	public TileDummy(Class<MASTER> tClass, String name, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull EnergyConnection[] energyConnections, int updateRate, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		super(name, 1, inventoryConnections, 1, energyConnections, 1, allowedFluids, fluidConnections);
 		this.updateRate = updateRate;
 		this.tClass = tClass;

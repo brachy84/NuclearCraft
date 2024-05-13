@@ -106,11 +106,11 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		inventoryStacks = NonNullList.create();
 		consumedStacks = info.getConsumedStacks();
 		
-		List<String> validFluids = NCRecipes.salt_fission.validFluids.get(0);
-		tanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, validFluids), new Tank(INGOT_BLOCK_VOLUME, new ArrayList<>()));
-		consumedTanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, new ArrayList<>()));
+		Set<String> validFluids = NCRecipes.salt_fission.validFluids.get(0);
+		tanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, validFluids), new Tank(INGOT_BLOCK_VOLUME, new ObjectOpenHashSet<>()));
+		consumedTanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, new ObjectOpenHashSet<>()));
 		
-		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ArrayList<>()));
+		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ObjectOpenHashSet<>()));
 		
 		fluidConnections = ITileFluid.fluidConnectionAll(info.nonTankSorptions());
 	}

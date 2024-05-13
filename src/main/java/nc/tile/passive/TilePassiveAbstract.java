@@ -27,6 +27,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
+import java.util.Collections;
+
 import static nc.config.NCConfig.*;
 
 public abstract class TilePassiveAbstract extends TileEnergyFluidSidedInventory implements ITilePassive {
@@ -70,7 +72,7 @@ public abstract class TilePassiveAbstract extends TileEnergyFluidSidedInventory 
 	}
 	
 	protected TilePassiveAbstract(String name, IItemIngredient itemType, double itemRate, double energyRate, IFluidIngredient fluidType, double fluidRate) {
-		super(name, 1, itemRate > 0D ? ITileInventory.inventoryConnectionAll(ItemSorption.OUT) : itemRate < 0D ? ITileInventory.inventoryConnectionAll(ItemSorption.IN) : ITileInventory.inventoryConnectionAll(ItemSorption.NON), energyRate == 0D ? 1 : MathHelper.ceil(Math.max(rf_per_eu, machine_update_rate) * Math.abs(energyRate)), energyRate == 0D ? 0 : MathHelper.ceil(Math.max(rf_per_eu, machine_update_rate) * Math.abs(energyRate)), energyRate > 0D ? ITileEnergy.energyConnectionAll(EnergyConnection.OUT) : energyRate < 0D ? ITileEnergy.energyConnectionAll(EnergyConnection.IN) : ITileEnergy.energyConnectionAll(EnergyConnection.NON), fluidRate == 0D ? 1 : MathHelper.ceil(6 * machine_update_rate * Math.abs(fluidRate)), Lists.newArrayList(fluidType.getStack().getFluid().getName()), fluidRate > 0D ? ITileFluid.fluidConnectionAll(TankSorption.OUT) : fluidRate < 0D ? ITileFluid.fluidConnectionAll(TankSorption.IN) : ITileFluid.fluidConnectionAll(TankSorption.NON));
+		super(name, 1, itemRate > 0D ? ITileInventory.inventoryConnectionAll(ItemSorption.OUT) : itemRate < 0D ? ITileInventory.inventoryConnectionAll(ItemSorption.IN) : ITileInventory.inventoryConnectionAll(ItemSorption.NON), energyRate == 0D ? 1 : MathHelper.ceil(Math.max(rf_per_eu, machine_update_rate) * Math.abs(energyRate)), energyRate == 0D ? 0 : MathHelper.ceil(Math.max(rf_per_eu, machine_update_rate) * Math.abs(energyRate)), energyRate > 0D ? ITileEnergy.energyConnectionAll(EnergyConnection.OUT) : energyRate < 0D ? ITileEnergy.energyConnectionAll(EnergyConnection.IN) : ITileEnergy.energyConnectionAll(EnergyConnection.NON), fluidRate == 0D ? 1 : MathHelper.ceil(6 * machine_update_rate * Math.abs(fluidRate)), Collections.singleton(fluidType.getStack().getFluid().getName()), fluidRate > 0D ? ITileFluid.fluidConnectionAll(TankSorption.OUT) : fluidRate < 0D ? ITileFluid.fluidConnectionAll(TankSorption.IN) : ITileFluid.fluidConnectionAll(TankSorption.NON));
 		this.energyRate = energyRate;
 		this.itemRate = itemRate;
 		this.itemType = itemType;

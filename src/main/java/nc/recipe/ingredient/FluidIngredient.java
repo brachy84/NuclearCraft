@@ -75,8 +75,8 @@ public class FluidIngredient implements IFluidIngredient {
 	
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption type) {
-		if (object instanceof Tank) {
-			object = ((Tank) object).getFluid();
+		if (object instanceof Tank tank) {
+			object = tank.getFluid();
 		}
 		if (object instanceof FluidStack fluidstack) {
 			if (!fluidstack.isFluidEqual(stack) || !FluidStack.areFluidStackTagsEqual(fluidstack, stack)) {
@@ -84,8 +84,8 @@ public class FluidIngredient implements IFluidIngredient {
 			}
 			return new IngredientMatchResult(type.checkStackSize(stack.amount, fluidstack.amount), 0);
 		}
-		else if (object instanceof FluidIngredient && match(((FluidIngredient) object).stack, type).matches()) {
-			return new IngredientMatchResult(type.checkStackSize(getMaxStackSize(0), ((FluidIngredient) object).getMaxStackSize(0)), 0);
+		else if (object instanceof FluidIngredient ingredient && match(ingredient.stack, type).matches()) {
+			return new IngredientMatchResult(type.checkStackSize(getMaxStackSize(0), ingredient.getMaxStackSize(0)), 0);
 		}
 		return IngredientMatchResult.FAIL;
 	}

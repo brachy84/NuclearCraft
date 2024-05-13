@@ -289,7 +289,7 @@ public class BasicRecipe implements IRecipe {
 	}
 	
 	public double getTurbineSpinUpMultiplier() {
-		return (double) extras.get(2);
+		return turbine_spin_up_multiplier_global * (double) extras.get(2);
 	}
 	
 	public String getTurbineParticleEffect() {

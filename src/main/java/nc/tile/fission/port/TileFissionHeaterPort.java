@@ -1,12 +1,13 @@
 package nc.tile.fission.port;
 
-import com.google.common.collect.Lists;
 import nc.recipe.NCRecipes;
 import nc.tile.fission.TileSaltFissionHeater;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Collections;
 
 import static nc.init.NCCoolantFluids.COOLANTS;
 import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
@@ -26,7 +27,7 @@ public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeate
 		this();
 		this.heaterType = heaterType;
 		this.coolantName = coolantName;
-		tanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
+		tanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
 	}
 	
 	public static class Meta extends TileFissionHeaterPort {
@@ -294,7 +295,7 @@ public class TileFissionHeaterPort extends TileFissionFluidPort<TileFissionHeate
 		}
 		if (nbt.hasKey("coolantName")) {
 			coolantName = nbt.getString("coolantName");
-			tanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
+			tanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
 		}
 	}
 }

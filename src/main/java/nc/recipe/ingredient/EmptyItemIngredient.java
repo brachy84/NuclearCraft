@@ -68,8 +68,8 @@ public class EmptyItemIngredient implements IItemIngredient {
 		if (object == null) {
 			return IngredientMatchResult.PASS_0;
 		}
-		if (object instanceof ItemStack) {
-			return new IngredientMatchResult(((ItemStack) object).isEmpty(), 0);
+		if (object instanceof ItemStack stack) {
+			return new IngredientMatchResult(stack.isEmpty(), 0);
 		}
 		return new IngredientMatchResult(object instanceof EmptyItemIngredient, 0);
 	}

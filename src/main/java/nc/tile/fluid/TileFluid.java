@@ -30,18 +30,18 @@ public abstract class TileFluid extends NCTile implements ITileFluid {
 	private final List<Boolean> voidUnusableFluidInputs;
 	private final List<TankOutputSetting> tankOutputSettings;
 	
-	public TileFluid(int capacity, List<String> allowedFluidsList, @Nonnull FluidConnection[] fluidConnections) {
-		this(new IntArrayList(new int[] {capacity}), Lists.<List<String>>newArrayList(allowedFluidsList), fluidConnections);
+	public TileFluid(int capacity, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+		this(new IntArrayList(new int[] {capacity}), Lists.<Set<String>>newArrayList(allowedFluids), fluidConnections);
 	}
 	
-	public TileFluid(@Nonnull IntList capacity, List<List<String>> allowedFluidsLists, @Nonnull FluidConnection[] fluidConnections) {
+	public TileFluid(@Nonnull IntList capacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		super();
 		tanks = new ArrayList<>();
 		voidUnusableFluidInputs = new ArrayList<>();
 		tankOutputSettings = new ArrayList<>();
 		if (!capacity.isEmpty()) {
 			for (int i = 0; i < capacity.size(); ++i) {
-				tanks.add(new Tank(capacity.get(i), allowedFluidsLists == null || allowedFluidsLists.size() <= i ? null : allowedFluidsLists.get(i)));
+				tanks.add(new Tank(capacity.get(i), allowedFluids == null || allowedFluids.size() <= i ? null : allowedFluids.get(i)));
 				voidUnusableFluidInputs.add(false);
 				tankOutputSettings.add(TankOutputSetting.DEFAULT);
 			}

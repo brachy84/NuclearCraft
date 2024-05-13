@@ -82,6 +82,7 @@ public class MultiblockWorldRegistry {
 	/**
 	 * Called prior to processing multiblocks. Do bookkeeping.
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void processMultiblockChanges() {
 		BlockPos coord;
 		

@@ -148,6 +148,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 			setLastError(Global.MOD_ID + ".multiblock_validation.too_many_controllers", null);
 			return false;
 		}
+		
 		int q = qubitCount(), max = getMaxQubits();
 		if (q > max) {
 			setLastError(Global.MOD_ID + ".multiblock_validation.quantum_computer.too_many_qubits", null, q, max);

@@ -98,10 +98,10 @@ public class FluidArrayIngredient implements IFluidIngredient {
 	
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption sorption) {
-		if (object instanceof FluidArrayIngredient) {
+		if (object instanceof FluidArrayIngredient arrayIngredient) {
 			loop:
 			for (IFluidIngredient ingredient : ingredientList) {
-				for (IFluidIngredient ingr : ((FluidArrayIngredient) object).ingredientList) {
+				for (IFluidIngredient ingr : arrayIngredient.ingredientList) {
 					if (ingredient.match(ingr, sorption).matches()) {
 						continue loop;
 					}

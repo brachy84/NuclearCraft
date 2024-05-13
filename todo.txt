@@ -1,17 +1,8 @@
 GroovyScript support
 
-Config localisation
 Patchouli documentation
 
 Add auto-outputting to machines
-
-Fix smart insertion for fluid recipes
-
-QMD feature merge: nitrogen collector -> air collector
-QMD feature merge: particles in recipe system
-
-Global fission radiation configs
-Global turbine spin-up and spin-down multiplier configs
 
 Complete printing of registered multiblock component stats and rules to separate nuclearcraft.info file
 
@@ -41,6 +32,9 @@ Read Pu + Fatmice neutron poison discussion (+ "Technically, almost all of the n
 Reduce default neutron poison lifetime
 
 Multitool support for side configurations
+
+QMD feature merge: nitrogen collector -> air collector
+QMD feature merge: particles in recipe system
 
 OC support for side configurations
 OC support for port filtering

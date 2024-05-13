@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.*;
 
 import javax.annotation.*;
 import java.util.*;
@@ -571,17 +571,11 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		}
 		
 		if (NCConfig.smart_processor_input) {
-			return getRecipeHandler().isValidItemInput(slot, stack, getRecipeInfo(), getItemInputs(false), inputItemStacksExcludingSlot(slot));
+			return getRecipeHandler().isValidItemInput(stack, slot, getItemInputs(false), getFluidInputs(false), getRecipeInfo());
 		}
 		else {
-			return getRecipeHandler().isValidItemInput(slot, stack);
+			return getRecipeHandler().isValidItemInput(stack, slot);
 		}
-	}
-	
-	default List<ItemStack> inputItemStacksExcludingSlot(int slot) {
-		List<ItemStack> inputItemsExcludingSlot = new ArrayList<>(getItemInputs(false));
-		inputItemsExcludingSlot.remove(slot);
-		return inputItemsExcludingSlot;
 	}
 	
 	@Override
@@ -614,6 +608,21 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	// ITileFluid
+	
+	@Override
+	default boolean isFluidValidForTank(int tankNumber, FluidStack stack) {
+		INFO info = getContainerInfo();
+		if (stack == null || stack.amount <= 0 || (tankNumber >= info.fluidInputSize && tankNumber < info.fluidInputSize + info.fluidOutputSize)) {
+			return false;
+		}
+		
+		if (NCConfig.smart_processor_input) {
+			return getRecipeHandler().isValidFluidInput(stack, tankNumber, getFluidInputs(false), getItemInputs(false), getRecipeInfo());
+		}
+		else {
+			return getRecipeHandler().isValidFluidInput(stack, tankNumber);
+		}
+	}
 	
 	@Override
 	default void clearAllTanks() {

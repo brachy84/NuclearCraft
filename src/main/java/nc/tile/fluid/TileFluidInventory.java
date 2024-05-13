@@ -28,12 +28,12 @@ public abstract class TileFluidInventory extends TileFluid implements ITileInven
 	private @Nonnull
 	final List<ItemOutputSetting> itemOutputSettings;
 	
-	public TileFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, int capacity, List<String> allowedFluidsList, @Nonnull FluidConnection[] fluidConnections) {
-		this(name, size, inventoryConnections, new IntArrayList(new int[] {capacity}), Lists.<List<String>>newArrayList(allowedFluidsList), fluidConnections);
+	public TileFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, int capacity, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+		this(name, size, inventoryConnections, new IntArrayList(new int[] {capacity}), Lists.<Set<String>>newArrayList(allowedFluids), fluidConnections);
 	}
 	
-	public TileFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull IntList capacity, List<List<String>> allowedFluidsLists, @Nonnull FluidConnection[] fluidConnections) {
-		super(capacity, allowedFluidsLists, fluidConnections);
+	public TileFluidInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull IntList capacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+		super(capacity, allowedFluids, fluidConnections);
 		inventoryName = Global.MOD_ID + ".container." + name;
 		inventoryStacks = NonNullList.withSize(size, ItemStack.EMPTY);
 		this.inventoryConnections = inventoryConnections;

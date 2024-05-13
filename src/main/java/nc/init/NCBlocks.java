@@ -203,7 +203,7 @@ public class NCBlocks {
 		
 		fertile_isotope = addWithNameMeta(Global.MOD_ID, "fertile_isotope", new BlockMeta.BlockFertileIsotope());
 		
-		supercold_ice = addWithName(Global.MOD_ID, "supercold_ice", new NCBlockIce(0.999F).setCreativeTab(NCTabs.material));
+		supercold_ice = addWithName(Global.MOD_ID, "supercold_ice", new NCBlockIce(Math.nextAfter(1F, -1F)).setCreativeTab(NCTabs.material));
 		
 		heavy_water_moderator = addWithName(Global.MOD_ID, "heavy_water_moderator", new NCBlock(Material.IRON).setCreativeTab(NCTabs.misc));
 		

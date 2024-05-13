@@ -23,7 +23,7 @@ public abstract class TilePassiveGenerator extends TileEnergy implements ITickab
 		}
 	}
 	
-	public abstract int getGenerated();
+	public abstract long getGenerated();
 	
 	@Override
 	public int getSinkTier() {

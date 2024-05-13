@@ -47,6 +47,10 @@ public interface ITileFluid extends ITile {
 		return true;
 	}
 	
+	default boolean isFluidValidForTank(int tankNumber, FluidStack stack) {
+		return getTanks().get(tankNumber).canFillFluidType(stack);
+	}
+	
 	default void clearTank(int tankNumber) {
 		getTanks().get(tankNumber).setFluidStored(null);
 	}
@@ -122,8 +126,8 @@ public interface ITileFluid extends ITile {
 		List<Tank> tanks = getTanks();
 		for (int i = 0; i < tanks.size(); ++i) {
 			if (getTankSorption(side, i).canFill()) {
-				Tank tank = tanks.get(i);
-				if (tank.canFillFluidType(resource) && isNextToFill(side, i, resource) && tank.getFluidAmount() < tank.getCapacity()) {
+				Tank tank;
+				if (isFluidValidForTank(i, resource) && isNextToFill(side, i, resource) && (tank = tanks.get(i)).getFluidAmount() < tank.getCapacity()) {
 					FluidStack fluid = tank.getFluid();
 					if (fluid == null || fluid.isFluidEqual(resource)) {
 						return tank.fill(resource, doFill);

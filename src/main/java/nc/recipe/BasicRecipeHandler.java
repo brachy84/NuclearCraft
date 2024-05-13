@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.*;
 import nc.integration.crafttweaker.*;
 import nc.integration.gtce.GTCERecipeHelper;
 import nc.recipe.ingredient.*;
+import nc.tile.internal.fluid.Tank;
 import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,6 +17,7 @@ import stanhebben.zenscript.annotations.*;
 
 import javax.annotation.*;
 import java.util.*;
+import java.util.function.*;
 
 import static nc.config.NCConfig.*;
 
@@ -27,7 +29,7 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	protected final int itemInputSize, fluidInputSize, itemOutputSize, fluidOutputSize;
 	protected final boolean isShapeless;
 	
-	public List<List<String>> validFluids = null;
+	public List<Set<String>> validFluids = null;
 	
 	public BasicRecipeHandler(@Nonnull String name, int itemInputSize, int fluidInputSize, int itemOutputSize, int fluidOutputSize) {
 		this(name, itemInputSize, fluidInputSize, itemOutputSize, fluidOutputSize, true);
@@ -338,17 +340,17 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		}
 	}
 	
-	public boolean isValidItemInput(int slot, ItemStack stack) {
+	protected <T, V extends IIngredient<T>> boolean isValidInput(T stack, int index, Function<BasicRecipe, List<V>> ingredientsFunction) {
 		for (BasicRecipe recipe : recipeList) {
 			if (isShapeless) {
-				for (IItemIngredient input : recipe.getItemIngredients()) {
+				for (V input : ingredientsFunction.apply(recipe)) {
 					if (input.match(stack, IngredientSorption.NEUTRAL).matches()) {
 						return true;
 					}
 				}
 			}
 			else {
-				if (recipe.getItemIngredients().get(slot).match(stack, IngredientSorption.NEUTRAL).matches()) {
+				if (ingredientsFunction.apply(recipe).get(index).match(stack, IngredientSorption.NEUTRAL).matches()) {
 					return true;
 				}
 			}
@@ -356,53 +358,34 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		return false;
 	}
 	
-	public boolean isValidFluidInput(int tankNumber, FluidStack stack) {
-		for (BasicRecipe recipe : recipeList) {
-			if (isShapeless) {
-				for (IFluidIngredient input : recipe.getFluidIngredients()) {
-					if (input.match(stack, IngredientSorption.NEUTRAL).matches()) {
-						return true;
-					}
-				}
-			}
-			else {
-				if (recipe.getFluidIngredients().get(tankNumber).match(stack, IngredientSorption.NEUTRAL).matches()) {
-					return true;
-				}
-			}
-		}
-		return false;
+	public boolean isValidItemInput(ItemStack stack, int slot) {
+		return isValidInput(stack, slot, BasicRecipe::getItemIngredients);
+	}
+	
+	public boolean isValidFluidInput(FluidStack stack, int tankNumber) {
+		return isValidInput(stack, tankNumber, BasicRecipe::getFluidIngredients);
 	}
 	
 	/**
-	 * Smart item insertion - don't insert if matching item is already present in another input slot
+	 * Smart insertion - don't insert if stack is not valid for any possible recipes
 	 */
-	public boolean isValidItemInput(int slot, ItemStack stack, RecipeInfo<BasicRecipe> recipeInfo, List<ItemStack> allInputs, List<ItemStack> otherInputs) {
-		ItemStack slotStack = allInputs.get(slot);
-		if (otherInputs.isEmpty() || (stack.isItemEqual(slotStack) && StackHelper.areItemStackTagsEqual(stack, slotStack))) {
-			return isValidItemInput(slot, stack);
-		}
-		
-		boolean othersAllEmpty = true;
-		for (ItemStack otherInput : otherInputs) {
-			if (!otherInput.isEmpty()) {
-				othersAllEmpty = false;
-				break;
-			}
-		}
-		if (othersAllEmpty) {
-			return isValidItemInput(slot, stack);
+	public <T, U, V extends IIngredient<T>, W extends IIngredient<U>> boolean isValidInput(T stack, int index, List<T> inputs, List<U> associatedInputs, RecipeInfo<BasicRecipe> recipeInfo, int inputSize, int associatedInputSize, Predicate<T> isEmptyFunction, Predicate<U> associatedIsEmptyFunction, Predicate<T> isEqualFunction, Function<BasicRecipe, List<V>> ingredientsFunction, Function<BasicRecipe, List<W>> associatedIngredientsFunction) {
+		List<T> otherInputs = inputsExcludingIndex(inputs, index);
+		if ((otherInputs.stream().allMatch(isEmptyFunction) && associatedInputs.stream().allMatch(associatedIsEmptyFunction)) || isEqualFunction.test(inputs.get(index))) {
+			return isValidInput(stack, index, ingredientsFunction);
 		}
 		
 		if (recipeInfo == null) {
-			List<BasicRecipe> recipes = new ArrayList<>(recipeList);
+			ObjectSet<BasicRecipe> recipes = new ObjectOpenHashSet<>(recipeList);
 			recipeLoop:
 			for (BasicRecipe recipe : recipeList) {
+				List<V> ingredients = ingredientsFunction.apply(recipe);
+				List<W> associatedIngredients = associatedIngredientsFunction.apply(recipe);
 				if (isShapeless) {
 					stackLoop:
-					for (ItemStack inputStack : allInputs) {
-						if (!inputStack.isEmpty()) {
-							for (IItemIngredient recipeInput : recipe.getItemIngredients()) {
+					for (T inputStack : inputs) {
+						if (!isEmptyFunction.test(inputStack)) {
+							for (V recipeInput : ingredients) {
 								if (recipeInput.match(inputStack, IngredientSorption.NEUTRAL).matches()) {
 									continue stackLoop;
 								}
@@ -411,11 +394,32 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 							continue recipeLoop;
 						}
 					}
+					
+					associatedStackLoop:
+					for (U inputStack : associatedInputs) {
+						if (!associatedIsEmptyFunction.test(inputStack)) {
+							for (W recipeInput : associatedIngredients) {
+								if (recipeInput.match(inputStack, IngredientSorption.NEUTRAL).matches()) {
+									continue associatedStackLoop;
+								}
+							}
+							recipes.remove(recipe);
+							continue recipeLoop;
+						}
+					}
 				}
 				else {
-					for (int i = 0; i < itemInputSize; ++i) {
-						ItemStack inputStack = allInputs.get(i);
-						if (!inputStack.isEmpty() && !recipe.getItemIngredients().get(i).match(inputStack, IngredientSorption.NEUTRAL).matches()) {
+					for (int i = 0; i < inputSize; ++i) {
+						T inputStack = inputs.get(i);
+						if (!isEmptyFunction.test(inputStack) && !ingredients.get(i).match(inputStack, IngredientSorption.NEUTRAL).matches()) {
+							recipes.remove(recipe);
+							continue recipeLoop;
+						}
+					}
+					
+					for (int i = 0; i < associatedInputSize; ++i) {
+						U inputStack = associatedInputs.get(i);
+						if (!associatedIsEmptyFunction.test(inputStack) && !associatedIngredients.get(i).match(inputStack, IngredientSorption.NEUTRAL).matches()) {
 							recipes.remove(recipe);
 							continue recipeLoop;
 						}
@@ -424,23 +428,31 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 			}
 			
 			for (BasicRecipe recipe : recipes) {
-				if (isValidItemInputInternal(slot, stack, recipe, otherInputs)) {
+				if (isValidInputInternal(stack, index, otherInputs, ingredientsFunction.apply(recipe), isEmptyFunction)) {
 					return true;
 				}
 			}
 			return false;
 		}
 		else {
-			return isValidItemInputInternal(slot, stack, recipeInfo.recipe, otherInputs);
+			return isValidInputInternal(stack, index, otherInputs, ingredientsFunction.apply(recipeInfo.recipe), isEmptyFunction);
 		}
 	}
 	
-	protected boolean isValidItemInputInternal(int slot, ItemStack stack, BasicRecipe recipe, List<ItemStack> otherInputs) {
+	public boolean isValidItemInput(ItemStack stack, int slot, List<ItemStack> itemInputs, List<Tank> fluidInputs, RecipeInfo<BasicRecipe> recipeInfo) {
+		return isValidInput(stack, slot, itemInputs, StreamHelper.map(fluidInputs, Tank::getFluid), recipeInfo, itemInputSize, fluidInputSize, ItemStack::isEmpty, x -> x == null || x.amount <= 0, x -> stack.isItemEqual(x) && StackHelper.areItemStackTagsEqual(stack, x), BasicRecipe::getItemIngredients, BasicRecipe::getFluidIngredients);
+	}
+	
+	public boolean isValidFluidInput(FluidStack stack, int tankNumber, List<Tank> fluidInputs, List<ItemStack> itemInputs, RecipeInfo<BasicRecipe> recipeInfo) {
+		return isValidInput(stack, tankNumber, StreamHelper.map(fluidInputs, Tank::getFluid), itemInputs, recipeInfo, fluidInputSize, itemInputSize, x -> x == null || x.amount <= 0, ItemStack::isEmpty, stack == null ? Objects::isNull : x -> (stack.isFluidEqual(x) && FluidStack.areFluidStackTagsEqual(stack, x)), BasicRecipe::getFluidIngredients, BasicRecipe::getItemIngredients);
+	}
+	
+	protected <T, V extends IIngredient<T>> boolean isValidInputInternal(T stack, int index, List<T> otherInputs, List<V> ingredients, Predicate<T> isEmptyFunction) {
 		if (isShapeless) {
-			for (IItemIngredient input : recipe.getItemIngredients()) {
+			for (V input : ingredients) {
 				if (input.match(stack, IngredientSorption.NEUTRAL).matches()) {
-					for (ItemStack other : otherInputs) {
-						if (!other.isEmpty() && input.match(other, IngredientSorption.NEUTRAL).matches()) {
+					for (T other : otherInputs) {
+						if (!isEmptyFunction.test(other) && input.match(other, IngredientSorption.NEUTRAL).matches()) {
 							return false;
 						}
 					}
@@ -450,7 +462,13 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 			return false;
 		}
 		else {
-			return recipe.getItemIngredients().get(slot).match(stack, IngredientSorption.NEUTRAL).matches();
+			return ingredients.get(index).match(stack, IngredientSorption.NEUTRAL).matches();
 		}
+	}
+	
+	protected static <T> List<T> inputsExcludingIndex(List<T> inputs, int index) {
+		List<T> inputsExcludingIndex = new ArrayList<>(inputs);
+		inputsExcludingIndex.remove(index);
+		return inputsExcludingIndex;
 	}
 }

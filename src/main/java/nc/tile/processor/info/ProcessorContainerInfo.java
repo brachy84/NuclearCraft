@@ -1,6 +1,7 @@
 package nc.tile.processor.info;
 
 import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.container.ContainerFunction;
 import nc.gui.GuiFunction;
 import nc.integration.jei.category.info.JEIContainerConnection;
@@ -258,7 +259,7 @@ public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcesso
 		@Nonnull List<Tank> consumedTanks = new ArrayList<>();
 		if (consumesInputs) {
 			for (int i = 0; i < fluidInputSize; ++i) {
-				consumedTanks.add(new Tank(inputTankCapacity, new ArrayList<>()));
+				consumedTanks.add(new Tank(inputTankCapacity, new ObjectOpenHashSet<>()));
 			}
 		}
 		return consumedTanks;

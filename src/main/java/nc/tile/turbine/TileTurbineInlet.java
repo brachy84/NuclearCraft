@@ -1,6 +1,7 @@
 package nc.tile.turbine;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.ModCheck;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
@@ -13,14 +14,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.*;
-import java.util.*;
+import java.util.List;
 
 import static nc.block.property.BlockProperties.AXIS_ALL;
 import static nc.config.NCConfig.enable_mek_gas;
 
 public class TileTurbineInlet extends TileTurbinePart implements ITileFluid {
 	
-	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ArrayList<>()));
+	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ObjectOpenHashSet<>()));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(TankSorption.IN);
 	

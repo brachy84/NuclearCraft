@@ -2,6 +2,7 @@ package nc.recipe;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.ModCheck;
 import nc.config.NCConfig;
 import nc.recipe.ingredient.*;
@@ -475,31 +476,31 @@ public class RecipeHelper {
 		return ingredientNames;
 	}
 	
-	public static List<List<String>> validFluids(BasicRecipeHandler recipes) {
-		return validFluids(recipes, new ArrayList<>());
+	public static List<Set<String>> validFluids(BasicRecipeHandler recipes) {
+		return validFluids(recipes, new ObjectOpenHashSet<>());
 	}
 	
-	public static List<List<String>> validFluids(BasicRecipeHandler recipes, List<String> exceptions) {
+	public static List<Set<String>> validFluids(BasicRecipeHandler recipes, Set<String> exceptions) {
 		int fluidInputSize = recipes.getFluidInputSize();
 		int fluidOutputSize = recipes.getFluidOutputSize();
 		
-		List<String> fluidNameList = new ArrayList<>();
+		Set<String> fluidNameSet = new ObjectOpenHashSet<>();
 		for (Entry<String, Fluid> entry : FluidRegistry.getRegisteredFluids().entrySet()) {
 			String fluidName = entry.getKey();
 			if (recipes.isValidFluidInput(new FluidStack(entry.getValue(), 1000)) && !exceptions.contains(fluidName)) {
-				fluidNameList.add(fluidName);
+				fluidNameSet.add(fluidName);
 			}
 		}
 		
-		List<List<String>> allowedFluidLists = new ArrayList<>();
+		List<Set<String>> allowedFluidSets = new ArrayList<>();
 		for (int i = 0; i < fluidInputSize; ++i) {
-			allowedFluidLists.add(fluidNameList);
+			allowedFluidSets.add(fluidNameSet);
 		}
 		for (int i = fluidInputSize; i < fluidInputSize + fluidOutputSize; ++i) {
-			allowedFluidLists.add(null);
+			allowedFluidSets.add(null);
 		}
 		
-		return allowedFluidLists;
+		return allowedFluidSets;
 	}
 	
 	public static OreIngredient getOreStackFromItems(List<ItemStack> stackList, int stackSize) {

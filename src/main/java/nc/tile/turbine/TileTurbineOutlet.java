@@ -1,6 +1,7 @@
 package nc.tile.turbine;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.ModCheck;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.turbine.Turbine;
@@ -15,14 +16,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.*;
 
 import javax.annotation.*;
-import java.util.*;
+import java.util.List;
 
 import static nc.block.property.BlockProperties.AXIS_ALL;
 import static nc.config.NCConfig.*;
 
 public class TileTurbineOutlet extends TileTurbinePart implements ITickable, ITileFluid {
 	
-	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ArrayList<>()));
+	private final @Nonnull List<Tank> backupTanks = Lists.newArrayList(new Tank(1, new ObjectOpenHashSet<>()));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(TankSorption.OUT);
 	

@@ -889,7 +889,7 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 			return (effectiveInertia * previousRawPower + maxLimitPower * getTurbine().spinUpMultiplier) / (effectiveInertia + getTurbine().spinUpMultiplier);
 		}
 		else {
-			return effectiveInertia * previousRawPower / (effectiveInertia + Math.log1p(effectiveInertia) + 1D);
+			return effectiveInertia * previousRawPower / (turbine_spin_down_multiplier * (effectiveInertia + Math.log1p(effectiveInertia) + 1D));
 		}
 	}
 	

@@ -98,10 +98,10 @@ public class ItemArrayIngredient implements IItemIngredient {
 	
 	@Override
 	public IngredientMatchResult match(Object object, IngredientSorption sorption) {
-		if (object instanceof ItemArrayIngredient) {
+		if (object instanceof ItemArrayIngredient arrayIngredient) {
 			loop:
 			for (IItemIngredient ingredient : ingredientList) {
-				for (IItemIngredient ingr : ((ItemArrayIngredient) object).ingredientList) {
+				for (IItemIngredient ingr : arrayIngredient.ingredientList) {
 					if (ingredient.match(ingr, sorption).matches()) {
 						continue loop;
 					}

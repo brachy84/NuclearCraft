@@ -97,7 +97,7 @@ public class ScriptAddonHandler {
 			return;
 		}
 		
-		String dirNameLowerCase = dirName.toLowerCase();
+		String dirNameLowerCase = dirName.toLowerCase(Locale.ROOT);
 		for (String suffix : IGNORE_SUFFIX) {
 			if (dirNameLowerCase.endsWith(suffix)) {
 				return;
@@ -165,7 +165,7 @@ public class ScriptAddonHandler {
 	
 	public static void copyLangs(File addonDir, File langDir) throws IOException {
 		for (File f : langDir.listFiles()) {
-			String name = f.getName().toLowerCase();
+			String name = f.getName().toLowerCase(Locale.ROOT);
 			if (f.isFile() && name.endsWith(".lang")) {
 				String type = StringHelper.removeSuffix(name, 5);
 				File lang = new File("resources/nuclearcraft/lang/" + type + ".lang");

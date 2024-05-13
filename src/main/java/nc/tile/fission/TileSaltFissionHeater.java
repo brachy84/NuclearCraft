@@ -94,10 +94,10 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 		inventoryStacks = NonNullList.create();
 		consumedStacks = info.getConsumedStacks();
 		
-		tanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, null), new Tank(INGOT_BLOCK_VOLUME, new ArrayList<>()));
-		consumedTanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, new ArrayList<>()));
+		tanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, null), new Tank(INGOT_BLOCK_VOLUME, new ObjectOpenHashSet<>()));
+		consumedTanks = Lists.newArrayList(new Tank(INGOT_BLOCK_VOLUME, new ObjectOpenHashSet<>()));
 		
-		filterTanks = Lists.newArrayList(new Tank(1000, null), new Tank(1000, new ArrayList<>()));
+		filterTanks = Lists.newArrayList(new Tank(1000, null), new Tank(1000, new ObjectOpenHashSet<>()));
 		
 		fluidConnections = ITileFluid.fluidConnectionAll(info.nonTankSorptions());
 	}
@@ -106,8 +106,8 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 		this();
 		this.heaterType = heaterType;
 		this.coolantName = coolantName;
-		tanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
-		filterTanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
+		tanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
+		filterTanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
 	}
 	
 	public static class Meta extends TileSaltFissionHeater {
@@ -870,8 +870,8 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 		}
 		if (nbt.hasKey("coolantName")) {
 			coolantName = nbt.getString("coolantName");
-			tanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
-			filterTanks.get(0).setAllowedFluids(Lists.newArrayList(coolantName));
+			tanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
+			filterTanks.get(0).setAllowedFluids(Collections.singleton(coolantName));
 		}
 		readTanks(nbt);
 		

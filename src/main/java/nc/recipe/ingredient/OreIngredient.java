@@ -100,7 +100,7 @@ public class OreIngredient implements IItemIngredient {
 		else if (object instanceof String) {
 			return new IngredientMatchResult(oreName.equals(object), 0);
 		}
-		else if (object instanceof ItemStack itemstack && sorption.checkStackSize(stackSize, ((ItemStack) object).getCount())) {
+		else if (object instanceof ItemStack itemstack && sorption.checkStackSize(stackSize, itemstack.getCount())) {
 			if (itemstack.isEmpty()) {
 				return IngredientMatchResult.FAIL;
 			}
@@ -108,13 +108,13 @@ public class OreIngredient implements IItemIngredient {
 				return IngredientMatchResult.PASS_0;
 			}
 		}
-		else if (object instanceof ItemIngredient) {
-			if (match(((ItemIngredient) object).stack, sorption).matches()) {
+		else if (object instanceof ItemIngredient ingredient) {
+			if (match(ingredient.stack, sorption).matches()) {
 				return IngredientMatchResult.PASS_0;
 			}
 		}
-		else if (object instanceof ItemArrayIngredient) {
-			for (IItemIngredient ingredient : ((ItemArrayIngredient) object).ingredientList) {
+		else if (object instanceof ItemArrayIngredient arrayIngredient) {
+			for (IItemIngredient ingredient : arrayIngredient.ingredientList) {
 				if (!match(ingredient, sorption).matches()) {
 					return IngredientMatchResult.FAIL;
 				}

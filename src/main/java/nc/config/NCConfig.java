@@ -69,6 +69,7 @@ public class NCConfig {
 	public static double[] energy_upgrade_power_laws_fp;
 	public static double[] energy_upgrade_multipliers_fp;
 	public static int[] upgrade_stack_sizes;
+	
 	public static int rf_per_eu;
 	public static boolean enable_ic2_eu;
 	public static boolean enable_gtce_eu;
@@ -86,7 +87,6 @@ public class NCConfig {
 	public static boolean[] gtce_recipe_integration;
 	public static boolean gtce_recipe_logging;
 	public static boolean smart_processor_input;
-	public static boolean passive_permeation;
 	public static boolean factor_recipes;
 	public static boolean processor_particles;
 	
@@ -102,6 +102,8 @@ public class NCConfig {
 	public static int[] battery_item_max_transfer;
 	public static int[] battery_item_energy_tier;
 	
+	public static int fission_min_size; // Default: 1
+	public static int fission_max_size; // Default: 24
 	public static double fission_fuel_time_multiplier; // Default: 1
 	public static double fission_fuel_heat_multiplier; // Default: 1
 	public static double fission_fuel_efficiency_multiplier; // Default: 1
@@ -130,12 +132,8 @@ public class NCConfig {
 	public static double[] fission_decay_term_multipliers; // Exponential, linear
 	
 	public static boolean fission_overheat;
-	public static boolean fission_explosions;
 	public static double fission_meltdown_radiation_multiplier;
 	public static boolean fission_heat_damage;
-	public static int fission_min_size; // Default: 1
-	public static int fission_max_size; // Default: 24
-	public static int fission_comparator_max_temp;
 	public static int fission_neutron_reach;
 	public static boolean[] fission_heat_dissipation;
 	public static double fission_emergency_cooling_multiplier;
@@ -247,7 +245,9 @@ public class NCConfig {
 	public static String[] turbine_connector_rule;
 	public static double[] turbine_power_per_mb;
 	public static double[] turbine_expansion_level;
+	public static double turbine_spin_up_multiplier_global;
 	public static double[] turbine_spin_up_multiplier;
+	public static double turbine_spin_down_multiplier;
 	public static int turbine_mb_per_blade;
 	public static double[] turbine_throughput_leniency_params;
 	public static double turbine_tension_throughput_factor;
@@ -356,13 +356,6 @@ public class NCConfig {
 	public static boolean radiation_death_persist;
 	public static double radiation_death_persist_fraction;
 	public static double radiation_death_immunity_time;
-	
-	public static String[] radiation_rads_text_color;
-	public static String[] radiation_rate_text_color;
-	public static String[] radiation_positive_food_rads_text_color;
-	public static String[] radiation_negative_food_rads_text_color;
-	public static String[] radiation_positive_food_resistance_text_color;
-	public static String[] radiation_negative_food_resistance_text_color;
 	
 	public static String[] radiation_player_debuff_lists;
 	public static String[] radiation_passive_debuff_lists;
@@ -497,6 +490,7 @@ public class NCConfig {
 		energy_upgrade_power_laws_fp = sync(CATEGORY_PROCESSOR, "energy_upgrade_power_laws_fp", new double[] {1D}, 1D, 15D, ARRAY);
 		energy_upgrade_multipliers_fp = sync(CATEGORY_PROCESSOR, "energy_upgrade_multipliers_fp", new double[] {1D}, 0D, 15D, ARRAY);
 		upgrade_stack_sizes = sync(CATEGORY_PROCESSOR, "upgrade_stack_sizes", new int[] {64, 64}, 1, 64, ARRAY);
+		
 		rf_per_eu = sync(CATEGORY_PROCESSOR, "rf_per_eu", 16, 1, 65536);
 		enable_ic2_eu = sync(CATEGORY_PROCESSOR, "enable_ic2_eu", true);
 		enable_gtce_eu = sync(CATEGORY_PROCESSOR, "enable_gtce_eu", true);
@@ -514,7 +508,6 @@ public class NCConfig {
 		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
 		smart_processor_input = sync(CATEGORY_PROCESSOR, "smart_processor_input", true);
-		passive_permeation = sync(CATEGORY_PROCESSOR, "passive_permeation", true);
 		factor_recipes = sync(CATEGORY_PROCESSOR, "factor_recipes", false);
 		processor_particles = sync(CATEGORY_PROCESSOR, "processor_particles", true);
 		
@@ -530,6 +523,8 @@ public class NCConfig {
 		battery_item_max_transfer = sync(CATEGORY_ENERGY_STORAGE, "battery_item_max_transfer", new int[] {80000}, 1, Integer.MAX_VALUE, ARRAY);
 		battery_item_energy_tier = sync(CATEGORY_ENERGY_STORAGE, "battery_item_energy_tier", new int[] {3}, 1, 10, ARRAY);
 		
+		fission_min_size = sync(CATEGORY_FISSION, "fission_min_size", 1, 1, 255);
+		fission_max_size = sync(CATEGORY_FISSION, "fission_max_size", 24, 3, 255);
 		fission_fuel_time_multiplier = sync(CATEGORY_FISSION, "fission_fuel_time_multiplier", 1D, 0.001D, 255D);
 		fission_fuel_heat_multiplier = sync(CATEGORY_FISSION, "fission_fuel_heat_multiplier", 1D, 0D, 255D);
 		fission_fuel_efficiency_multiplier = sync(CATEGORY_FISSION, "fission_fuel_efficiency_multiplier", 1D, 0D, 255D);
@@ -556,12 +551,8 @@ public class NCConfig {
 		fission_decay_daughter_multipliers = sync(CATEGORY_FISSION, "fission_decay_daughter_multipliers", new double[] {5D, 5D}, 0D, 255D, ARRAY);
 		fission_decay_term_multipliers = sync(CATEGORY_FISSION, "fission_decay_term_multipliers", new double[] {0.95D, 0.05D}, 0D, 1D, ARRAY);
 		fission_overheat = sync(CATEGORY_FISSION, "fission_overheat", true);
-		fission_explosions = sync(CATEGORY_FISSION, "fission_explosions", false);
 		fission_meltdown_radiation_multiplier = sync(CATEGORY_FISSION, "fission_meltdown_radiation_multiplier", 1D, 0D, 255D);
 		fission_heat_damage = sync(CATEGORY_FISSION, "fission_heat_damage", false);
-		fission_min_size = sync(CATEGORY_FISSION, "fission_min_size", 1, 1, 255);
-		fission_max_size = sync(CATEGORY_FISSION, "fission_max_size", 24, 3, 255);
-		fission_comparator_max_temp = sync(CATEGORY_FISSION, "fission_comparator_max_temp", 1600, 20, 2400);
 		fission_neutron_reach = sync(CATEGORY_FISSION, "fission_neutron_reach", 4, 1, 255);
 		fission_heat_dissipation = sync(CATEGORY_FISSION, "fission_heat_dissipation", new boolean[] {true, false}, ARRAY);
 		fission_emergency_cooling_multiplier = sync(CATEGORY_FISSION, "fission_emergency_cooling_multiplier", 1D, 0.001D, 255D);
@@ -674,7 +665,9 @@ public class NCConfig {
 		turbine_connector_rule = sync(CATEGORY_TURBINE, "turbine_connector_rule", new String[] {"one of any coil"}, ARRAY);
 		turbine_power_per_mb = sync(CATEGORY_TURBINE, "turbine_power_per_mb", new double[] {16D, 4D, 4D}, 0D, 255D, ARRAY);
 		turbine_expansion_level = sync(CATEGORY_TURBINE, "turbine_expansion_level", new double[] {4D, 2D, 2D}, 1D, 255D, ARRAY);
+		turbine_spin_up_multiplier_global = sync(CATEGORY_TURBINE, "turbine_spin_up_multiplier_global", 1D, 0D, 255D);
 		turbine_spin_up_multiplier = sync(CATEGORY_TURBINE, "turbine_spin_up_multiplier", new double[] {1D, 1D, 1D}, 0D, 255D, ARRAY);
+		turbine_spin_down_multiplier = sync(CATEGORY_TURBINE, "turbine_spin_down_multiplier", 1D, 0.01D, 255D);
 		turbine_mb_per_blade = sync(CATEGORY_TURBINE, "turbine_mb_per_blade", 100, 1, 32767);
 		turbine_throughput_leniency_params = sync(CATEGORY_TURBINE, "turbine_throughput_leniency_params", new double[] {0.5D, 0.75D}, 0D, 1D, ARRAY);
 		turbine_tension_throughput_factor = sync(CATEGORY_TURBINE, "turbine_tension_throughput_factor", 2D, 1D, 255D);
@@ -782,14 +775,6 @@ public class NCConfig {
 		radiation_death_persist = sync(CATEGORY_RADIATION, "radiation_death_persist", true);
 		radiation_death_persist_fraction = sync(CATEGORY_RADIATION, "radiation_death_persist_fraction", 0.75D, 0D, 1D);
 		radiation_death_immunity_time = sync(CATEGORY_RADIATION, "radiation_death_immunity_time", 90D, 0D, 3600D);
-		
-		// TODO
-		radiation_rads_text_color = sync(CATEGORY_RADIATION, "radiation_rads_text_color", new String[] {"0.0_f", "30.0_e", "50.0_6", "70.0_c", "90.0_4"}, LIST);
-		radiation_rate_text_color = sync(CATEGORY_RADIATION, "radiation_rate_text_color", new String[] {"0.0_f", "0.000000001_e", "0.001_6", "0.1_c", "1.0_4"}, LIST);
-		radiation_positive_food_rads_text_color = sync(CATEGORY_RADIATION, "radiation_positive_food_rads_text_color", new String[] {"0.0_f", "0.1_e", "1.0_6", "10.0_c", "100.0_4"}, LIST);
-		radiation_negative_food_rads_text_color = sync(CATEGORY_RADIATION, "radiation_negative_food_rads_text_color", new String[] {"0.0_b", "-10.0_9", "-100.0_d"}, LIST);
-		radiation_positive_food_resistance_text_color = sync(CATEGORY_RADIATION, "radiation_positive_food_resistance_text_color", new String[] {"0.0_f"}, LIST);
-		radiation_negative_food_resistance_text_color = sync(CATEGORY_RADIATION, "radiation_negative_food_resistance_text_color", new String[] {"0.0_7"}, LIST);
 		
 		radiation_player_debuff_lists = sync(CATEGORY_RADIATION, "radiation_player_debuff_lists", new String[] {"40.0_minecraft:weakness@1", "55.0_minecraft:weakness@1,minecraft:mining_fatigue@1", "70.0_minecraft:weakness@2,minecraft:mining_fatigue@1,minecraft:hunger@1", "80.0_minecraft:weakness@2,minecraft:mining_fatigue@2,minecraft:hunger@1,minecraft:poison@1", "90.0_minecraft:weakness@3,minecraft:mining_fatigue@3,minecraft:hunger@2,minecraft:poison@1,minecraft:wither@1"}, LIST);
 		radiation_passive_debuff_lists = sync(CATEGORY_RADIATION, "radiation_passive_debuff_lists", new String[] {"40.0_minecraft:weakness@1", "55.0_minecraft:weakness@1,minecraft:mining_fatigue@1", "70.0_minecraft:weakness@2,minecraft:mining_fatigue@1,minecraft:hunger@1", "80.0_minecraft:weakness@2,minecraft:mining_fatigue@2,minecraft:hunger@1,minecraft:poison@1", "90.0_minecraft:weakness@3,minecraft:mining_fatigue@3,minecraft:hunger@2,minecraft:poison@1,minecraft:wither@1"}, LIST);

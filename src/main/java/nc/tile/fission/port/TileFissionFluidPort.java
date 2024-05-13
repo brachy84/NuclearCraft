@@ -1,14 +1,14 @@
 package nc.tile.fission.port;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.ModCheck;
+import nc.config.NCConfig;
 import nc.handler.TileInfoHandler;
 import nc.network.tile.multiblock.port.FluidPortUpdatePacket;
 import nc.recipe.BasicRecipeHandler;
-import nc.tile.ITileGui;
+import nc.tile.*;
 import nc.tile.fluid.*;
-import nc.tile.TileContainerInfo;
 import nc.tile.internal.fluid.*;
 import nc.util.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.*;
@@ -44,12 +45,12 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
-	public TileFissionFluidPort(String name, Class<PORT> portClass, int capacity, List<String> validFluids, BasicRecipeHandler recipeHandler) {
+	public TileFissionFluidPort(String name, Class<PORT> portClass, int capacity, Set<String> validFluids, BasicRecipeHandler recipeHandler) {
 		super(portClass);
 		info = TileInfoHandler.getTileContainerInfo(name);
 		
-		tanks = Lists.newArrayList(new Tank(capacity, validFluids), new Tank(capacity, new ArrayList<>()));
-		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ArrayList<>()));
+		tanks = Lists.newArrayList(new Tank(capacity, validFluids), new Tank(capacity, new ObjectOpenHashSet<>()));
+		filterTanks = Lists.newArrayList(new Tank(1000, validFluids), new Tank(1000, new ObjectOpenHashSet<>()));
 		this.capacity = capacity;
 		
 		fluidSides = ITileFluid.getDefaultFluidSides(this);
@@ -173,6 +174,20 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	@Override
 	public boolean hasConfigurableFluidConnections() {
 		return true;
+	}
+	
+	@Override
+	public boolean isFluidValidForTank(int tankNumber, FluidStack stack) {
+		if (stack == null || stack.amount <= 0 || tankNumber >= recipeHandler.getFluidInputSize()) {
+			return false;
+		}
+		
+		if (NCConfig.smart_processor_input) {
+			return recipeHandler.isValidFluidInput(stack, tankNumber, getTanks().subList(0, recipeHandler.getFluidInputSize()), new ArrayList<>(), null);
+		}
+		else {
+			return recipeHandler.isValidFluidInput(stack, tankNumber);
+		}
 	}
 	
 	// ITileGui

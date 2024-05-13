@@ -44,7 +44,7 @@ public class NCRecipes {
 		return getHandler(name).recipeList;
 	}
 	
-	public static List<List<String>> getValidFluids(String name) {
+	public static List<Set<String>> getValidFluids(String name) {
 		return getHandler(name).validFluids;
 	}
 	

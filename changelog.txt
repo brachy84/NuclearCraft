@@ -2,6 +2,8 @@ v2o.7.2
 
 + Added CT methods to define and register custom processors
 
+* Fully implemented smart insertion logic for item and fluid ingredients
+
 + Added Radiation Scrubber GUI (shift-click to see radiation removal rate)
 
 + Added back GTCEu recipe integration
@@ -12,7 +14,10 @@ v2o.7.2
 
 + Added config to entirely disable all GTCEu recipe integration
 + Added config to disable all miscellaneous TiC recipes
++ Added global configs for turbine spin-up and spin-down multipliers
+
 * Fixed processor registration configs disabling the wrong crafting recipes
+* Added config localisation for all implemented options
 
 * Simplified registration logic
 

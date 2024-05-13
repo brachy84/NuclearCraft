@@ -175,17 +175,11 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 		}
 		
 		if (NCConfig.smart_processor_input) {
-			return recipeHandler.isValidItemInput(slot, stack, null, getInventoryStacks().subList(0, recipeHandler.getItemInputSize()), inputItemStacksExcludingSlot(slot));
+			return recipeHandler.isValidItemInput(stack, slot, getInventoryStacks().subList(0, recipeHandler.getItemInputSize()), new ArrayList<>(), null);
 		}
 		else {
-			return recipeHandler.isValidItemInput(slot, stack);
+			return recipeHandler.isValidItemInput(stack, slot);
 		}
-	}
-	
-	public List<ItemStack> inputItemStacksExcludingSlot(int slot) {
-		List<ItemStack> inputItemsExcludingSlot = new ArrayList<>(getInventoryStacks().subList(0, recipeHandler.getItemInputSize()));
-		inputItemsExcludingSlot.remove(slot);
-		return inputItemsExcludingSlot;
 	}
 	
 	@Override

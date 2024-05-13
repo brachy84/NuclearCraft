@@ -1,5 +1,6 @@
 package nc.tile.internal.fluid;
 
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.*;
@@ -8,9 +9,9 @@ import java.util.*;
 
 public class Tank extends FluidTank {
 	
-	protected List<String> allowedFluids;
+	protected Set<String> allowedFluids;
 	
-	public Tank(int capacity, List<String> allowedFluids) {
+	public Tank(int capacity, Set<String> allowedFluids) {
 		super(capacity);
 		this.allowedFluids = allowedFluids;
 	}
@@ -26,13 +27,13 @@ public class Tank extends FluidTank {
 		return fluidIn != null && (allowedFluids == null || allowedFluids.contains(fluidIn.getName()));
 	}
 	
-	public void setAllowedFluids(List<String> allowedFluids) {
+	public void setAllowedFluids(Set<String> allowedFluids) {
 		if (allowedFluids == null) {
 			this.allowedFluids = null;
 		}
 		else {
 			if (this.allowedFluids == null) {
-				this.allowedFluids = new ArrayList<>();
+				this.allowedFluids = new ObjectOpenHashSet<>();
 			}
 			else {
 				this.allowedFluids.clear();

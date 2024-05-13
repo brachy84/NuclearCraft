@@ -35,7 +35,7 @@ public class BlockSaltFissionVessel extends BlockFissionPart {
 				FissionReactor reactor = vessel.getMultiblock();
 				if (reactor != null) {
 					FluidStack fluidStack = FluidStackHelper.getFluid(player.getHeldItem(hand));
-					if (vessel.canModifyFilter(0) && vessel.getTanks().get(0).isEmpty() && fluidStack != null && !FluidStackHelper.stacksEqual(vessel.getFilterTanks().get(0).getFluid(), fluidStack) && vessel.getTanks().get(0).canFillFluidType(fluidStack)) {
+					if (vessel.canModifyFilter(0) && vessel.getTanks().get(0).isEmpty() && fluidStack != null && !FluidStackHelper.stacksEqual(vessel.getFilterTanks().get(0).getFluid(), fluidStack) && vessel.isFluidValidForTank(0, fluidStack)) {
 						player.sendMessage(new TextComponentString(Lang.localize("message.nuclearcraft.filter") + " " + TextFormatting.BOLD + Lang.localize(fluidStack.getUnlocalizedName())));
 						FluidStack filter = fluidStack.copy();
 						filter.amount = 1000;

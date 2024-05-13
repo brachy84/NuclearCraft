@@ -33,7 +33,7 @@ public abstract class BlockFissionFluidPort<PORT extends TileFissionFluidPort<PO
 				FissionReactor reactor = port.getMultiblock();
 				if (reactor != null) {
 					FluidStack fluidStack = FluidStackHelper.getFluid(player.getHeldItem(hand));
-					if (port.canModifyFilter(0) && port.getTanks().get(0).isEmpty() && fluidStack != null && !FluidStackHelper.stacksEqual(port.getFilterTanks().get(0).getFluid(), fluidStack) && port.getTanks().get(0).canFillFluidType(fluidStack)) {
+					if (port.canModifyFilter(0) && port.getTanks().get(0).isEmpty() && fluidStack != null && !FluidStackHelper.stacksEqual(port.getFilterTanks().get(0).getFluid(), fluidStack) && port.isFluidValidForTank(0, fluidStack)) {
 						player.sendMessage(new TextComponentString(Lang.localize("message.nuclearcraft.filter") + " " + TextFormatting.BOLD + Lang.localize(fluidStack.getUnlocalizedName())));
 						FluidStack filter = fluidStack.copy();
 						filter.amount = 1000;

@@ -1,7 +1,7 @@
 package nc.tile.processor;
 
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.*;
 import li.cil.oc.api.network.SimpleComponent;
 import nc.ModCheck;
 import nc.handler.TileInfoHandler;
@@ -50,7 +50,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 		this(name, info, ITileInventory.inventoryConnectionAll(info.defaultItemSorptions()), info.getEnergyCapacity(1D, 1D), ITileEnergy.energyConnectionAll(info.defaultEnergyConnection()), info.defaultTankCapacities(), NCRecipes.getValidFluids(name), ITileFluid.fluidConnectionAll(info.defaultTankSorptions()));
 	}
 	
-	private TileEnergyProcessor(String name, INFO info, @Nonnull InventoryConnection[] inventoryConnections, long capacity, @Nonnull EnergyConnection[] energyConnections, @Nonnull IntList fluidCapacity, List<List<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+	private TileEnergyProcessor(String name, INFO info, @Nonnull InventoryConnection[] inventoryConnections, long capacity, @Nonnull EnergyConnection[] energyConnections, @Nonnull IntList fluidCapacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		super(name, info.getInventorySize(), inventoryConnections, capacity, energyConnections, fluidCapacity, allowedFluids, fluidConnections);
 		this.info = info;
 		

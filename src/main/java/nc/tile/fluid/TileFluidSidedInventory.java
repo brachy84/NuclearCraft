@@ -8,16 +8,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.*;
-import java.util.List;
+import java.util.*;
 
 public abstract class TileFluidSidedInventory extends TileFluidInventory {
 	
-	public TileFluidSidedInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, int capacity, List<String> allowedFluidsList, @Nonnull FluidConnection[] fluidConnections) {
-		super(name, size, inventoryConnections, capacity, allowedFluidsList, fluidConnections);
+	public TileFluidSidedInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, int capacity, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+		super(name, size, inventoryConnections, capacity, allowedFluids, fluidConnections);
 	}
 	
-	public TileFluidSidedInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull IntList capacity, List<List<String>> allowedFluidsLists, @Nonnull FluidConnection[] fluidConnections) {
-		super(name, size, inventoryConnections, capacity, allowedFluidsLists, fluidConnections);
+	public TileFluidSidedInventory(String name, int size, @Nonnull InventoryConnection[] inventoryConnections, @Nonnull IntList capacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
+		super(name, size, inventoryConnections, capacity, allowedFluids, fluidConnections);
 	}
 	
 	// Capability

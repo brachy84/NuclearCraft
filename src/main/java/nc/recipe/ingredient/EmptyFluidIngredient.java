@@ -69,8 +69,8 @@ public class EmptyFluidIngredient implements IFluidIngredient {
 		if (object == null) {
 			return IngredientMatchResult.PASS_0;
 		}
-		if (object instanceof Tank) {
-			return new IngredientMatchResult(((Tank) object).getFluid() == null, 0);
+		if (object instanceof Tank tank) {
+			return new IngredientMatchResult(tank.getFluid() == null, 0);
 		}
 		return new IngredientMatchResult(object instanceof EmptyFluidIngredient, 0);
 	}

@@ -75,16 +75,14 @@ public class ItemIngredient implements IItemIngredient {
 			return new IngredientMatchResult(type.checkStackSize(stack.getCount(), itemstack.getCount()), 0);
 		}
 		else if (object instanceof OreIngredient oreStack) {
-			// return oreStack.matches(this, type);
-			
 			for (ItemStack itemStack : oreStack.cachedStackList) {
 				if (match(itemStack, type).matches()) {
 					return new IngredientMatchResult(type.checkStackSize(stack.getCount(), oreStack.stackSize), 0);
 				}
 			}
 		}
-		else if (object instanceof ItemIngredient && match(((ItemIngredient) object).stack, type).matches()) {
-			return new IngredientMatchResult(type.checkStackSize(getMaxStackSize(0), ((ItemIngredient) object).getMaxStackSize(0)), 0);
+		else if (object instanceof ItemIngredient ingredient && match(ingredient.stack, type).matches()) {
+			return new IngredientMatchResult(type.checkStackSize(getMaxStackSize(0), ingredient.getMaxStackSize(0)), 0);
 		}
 		return IngredientMatchResult.FAIL;
 	}
