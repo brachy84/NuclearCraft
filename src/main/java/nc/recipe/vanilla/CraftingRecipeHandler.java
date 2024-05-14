@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.*;
 import nc.*;
 import nc.enumm.MetaEnums.IngotType;
 import nc.init.*;
+import nc.item.ItemMultitool;
 import nc.multiblock.quantum.QuantumGateEnums;
 import nc.radiation.RadArmor;
 import nc.recipe.vanilla.ingredient.BucketIngredient;
@@ -429,7 +430,7 @@ public class CraftingRecipeHandler {
 		addShapedOreRecipe(new ItemStack(NCItems.rad_shielding, 1, 1), "BBB", "RFR", "PPP", 'B', "bioplastic", 'F', "ingotFerroboron", 'P', "plateBasic", 'R', new ItemStack(NCItems.rad_shielding, 1, 0));
 		addShapedOreRecipe(new ItemStack(NCItems.rad_shielding, 1, 2), "BBB", "RHR", "PPP", 'B', "ingotBeryllium", 'H', "ingotHardCarbon", 'P', "plateDU", 'R', new ItemStack(NCItems.rad_shielding, 1, 1));
 		
-		addShapedOreRecipe(new ItemStack(NCItems.multitool), " F ", "HSF", "SB ", 'F', "ingotFerroboron", 'H', "ingotHardCarbon", 'S', "ingotSteel", 'B', "ingotBronze");
+		addShapedOreRecipe(ItemMultitool.newMultitool(NCItems.multitool), " F ", "HSF", "SB ", 'F', "ingotFerroboron", 'H', "ingotHardCarbon", 'S', "ingotSteel", 'B', "ingotBronze");
 		
 		addShapelessOreRecipe(NCItems.record_wanderer, "record", "ingotTough");
 		addShapelessOreRecipe(NCItems.record_end_of_the_world, "record", "ingotUranium235");

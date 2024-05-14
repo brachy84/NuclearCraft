@@ -79,7 +79,7 @@ public class ReflectionHelper {
 			ClassWriter cw = new ClassWriter(cr, 0);
 			
 			String fullName = clazz.getPackage().getName() + "." + cloneName;
-			cr.accept(new CloneClassVisitor(cw, fullName.replace(".", "/")), 0);
+			cr.accept(new CloneClassVisitor(cw, fullName.replace('.', '/')), 0);
 			
 			return defineClass(clazz.getClassLoader(), fullName, cw);
 		} catch (IOException e) {

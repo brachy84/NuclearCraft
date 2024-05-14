@@ -5,6 +5,7 @@ import nc.tile.ITile;
 import nc.tile.internal.inventory.*;
 import nc.tile.multiblock.port.ITilePort;
 import nc.tile.processor.IProcessor;
+import nc.tile.processor.IProcessor.HandlerPair;
 import nc.util.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
@@ -253,6 +254,21 @@ public interface ITileInventory extends ITile, ISidedInventory {
 		}
 		
 		return true;
+	}
+	
+	default boolean tryPushSlot(HandlerPair[] adjacentHandlers, NonNullList<ItemStack> stacks, int slot, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		if (!stacks.get(slot).isEmpty()) {
+			for (int i = 0; i < dirCount; ++i) {
+				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
+				if (getItemSorption(dir, slot).equals(ItemSorption.AUTO_OUT)) {
+					IItemHandler handler = adjacentHandlers[dir.getIndex()].itemHandler;
+					if (handler != null && pushSlotToHandler(handler, stacks, dir, slot)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	// NBT

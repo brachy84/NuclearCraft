@@ -1,6 +1,13 @@
 package nc.util;
 
+import java.util.function.*;
+
 public class LambdaHelper {
+	
+	public static <T> T also(T t, Consumer<T> consumer) {
+		consumer.accept(t);
+		return t;
+	}
 	
 	@FunctionalInterface
 	public interface ThrowingRunnable {

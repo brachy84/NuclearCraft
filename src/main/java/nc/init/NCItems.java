@@ -207,7 +207,7 @@ public class NCItems {
 		
 		smore = addWithName(Global.MOD_ID, "smore", new NCItemFood(8, 1.4F, false, new PotionEffect[] {PotionHelper.newEffect(3, 2, 300), PotionHelper.newEffect(1, 2, 300), PotionHelper.newEffect(22, 2, 300)}), NCTabs.misc);
 		moresmore = addWithName(Global.MOD_ID, "moresmore", new NCItemFood(20, 3.8F, false, new PotionEffect[] {PotionHelper.newEffect(3, 2, 600), PotionHelper.newEffect(1, 2, 600), PotionHelper.newEffect(22, 2, 600)}), NCTabs.misc);
-		foursmore = addWithName(Global.MOD_ID, "foursmore", new NCItemFood(44, 8.6F, false, new PotionEffect[] {PotionHelper.newEffect(3, 2, 1200), PotionHelper.newEffect(1, 2, 1200), PotionHelper.newEffect(22, 2, 1200)}), null);
+		foursmore = addWithName(Global.MOD_ID, "foursmore", new NCItemFood(48, 8.6F, false, new PotionEffect[] {PotionHelper.newEffect(3, 2, 1200), PotionHelper.newEffect(1, 2, 1200), PotionHelper.newEffect(22, 2, 1200)}), null);
 		
 		record_wanderer = addWithName(Global.MOD_ID, "record_wanderer", new NCItemRecord("record_wanderer", NCSounds.wanderer), NCTabs.misc);
 		record_end_of_the_world = addWithName(Global.MOD_ID, "record_end_of_the_world", new NCItemRecord("record_end_of_the_world", NCSounds.end_of_the_world), NCTabs.misc);

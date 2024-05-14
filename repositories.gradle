@@ -22,6 +22,10 @@ repositories {
 		url "https://maven.tterrag.com/"
 	}
 	maven {
+		name "buildcraft"
+		url "https://mod-buildcraft.com/maven/"
+	}
+	maven {
 		name = "mcmoddev"
 		url = "https://maven.mcmoddev.com"
 	}

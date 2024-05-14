@@ -19,14 +19,12 @@ import static nc.config.NCConfig.enable_gtce_eu;
 @Optional.InterfaceList({@Optional.Interface(iface = "ic2.api.energy.tile.IEnergySink", modid = "ic2"), @Optional.Interface(iface = "ic2.api.energy.tile.IEnergySource", modid = "ic2")})
 public abstract class TileEnergy extends NCTile implements ITileEnergy, IEnergySink, IEnergySource {
 	
-	private final @Nonnull EnergyStorage storage;
+	protected @Nonnull EnergyStorage storage = null;
 	
-	private @Nonnull EnergyConnection[] energyConnections;
+	protected @Nonnull EnergyConnection[] energyConnections = null;
 	
-	private @Nonnull
-	final EnergyTileWrapper[] energySides;
-	private @Nonnull
-	final EnergyTileWrapperGT[] energySidesGT;
+	private final @Nonnull EnergyTileWrapper[] energySides;
+	private final @Nonnull EnergyTileWrapperGT[] energySidesGT;
 	
 	private boolean ic2reg = false;
 	
@@ -36,10 +34,14 @@ public abstract class TileEnergy extends NCTile implements ITileEnergy, IEnergyS
 	
 	public TileEnergy(long capacity, int maxTransfer, @Nonnull EnergyConnection[] energyConnections) {
 		super();
-		storage = new EnergyStorage(capacity, maxTransfer);
-		this.energyConnections = energyConnections;
+		initTileEnergy(capacity, maxTransfer, energyConnections);
 		energySides = ITileEnergy.getDefaultEnergySides(this);
 		energySidesGT = ITileEnergy.getDefaultEnergySidesGT(this);
+	}
+	
+	protected void initTileEnergy(long capacity, int maxTransfer, @Nonnull EnergyConnection[] energyConnections) {
+		storage = new EnergyStorage(capacity, maxTransfer);
+		this.energyConnections = energyConnections;
 	}
 	
 	@Override

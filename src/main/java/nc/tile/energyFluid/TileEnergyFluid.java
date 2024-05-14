@@ -20,17 +20,17 @@ import static nc.config.NCConfig.enable_mek_gas;
 
 public abstract class TileEnergyFluid extends TileEnergy implements ITileFluid {
 	
-	private final @Nonnull List<Tank> tanks;
+	private @Nonnull List<Tank> tanks = null;
 	
-	private @Nonnull FluidConnection[] fluidConnections;
+	private @Nonnull FluidConnection[] fluidConnections = null;
 	
 	private final @Nonnull FluidTileWrapper[] fluidSides;
 	
 	private final @Nonnull GasTileWrapper gasWrapper;
 	
 	private boolean inputTanksSeparated = false;
-	private final List<Boolean> voidUnusableFluidInputs;
-	private final List<TankOutputSetting> tankOutputSettings;
+	private List<Boolean> voidUnusableFluidInputs;
+	private List<TankOutputSetting> tankOutputSettings;
 	
 	public TileEnergyFluid(long capacity, @Nonnull EnergyConnection[] energyConnections, int fluidCapacity, Set<String> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		this(capacity, NCMath.toInt(capacity), energyConnections, new IntArrayList(new int[] {fluidCapacity}), Lists.<Set<String>>newArrayList(allowedFluids), fluidConnections);
@@ -46,6 +46,12 @@ public abstract class TileEnergyFluid extends TileEnergy implements ITileFluid {
 	
 	public TileEnergyFluid(long capacity, int maxTransfer, @Nonnull EnergyConnection[] energyConnections, @Nonnull IntList fluidCapacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		super(capacity, maxTransfer, energyConnections);
+		initTileEnergyFluid(fluidCapacity, allowedFluids, fluidConnections);
+		fluidSides = ITileFluid.getDefaultFluidSides(this);
+		gasWrapper = new GasTileWrapper(this);
+	}
+	
+	protected void initTileEnergyFluid(@Nonnull IntList fluidCapacity, List<Set<String>> allowedFluids, @Nonnull FluidConnection[] fluidConnections) {
 		tanks = new ArrayList<>();
 		voidUnusableFluidInputs = new ArrayList<>();
 		tankOutputSettings = new ArrayList<>();
@@ -57,8 +63,6 @@ public abstract class TileEnergyFluid extends TileEnergy implements ITileFluid {
 			}
 		}
 		this.fluidConnections = fluidConnections;
-		fluidSides = ITileFluid.getDefaultFluidSides(this);
-		gasWrapper = new GasTileWrapper(this);
 	}
 	
 	@Override

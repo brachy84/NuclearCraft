@@ -7,6 +7,7 @@ import nc.tile.internal.fluid.*;
 import nc.tile.multiblock.port.ITilePort;
 import nc.tile.passive.ITilePassive;
 import nc.tile.processor.IProcessor;
+import nc.tile.processor.IProcessor.HandlerPair;
 import nc.util.BlockHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -285,6 +286,21 @@ public interface ITileFluid extends ITile {
 		
 		FluidStack drain = tank.drain(handler.fill(tank.drain(tank.getCapacity(), false), true), true);
 		return drain != null && drain.amount != 0;
+	}
+	
+	default boolean tryPushTank(HandlerPair[] adjacentHandlers, List<Tank> tanks, int tankIndex, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		if (!tanks.get(tankIndex).isEmpty()) {
+			for (int i = 0; i < dirCount; ++i) {
+				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
+				if (getTankSorption(dir, tankIndex).equals(TankSorption.AUTO_OUT)) {
+					IFluidHandler handler = adjacentHandlers[dir.getIndex()].fluidHandler;
+					if (handler != null && pushTankToHandler(handler, tanks, dir, tankIndex)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	// NBT

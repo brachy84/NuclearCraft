@@ -6,10 +6,9 @@ import nc.gui.NCGui;
 import nc.gui.element.*;
 import nc.network.gui.*;
 import nc.network.tile.TileUpdatePacket;
-import nc.tile.ITileGui;
+import nc.tile.*;
 import nc.tile.fluid.ITileFluid;
-import nc.tile.TileContainerInfo;
-import nc.tile.internal.fluid.TankSorption;
+import nc.tile.internal.fluid.*;
 import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
@@ -143,6 +142,8 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 	
 	public static class Output<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO> & ITileFluid, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends GuiFluidSorptions<TILE, PACKET, INFO> {
 		
+		public TankOutputSetting outputSetting;
+		
 		public Output(NCGui parent, TILE tile, int slot) {
 			super(parent, tile, slot, TankSorption.Type.OUTPUT);
 			gui_textures = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/output_fluid_config.png");
@@ -150,18 +151,19 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 			b = new int[] {43, 7, 25, 25, 25, 43};
 			xSize = 90;
 			ySize = 68;
+			outputSetting = tile.getTankOutputSetting(slot);
 		}
 		
 		@Override
 		public void renderTooltips(int mouseX, int mouseY) {
 			super.renderTooltips(mouseX, mouseY);
-			drawTooltip(Lang.localize("gui.nc.container.tank_setting_config") + " " + tile.getTankOutputSetting(slot).getTextColor() + Lang.localize("gui.nc.container." + tile.getTankOutputSetting(slot).getName() + "_setting_config"), mouseX, mouseY, 7, 25, 18, 18);
+			drawTooltip(Lang.localize("gui.nc.container.tank_setting_config") + " " + outputSetting.getTextColor() + Lang.localize("gui.nc.container." + outputSetting.getName() + "_setting_config"), mouseX, mouseY, 7, 25, 18, 18);
 		}
 		
 		@Override
 		public void initGui() {
 			super.initGui();
-			buttonList.add(new NCEnumButton.TankOutputSetting(6, guiLeft + 7, guiTop + 25, tile.getTankOutputSetting(slot)));
+			buttonList.add(new NCEnumButton.TankOutputSetting(6, guiLeft + 7, guiTop + 25, outputSetting));
 		}
 		
 		@Override
@@ -169,8 +171,7 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 			super.actionPerformed(guiButton);
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
-					tile.setTankOutputSetting(slot, tile.getTankOutputSetting(slot).next(false));
-					new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)).sendToServer();
+					outputSetting = outputSetting.next(false);
 				}
 			}
 		}
@@ -180,10 +181,16 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 			super.actionPerformedRight(guiButton);
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
-					tile.setTankOutputSetting(slot, tile.getTankOutputSetting(slot).next(true));
-					new ToggleTankOutputSettingPacket(tile, slot, tile.getTankOutputSetting(slot)).sendToServer();
+					outputSetting = outputSetting.next(true);
 				}
 			}
+		}
+		
+		@Override
+		public void onGuiClosed() {
+			super.onGuiClosed();
+			tile.setTankOutputSetting(slot, outputSetting);
+			new ToggleTankOutputSettingPacket(tile, slot, outputSetting).sendToServer();
 		}
 	}
 }

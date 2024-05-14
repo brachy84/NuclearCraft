@@ -3,7 +3,6 @@ package nc.tile;
 import nc.block.property.BlockProperties;
 import nc.block.tile.IActivatable;
 import nc.capability.radiation.source.IRadiationSource;
-import nc.util.*;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.*;
-import java.util.*;
+import java.util.List;
 
 public interface ITile {
 	
@@ -151,8 +150,7 @@ public interface ITile {
 		return side == null ? EnumFacing.DOWN : side;
 	}
 	
-	default <T> @Nullable T getCapability(Capability<T> capability, BlockPos pos, EnumFacing side) {
-		TileEntity tile = getTileWorld().getTileEntity(pos);
+	default <T> @Nullable T getCapabilitySafe(Capability<T> capability, TileEntity tile, EnumFacing side) {
 		if (tile == null) {
 			return null;
 		}
@@ -165,12 +163,12 @@ public interface ITile {
 		}
 	}
 	
-	default <T> @Nullable T getAdjacentCapability(Capability<T> capability, @Nonnull EnumFacing side) {
-		return getCapability(capability, getTilePos().offset(side), side.getOpposite());
+	default <T> @Nullable T getCapabilitySafe(Capability<T> capability, BlockPos pos, EnumFacing side) {
+		return getCapabilitySafe(capability, getTileWorld().getTileEntity(pos), side);
 	}
 	
-	default <T> List<Lazy<T>> getLazyAdjacentCapabilities(Capability<T> capability) {
-		return StreamHelper.map(Arrays.asList(EnumFacing.VALUES), x -> new Lazy<>(() -> getAdjacentCapability(capability, x)));
+	default <T> @Nullable T getAdjacentCapabilitySafe(Capability<T> capability, @Nonnull EnumFacing side) {
+		return getCapabilitySafe(capability, getTilePos().offset(side), side.getOpposite());
 	}
 	
 	// HWYLA

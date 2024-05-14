@@ -1,5 +1,7 @@
 package nc.tile.dummy;
 
-public interface IInterfaceable extends IDummyMaster {
-	
+import nc.tile.IMultitoolLogic;
+
+public interface IInterfaceable extends IDummyMaster, IMultitoolLogic {
+
 }

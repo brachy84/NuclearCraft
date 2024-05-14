@@ -6,9 +6,8 @@ import nc.gui.NCGui;
 import nc.gui.element.*;
 import nc.network.gui.*;
 import nc.network.tile.TileUpdatePacket;
-import nc.tile.ITileGui;
-import nc.tile.TileContainerInfo;
-import nc.tile.internal.inventory.ItemSorption;
+import nc.tile.*;
+import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.util.*;
 import net.minecraft.block.state.IBlockState;
@@ -143,6 +142,8 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 	
 	public static class Output<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO> & ITileInventory, PACKET extends TileUpdatePacket, INFO extends TileContainerInfo<TILE>> extends GuiItemSorptions<TILE, PACKET, INFO> {
 		
+		public ItemOutputSetting outputSetting;
+		
 		public Output(NCGui parent, TILE tile, int slot) {
 			super(parent, tile, slot, ItemSorption.Type.OUTPUT);
 			gui_textures = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/output_item_config.png");
@@ -150,18 +151,19 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 			b = new int[] {43, 7, 25, 25, 25, 43};
 			xSize = 90;
 			ySize = 68;
+			outputSetting = tile.getItemOutputSetting(slot);
 		}
 		
 		@Override
 		public void renderTooltips(int mouseX, int mouseY) {
 			super.renderTooltips(mouseX, mouseY);
-			drawTooltip(Lang.localize("gui.nc.container.slot_setting_config") + " " + tile.getItemOutputSetting(slot).getTextColor() + Lang.localize("gui.nc.container." + tile.getItemOutputSetting(slot).getName() + "_setting_config"), mouseX, mouseY, 7, 25, 18, 18);
+			drawTooltip(Lang.localize("gui.nc.container.slot_setting_config") + " " + outputSetting.getTextColor() + Lang.localize("gui.nc.container." + outputSetting.getName() + "_setting_config"), mouseX, mouseY, 7, 25, 18, 18);
 		}
 		
 		@Override
 		public void initGui() {
 			super.initGui();
-			buttonList.add(new NCEnumButton.ItemOutputSetting(6, guiLeft + 7, guiTop + 25, tile.getItemOutputSetting(slot)));
+			buttonList.add(new NCEnumButton.ItemOutputSetting(6, guiLeft + 7, guiTop + 25, outputSetting));
 		}
 		
 		@Override
@@ -169,8 +171,7 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 			super.actionPerformed(guiButton);
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
-					tile.setItemOutputSetting(slot, tile.getItemOutputSetting(slot).next(false));
-					new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)).sendToServer();
+					outputSetting = outputSetting.next(false);
 				}
 			}
 		}
@@ -180,10 +181,16 @@ public abstract class GuiItemSorptions<TILE extends TileEntity & ITileGui<TILE, 
 			super.actionPerformedRight(guiButton);
 			if (tile.getTileWorld().isRemote) {
 				if (guiButton.id == 6) {
-					tile.setItemOutputSetting(slot, tile.getItemOutputSetting(slot).next(true));
-					new ToggleItemOutputSettingPacket(tile, slot, tile.getItemOutputSetting(slot)).sendToServer();
+					outputSetting = outputSetting.next(true);
 				}
 			}
+		}
+		
+		@Override
+		public void onGuiClosed() {
+			super.onGuiClosed();
+			tile.setItemOutputSetting(slot, outputSetting);
+			new ToggleItemOutputSettingPacket(tile, slot, outputSetting).sendToServer();
 		}
 	}
 	

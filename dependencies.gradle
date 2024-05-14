@@ -48,6 +48,7 @@ dependencies {
 	implementation("net.darkhax.bookshelf:Bookshelf-1.12.2:2.3.590")
 	implementation("net.darkhax.gamestages:GameStages-1.12.2:2.0.123")
 	implementation("vazkii.patchouli:Patchouli:1.0-23.6")
+	implementation("com.mod-buildcraft:buildcraft-api:7.99.24.8")
 	
 	implementation rfg.deobf("curse.maven:baubles-227083:2518667")
 	implementation rfg.deobf("curse.maven:base-246996:3440963")

@@ -2155,7 +2155,10 @@ item.nuclearcraft.multitool.name=Multitool
 
 info.nuclearcraft.multitool.clear_info=Cleared stored multitool info!
 
-info.nuclearcraft.multitool.copy_component_info=Copied component info to multitool!
+info.nuclearcraft.multitool.save_processor_config=Saved %s configuration to multitool!
+info.nuclearcraft.multitool.load_processor_config=Loaded %s configuration from multitool!
+
+info.nuclearcraft.multitool.copy_component_info=Saved component info to multitool!
 
 info.nuclearcraft.multitool.connect_component_monitor=Connected component to monitor!
 
@@ -2165,7 +2168,7 @@ info.nuclearcraft.multitool.quantum_computer.qubit_id=Qubit ID: %s
 info.nuclearcraft.multitool.quantum_computer.start_qubit_set=Created new qubit ID set starting with %s!
 info.nuclearcraft.multitool.quantum_computer.start_qubit_list=Created new qubit ID list starting with %s!
 info.nuclearcraft.multitool.quantum_computer.remove_qubit=Removed qubit ID %s from multitool!
-info.nuclearcraft.multitool.quantum_computer.add_qubit=Copied qubit ID %s to multitool!
+info.nuclearcraft.multitool.quantum_computer.add_qubit=Saved qubit ID %s to multitool!
 
 info.nuclearcraft.multitool.quantum_computer.single_gate_info=Gate currently targeting qubits %s
 info.nuclearcraft.multitool.quantum_computer.start_target_set=Gate now waiting for set of target qubits...

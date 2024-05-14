@@ -5,11 +5,9 @@ import nc.network.tile.processor.EnergyProcessorUpdatePacket;
 import nc.tile.ITileInstallable;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
-import nc.util.*;
+import nc.util.StackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import java.util.List;
 
@@ -17,15 +15,22 @@ import static nc.config.NCConfig.*;
 
 public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableEnergyProcessor<TILE, INFO>, INFO extends UpgradableProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket, INFO>> extends TileEnergyProcessor<TILE, INFO> implements ITileInstallable {
 	
+	/**
+	 * Don't use this constructor!
+	 */
+	protected TileUpgradableEnergyProcessor() {
+		super();
+	}
+	
 	protected TileUpgradableEnergyProcessor(String name) {
 		super(name);
 	}
 	
 	@Override
-	public boolean autoPushInternal(NonNullList<ItemStack> stacks, List<Tank> tanks, List<Lazy<IItemHandler>> itemHandlers, List<Lazy<IFluidHandler>> fluidHandlers, List<EnumFacing> dirs, int dirCount, int indexOffset) {
-		boolean pushed = super.autoPushInternal(stacks, tanks, itemHandlers, fluidHandlers, dirs, dirCount, indexOffset);
-		pushed |= tryPushSlot(itemHandlers, stacks, info.speedUpgradeSlot, dirs, dirCount, indexOffset);
-		pushed |= tryPushSlot(itemHandlers, stacks, info.energyUpgradeSlot, dirs, dirCount, indexOffset);
+	public boolean autoPushInternal(HandlerPair[] adjacentHandlers, NonNullList<ItemStack> stacks, List<Tank> tanks, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		boolean pushed = super.autoPushInternal(adjacentHandlers, stacks, tanks, dirs, dirCount, indexOffset);
+		pushed |= tryPushSlot(adjacentHandlers, stacks, info.speedUpgradeSlot, dirs, dirCount, indexOffset);
+		pushed |= tryPushSlot(adjacentHandlers, stacks, info.energyUpgradeSlot, dirs, dirCount, indexOffset);
 		return pushed;
 	}
 	

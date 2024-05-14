@@ -1,6 +1,11 @@
 v2o.7.3
 
 + Added auto-output mode for processor slots
++ Added multitool saving and loading of processor configurations
+
+* Fixed multitool logic clearing NBT data of Morph-o-Tool
+
+* Fixed custom processors not correctly loading from NBT
 
 v2o.7.2
 

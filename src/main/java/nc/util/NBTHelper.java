@@ -16,12 +16,53 @@ public class NBTHelper {
 	
 	// ItemStack
 	
-	public static NBTTagCompound getStackNBT(ItemStack stack) {
+	public static NBTTagCompound getStackNBT(ItemStack stack, String... subKeys) {
+		if (stack.isEmpty()) {
+			return null;
+		}
+		
 		NBTTagCompound nbt = stack.getTagCompound();
-		if (nbt == null && !stack.isEmpty()) {
+		if (nbt == null) {
 			stack.setTagCompound(nbt = new NBTTagCompound());
 		}
+		
+		for (String subKey : subKeys) {
+			if (nbt.hasKey(subKey, 10)) {
+				nbt = nbt.getCompoundTag(subKey);
+			}
+			else {
+				NBTTagCompound prev = nbt;
+				prev.setTag(subKey, nbt = new NBTTagCompound());
+			}
+		}
+		
 		return nbt;
+	}
+	
+	public static void clearStackNBT(ItemStack stack, String... subKeys) {
+		if (!stack.hasTagCompound()) {
+			return;
+		}
+		
+		if (subKeys.length == 0) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
+		
+		NBTTagCompound nbt = stack.getTagCompound();
+		
+		int lastIndex = subKeys.length - 1;
+		
+		for (int i = 0; i < lastIndex; ++i) {
+			String subKey = subKeys[i];
+			if (nbt.hasKey(subKey, 10)) {
+				nbt = nbt.getCompoundTag(subKey);
+			}
+			else {
+				return;
+			}
+		}
+		
+		nbt.setTag(subKeys[lastIndex], new NBTTagCompound());
 	}
 	
 	// Inventory

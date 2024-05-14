@@ -53,11 +53,11 @@ public class TileQuantumComputerQubit extends TileQuantumComputerPart implements
 	
 	@Override
 	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool);
+		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 		if (nbt != null) {
-			String mode = nbt.getString("qubitMode");
-			boolean s = mode.equals("set"), l = mode.equals("list");
-			if (s || l) {
+			String mode = nbt.getString("qComputerQubitMode");
+			boolean s, l;
+			if ((s = mode.equals("set")) || (l = mode.equals("list"))) {
 				IntCollection idColl = s ? new IntOpenHashSet() : new IntArrayList();
 				if (s) {
 					NBTHelper.readIntCollection(nbt, idColl, "qubitIDSet");

@@ -5,7 +5,7 @@ import nc.config.NCConfig;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
-import nc.tile.ITileGui;
+import nc.tile.*;
 import nc.tile.dummy.IInterfaceable;
 import nc.tile.energy.ITileEnergy;
 import nc.tile.fluid.ITileFluid;
@@ -16,11 +16,13 @@ import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
 import net.minecraftforge.items.*;
@@ -513,68 +515,63 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	}
 	
 	default boolean autoPush() {
-		List<Lazy<IItemHandler>> itemHandlers = getLazyAdjacentCapabilities(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-		List<Lazy<IFluidHandler>> fluidHandlers = getLazyAdjacentCapabilities(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+		HandlerPair[] adjacentHandlers = getAdjacentHandlers();
+		if (adjacentHandlers == null) {
+			return false;
+		}
 		
 		List<EnumFacing> dirs = new ArrayList<>();
-		for (EnumFacing dir : EnumFacing.VALUES) {
-			if (getInventoryConnection(dir).anyOfSorption(ItemSorption.AUTO_OUT) || getFluidConnection(dir).anyOfSorption(TankSorption.AUTO_OUT)) {
-				dirs.add(dir);
+		for (int i = 0; i < 6; ++i) {
+			if (adjacentHandlers[i] != null) {
+				dirs.add(EnumFacing.VALUES[i]);
 			}
 		}
 		
-		return autoPushInternal(getInventoryStacks(), getTanks(), itemHandlers, fluidHandlers, dirs, dirs.size(), (int) getTileWorld().getTotalWorldTime());
+		return autoPushInternal(adjacentHandlers, getInventoryStacks(), getTanks(), dirs, dirs.size(), (int) getTileWorld().getTotalWorldTime());
 	}
 	
-	default boolean autoPushInternal(NonNullList<ItemStack> stacks, List<Tank> tanks, List<Lazy<IItemHandler>> itemHandlers, List<Lazy<IFluidHandler>> fluidHandlers, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+	default boolean autoPushInternal(HandlerPair[] adjacentHandlers, NonNullList<ItemStack> stacks, List<Tank> tanks, List<EnumFacing> dirs, int dirCount, int indexOffset) {
 		INFO info = getContainerInfo();
 		boolean pushed = false;
 		
 		for (int i = 0; i < info.itemInputSize; ++i) {
-			pushed |= tryPushSlot(itemHandlers, stacks, info.itemInputSlots[i], dirs, dirCount, indexOffset);
+			pushed |= tryPushSlot(adjacentHandlers, stacks, info.itemInputSlots[i], dirs, dirCount, indexOffset);
 		}
 		for (int i = 0; i < info.fluidInputSize; ++i) {
-			pushed |= tryPushTank(fluidHandlers, tanks, info.fluidInputTanks[i], dirs, dirCount, indexOffset);
+			pushed |= tryPushTank(adjacentHandlers, tanks, info.fluidInputTanks[i], dirs, dirCount, indexOffset);
 		}
 		for (int i = 0; i < info.itemOutputSize; ++i) {
-			pushed |= tryPushSlot(itemHandlers, stacks, info.itemOutputSlots[i], dirs, dirCount, indexOffset);
+			pushed |= tryPushSlot(adjacentHandlers, stacks, info.itemOutputSlots[i], dirs, dirCount, indexOffset);
 		}
 		for (int i = 0; i < info.fluidOutputSize; ++i) {
-			pushed |= tryPushTank(fluidHandlers, tanks, info.fluidOutputTanks[i], dirs, dirCount, indexOffset);
+			pushed |= tryPushTank(adjacentHandlers, tanks, info.fluidOutputTanks[i], dirs, dirCount, indexOffset);
 		}
 		
 		return pushed;
 	}
 	
-	default boolean tryPushSlot(List<Lazy<IItemHandler>> itemHandlers, NonNullList<ItemStack> stacks, int slot, List<EnumFacing> dirs, int dirCount, int indexOffset) {
-		if (!stacks.get(slot).isEmpty()) {
-			for (int i = 0; i < dirCount; ++i) {
-				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
-				if (getItemSorption(dir, slot).equals(ItemSorption.AUTO_OUT)) {
-					IItemHandler handler = itemHandlers.get(dir.getIndex()).get();
-					if (handler != null && pushSlotToHandler(handler, stacks, dir, slot)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+	default void onBlockNeighborChanged(IBlockState state, World world, BlockPos pos, BlockPos fromPos) {
+		ITileGui.super.onBlockNeighborChanged(state, world, pos, fromPos);
+		updateAdjacentHandlers();
 	}
 	
-	default boolean tryPushTank(List<Lazy<IFluidHandler>> fluidHandlers, List<Tank> tanks, int tankIndex, List<EnumFacing> dirs, int dirCount, int indexOffset) {
-		if (!tanks.get(tankIndex).isEmpty()) {
-			for (int i = 0; i < dirCount; ++i) {
-				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
-				if (getTankSorption(dir, tankIndex).equals(TankSorption.AUTO_OUT)) {
-					IFluidHandler handler = fluidHandlers.get(dir.getIndex()).get();
-					if (handler != null && pushTankToHandler(handler, tanks, dir, tankIndex)) {
-						return true;
-					}
-				}
-			}
+	class HandlerPair {
+		
+		public final IItemHandler itemHandler;
+		public final IFluidHandler fluidHandler;
+		
+		public HandlerPair(IItemHandler itemHandler, IFluidHandler fluidHandler) {
+			this.itemHandler = itemHandler;
+			this.fluidHandler = fluidHandler;
 		}
-		return false;
+		
 	}
+	
+	default @Nullable HandlerPair[] getAdjacentHandlers() {
+		return null;
+	}
+	
+	default void updateAdjacentHandlers() {}
 	
 	default void refreshAll() {
 		refreshDirty();

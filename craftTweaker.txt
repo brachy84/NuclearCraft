@@ -584,7 +584,7 @@ mods.nuclearcraft.UpgradableEnergyProcessorBuilder(String processorID);
 Processor Builder Methods:
 --------------------------
 
-ProcessorBuilder::register();
+ProcessorBuilder::buildAndRegister();
 
 ProcessorBuilder::setGuiWH(int w, int h);
 

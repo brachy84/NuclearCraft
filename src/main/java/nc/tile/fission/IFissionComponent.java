@@ -127,7 +127,7 @@ public interface IFissionComponent extends IFissionPart {
 	@Override
 	default boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
-			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool);
+			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				nbt.setLong("componentPos", getTilePos().toLong());
 				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.copy_component_info")));

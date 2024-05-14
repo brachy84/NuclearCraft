@@ -4,10 +4,7 @@ Patchouli documentation
 
 Complete printing of registered multiblock component stats and rules to separate nuclearcraft.info file
 
-Move multitool NBT to player NBT to fix universal tool bug and allow for generalisation of multitool logic to any wrench item
-
 Move multiblock component ticking from TE to multiblock logic
-Tick vessel bunches as one entity
 
 Multiblock monitors: show cluster information, meltdown locations, side configurations, etc.
 
@@ -28,8 +25,6 @@ Add component heat dissipation while invalid
 
 Read Pu + Fatmice neutron poison discussion (+ "Technically, almost all of the neutron poisons were removed with the spent fuel")
 Reduce default neutron poison lifetime
-
-Multitool support for copying/pasting side configurations
 
 QMD feature merge: nitrogen collector -> air collector
 QMD feature merge: particles in recipe system

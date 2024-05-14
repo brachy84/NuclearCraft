@@ -1,31 +1,52 @@
 package nc.item;
 
+import buildcraft.api.tools.IToolWrench;
+import cofh.api.item.IToolHammer;
+import nc.config.NCConfig;
 import nc.tile.IMultitoolLogic;
 import nc.util.*;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.*;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional.*;
 import net.minecraftforge.fml.relauncher.*;
 
+import javax.annotation.*;
 import java.util.*;
 
-import static nc.config.NCConfig.quantum_angle_precision;
-
-public class ItemMultitool extends NCItem {
-	
-	/**
-	 * List of all multitool right-click logic. Earlier entries are prioritised!
-	 */
-	public static final List<MultitoolRightClickLogic> MULTITOOL_RIGHT_CLICK_LOGIC = new LinkedList<>();
+@InterfaceList({@Interface(iface = "buildcraft.api.tools.IToolWrench", modid = "buildcraftcore"), @Interface(iface = "cofh.api.item.IToolHammer", modid = "cofhapi")})
+public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 	
 	public ItemMultitool(String... tooltip) {
 		super(tooltip);
 		maxStackSize = 1;
+	}
+	
+	public static ItemStack newMultitool(Item item) {
+		ItemStack stack = new ItemStack(item);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setTag("ncMultitool", new NBTTagCompound());
+		stack.setTagCompound(nbt);
+		return stack;
+	}
+	
+	public static boolean isMultitool(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() instanceof ItemMultitool;
+	}
+	
+	public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+		if (isInCreativeTab(tab)) {
+			items.add(newMultitool(this));
+		}
 	}
 	
 	@Override
@@ -34,30 +55,20 @@ public class ItemMultitool extends NCItem {
 		return true;
 	}
 	
-	public static boolean isMultitool(ItemStack stack) {
-		return !stack.isEmpty() && stack.getItem() instanceof ItemMultitool;
-	}
-	
-	protected static void clearNBT(ItemStack stack) {
-		stack.setTagCompound(new NBTTagCompound());
-	}
-	
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (isMultitool(stack)) {
-			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof IMultitoolLogic) {
-				if (!world.isRemote) {
-					NBTTagCompound nbt = NBTHelper.getStackNBT(stack);
-					
+			if (!world.isRemote) {
+				TileEntity tile = world.getTileEntity(pos);
+				if (tile instanceof IMultitoolLogic multitoolTile) {
+					NBTTagCompound nbt = NBTHelper.getStackNBT(stack, "ncMultitool");
 					if (nbt != null) {
-						boolean multitoolUsed = ((IMultitoolLogic) tile).onUseMultitool(stack, player, world, facing, hitX, hitY, hitZ);
+						boolean multitoolUsed = multitoolTile.onUseMultitool(stack, player, world, facing, hitX, hitY, hitZ);
 						nbt.setBoolean("multitoolUsed", multitoolUsed);
-						
-						tile.markDirty();
-						
 						if (multitoolUsed) {
+							multitoolTile.markDirtyAndNotify();
+							playUseSound(world, player);
 							return EnumActionResult.SUCCESS;
 						}
 					}
@@ -72,15 +83,29 @@ public class ItemMultitool extends NCItem {
 		ItemStack stack = player.getHeldItem(hand);
 		if (isMultitool(stack)) {
 			if (!world.isRemote) {
-				for (MultitoolRightClickLogic logic : MULTITOOL_RIGHT_CLICK_LOGIC) {
-					ActionResult<ItemStack> result = logic.onRightClick(this, world, player, hand, stack);
-					if (result != null) {
-						return result;
+				ActionResult<ItemStack> result = null;
+				NBTTagCompound nbt = NBTHelper.getStackNBT(stack, "ncMultitool");
+				if (nbt != null) {
+					for (MultitoolRightClickLogic logic : MULTITOOL_RIGHT_CLICK_LOGIC) {
+						result = logic.onRightClick(this, world, player, hand, stack);
+						if (result != null) {
+							playUseSound(world, player);
+							break;
+						}
 					}
+					nbt.removeTag("multitoolUsed");
+				}
+				
+				if (result != null) {
+					return result;
 				}
 			}
 		}
 		return super.onItemRightClick(world, player, hand);
+	}
+	
+	public static void playUseSound(World world, EntityPlayer player) {
+		world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5F, player.isSneaking() ? 1F : SoundHelper.getPitch(-1D));
 	}
 	
 	@Override
@@ -89,60 +114,75 @@ public class ItemMultitool extends NCItem {
 		return false;
 	}
 	
-	public static abstract class MultitoolRightClickLogic {
-		
-		public abstract ActionResult<ItemStack> onRightClick(ItemMultitool itemMultitool, World world, EntityPlayer player, EnumHand hand, ItemStack heldItem);
+	// IToolWrench
+	
+	@Override
+	@Optional.Method(modid = "buildcraftcore")
+	public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+		return isMultitool(wrench);
 	}
 	
+	@Override
+	@Optional.Method(modid = "buildcraftcore")
+	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {}
+	
+	// IToolHammer
+	
+	@Override
+	@Optional.Method(modid = "cofhapi")
+	public boolean isUsable(ItemStack item, EntityLivingBase user, BlockPos pos) {
+		return isMultitool(item);
+	}
+	
+	@Override
+	@Optional.Method(modid = "cofhapi")
+	public boolean isUsable(ItemStack item, EntityLivingBase user, Entity entity) {
+		return isMultitool(item);
+	}
+	
+	@Override
+	@Optional.Method(modid = "cofhapi")
+	public void toolUsed(ItemStack item, EntityLivingBase user, BlockPos pos) {}
+	
+	@Override
+	@Optional.Method(modid = "cofhapi")
+	public void toolUsed(ItemStack item, EntityLivingBase user, Entity entity) {}
+	
+	// Right click logic
+	
+	public interface MultitoolRightClickLogic {
+		
+		@Nullable ActionResult<ItemStack> onRightClick(ItemMultitool itemMultitool, World world, EntityPlayer player, EnumHand hand, ItemStack heldItem);
+	}
+	
+	/**
+	 * List of all multitool right-click logic. Earlier entries are prioritised!
+	 */
+	public static final List<MultitoolRightClickLogic> MULTITOOL_RIGHT_CLICK_LOGIC = new LinkedList<>();
+	
 	public static void registerRightClickLogic() {
-		MULTITOOL_RIGHT_CLICK_LOGIC.add(new MultitoolRightClickLogic() {
-			
-			@Override
-			public ActionResult<ItemStack> onRightClick(ItemMultitool itemMultitool, World world, EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-				NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem);
-				if (nbt != null && !player.isSneaking() && nbt.getString("gateMode").equals("angle")) {
-					double angle = NCMath.roundTo(player.rotationYaw + 360D, 360D / quantum_angle_precision) % 360D;
-					nbt.setDouble("gateAngle", angle);
-					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.tool_set_angle", NCMath.decimalPlaces(angle, 5))));
+		MULTITOOL_RIGHT_CLICK_LOGIC.add((itemMultitool, world, player, hand, heldItem) -> {
+			NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem, "ncMultitool");
+			if (nbt != null && !player.isSneaking() && nbt.getString("qComputerGateMode").equals("angle")) {
+				double angle = NCMath.roundTo(player.rotationYaw + 360D, 360D / NCConfig.quantum_angle_precision) % 360D;
+				nbt.setDouble("gateAngle", angle);
+				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.tool_set_angle", NCMath.decimalPlaces(angle, 5))));
+				return itemMultitool.actionResult(true, heldItem);
+			}
+			return null;
+		});
+		
+		MULTITOOL_RIGHT_CLICK_LOGIC.add((itemMultitool, world, player, hand, heldItem) -> {
+			NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem, "ncMultitool");
+			if (nbt != null && player.isSneaking() && !nbt.isEmpty() && !nbt.getBoolean("multitoolUsed")) {
+				RayTraceResult rayTraceResult = itemMultitool.rayTrace(world, player, false);
+				if (rayTraceResult == null || rayTraceResult.typeOfHit != RayTraceResult.Type.BLOCK || !(world.getTileEntity(rayTraceResult.getBlockPos()) instanceof IMultitoolLogic)) {
+					NBTHelper.clearStackNBT(heldItem, "ncMultitool");
+					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.clear_info")));
 					return itemMultitool.actionResult(true, heldItem);
 				}
-				return null;
 			}
-		});
-		
-		MULTITOOL_RIGHT_CLICK_LOGIC.add(new MultitoolRightClickLogic() {
-			
-			@Override
-			public ActionResult<ItemStack> onRightClick(ItemMultitool itemMultitool, World world, EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-				NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem);
-				if (nbt != null && player.isSneaking() && !nbt.isEmpty() && !nbt.getBoolean("multitoolUsed")) {
-					RayTraceResult raytraceresult = itemMultitool.rayTrace(world, player, false);
-					if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-						return itemMultitool.actionResult(false, heldItem);
-					}
-					
-					BlockPos pos = raytraceresult.getBlockPos();
-					TileEntity tile = world.getTileEntity(pos);
-					if (!(tile instanceof IMultitoolLogic)) {
-						clearNBT(heldItem);
-						player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.clear_info")));
-						return itemMultitool.actionResult(true, heldItem);
-					}
-				}
-				return null;
-			}
-		});
-		
-		MULTITOOL_RIGHT_CLICK_LOGIC.add(new MultitoolRightClickLogic() {
-			
-			@Override
-			public ActionResult<ItemStack> onRightClick(ItemMultitool itemMultitool, World world, EntityPlayer player, EnumHand hand, ItemStack heldItem) {
-				NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem);
-				if (nbt != null) {
-					nbt.removeTag("multitoolUsed");
-				}
-				return null;
-			}
+			return null;
 		});
 	}
 }

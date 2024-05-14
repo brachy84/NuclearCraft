@@ -7,12 +7,26 @@ public class TileProcessorImpl {
 	
 	public static abstract class TileBasicEnergyProcessor<TILE extends TileBasicEnergyProcessor<TILE>> extends TileEnergyProcessor<TILE, ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket>> implements IBasicProcessor<TILE, EnergyProcessorUpdatePacket> {
 		
+		/**
+		 * Don't use this constructor!
+		 */
+		protected TileBasicEnergyProcessor() {
+			super();
+		}
+		
 		protected TileBasicEnergyProcessor(String name) {
 			super(name);
 		}
 	}
 	
 	public static abstract class TileBasicUpgradableEnergyProcessor<TILE extends TileBasicUpgradableEnergyProcessor<TILE>> extends TileUpgradableEnergyProcessor<TILE, ProcessorContainerInfoImpl.BasicUpgradableProcessorContainerInfo<TILE, EnergyProcessorUpdatePacket>> implements IUpgradableBasicProcessor<TILE, EnergyProcessorUpdatePacket> {
+		
+		/**
+		 * Don't use this constructor!
+		 */
+		protected TileBasicUpgradableEnergyProcessor() {
+			super();
+		}
 		
 		protected TileBasicUpgradableEnergyProcessor(String name) {
 			super(name);
@@ -21,8 +35,11 @@ public class TileProcessorImpl {
 	
 	public static class TileBasicEnergyProcessorDyn extends TileBasicEnergyProcessor<TileBasicEnergyProcessorDyn> {
 		
+		/**
+		 * Don't use this constructor!
+		 */
 		public TileBasicEnergyProcessorDyn() {
-			super("basic_energy_processor_dyn");
+			super();
 		}
 		
 		public TileBasicEnergyProcessorDyn(String name) {
@@ -32,8 +49,11 @@ public class TileProcessorImpl {
 	
 	public static class TileBasicUpgradableEnergyProcessorDyn extends TileBasicUpgradableEnergyProcessor<TileBasicUpgradableEnergyProcessorDyn> {
 		
+		/**
+		 * Don't use this constructor!
+		 */
 		public TileBasicUpgradableEnergyProcessorDyn() {
-			super("basic_upgradable_energy_processor_dyn");
+			super();
 		}
 		
 		public TileBasicUpgradableEnergyProcessorDyn(String name) {

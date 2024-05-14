@@ -49,7 +49,7 @@ public class TileFissionMonitor extends TileFissionPart {
 		
 		}
 		else {
-			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool);
+			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null && nbt.hasKey("componentPos", 99)) {
 				componentPos = BlockPos.fromLong(nbt.getLong("componentPos"));
 				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.connect_component_monitor")));
