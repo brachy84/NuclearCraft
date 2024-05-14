@@ -55,6 +55,15 @@ public class InventoryConnection {
 		return false;
 	}
 	
+	public boolean anyOfSorption(ItemSorption itemSorption) {
+		for (ItemSorption sorption : sorptionList) {
+			if (sorption.equals(itemSorption)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public int[] getSlotsForFace() {
 		IntList slotList = new IntArrayList();
 		for (int i = 0; i < sorptionList.size(); ++i) {

@@ -9,14 +9,16 @@ public enum TankSorption implements IStringSerializable, IGuiButton {
 	IN,
 	OUT,
 	BOTH,
-	NON;
+	NON,
+	AUTO_IN,
+	AUTO_OUT;
 	
 	public boolean canFill() {
-		return this == IN || this == BOTH;
+		return this == IN || this == BOTH || this == AUTO_IN;
 	}
 	
 	public boolean canDrain() {
-		return this == OUT || this == BOTH;
+		return this == OUT || this == BOTH || this == AUTO_OUT;
 	}
 	
 	public boolean canConnect() {
@@ -28,20 +30,22 @@ public enum TankSorption implements IStringSerializable, IGuiButton {
 			return switch (type) {
 				case INPUT -> switch (this) {
 					case IN -> NON;
-					case NON -> OUT;
+					case NON -> AUTO_OUT;
+					case AUTO_OUT -> OUT;
 					case OUT -> IN;
 					default -> IN;
 				};
 				case OUTPUT -> switch (this) {
 					case OUT -> NON;
-					case NON -> OUT;
+					case NON -> AUTO_OUT;
+					case AUTO_OUT -> OUT;
 					default -> OUT;
 				};
 				default -> switch (this) {
-					case IN -> NON;
+					case IN, AUTO_IN -> NON;
 					case NON -> BOTH;
 					case BOTH -> OUT;
-					case OUT -> IN;
+					case OUT, AUTO_OUT -> IN;
 				};
 			};
 		}
@@ -49,18 +53,20 @@ public enum TankSorption implements IStringSerializable, IGuiButton {
 			return switch (type) {
 				case INPUT -> switch (this) {
 					case IN -> OUT;
-					case OUT -> NON;
+					case OUT -> AUTO_OUT;
+					case AUTO_OUT -> NON;
 					case NON -> IN;
 					default -> IN;
 				};
 				case OUTPUT -> switch (this) {
-					case OUT -> NON;
+					case OUT -> AUTO_OUT;
+					case AUTO_OUT -> NON;
 					case NON -> OUT;
 					default -> OUT;
 				};
 				default -> switch (this) {
-					case IN -> OUT;
-					case OUT -> BOTH;
+					case IN, AUTO_IN -> OUT;
+					case OUT, AUTO_OUT -> BOTH;
 					case BOTH -> NON;
 					case NON -> IN;
 				};
@@ -75,6 +81,8 @@ public enum TankSorption implements IStringSerializable, IGuiButton {
 			case OUT -> "out";
 			case BOTH -> "both";
 			case NON -> "non";
+			case AUTO_IN -> "auto_in";
+			case AUTO_OUT -> "auto_out";
 		};
 	}
 	
@@ -84,22 +92,26 @@ public enum TankSorption implements IStringSerializable, IGuiButton {
 			case OUT -> TextFormatting.RED;
 			case BOTH -> TextFormatting.BOLD;
 			case NON -> TextFormatting.GRAY;
+			case AUTO_IN -> TextFormatting.GREEN;
+			case AUTO_OUT -> TextFormatting.LIGHT_PURPLE;
 		};
 	}
 	
 	@Override
 	public int getTextureX() {
 		return switch (this) {
-			case IN -> 162;
-			case OUT -> 180;
-			case NON -> 198;
-			default -> 198;
+			case IN, AUTO_IN -> 162;
+			case OUT, AUTO_OUT -> 180;
+			case NON, BOTH -> 198;
 		};
 	}
 	
 	@Override
 	public int getTextureY() {
-		return 0;
+		return switch (this) {
+			case IN, OUT, NON -> 0;
+			case AUTO_IN, AUTO_OUT, BOTH -> 18;
+		};
 	}
 	
 	@Override

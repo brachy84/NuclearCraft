@@ -35,7 +35,7 @@ public abstract class GuiFluidSorptions<TILE extends TileEntity & ITileGui<TILE,
 		this.parent = parent;
 		this.tile = tile;
 		EnumFacing facing = tile.getFacingHorizontal();
-		dirs = new EnumFacing[] {BlockHelper.bottom(facing), BlockHelper.top(facing), BlockHelper.left(facing), BlockHelper.right(facing), BlockHelper.front(facing), BlockHelper.back(facing)};
+		dirs = StreamHelper.map(BlockHelper.DIR_FROM_FACING, x -> x.apply(facing), EnumFacing[]::new);
 		this.slot = slot;
 		this.sorptionType = sorptionType;
 	}

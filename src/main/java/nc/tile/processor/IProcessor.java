@@ -7,10 +7,12 @@ import nc.recipe.*;
 import nc.recipe.ingredient.*;
 import nc.tile.ITileGui;
 import nc.tile.dummy.IInterfaceable;
+import nc.tile.energy.ITileEnergy;
 import nc.tile.fluid.ITileFluid;
+import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.fluid.Tank.TankInfo;
-import nc.tile.internal.inventory.ItemOutputSetting;
+import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.*;
@@ -19,7 +21,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.items.*;
 
 import javax.annotation.*;
 import java.util.*;
@@ -47,6 +51,14 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		else {
 			setBaseProcessTime(recipe.getBaseProcessTime(info.defaultProcessTime));
 			setBaseProcessPower(recipe.getBaseProcessPower(info.defaultProcessPower));
+			
+			if (info.consumesInputs && this instanceof ITileEnergy tileEnergy) {
+				EnergyConnection energyConnection = getBaseProcessPower() >= 0D ? EnergyConnection.IN : EnergyConnection.OUT;
+				EnergyConnection[] energyConnections = tileEnergy.getEnergyConnections();
+				for (int i = 0; i < 6; ++i) {
+					energyConnections[i] = energyConnection;
+				}
+			}
 		}
 	}
 	
@@ -213,12 +225,11 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	
 	default boolean canProduceProducts() {
 		INFO info = getContainerInfo();
-		int itemInputSize = info.itemInputSize;
 		int itemOutputSize = info.itemOutputSize;
 		
 		List<ItemStack> stacks = getInventoryStacks();
 		for (int i = 0; i < itemOutputSize; ++i) {
-			int slot = i + itemInputSize;
+			int slot = info.itemOutputSlots[i];
 			ItemOutputSetting outputSetting = getItemOutputSetting(slot);
 			
 			if (outputSetting == ItemOutputSetting.VOID) {
@@ -249,12 +260,11 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 			}
 		}
 		
-		int fluidInputSize = info.fluidInputSize;
 		int fluidOutputSize = info.fluidOutputSize;
 		
 		List<Tank> tanks = getTanks();
 		for (int i = 0; i < fluidOutputSize; ++i) {
-			int tankIndex = i + fluidInputSize;
+			int tankIndex = info.fluidOutputTanks[i];
 			TankOutputSetting outputSetting = getTankOutputSetting(tankIndex);
 			
 			if (outputSetting == TankOutputSetting.VOID) {
@@ -321,21 +331,18 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		
 		if (consumesInputs) {
 			for (int i = 0; i < itemInputSize; ++i) {
-				if (!consumedStacks.get(i).isEmpty()) {
-					consumedStacks.set(i, ItemStack.EMPTY);
-				}
+				consumedStacks.set(i, ItemStack.EMPTY);
 			}
 			for (Tank tank : consumedTanks) {
-				if (!tank.isEmpty()) {
-					tank.setFluidStored(null);
-				}
+				tank.setFluidStored(null);
 			}
 		}
 		
 		List<ItemStack> stacks = getInventoryStacks();
 		for (int i = 0; i < itemInputSize; ++i) {
+			int slot = info.itemInputSlots[i];
 			int itemIngredientStackSize = getItemIngredients().get(itemInputOrder.get(i)).getMaxStackSize(recipeInfo.getItemIngredientNumbers().get(i));
-			ItemStack stack = stacks.get(i);
+			ItemStack stack = stacks.get(slot);
 			
 			if (itemIngredientStackSize > 0) {
 				if (consumesInputs) {
@@ -345,7 +352,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 			}
 			
 			if (stack.getCount() <= 0) {
-				stacks.set(i, ItemStack.EMPTY);
+				stacks.set(slot, ItemStack.EMPTY);
 			}
 		}
 		
@@ -375,15 +382,13 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		int itemInputSize = info.itemInputSize;
 		int fluidInputSize = info.fluidInputSize;
 		
-		NonNullList<ItemStack> consumedStacks = getConsumedStacks();
-		List<Tank> consumedTanks = getConsumedTanks();
-		
 		if (consumesInputs) {
+			NonNullList<ItemStack> consumedStacks = getConsumedStacks();
 			for (int i = 0; i < itemInputSize; ++i) {
 				consumedStacks.set(i, ItemStack.EMPTY);
 			}
-			for (int i = 0; i < fluidInputSize; ++i) {
-				consumedTanks.get(i).setFluidStored(null);
+			for (Tank tank : getConsumedTanks()) {
+				tank.setFluidStored(null);
 			}
 		}
 		
@@ -399,8 +404,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		
 		List<ItemStack> stacks = getInventoryStacks();
 		for (int i = 0; i < itemOutputSize; ++i) {
-			int slot = i + itemInputSize;
-			
+			int slot = info.itemOutputSlots[i];
 			if (getItemOutputSetting(slot) == ItemOutputSetting.VOID) {
 				stacks.set(slot, ItemStack.EMPTY);
 				continue;
@@ -428,8 +432,7 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		
 		List<Tank> tanks = getTanks();
 		for (int i = 0; i < fluidOutputSize; ++i) {
-			int tankIndex = i + fluidInputSize;
-			
+			int tankIndex = info.fluidOutputTanks[i];
 			if (getTankOutputSetting(tankIndex) == TankOutputSetting.VOID) {
 				clearTank(tankIndex);
 				continue;
@@ -455,6 +458,8 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		if (consumesInputs) {
 			setHasConsumed(false);
 		}
+		
+		autoPush();
 	}
 	
 	// ITickable
@@ -477,6 +482,10 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 					setCurrentTime(0D);
 					setResetTime(0D);
 				}
+			}
+			
+			if (!wasProcessing) {
+				shouldUpdate |= autoPush();
 			}
 		}
 		
@@ -501,6 +510,70 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		if (newTime < getResetTime()) {
 			setResetTime(newTime);
 		}
+	}
+	
+	default boolean autoPush() {
+		List<Lazy<IItemHandler>> itemHandlers = getLazyAdjacentCapabilities(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+		List<Lazy<IFluidHandler>> fluidHandlers = getLazyAdjacentCapabilities(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+		
+		List<EnumFacing> dirs = new ArrayList<>();
+		for (EnumFacing dir : EnumFacing.VALUES) {
+			if (getInventoryConnection(dir).anyOfSorption(ItemSorption.AUTO_OUT) || getFluidConnection(dir).anyOfSorption(TankSorption.AUTO_OUT)) {
+				dirs.add(dir);
+			}
+		}
+		
+		return autoPushInternal(getInventoryStacks(), getTanks(), itemHandlers, fluidHandlers, dirs, dirs.size(), (int) getTileWorld().getTotalWorldTime());
+	}
+	
+	default boolean autoPushInternal(NonNullList<ItemStack> stacks, List<Tank> tanks, List<Lazy<IItemHandler>> itemHandlers, List<Lazy<IFluidHandler>> fluidHandlers, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		INFO info = getContainerInfo();
+		boolean pushed = false;
+		
+		for (int i = 0; i < info.itemInputSize; ++i) {
+			pushed |= tryPushSlot(itemHandlers, stacks, info.itemInputSlots[i], dirs, dirCount, indexOffset);
+		}
+		for (int i = 0; i < info.fluidInputSize; ++i) {
+			pushed |= tryPushTank(fluidHandlers, tanks, info.fluidInputTanks[i], dirs, dirCount, indexOffset);
+		}
+		for (int i = 0; i < info.itemOutputSize; ++i) {
+			pushed |= tryPushSlot(itemHandlers, stacks, info.itemOutputSlots[i], dirs, dirCount, indexOffset);
+		}
+		for (int i = 0; i < info.fluidOutputSize; ++i) {
+			pushed |= tryPushTank(fluidHandlers, tanks, info.fluidOutputTanks[i], dirs, dirCount, indexOffset);
+		}
+		
+		return pushed;
+	}
+	
+	default boolean tryPushSlot(List<Lazy<IItemHandler>> itemHandlers, NonNullList<ItemStack> stacks, int slot, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		if (!stacks.get(slot).isEmpty()) {
+			for (int i = 0; i < dirCount; ++i) {
+				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
+				if (getItemSorption(dir, slot).equals(ItemSorption.AUTO_OUT)) {
+					IItemHandler handler = itemHandlers.get(dir.getIndex()).get();
+					if (handler != null && pushSlotToHandler(handler, stacks, dir, slot)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	default boolean tryPushTank(List<Lazy<IFluidHandler>> fluidHandlers, List<Tank> tanks, int tankIndex, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		if (!tanks.get(tankIndex).isEmpty()) {
+			for (int i = 0; i < dirCount; ++i) {
+				EnumFacing dir = dirs.get((i + indexOffset) % dirCount);
+				if (getTankSorption(dir, tankIndex).equals(TankSorption.AUTO_OUT)) {
+					IFluidHandler handler = fluidHandlers.get(dir.getIndex()).get();
+					if (handler != null && pushTankToHandler(handler, tanks, dir, tankIndex)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	default void refreshAll() {

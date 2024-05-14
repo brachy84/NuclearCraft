@@ -3,9 +3,15 @@ package nc.tile.processor;
 import nc.init.NCItems;
 import nc.network.tile.processor.EnergyProcessorUpdatePacket;
 import nc.tile.ITileInstallable;
+import nc.tile.internal.fluid.Tank;
 import nc.tile.processor.info.UpgradableProcessorContainerInfo;
-import nc.util.StackHelper;
+import nc.util.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
+
+import java.util.List;
 
 import static nc.config.NCConfig.*;
 
@@ -13,6 +19,14 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 	
 	protected TileUpgradableEnergyProcessor(String name) {
 		super(name);
+	}
+	
+	@Override
+	public boolean autoPushInternal(NonNullList<ItemStack> stacks, List<Tank> tanks, List<Lazy<IItemHandler>> itemHandlers, List<Lazy<IFluidHandler>> fluidHandlers, List<EnumFacing> dirs, int dirCount, int indexOffset) {
+		boolean pushed = super.autoPushInternal(stacks, tanks, itemHandlers, fluidHandlers, dirs, dirCount, indexOffset);
+		pushed |= tryPushSlot(itemHandlers, stacks, info.speedUpgradeSlot, dirs, dirCount, indexOffset);
+		pushed |= tryPushSlot(itemHandlers, stacks, info.energyUpgradeSlot, dirs, dirCount, indexOffset);
+		return pushed;
 	}
 	
 	@Override
@@ -76,14 +90,13 @@ public abstract class TileUpgradableEnergyProcessor<TILE extends TileUpgradableE
 	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (stack.getItem() == NCItems.upgrade) {
-			if (slot == info.speedUpgradeSlot) {
-				return StackHelper.getMetadata(stack) == 0;
-			}
-			else if (slot == info.energyUpgradeSlot) {
-				return StackHelper.getMetadata(stack) == 1;
-			}
+		if (slot == info.speedUpgradeSlot) {
+			return stack.getItem() == NCItems.upgrade && StackHelper.getMetadata(stack) == 0;
 		}
+		else if (slot == info.energyUpgradeSlot) {
+			return stack.getItem() == NCItems.upgrade && StackHelper.getMetadata(stack) == 1;
+		}
+		
 		return super.isItemValidForSlot(slot, stack);
 	}
 }

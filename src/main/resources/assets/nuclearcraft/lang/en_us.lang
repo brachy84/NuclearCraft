@@ -3282,6 +3282,8 @@ gui.nc.container.front_config=FRONT:
 gui.nc.container.back_config=BACK:
 gui.nc.container.in_config=INPUT
 gui.nc.container.out_config=OUTPUT
+gui.nc.container.auto_in_config=AUTO-INPUT
+gui.nc.container.auto_out_config=AUTO-OUTPUT
 gui.nc.container.both_config=BOTH
 gui.nc.container.non_config=DISABLED
 

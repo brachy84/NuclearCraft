@@ -13,7 +13,6 @@ import nc.tile.processor.info.ProcessorContainerInfoImpl;
 import nc.tile.radiation.TileRadiationScrubber;
 import nc.util.*;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.*;
@@ -212,7 +211,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return MathHelper.ceil(getScrubberProcessTime() / 120D);
+			return NCMath.toInt(getScrubberProcessTime() / 120D);
 		}
 		
 		protected double getScrubberProcessTime() {
@@ -294,7 +293,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getDecayGeneratorLifetime() / 20D);
+			return NCMath.toInt(getDecayGeneratorLifetime() / 20D);
 		}
 		
 		protected double getDecayGeneratorLifetime() {
@@ -371,12 +370,12 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getIrradiatorFluxRequired() / 8000D);
+			return NCMath.toInt(getIrradiatorFluxRequired() / 8000D);
 		}
 		
-		protected int getIrradiatorFluxRequired() {
+		protected long getIrradiatorFluxRequired() {
 			if (recipe == null) {
-				return 1;
+				return 1L;
 			}
 			return recipe.getIrradiatorFluxRequired();
 		}
@@ -395,16 +394,16 @@ public class JEIRecipeWrapperImpl {
 			return recipe.getIrradiatorProcessEfficiency();
 		}
 		
-		protected int getIrradiatorMinFluxPerTick() {
+		protected long getIrradiatorMinFluxPerTick() {
 			if (recipe == null) {
-				return 0;
+				return 0L;
 			}
 			return recipe.getIrradiatorMinFluxPerTick();
 		}
 		
-		protected int getIrradiatorMaxFluxPerTick() {
+		protected long getIrradiatorMaxFluxPerTick() {
 			if (recipe == null) {
-				return -1;
+				return -1L;
 			}
 			return recipe.getIrradiatorMaxFluxPerTick();
 		}
@@ -430,12 +429,12 @@ public class JEIRecipeWrapperImpl {
 				if (efficiency > 0D) {
 					tooltip.add(TextFormatting.LIGHT_PURPLE + EFFICIENCY + " " + TextFormatting.WHITE + NCMath.pcDecimalPlaces(efficiency, 1));
 				}
-				int minFluxPerTick = getIrradiatorMinFluxPerTick(), maxFluxPerTick = getIrradiatorMaxFluxPerTick();
-				if (minFluxPerTick > 0 || maxFluxPerTick >= 0) {
+				long minFluxPerTick = getIrradiatorMinFluxPerTick(), maxFluxPerTick = getIrradiatorMaxFluxPerTick();
+				if (minFluxPerTick > 0 || (maxFluxPerTick >= 0 && maxFluxPerTick < Long.MAX_VALUE)) {
 					if (minFluxPerTick <= 0) {
 						tooltip.add(TextFormatting.RED + VALID_FLUX_MAXIMUM + " " + TextFormatting.WHITE + minFluxPerTick + " N/t");
 					}
-					else if (maxFluxPerTick < 0) {
+					else if (maxFluxPerTick < 0 || maxFluxPerTick == Long.MAX_VALUE) {
 						tooltip.add(TextFormatting.RED + VALID_FLUX_MINIMUM + " " + TextFormatting.WHITE + maxFluxPerTick + " N/t");
 					}
 					else {
@@ -468,7 +467,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getFissionFuelTime() / 16D);
+			return NCMath.toInt(getFissionFuelTime() / 16D);
 		}
 		
 		protected int getFissionFuelTime() {
@@ -561,7 +560,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getFissionFuelTime() / 16D);
+			return NCMath.toInt(getFissionFuelTime() / 16D);
 		}
 		
 		protected int getFissionFuelTime() {
@@ -686,7 +685,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (9D * getSaltFissionFuelTime());
+			return NCMath.toInt(9D * getSaltFissionFuelTime());
 		}
 		
 		protected double getSaltFissionFuelTime() {
@@ -823,7 +822,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (16D / getEmergencyCoolingHeatPerInputMB());
+			return NCMath.toInt(16D / getEmergencyCoolingHeatPerInputMB());
 		}
 		
 		public double getEmergencyCoolingHeatPerInputMB() {
@@ -855,7 +854,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return recipe != null ? (int) (recipe.getHeatExchangerProcessTime() / 400D) : 40;
+			return recipe != null ? NCMath.toInt(recipe.getHeatExchangerProcessTime() / 400D) : 40;
 		}
 		
 		protected int getHeatExchangerProcessTime() {
@@ -899,7 +898,7 @@ public class JEIRecipeWrapperImpl {
 		
 		@Override
 		protected int getProgressArrowTime() {
-			return (int) (getCondenserProcessTime() / 2D);
+			return NCMath.toInt(getCondenserProcessTime() / 2D);
 		}
 		
 		protected double getCondenserProcessTime() {

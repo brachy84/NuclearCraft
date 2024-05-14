@@ -3,6 +3,7 @@ package nc.tile;
 import nc.block.property.BlockProperties;
 import nc.block.tile.IActivatable;
 import nc.capability.radiation.source.IRadiationSource;
+import nc.util.*;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,9 +12,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.*;
-import java.util.List;
+import java.util.*;
 
 public interface ITile {
 	
@@ -147,6 +149,28 @@ public interface ITile {
 	 */
 	default @Nonnull EnumFacing nonNullSide(@Nullable EnumFacing side) {
 		return side == null ? EnumFacing.DOWN : side;
+	}
+	
+	default <T> @Nullable T getCapability(Capability<T> capability, BlockPos pos, EnumFacing side) {
+		TileEntity tile = getTileWorld().getTileEntity(pos);
+		if (tile == null) {
+			return null;
+		}
+		
+		if (tile.hasCapability(capability, side)) {
+			return tile.getCapability(capability, side);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	default <T> @Nullable T getAdjacentCapability(Capability<T> capability, @Nonnull EnumFacing side) {
+		return getCapability(capability, getTilePos().offset(side), side.getOpposite());
+	}
+	
+	default <T> List<Lazy<T>> getLazyAdjacentCapabilities(Capability<T> capability) {
+		return StreamHelper.map(Arrays.asList(EnumFacing.VALUES), x -> new Lazy<>(() -> getAdjacentCapability(capability, x)));
 	}
 	
 	// HWYLA

@@ -154,8 +154,8 @@ public class BasicRecipe implements IRecipe {
 	
 	// Fission Irradiator
 	
-	public int getIrradiatorFluxRequired() {
-		return (int) extras.get(0);
+	public long getIrradiatorFluxRequired() {
+		return (long) extras.get(0);
 	}
 	
 	public double getIrradiatorHeatPerFlux() {
@@ -166,12 +166,12 @@ public class BasicRecipe implements IRecipe {
 		return (double) extras.get(2);
 	}
 	
-	public int getIrradiatorMinFluxPerTick() {
-		return (int) extras.get(3);
+	public long getIrradiatorMinFluxPerTick() {
+		return (long) extras.get(3);
 	}
 	
-	public int getIrradiatorMaxFluxPerTick() {
-		return (int) extras.get(4);
+	public long getIrradiatorMaxFluxPerTick() {
+		return (long) extras.get(4);
 	}
 	
 	public double getIrradiatorBaseProcessRadiation() {

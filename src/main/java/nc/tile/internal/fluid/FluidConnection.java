@@ -54,6 +54,15 @@ public class FluidConnection {
 		return false;
 	}
 	
+	public boolean anyOfSorption(TankSorption tankSorption) {
+		for (TankSorption sorption : sorptionList) {
+			if (sorption.equals(tankSorption)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void toggleTankSorption(int tankNumber, TankSorption.Type type, boolean reverse) {
 		setTankSorption(tankNumber, getTankSorption(tankNumber).next(type, reverse));
 	}

@@ -4,6 +4,7 @@ import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.*;
 import gregtech.api.recipes.ingredients.*;
 import gregtech.common.items.MetaItems;
+import nc.config.NCConfig;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
 import nc.util.*;
@@ -13,8 +14,6 @@ import net.minecraftforge.fml.common.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-
-import static nc.config.NCConfig.gtce_recipe_logging;
 
 public class GTCERecipeHelper {
 	
@@ -47,9 +46,7 @@ public class GTCERecipeHelper {
 				break;
 			case "melter":
 				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
-				if (recipeMap != null) {
-					builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
-				}
+				builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
 				break;
 			case "supercooler":
 				recipeMap = RecipeMaps.VACUUM_RECIPES;
@@ -95,9 +92,7 @@ public class GTCERecipeHelper {
 				break;
 			case "extractor":
 				recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
-				if (recipeMap != null) {
-					builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
-				}
+				builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
 				break;
 			case "centrifuge":
 				recipeMap = RecipeMaps.CENTRIFUGE_RECIPES;
@@ -113,7 +108,7 @@ public class GTCERecipeHelper {
 				break;
 		}
 		
-		if (recipeMap == null || builder == null) {
+		if (builder == null) {
 			return;
 		}
 		
@@ -248,7 +243,7 @@ public class GTCERecipeHelper {
 			}
 		}
 		
-		if (built && gtce_recipe_logging) {
+		if (built && NCConfig.gtce_recipe_logging) {
 			NCUtil.getLogger().info("Injected GTCE " + recipeMap.unlocalizedName + " recipe: " + RecipeHelper.getRecipeString(recipe));
 		}
 	}

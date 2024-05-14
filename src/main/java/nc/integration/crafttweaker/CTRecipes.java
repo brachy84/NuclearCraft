@@ -3,7 +3,6 @@ package nc.integration.crafttweaker;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import nc.recipe.*;
-import nc.util.NCMath;
 import stanhebben.zenscript.annotations.*;
 
 public class CTRecipes {
@@ -698,8 +697,8 @@ public class CTRecipes {
 		}
 		
 		@ZenMethod
-		public static void addRecipe(IIngredient input, IIngredient output, int fluxRequired, double heatPerFlux, double efficiency, @Optional(valueLong = 0) long minFluxPerTick, @Optional(valueLong = -1) long maxFluxPerTick, @Optional double radiation) {
-			getRecipeHandler().ctAddRecipe(input, output, fluxRequired, heatPerFlux, efficiency, NCMath.toInt(minFluxPerTick), NCMath.toInt(maxFluxPerTick), radiation);
+		public static void addRecipe(IIngredient input, IIngredient output, long fluxRequired, double heatPerFlux, double efficiency, @Optional(valueLong = 0) long minFluxPerTick, @Optional(valueLong = -1) long maxFluxPerTick, @Optional double radiation) {
+			getRecipeHandler().ctAddRecipe(input, output, fluxRequired, heatPerFlux, efficiency, minFluxPerTick, maxFluxPerTick, radiation);
 		}
 		
 		@ZenMethod

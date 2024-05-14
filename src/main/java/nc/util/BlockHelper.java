@@ -15,6 +15,7 @@ import net.minecraftforge.items.*;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.function.UnaryOperator;
 
 import static nc.config.NCConfig.processor_particles;
 
@@ -157,4 +158,8 @@ public class BlockHelper {
 	public static EnumFacing back(@Nullable EnumFacing facing) {
 		return facing == null ? EnumFacing.EAST : EnumFacing.byIndex(BACK[facing.getIndex()]);
 	}
+	
+	public interface EnumFacingUnaryOperator extends UnaryOperator<EnumFacing> {}
+	
+	public static EnumFacingUnaryOperator[] DIR_FROM_FACING = {BlockHelper::bottom, BlockHelper::top, BlockHelper::left, BlockHelper::right, BlockHelper::front, BlockHelper::back};
 }

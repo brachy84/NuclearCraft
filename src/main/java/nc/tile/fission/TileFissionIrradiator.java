@@ -53,7 +53,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	protected @Nonnull GasTileWrapper gasWrapper = new GasTileWrapper(this);
 	
 	public double baseProcessTime = 1D, baseProcessHeatPerFlux = 0D, baseProcessEfficiency = 0D, baseProcessRadiation = 0D;
-	public int minFluxPerTick = 0, maxFluxPerTick = -1;
+	public long minFluxPerTick = 0, maxFluxPerTick = -1;
 	
 	public double time, resetTime;
 	public boolean isProcessing, canProcessInputs, hasConsumed;
@@ -307,8 +307,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		baseProcessTime = recipe == null ? 1D : recipe.getIrradiatorFluxRequired();
 		baseProcessHeatPerFlux = recipe == null ? 0D : recipe.getIrradiatorHeatPerFlux();
 		baseProcessEfficiency = recipe == null ? 0D : recipe.getIrradiatorProcessEfficiency();
-		minFluxPerTick = recipe == null ? 0 : recipe.getIrradiatorMinFluxPerTick();
-		maxFluxPerTick = recipe == null ? -1 : recipe.getIrradiatorMaxFluxPerTick();
+		minFluxPerTick = recipe == null ? 0L : recipe.getIrradiatorMinFluxPerTick();
+		maxFluxPerTick = recipe == null ? -1L : recipe.getIrradiatorMaxFluxPerTick();
 		baseProcessRadiation = recipe == null ? 0D : recipe.getIrradiatorBaseProcessRadiation();
 	}
 	
@@ -392,7 +392,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public double getSpeedMultiplier() {
-		if ((minFluxPerTick >= 0 && flux < minFluxPerTick) || (maxFluxPerTick >= 0 && flux > maxFluxPerTick)) {
+		if ((minFluxPerTick >= 0L && flux < minFluxPerTick) || (maxFluxPerTick >= 0L && flux > maxFluxPerTick)) {
 			return 0;
 		}
 		return flux;
@@ -640,6 +640,9 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		nbt.setDouble("baseProcessHeatPerFlux", baseProcessHeatPerFlux);
 		nbt.setDouble("baseProcessEfficiency", baseProcessEfficiency);
 		
+		nbt.setLong("minFluxPerTick", minFluxPerTick);
+		nbt.setLong("maxFluxPerTick", maxFluxPerTick);
+		
 		nbt.setLong("flux", flux);
 		nbt.setLong("clusterHeat", heat);
 		return nbt;
@@ -656,6 +659,9 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		baseProcessTime = nbt.getDouble("baseProcessTime");
 		baseProcessHeatPerFlux = nbt.getDouble("baseProcessHeatPerFlux");
 		baseProcessEfficiency = nbt.getDouble("baseProcessEfficiency");
+		
+		minFluxPerTick = nbt.getLong("minFluxPerTick");
+		maxFluxPerTick = nbt.getLong("maxFluxPerTick");
 		
 		flux = nbt.getLong("flux");
 		heat = nbt.getLong("clusterHeat");

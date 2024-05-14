@@ -7,6 +7,7 @@ import nc.tile.internal.fluid.*;
 import nc.tile.multiblock.port.ITilePort;
 import nc.tile.passive.ITilePassive;
 import nc.tile.processor.IProcessor;
+import nc.util.BlockHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -261,16 +262,9 @@ public interface ITileFluid extends ITile {
 		boolean drained = false;
 		
 		List<Tank> tanks = getTanks();
-		for (int i = 0; i < tanks.size(); ++i) {
-			Tank tank;
-			if (!getTankSorption(side, i).canDrain() || (tank = tanks.get(i)).getFluid() == null) {
-				continue;
-			}
-			
-			FluidStack drain = tank.drain(adjStorage.fill(tank.drain(tank.getCapacity(), false), true), true);
-			if (drain != null && drain.amount != 0) {
-				drained = true;
-			}
+		int tankCount = tanks.size();
+		for (int i = 0; i < tankCount; ++i) {
+			drained |= pushTankToHandler(adjStorage, tanks, side, i);
 		}
 		
 		if (drained) {
@@ -281,6 +275,16 @@ public interface ITileFluid extends ITile {
 				((ITilePort<?, ?, ?, ?, ?>) this).setRefreshTargetsFlag(true);
 			}
 		}
+	}
+	
+	default boolean pushTankToHandler(IFluidHandler handler, List<Tank> tanks, @Nonnull EnumFacing side, int tankNumber) {
+		Tank tank;
+		if (!getTankSorption(side, tankNumber).canDrain() || (tank = tanks.get(tankNumber)).getFluid() == null) {
+			return false;
+		}
+		
+		FluidStack drain = tank.drain(handler.fill(tank.drain(tank.getCapacity(), false), true), true);
+		return drain != null && drain.amount != 0;
 	}
 	
 	// NBT
@@ -301,18 +305,26 @@ public interface ITileFluid extends ITile {
 	}
 	
 	default NBTTagCompound writeFluidConnections(NBTTagCompound nbt) {
-		for (EnumFacing side : EnumFacing.VALUES) {
-			getFluidConnection(side).writeToNBT(nbt, side);
+		return writeFluidConnectionsDirectional(nbt, null);
+	}
+	
+	default NBTTagCompound writeFluidConnectionsDirectional(NBTTagCompound nbt, @Nullable EnumFacing facing) {
+		for (int i = 0; i < 6; ++i) {
+			getFluidConnection(BlockHelper.DIR_FROM_FACING[i].apply(facing)).writeToNBT(nbt, EnumFacing.byIndex(i));
 		}
 		return nbt;
 	}
 	
 	default void readFluidConnections(NBTTagCompound nbt) {
+		readFluidConnectionsDirectional(nbt, null);
+	}
+	
+	default void readFluidConnectionsDirectional(NBTTagCompound nbt, @Nullable EnumFacing facing) {
 		if (!hasConfigurableFluidConnections()) {
 			return;
 		}
-		for (EnumFacing side : EnumFacing.VALUES) {
-			getFluidConnection(side).readFromNBT(nbt, side);
+		for (int i = 0; i < 6; ++i) {
+			getFluidConnection(BlockHelper.DIR_FROM_FACING[i].apply(facing)).readFromNBT(nbt, EnumFacing.byIndex(i));
 		}
 	}
 	

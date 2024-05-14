@@ -1,3 +1,7 @@
+v2o.7.3
+
++ Added auto-output mode for processor slots
+
 v2o.7.2
 
 + Added CT methods to define and register custom processors

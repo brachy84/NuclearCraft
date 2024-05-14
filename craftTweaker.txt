@@ -328,7 +328,7 @@ mods.nuclearcraft.FissionReflector.removeAll();
 Fission Irradiator:
 -------------------
 
-mods.nuclearcraft.FissionIrradiator.addRecipe(IIngredient itemInput, IIngredient itemOutput, int fluxRequired, double heatPerFlux, double efficiency, {int minFluxPerTick, int maxFluxPerTick, double radiation});
+mods.nuclearcraft.FissionIrradiator.addRecipe(IIngredient itemInput, IIngredient itemOutput, int fluxRequired, double heatPerFlux, double efficiency, {long minFluxPerTick, long maxFluxPerTick, double radiation});
 
 mods.nuclearcraft.FissionIrradiator.removeRecipeWithInput(IIngredient itemInput);
 mods.nuclearcraft.FissionIrradiator.removeRecipeWithOutput(IIngredient itemOutput);

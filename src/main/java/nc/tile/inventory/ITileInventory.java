@@ -207,12 +207,9 @@ public interface ITileInventory extends ITile, ISidedInventory {
 			return;
 		}
 		
-		/*if (ModCheck.mekanismLoaded() && tile.hasCapability(CapabilityHelper.LOGISTICAL_TRANSPORTER_CAPABILITY, side.getOpposite())) {
-			ILogisticalTransporter lt = tile.getCapability(CapabilityHelper.LOGISTICAL_TRANSPORTER_CAPABILITY, side.getOpposite());
-		}*/
-		
-		if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())) {
-			IItemHandler adjInv = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite());
+		EnumFacing oppositeSide = side.getOpposite();
+		if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, oppositeSide)) {
+			IItemHandler adjInv = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, oppositeSide);
 			if (adjInv == null || adjInv.getSlots() < 1) {
 				return;
 			}
@@ -220,27 +217,9 @@ public interface ITileInventory extends ITile, ISidedInventory {
 			boolean pushed = false;
 			
 			@Nonnull NonNullList<ItemStack> stacks = getInventoryStacks();
-			int stacksCount = stacks.size();
-			for (int i = 0; i < stacksCount; ++i) {
-				ItemStack stack;
-				if (!getItemSorption(side, i).canExtract() || (stack = stacks.get(i)).isEmpty()) {
-					continue;
-				}
-				
-				ItemStack initialStack = stack.copy();
-				ItemStack remaining = NCInventoryHelper.addStackToInventory(adjInv, initialStack);
-				
-				if (remaining.getCount() >= initialStack.getCount()) {
-					continue;
-				}
-				
-				pushed = true;
-				
-				stack.shrink(initialStack.getCount() - remaining.getCount());
-				
-				if (stack.getCount() <= 0) {
-					stacks.set(i, ItemStack.EMPTY);
-				}
+			int stackCount = stacks.size();
+			for (int i = 0; i < stackCount; ++i) {
+				pushed |= pushSlotToHandler(adjInv, stacks, side, i);
 			}
 			
 			if (pushed) {
@@ -252,6 +231,28 @@ public interface ITileInventory extends ITile, ISidedInventory {
 				}
 			}
 		}
+	}
+	
+	default boolean pushSlotToHandler(IItemHandler handler, NonNullList<ItemStack> stacks, @Nonnull EnumFacing side, int slot) {
+		ItemStack stack;
+		if (!getItemSorption(side, slot).canExtract() || (stack = stacks.get(slot)).isEmpty()) {
+			return false;
+		}
+		
+		ItemStack initialStack = stack.copy();
+		ItemStack remaining = NCInventoryHelper.addStackToInventory(handler, initialStack);
+		
+		if (remaining.getCount() >= initialStack.getCount()) {
+			return false;
+		}
+		
+		stack.shrink(initialStack.getCount() - remaining.getCount());
+		
+		if (stack.getCount() <= 0) {
+			stacks.set(slot, ItemStack.EMPTY);
+		}
+		
+		return true;
 	}
 	
 	// NBT
@@ -266,18 +267,26 @@ public interface ITileInventory extends ITile, ISidedInventory {
 	}
 	
 	default NBTTagCompound writeInventoryConnections(NBTTagCompound nbt) {
-		for (EnumFacing side : EnumFacing.VALUES) {
-			getInventoryConnection(side).writeToNBT(nbt, side);
+		return writeInventoryConnectionsDirectional(nbt, null);
+	}
+	
+	default NBTTagCompound writeInventoryConnectionsDirectional(NBTTagCompound nbt, @Nullable EnumFacing facing) {
+		for (int i = 0; i < 6; ++i) {
+			getInventoryConnection(BlockHelper.DIR_FROM_FACING[i].apply(facing)).writeToNBT(nbt, EnumFacing.byIndex(i));
 		}
 		return nbt;
 	}
 	
 	default void readInventoryConnections(NBTTagCompound nbt) {
+		readInventoryConnectionsDirectional(nbt, null);
+	}
+	
+	default void readInventoryConnectionsDirectional(NBTTagCompound nbt, @Nullable EnumFacing facing) {
 		if (!hasConfigurableInventoryConnections()) {
 			return;
 		}
-		for (EnumFacing side : EnumFacing.VALUES) {
-			getInventoryConnection(side).readFromNBT(nbt, side);
+		for (int i = 0; i < 6; ++i) {
+			getInventoryConnection(BlockHelper.DIR_FROM_FACING[i].apply(facing)).readFromNBT(nbt, EnumFacing.byIndex(i));
 		}
 	}
 	
