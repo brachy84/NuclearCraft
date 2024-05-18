@@ -2,8 +2,9 @@ package nc.tile.fission;
 
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.FissionReactor;
+import nc.render.BlockHighlightTracker;
 import nc.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -40,23 +41,48 @@ public class TileFissionMonitor extends TileFissionPart {
 		return componentPos;
 	}
 	
+	public IFissionComponent getComponent() {
+		FissionReactor reactor = getMultiblock();
+		return reactor == null ? null : reactor.getPartMap(IFissionComponent.class).get(componentPos.toLong());
+	}
+	
 	// IMultitoolLogic
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		// TODO
-		if (player.isSneaking()) {
-		
-		}
-		else {
-			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
-			if (nbt != null && nbt.hasKey("componentPos", 99)) {
-				componentPos = BlockPos.fromLong(nbt.getLong("componentPos"));
-				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.connect_component_monitor")));
-				return true;
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
+		if (nbt != null) {
+			if (!player.isSneaking()) {
+				String displayName = getTileBlockDisplayName();
+				if (nbt.hasKey("fissionComponentInfo", 10)) {
+					NBTTagCompound info = nbt.getCompoundTag("fissionComponentInfo");
+					if (info.hasKey("componentPos", 99)) {
+						componentPos = BlockPos.fromLong(info.getLong("componentPos"));
+						BlockHighlightTracker.sendPacket(player, componentPos, 5000);
+						player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.load_component_info", info.getString("displayName"), displayName)));
+						nbt.removeTag("fissionComponentInfo");
+						return true;
+					}
+					else {
+						player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.invalid_component_info", info.getString("displayName"), displayName)));
+					}
+				}
+				else {
+					if (!DEFAULT_NON.equals(componentPos)) {
+						IFissionComponent component = getComponent();
+						if (component != null) {
+							BlockHighlightTracker.sendPacket(player, componentPos, 5000);
+							BlockPos pos = component.getTilePos();
+							player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.connected_component_info", displayName, component.getTileBlockDisplayName(), pos.getX(), pos.getY(), pos.getZ())));
+							return true;
+						}
+					}
+					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.no_connected_component_info", displayName)));
+					return true;
+				}
 			}
 		}
-		return super.onUseMultitool(multitool, player, worldIn, facing, hitX, hitY, hitZ);
+		return super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
 	}
 	
 	// NBT

@@ -1,13 +1,13 @@
 package nc.tile.fission.manager;
 
-import nc.tile.fission.TileFissionShield;
+import nc.tile.fission.TileFissionSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileFissionShieldManager extends TileFissionManager<TileFissionShieldManager, TileFissionShield> {
+public class TileFissionSourceManager extends TileFissionManager<TileFissionSourceManager, TileFissionSource> {
 	
-	public TileFissionShieldManager() {
-		super(TileFissionShieldManager.class);
+	public TileFissionSourceManager() {
+		super(TileFissionSourceManager.class);
 	}
 	
 	@Override
@@ -17,12 +17,12 @@ public class TileFissionShieldManager extends TileFissionManager<TileFissionShie
 	
 	@Override
 	public String getManagerType() {
-		return "fissionShieldManager";
+		return "fissionSourceManager";
 	}
 	
 	@Override
-	public Class<TileFissionShield> getListenerClass() {
-		return TileFissionShield.class;
+	public Class<TileFissionSource> getListenerClass() {
+		return TileFissionSource.class;
 	}
 	
 	@Override

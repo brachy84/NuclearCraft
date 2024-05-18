@@ -6,4 +6,8 @@ import nc.tile.multiblock.manager.ITileManagerListener;
 
 public interface IFissionManagerListener<MANAGER extends IFissionManager<MANAGER, LISTENER>, LISTENER extends IFissionManagerListener<MANAGER, LISTENER>> extends ITileManagerListener<FissionReactor, FissionReactorLogic, IFissionPart, MANAGER, LISTENER> {
 	
+	@Override
+	default void refreshMultiblock() {
+		getMultiblock().refreshFlag = true;
+	}
 }

@@ -7,7 +7,7 @@ import nc.tile.IMultitoolLogic;
 import nc.util.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,7 +64,7 @@ public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 				if (tile instanceof IMultitoolLogic multitoolTile) {
 					NBTTagCompound nbt = NBTHelper.getStackNBT(stack, "ncMultitool");
 					if (nbt != null) {
-						boolean multitoolUsed = multitoolTile.onUseMultitool(stack, player, world, facing, hitX, hitY, hitZ);
+						boolean multitoolUsed = multitoolTile.onUseMultitool(stack, (EntityPlayerMP) player, world, facing, hitX, hitY, hitZ);
 						nbt.setBoolean("multitoolUsed", multitoolUsed);
 						if (multitoolUsed) {
 							multitoolTile.markDirtyAndNotify();
@@ -165,7 +165,7 @@ public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem, "ncMultitool");
 			if (nbt != null && !player.isSneaking() && nbt.getString("qComputerGateMode").equals("angle")) {
 				double angle = NCMath.roundTo(player.rotationYaw + 360D, 360D / NCConfig.quantum_angle_precision) % 360D;
-				nbt.setDouble("gateAngle", angle);
+				nbt.setDouble("qGateAngle", angle);
 				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.tool_set_angle", NCMath.decimalPlaces(angle, 5))));
 				return itemMultitool.actionResult(true, heldItem);
 			}

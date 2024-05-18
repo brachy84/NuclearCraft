@@ -43,13 +43,23 @@ public abstract class TileFissionManager<MANAGER extends TileFissionManager<MANA
 		return listenerPosSet;
 	}
 	
+	@Override
+	public boolean getRefreshListenersFlag() {
+		return refreshListenersFlag;
+	}
+	
+	@Override
+	public void setRefreshListenersFlag(boolean flag) {
+		refreshListenersFlag = flag;
+	}
+	
 	// Ticking
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
 			if (refreshListenersFlag) {
-				refreshListeners(false);
+				refreshListeners();
 			}
 		}
 	}

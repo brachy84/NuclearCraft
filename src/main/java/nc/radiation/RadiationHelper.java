@@ -3,21 +3,23 @@ package nc.radiation;
 import baubles.api.BaubleType;
 import baubles.api.cap.*;
 import ic2.api.reactor.IReactor;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import nc.ModCheck;
 import nc.capability.radiation.IRadiation;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.capability.radiation.resistance.IRadiationResistance;
 import nc.capability.radiation.source.IRadiationSource;
 import nc.init.NCItems;
+import nc.radiation.RadPotionEffects.RadEffect;
 import nc.tile.dummy.TileDummy;
 import nc.tile.radiation.ITileRadiationEnvironment;
 import nc.util.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextFormatting;
@@ -389,17 +391,26 @@ public class RadiationHelper {
 	
 	// Entity Symptoms
 	
-	public static void applyPotionEffects(EntityLivingBase entity, IEntityRads entityRads, int durationMult, List<Double> radLevelList, List<List<PotionEffect>> potionList) {
-		if (radLevelList.isEmpty() || radLevelList.size() != potionList.size()) {
+	public static void applyEntityEffects(EntityLivingBase entity, IEntityRads entityRads, double durationMult, List<Double> radLevelList, List<List<RadEffect>> radEffectLists, Object2ObjectMap<AttributeModifier, String> radAttributeMap) {
+		int radLevelCount = radLevelList.size();
+		if (radLevelCount != radEffectLists.size()) {
 			return;
 		}
+		
+		radAttributeMap.forEach((k, v) -> {
+			IAttributeInstance attributeInstance = entity.getAttributeMap().getAttributeInstanceByName(v);
+			if (attributeInstance != null) {
+				attributeInstance.removeModifier(k);
+			}
+		});
+		
 		double radPercentage = entityRads.getRadsPercentage();
 		
-		for (int i = 0; i < radLevelList.size(); ++i) {
-			final int j = radLevelList.size() - 1 - i;
+		for (int i = 0; i < radLevelCount; ++i) {
+			final int j = radLevelCount - 1 - i;
 			if (radPercentage >= radLevelList.get(j)) {
-				for (PotionEffect potionEffect : potionList.get(j)) {
-					entity.addPotionEffect(new PotionEffect(potionEffect.getPotion(), potionEffect.getDuration() * durationMult, potionEffect.getAmplifier(), potionEffect.getIsAmbient(), potionEffect.doesShowParticles()));
+				for (RadEffect effect : radEffectLists.get(j)) {
+					effect.accept(entity, durationMult);
 				}
 				break;
 			}

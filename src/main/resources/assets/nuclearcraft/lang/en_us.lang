@@ -147,7 +147,7 @@ tile.nuclearcraft.energy_storage.desc=Right click a side to read the energy leve
 tile.nuclearcraft.fission_casing.name=Fission Reactor Casing
 tile.nuclearcraft.fission_glass.name=Fission Reactor Glass
 tile.nuclearcraft.fission_conductor.name=Fission Reactor Conductor
-tile.nuclearcraft.fission_monitor.name=Fission Reactor Monitor (WIP)
+tile.nuclearcraft.fission_monitor.name=Fission Reactor Monitor
 tile.nuclearcraft.fission_power_port.name=Fission Reactor Power Port
 tile.nuclearcraft.fission_vent.name=Fission Reactor Vent
 tile.nuclearcraft.fission_irradiator.name=Fission Irradiator
@@ -163,8 +163,7 @@ tile.nuclearcraft.fission_shield.boron_silver.name=Boron-Silver Fission Neutron 
 info.nuclearcraft.fission_shield.heat_per_flux.fixd=Heat Gen Per Flux: %s
 info.nuclearcraft.fission_shield.efficiency.fixd=Efficiency Multiplier: %s
 
-tile.nuclearcraft.fission_redstone_port.name=Fission Redstone Port (WIP)
-tile.nuclearcraft.fission_computer_port.name=Fission Computer Port (WIP)
+tile.nuclearcraft.fission_computer_port.name=Fission Computer Port
 tile.nuclearcraft.fission_computer_port.desc=Used to access the reactor via OpenComputers.
 
 tile.nuclearcraft.fission_irradiator_port.name=Fission Irradiator Port
@@ -207,7 +206,8 @@ tile.nuclearcraft.fission_heater_port2.liquid_helium.name=Liquid Helium Fission 
 tile.nuclearcraft.fission_heater_port2.enderium.name=Enderium Fission Coolant Heater Port
 tile.nuclearcraft.fission_heater_port2.cryotheum.name=Cryotheum Fission Coolant Heater Port
 
-tile.nuclearcraft.fission_shield_manager.name=Fission Neutron Shield Manager (WIP)
+tile.nuclearcraft.fission_source_manager.name=Fission Neutron Source Manager
+tile.nuclearcraft.fission_shield_manager.name=Fission Neutron Shield Manager
 
 tile.nuclearcraft.solid_fission_controller.name=Solid Fuel Fission Controller
 tile.nuclearcraft.solid_fission_cell.name=Fission Fuel Cell
@@ -332,7 +332,7 @@ tile.nuclearcraft.turbine_dynamo_coil.conductivity=Conductivity Multiplier:
 tile.nuclearcraft.turbine_coil_connector.name=Turbine Dynamo Coil Connector
 tile.nuclearcraft.turbine_inlet.name=Turbine Fluid Inlet
 tile.nuclearcraft.turbine_outlet.name=Turbine Fluid Outlet
-tile.nuclearcraft.turbine_computer_port.name=Turbine Computer Port (WIP)
+tile.nuclearcraft.turbine_computer_port.name=Turbine Computer Port
 tile.nuclearcraft.turbine_computer_port.desc=Used to access the turbine via OpenComputers.
 
 tile.nuclearcraft.cobblestone_generator.name=Cobblestone Generator
@@ -431,8 +431,6 @@ tile.nuclearcraft.quantum_computer_gate_swap.cswap.name=Quantum Computer Control
 tile.nuclearcraft.quantum_computer_gate_swap.cswap.desc=Performs a controlled swap on two lists of qubits.
 
 tile.nuclearcraft.quantum_computer_connector.name=Quantum Computer Connector
-tile.nuclearcraft.quantum_computer_port.name=Quantum Computer OC Port (WIP)
-tile.nuclearcraft.quantum_computer_port.desc=Used to access the quantum computer via OpenComputers.
 
 tile.nuclearcraft.quantum_computer_code_generator.qasm.name=Quantum Computer QASM Code Generator
 tile.nuclearcraft.quantum_computer_code_generator.qasm.desc=Used to generate QASM code for use with IBM Q.
@@ -2153,51 +2151,58 @@ item.nuclearcraft.lithium_ion_cell.name=Lithium Ion Cell
 
 item.nuclearcraft.multitool.name=Multitool
 
-info.nuclearcraft.multitool.clear_info=Cleared stored multitool info!
+info.nuclearcraft.multitool.clear_info=Cleared stored multitool info
 
-info.nuclearcraft.multitool.save_processor_config=Saved %s configuration to multitool!
-info.nuclearcraft.multitool.load_processor_config=Loaded %s configuration from multitool!
+info.nuclearcraft.multitool.save_processor_config=Saved %s configuration to multitool
+info.nuclearcraft.multitool.load_processor_config=Loaded %s configuration from multitool
+info.nuclearcraft.multitool.invalid_processor_config=%s configuration from multitool can not be loaded to %s
 
-info.nuclearcraft.multitool.copy_component_info=Saved component info to multitool!
+info.nuclearcraft.multitool.save_component_info=Saved %s info to multitool
+info.nuclearcraft.multitool.load_component_info=Loaded %s info from multitool to %s
+info.nuclearcraft.multitool.invalid_component_info=%s info from multitool can not be loaded to %s
 
-info.nuclearcraft.multitool.connect_component_monitor=Connected component to monitor!
+info.nuclearcraft.multitool.start_manager_listener_set=%s now waiting for set of listeners...
+info.nuclearcraft.multitool.append_manager_listener_set=Added listener %s to multitool
+info.nuclearcraft.multitool.finish_manager_listener_set=%s now connected to %s listeners
+info.nuclearcraft.multitool.manager_listener_info=%s currently connected to %s listeners
 
-info.nuclearcraft.multitool.fission.connect_shield_manager=All %s shields should now be connected to this manager!
+info.nuclearcraft.multitool.no_connected_component_info=%s currently has no connected component!
+info.nuclearcraft.multitool.connected_component_info=%s currently connected to %s at [%d, %d, %d]
 
 info.nuclearcraft.multitool.quantum_computer.qubit_id=Qubit ID: %s
-info.nuclearcraft.multitool.quantum_computer.start_qubit_set=Created new qubit ID set starting with %s!
-info.nuclearcraft.multitool.quantum_computer.start_qubit_list=Created new qubit ID list starting with %s!
-info.nuclearcraft.multitool.quantum_computer.remove_qubit=Removed qubit ID %s from multitool!
-info.nuclearcraft.multitool.quantum_computer.add_qubit=Saved qubit ID %s to multitool!
+info.nuclearcraft.multitool.quantum_computer.start_qubit_set=Created new qubit ID set starting with %s
+info.nuclearcraft.multitool.quantum_computer.start_qubit_list=Created new qubit ID list starting with %s
+info.nuclearcraft.multitool.quantum_computer.remove_qubit=Removed qubit ID %s from multitool
+info.nuclearcraft.multitool.quantum_computer.add_qubit=Saved qubit ID %s to multitool
 
-info.nuclearcraft.multitool.quantum_computer.single_gate_info=Gate currently targeting qubits %s
-info.nuclearcraft.multitool.quantum_computer.start_target_set=Gate now waiting for set of target qubits...
-info.nuclearcraft.multitool.quantum_computer.finish_target_set=Gate now targeting qubits %s!
+info.nuclearcraft.multitool.quantum_computer.single_gate_info=%s currently targeting qubits %s
+info.nuclearcraft.multitool.quantum_computer.start_target_set=%s now waiting for set of target qubits...
+info.nuclearcraft.multitool.quantum_computer.finish_target_set=%s now targeting qubits %s
 
-info.nuclearcraft.multitool.quantum_computer.single_angle_gate_info=Gate currently targeting qubits %s with working angle %s degrees
-info.nuclearcraft.multitool.quantum_computer.start_angle=Gate now waiting for working angle...
-info.nuclearcraft.multitool.quantum_computer.tool_set_angle=Saved angle of %s degrees to multitool!
-info.nuclearcraft.multitool.quantum_computer.finish_angle=Gate now working at %s degrees!
+info.nuclearcraft.multitool.quantum_computer.single_angle_gate_info=%s currently targeting qubits %s with working angle %s degrees
+info.nuclearcraft.multitool.quantum_computer.start_angle=%s now waiting for working angle...
+info.nuclearcraft.multitool.quantum_computer.tool_set_angle=Saved angle of %s degrees to multitool
+info.nuclearcraft.multitool.quantum_computer.finish_angle=%s now working at %s degrees
 
-info.nuclearcraft.multitool.quantum_computer.control_gate_info=Gate currently targeting qubits %s with control qubits %s
-info.nuclearcraft.multitool.quantum_computer.start_control_set=Gate now waiting for set of control qubits...
-info.nuclearcraft.multitool.quantum_computer.finish_control_set=Gate now controlled by qubits %s!
+info.nuclearcraft.multitool.quantum_computer.control_gate_info=%s currently targeting qubits %s with control qubits %s
+info.nuclearcraft.multitool.quantum_computer.start_control_set=%s now waiting for set of control qubits...
+info.nuclearcraft.multitool.quantum_computer.finish_control_set=%s now controlled by qubits %s
 
-info.nuclearcraft.multitool.quantum_computer.control_angle_gate_info=Gate currently targeting qubits %s with working angle %s degrees and control qubits %s
+info.nuclearcraft.multitool.quantum_computer.control_angle_gate_info=%s currently targeting qubits %s with working angle %s degrees and control qubits %s
 
-info.nuclearcraft.multitool.quantum_computer.swap_gate_info=Gate currently swapping qubits %s with qubits %s
-info.nuclearcraft.multitool.quantum_computer.start_first_swap_list=Gate now waiting for first list of qubits...
-info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list=Gate now set to swap first list of qubits %s!
-info.nuclearcraft.multitool.quantum_computer.start_second_swap_list=Gate now waiting for second list of qubits...
-info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list=Gate now set to swap second list of qubits %s!
+info.nuclearcraft.multitool.quantum_computer.swap_gate_info=%s currently swapping qubits %s with qubits %s
+info.nuclearcraft.multitool.quantum_computer.start_first_swap_list=%s now waiting for first list of qubits...
+info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list=%s now set to swap first list of qubits %s
+info.nuclearcraft.multitool.quantum_computer.start_second_swap_list=%s now waiting for second list of qubits...
+info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list=%s now set to swap second list of qubits %s
 
-info.nuclearcraft.multitool.quantum_computer.control_swap_gate_info=Gate currently swapping qubits %s with qubits %s, controlled by qubits %s
+info.nuclearcraft.multitool.quantum_computer.control_swap_gate_info=%s currently swapping qubits %s with qubits %s, controlled by qubits %s
 
-info.nuclearcraft.multitool.quantum_computer.controller.code_qasm_start=Quantum Computer entering QASM mode! Gate operations will be recorded but not carried out in the game.
-info.nuclearcraft.multitool.quantum_computer.controller.code_qiskit_start=Quantum Computer entering Qiskit mode! Gate operations will be recorded but not carried out in the game.
-info.nuclearcraft.multitool.quantum_computer.controller.code_too_many_qubits=Quantum Computer can not enter code generation mode, too many qubits installed.
-info.nuclearcraft.multitool.quantum_computer.controller.code_exit_too_many_qubits=Quantum Computer exiting code generation mode, too many qubits installed.
-info.nuclearcraft.multitool.quantum_computer.controller.code_exit_empty=Quantum Computer exiting code generation mode.
+info.nuclearcraft.multitool.quantum_computer.controller.code_qasm_start=Quantum Computer entering QASM mode! Gate operations will be recorded but not carried out in the game
+info.nuclearcraft.multitool.quantum_computer.controller.code_qiskit_start=Quantum Computer entering Qiskit mode! Gate operations will be recorded but not carried out in the game
+info.nuclearcraft.multitool.quantum_computer.controller.code_too_many_qubits=Quantum Computer can not enter code generation mode, too many qubits installed
+info.nuclearcraft.multitool.quantum_computer.controller.code_exit_too_many_qubits=Quantum Computer exiting code generation mode, too many qubits installed
+info.nuclearcraft.multitool.quantum_computer.controller.code_exit_empty=Quantum Computer exiting code generation mode
 
 info.nuclearcraft.multitool.quantum_computer.controller.qasm_print=Quantum Computer exiting QASM mode, saved generated code to %s
 info.nuclearcraft.multitool.quantum_computer.controller.qasm_error=Quantum Computer exiting QASM mode, an error occurred attempting save generated code to %s
@@ -3019,11 +3024,11 @@ gui.nc.config.radiation_death_immunity_time=Post-Death Immunity Time
 gui.nc.config.radiation_death_immunity_time.comment=Number of seconds players will have radiation immunity after death due to radiation.
 
 gui.nc.config.radiation_player_debuff_lists=Player Radiation Effects
-gui.nc.config.radiation_player_debuff_lists.comment=Lists of potion effects experienced at various percentages of radiation level by players. Format: 'radPercent_potionNameA@strength,potionNameB@strength,...,potionNameZ@strength'.
+gui.nc.config.radiation_player_debuff_lists.comment=Lists of effects experienced at various percentages of radiation level by players. Format: 'radPercent_effect,effect,...,effect', where 'effect' is a potion effect 'potionName@amplifier' or an attribute modifier 'attributeName@amount@operation'.
 gui.nc.config.radiation_passive_debuff_lists=Passive Entity Radiation Effects
-gui.nc.config.radiation_passive_debuff_lists.comment=Lists of potion effects experienced at various percentages of radiation level by passive entities. Format: 'radPercent_potionNameA@strength,potionNameB@strength,...,potionNameZ@strength'.
+gui.nc.config.radiation_passive_debuff_lists.comment=Lists of effects experienced at various percentages of radiation level by passive entities. Format: 'radPercent_effect,effect,...,effect', where 'effect' is a potion effect 'potionName@amplifier' or an attribute modifier 'attributeName@amount@operation'.
 gui.nc.config.radiation_mob_buff_lists=Mob Radiation Effects
-gui.nc.config.radiation_mob_buff_lists.comment=Lists of potion effects experienced at various percentages of radiation level by mobs. Format: 'radPercent_potionNameA@strength,potionNameB@strength,...,potionNameZ@strength'.
+gui.nc.config.radiation_mob_buff_lists.comment=Lists of effects experienced at various percentages of radiation level by mobs. Format: 'radPercent_effect,effect,...,effect', where 'effect' is a potion effect 'potionName@amplifier' or an attribute modifier 'attributeName@amount@operation'.
 gui.nc.config.radiation_player_rads_fatal=Player Max Radiation Fatality
 gui.nc.config.radiation_player_rads_fatal.comment=If enabled, players will be killed when they reach their maximum rad count.
 gui.nc.config.radiation_passive_rads_fatal=Passive Entity Max Radiation Fatality

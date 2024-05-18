@@ -6,7 +6,7 @@ import nc.multiblock.quantum.QuantumGateEnums;
 import nc.tile.quantum.TileQuantumComputerGate;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -88,7 +88,7 @@ public abstract class BlockQuantumComputerGate<T extends Enum<T> & IStringSerial
 			if (tile instanceof TileQuantumComputerGate) {
 				if (!world.isRemote) {
 					TileQuantumComputerGate gate = (TileQuantumComputerGate) tile;
-					player.sendMessage(gate.gateInfo());
+					gate.sendGateInfo((EntityPlayerMP) player);
 				}
 				return true;
 			}

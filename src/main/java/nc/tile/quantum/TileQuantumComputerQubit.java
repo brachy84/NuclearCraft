@@ -5,7 +5,7 @@ import nc.multiblock.quantum.*;
 import nc.network.tile.multiblock.QuantumComputerQubitRenderPacket;
 import nc.tile.ITilePacket;
 import nc.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -52,7 +52,7 @@ public class TileQuantumComputerQubit extends TileQuantumComputerPart implements
 	}
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 		if (nbt != null) {
 			String mode = nbt.getString("qComputerQubitMode");

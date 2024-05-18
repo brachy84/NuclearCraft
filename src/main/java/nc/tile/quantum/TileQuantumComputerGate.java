@@ -2,9 +2,10 @@ package nc.tile.quantum;
 
 import it.unimi.dsi.fastutil.ints.*;
 import nc.multiblock.quantum.*;
+import nc.render.BlockHighlightTracker;
 import nc.util.*;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -31,17 +32,18 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.single_gate_info", intSetToString(n)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, n);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.single_gate_info", getTileBlockDisplayName(), intSetToString(n))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getTarget") && player.isSneaking()) {
 					n.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setTarget";
@@ -51,7 +53,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setTarget") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, n, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", intSetToString(n))));
+					highlightQubits(player, n);
+					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", getTileBlockDisplayName(), intSetToString(n))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getTarget";
@@ -183,17 +186,18 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.single_angle_gate_info", intSetToString(n), NCMath.decimalPlaces(angle, 5)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, n);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.single_angle_gate_info", getTileBlockDisplayName(), intSetToString(n), NCMath.decimalPlaces(angle, 5))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getAngle") && player.isSneaking()) {
 					angle = 0D;
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_angle")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_angle", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "angle");
 					toolMode = "setAngle";
@@ -202,8 +206,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 					return true;
 				}
 				else if (toolMode.equals("setAngle") && !player.isSneaking()) {
-					angle = nbt.getDouble("gateAngle");
-					player.sendMessage(new TextComponentString(TextFormatting.GREEN + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_angle", NCMath.decimalPlaces(angle, 5))));
+					angle = nbt.getDouble("qGateAngle");
+					player.sendMessage(new TextComponentString(TextFormatting.GREEN + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_angle", getTileBlockDisplayName(), NCMath.decimalPlaces(angle, 5))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getTarget";
@@ -213,7 +217,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getTarget") && player.isSneaking()) {
 					n.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setTarget";
@@ -223,7 +227,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setTarget") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, n, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", intSetToString(n))));
+					highlightQubits(player, n);
+					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", getTileBlockDisplayName(), intSetToString(n))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getAngle";
@@ -238,14 +243,14 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		@Override
 		public NBTTagCompound writeAll(NBTTagCompound nbt) {
 			super.writeAll(nbt);
-			nbt.setDouble("gateAngle", angle);
+			nbt.setDouble("qGateAngle", angle);
 			return nbt;
 		}
 		
 		@Override
 		public void readAll(NBTTagCompound nbt) {
 			super.readAll(nbt);
-			angle = nbt.getDouble("gateAngle");
+			angle = nbt.getDouble("qGateAngle");
 		}
 	}
 	
@@ -309,17 +314,19 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_gate_info", intSetToString(t), intSetToString(c)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, c);
+			highlightQubits(player, t);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_gate_info", getTileBlockDisplayName(), intSetToString(t), intSetToString(c))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getControl") && player.isSneaking()) {
 					c.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setControl";
@@ -329,7 +336,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setControl") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, c, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", intSetToString(c))));
+					highlightQubits(player, c);
+					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", getTileBlockDisplayName(), intSetToString(c))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getTarget";
@@ -339,7 +347,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getTarget") && player.isSneaking()) {
 					t.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setTarget";
@@ -349,7 +357,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setTarget") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, t, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", intSetToString(t))));
+					highlightQubits(player, t);
+					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", getTileBlockDisplayName(), intSetToString(t))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getControl";
@@ -483,17 +492,19 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_angle_gate_info", intSetToString(t), NCMath.decimalPlaces(angle, 5), intSetToString(c)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, c);
+			highlightQubits(player, t);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_angle_gate_info", getTileBlockDisplayName(), intSetToString(t), NCMath.decimalPlaces(angle, 5), intSetToString(c))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getAngle") && player.isSneaking()) {
 					angle = 0D;
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_angle")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_angle", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "angle");
 					toolMode = "setAngle";
@@ -502,8 +513,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 					return true;
 				}
 				else if (toolMode.equals("setAngle") && !player.isSneaking()) {
-					angle = nbt.getDouble("gateAngle");
-					player.sendMessage(new TextComponentString(TextFormatting.GREEN + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_angle", NCMath.decimalPlaces(angle, 5))));
+					angle = nbt.getDouble("qGateAngle");
+					player.sendMessage(new TextComponentString(TextFormatting.GREEN + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_angle", getTileBlockDisplayName(), NCMath.decimalPlaces(angle, 5))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getControl";
@@ -513,7 +524,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getControl") && player.isSneaking()) {
 					c.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setControl";
@@ -523,7 +534,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setControl") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, c, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", intSetToString(c))));
+					highlightQubits(player, c);
+					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", getTileBlockDisplayName(), intSetToString(c))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getTarget";
@@ -533,7 +545,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getTarget") && player.isSneaking()) {
 					t.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_target_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setTarget";
@@ -543,7 +555,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setTarget") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, t, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", intSetToString(t))));
+					highlightQubits(player, t);
+					player.sendMessage(new TextComponentString(TextFormatting.BLUE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_target_set", getTileBlockDisplayName(), intSetToString(t))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getAngle";
@@ -558,14 +571,14 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		@Override
 		public NBTTagCompound writeAll(NBTTagCompound nbt) {
 			super.writeAll(nbt);
-			nbt.setDouble("gateAngle", angle);
+			nbt.setDouble("qGateAngle", angle);
 			return nbt;
 		}
 		
 		@Override
 		public void readAll(NBTTagCompound nbt) {
 			super.readAll(nbt);
-			angle = nbt.getDouble("gateAngle");
+			angle = nbt.getDouble("qGateAngle");
 		}
 	}
 	
@@ -634,17 +647,19 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.swap_gate_info", intListToString(i), intListToString(j)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, i);
+			highlightQubits(player, j);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.swap_gate_info", getTileBlockDisplayName(), intListToString(i), intListToString(j))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getFirst") && player.isSneaking()) {
 					i.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_first_swap_list")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_first_swap_list", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "list");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setFirst";
@@ -654,7 +669,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setFirst") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, i, "qubitIDList");
-					player.sendMessage(new TextComponentString(TextFormatting.GOLD + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list", intListToString(i))));
+					highlightQubits(player, i);
+					player.sendMessage(new TextComponentString(TextFormatting.GOLD + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list", getTileBlockDisplayName(), intListToString(i))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getSecond";
@@ -664,7 +680,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getSecond") && player.isSneaking()) {
 					j.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_second_swap_list")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_second_swap_list", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "list");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setSecond";
@@ -674,7 +690,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setSecond") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, j, "qubitIDList");
-					player.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list", intListToString(j))));
+					highlightQubits(player, j);
+					player.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list", getTileBlockDisplayName(), intListToString(j))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getFirst";
@@ -721,17 +738,20 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		public TextComponentString gateInfo() {
-			return new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_swap_gate_info", intListToString(i), intListToString(j), intSetToString(c)));
+		public void sendGateInfo(EntityPlayerMP player) {
+			highlightQubits(player, c);
+			highlightQubits(player, i);
+			highlightQubits(player, j);
+			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.control_swap_gate_info", getTileBlockDisplayName(), intListToString(i), intListToString(j), intSetToString(c))));
 		}
 		
 		@Override
-		public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 			if (nbt != null) {
 				if (toolMode.equals("getControl") && player.isSneaking()) {
 					c.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_control_set", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "set");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setControl";
@@ -741,7 +761,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setControl") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, c, "qubitIDSet");
-					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", intSetToString(c))));
+					highlightQubits(player, c);
+					player.sendMessage(new TextComponentString(TextFormatting.RED + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_control_set", getTileBlockDisplayName(), intSetToString(c))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getFirst";
@@ -751,7 +772,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getFirst") && player.isSneaking()) {
 					i.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_first_swap_list")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_first_swap_list", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "list");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setFirst";
@@ -761,7 +782,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setFirst") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, i, "qubitIDList");
-					player.sendMessage(new TextComponentString(TextFormatting.GOLD + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list", intListToString(i))));
+					highlightQubits(player, i);
+					player.sendMessage(new TextComponentString(TextFormatting.GOLD + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_first_swap_list", getTileBlockDisplayName(), intListToString(i))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getSecond";
@@ -771,7 +793,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("getSecond") && player.isSneaking()) {
 					j.clear();
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_second_swap_list")));
+					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + Lang.localize("info.nuclearcraft.multitool.quantum_computer.start_second_swap_list", getTileBlockDisplayName())));
 					nbt.setString("qComputerQubitMode", "list");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "setSecond";
@@ -781,7 +803,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 				}
 				else if (toolMode.equals("setSecond") && !player.isSneaking()) {
 					NBTHelper.readIntCollection(nbt, j, "qubitIDList");
-					player.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list", intListToString(j))));
+					highlightQubits(player, j);
+					player.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + Lang.localize("info.nuclearcraft.multitool.quantum_computer.finish_second_swap_list", getTileBlockDisplayName(), intListToString(j))));
 					nbt.setString("qComputerQubitMode", "");
 					nbt.setString("qComputerGateMode", "");
 					toolMode = "getControl";
@@ -849,10 +872,21 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 	
 	protected abstract QuantumGate<?> newGate(QuantumComputer qc);
 	
-	public abstract TextComponentString gateInfo();
+	public abstract void sendGateInfo(EntityPlayerMP player);
+	
+	protected void highlightQubits(EntityPlayerMP player, IntCollection n) {
+		QuantumComputer qc = getMultiblock();
+		if (qc != null) {
+			for (TileQuantumComputerQubit qubit : qc.getQubits()) {
+				if (n.contains(qubit.id)) {
+					BlockHighlightTracker.sendPacket(player, qubit.getPos(), 5000);
+				}
+			}
+		}
+	}
 	
 	public static void clearMultitoolGateInfo(NBTTagCompound nbt) {
-		nbt.setDouble("gateAngle", 0D);
+		nbt.setDouble("qGateAngle", 0D);
 		NBTHelper.writeIntCollection(nbt, new IntOpenHashSet(), "qubitIDSet");
 		NBTHelper.writeIntCollection(nbt, new IntArrayList(), "qubitIDList");
 	}

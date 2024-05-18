@@ -55,9 +55,13 @@ public class TileRadiationScrubber extends TileBasicEnergyProcessor<TileRadiatio
 				process();
 			}
 			
-			if (wasProcessing != isProcessing) {
+			if (wasProcessing == isProcessing) {
+				sendTileUpdatePacketToListeners();
+			}
+			else {
 				shouldUpdate = true;
 				setActivity(isProcessing);
+				sendTileUpdatePacketToAll();
 			}
 			
 			tickRadCount();

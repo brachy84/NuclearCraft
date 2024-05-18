@@ -10,7 +10,7 @@ import nc.tile.TileBin;
 import nc.tile.battery.TileBattery;
 import nc.tile.dummy.TileMachineInterface;
 import nc.tile.fission.*;
-import nc.tile.fission.manager.TileFissionShieldManager;
+import nc.tile.fission.manager.*;
 import nc.tile.fission.port.*;
 import nc.tile.generator.*;
 import nc.tile.hx.*;
@@ -82,6 +82,7 @@ public class NCTiles {
 		registerTileVariants(Global.MOD_ID, "fission_heater_port", MetaEnums.CoolantHeaterType.class, x -> Pair.of(x.toString(), x.getPortClass()));
 		registerTileVariants(Global.MOD_ID, "fission_heater_port", MetaEnums.CoolantHeaterType2.class, x -> Pair.of(x.toString(), x.getPortClass()));
 		
+		registerTile(Global.MOD_ID, "fission_source_manager", TileFissionSourceManager.class);
 		registerTile(Global.MOD_ID, "fission_shield_manager", TileFissionShieldManager.class);
 		
 		registerTile(Global.MOD_ID, "solid_fission_controller", TileSolidFissionController.class);

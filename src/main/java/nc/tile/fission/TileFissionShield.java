@@ -1,7 +1,7 @@
 package nc.tile.fission;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.enumm.MetaEnums;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.*;
@@ -9,6 +9,8 @@ import nc.tile.fission.IFissionFuelComponent.*;
 import nc.tile.fission.manager.*;
 import nc.util.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
@@ -71,6 +73,10 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	public void onMachineAssembled(FissionReactor controller) {
 		doStandardNullControllerResponse(controller);
 		super.onMachineAssembled(controller);
+	}
+	
+	public boolean isShieldActive() {
+		return manager != null && manager.isManagerActive();
 	}
 	
 	// IFissionComponent
@@ -228,44 +234,51 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	}
 	
 	@Override
-	public void clearManager() {
-		manager = null;
-		managerPos = DEFAULT_NON;
+	public TileFissionShieldManager getManager() {
+		return manager;
 	}
 	
 	@Override
-	public void refreshManager() {
-		manager = getMultiblock() == null ? null : getMultiblock().getPartMap(TileFissionShieldManager.class).get(managerPos.toLong());
-		if (manager == null) {
-			managerPos = DEFAULT_NON;
-		}
+	public void setManager(TileFissionShieldManager manager) {
+		this.manager = manager;
 	}
 	
 	@Override
-	public boolean onManagerRefresh(TileFissionShieldManager managerIn) {
-		manager = managerIn;
-		managerPos = managerIn.getPos();
-		boolean wasShielding = isShielding;
-		isShielding = managerIn.isShieldingActive();
-		if (wasShielding != isShielding) {
-			if (!world.isRemote) {
+	public boolean onManagerRefresh(TileFissionShieldManager manager) {
+		this.manager = manager;
+		if (manager != null) {
+			managerPos = manager.getPos();
+			boolean wasShielding = isShielding;
+			isShielding = isShieldActive();
+			if (wasShielding != isShielding) {
 				setActivity(isShielding);
+				return true;
 			}
-			return true;
+		}
+		else {
+			managerPos = DEFAULT_NON;
 		}
 		return false;
 	}
 	
-	// Ticking
+	@Override
+	public String getManagerType() {
+		return "fissionShieldManager";
+	}
 	
 	@Override
-	public void onBlockNeighborChanged(IBlockState state, World worldIn, BlockPos posIn, BlockPos fromPos) {
-		boolean wasShielding = isShielding;
-		super.onBlockNeighborChanged(state, worldIn, posIn, fromPos);
-		setActivity(isShielding);
-		if (!worldIn.isRemote && wasShielding != isShielding) {
-			getLogic().onShieldUpdated(this);
+	public Class<TileFissionShieldManager> getManagerClass() {
+		return TileFissionShieldManager.class;
+	}
+	
+	// IMultitoolLogic
+	
+	@Override
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (IFissionManagerListener.super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ)) {
+			return true;
 		}
+		return IFissionHeatingComponent.super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
 	}
 	
 	// NBT
@@ -299,5 +312,21 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 		flux = nbt.getInteger("flux");
 		heat = nbt.getLong("clusterHeat");
 		managerPos = BlockPos.fromLong(nbt.getLong("managerPos"));
+	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "shield";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
+		entry.put("effective_heating", getEffectiveHeating());
+		entry.put("is_shielding", isShielding);
+		entry.put("flux", flux);
+		return entry;
 	}
 }

@@ -115,8 +115,10 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	
 	public BUILDER setIsGenerator(boolean isGenerator) {
 		this.isGenerator = isGenerator;
-		consumesInputs = true;
-		losesProgress = false;
+		if (isGenerator) {
+			consumesInputs = true;
+			losesProgress = false;
+		}
 		return getThis();
 	}
 	

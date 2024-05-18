@@ -1,3 +1,16 @@
+v2o.7.4
+
++ Added Neutron Source Manager
++ Added multitool saving and loading of shield/source locations for shield/source managers
+
++ Added processor OC methods [thanks to igentuman!]
++ Added additional fission OC methods [thanks to igentuman!]
+
++ Added option to specify attribute modifiers as well as potion effects in radiation effects configs
+
+* Fixed custom processor crash
+* Fixed Radiation Scrubber GUI not updating correctly
+
 v2o.7.3
 
 + Added auto-output mode for processor slots

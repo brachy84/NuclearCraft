@@ -1,6 +1,7 @@
 package nc.tile.fission;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.PlacementRule;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.*;
@@ -385,5 +386,21 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 		}
 		
 		heat = nbt.getLong("clusterHeat");
+	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "sink";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
+		entry.put("type", sinkType);
+		entry.put("cooling", getCooling());
+		entry.put("is_valid", isInValidPosition);
+		return entry;
 	}
 }

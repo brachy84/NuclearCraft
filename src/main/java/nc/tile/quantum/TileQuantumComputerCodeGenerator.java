@@ -3,7 +3,7 @@ package nc.tile.quantum;
 import nc.multiblock.quantum.QuantumComputer;
 import nc.util.Lang;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -59,7 +59,7 @@ public abstract class TileQuantumComputerCodeGenerator extends TileQuantumComput
 	}
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!player.isSneaking()) {
 			QuantumComputer qc = getMultiblock();
 			if (qc != null && qc.isAssembled()) {

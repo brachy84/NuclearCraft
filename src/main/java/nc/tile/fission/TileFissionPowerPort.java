@@ -8,7 +8,7 @@ import nc.multiblock.fission.FissionReactor;
 import nc.tile.energy.ITileEnergy;
 import nc.tile.internal.energy.*;
 import nc.util.Lang;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -171,7 +171,7 @@ public class TileFissionPowerPort extends TileFissionPart implements ITickable, 
 	// IMultitoolLogic
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 		
 		}

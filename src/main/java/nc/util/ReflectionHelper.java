@@ -2,7 +2,7 @@ package nc.util;
 
 import org.objectweb.asm.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.*;
 
 public class ReflectionHelper {
@@ -74,14 +74,13 @@ public class ReflectionHelper {
 	}
 	
 	public static <T> Class<T> cloneClass(Class<? extends T> clazz, String cloneName) {
-		try {
-			ClassReader cr = new ClassReader(clazz.getName());
+		ClassLoader classLoader = clazz.getClassLoader();
+		try (InputStream is = classLoader.getResourceAsStream(clazz.getName().replace('.', '/') + ".class")) {
+			ClassReader cr = new ClassReader(is);
 			ClassWriter cw = new ClassWriter(cr, 0);
-			
 			String fullName = clazz.getPackage().getName() + "." + cloneName;
 			cr.accept(new CloneClassVisitor(cw, fullName.replace('.', '/')), 0);
-			
-			return defineClass(clazz.getClassLoader(), fullName, cw);
+			return defineClass(classLoader, fullName, cw);
 		} catch (IOException e) {
 			throw new UnsupportedOperationException();
 		}

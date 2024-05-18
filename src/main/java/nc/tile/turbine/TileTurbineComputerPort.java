@@ -73,13 +73,13 @@ public class TileTurbineComputerPort extends TileTurbinePart implements SimpleCo
 	@Callback
 	@Optional.Method(modid = "opencomputers")
 	public Object[] getEnergyStored(Context context, Arguments args) {
-		return new Object[] {isMultiblockAssembled() ? getMultiblock().energyStorage.getEnergyStored() : 0};
+		return new Object[] {isMultiblockAssembled() ? getMultiblock().energyStorage.getEnergyStoredLong() : 0L};
 	}
 	
 	@Callback
 	@Optional.Method(modid = "opencomputers")
 	public Object[] getEnergyCapacity(Context context, Arguments args) {
-		return new Object[] {isMultiblockAssembled() ? getMultiblock().energyStorage.getMaxEnergyStored() : 0};
+		return new Object[] {isMultiblockAssembled() ? getMultiblock().energyStorage.getMaxEnergyStoredLong() : 0L};
 	}
 	
 	@Callback

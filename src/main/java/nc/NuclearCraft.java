@@ -25,7 +25,7 @@ public class NuclearCraft {
 	@SidedProxy(clientSide = Global.NC_CLIENT_PROXY, serverSide = Global.NC_SERVER_PROXY)
 	public static CommonProxy proxy;
 	
-	public BlockHighlightTracker blockOverlayTracker = new BlockHighlightTracker();
+	public final BlockHighlightTracker blockOverlayTracker = new BlockHighlightTracker();
 	
 	@EventHandler
 	public void onConstruction(FMLConstructionEvent constructionEvent) throws IOException {

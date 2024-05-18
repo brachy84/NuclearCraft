@@ -7,6 +7,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +28,14 @@ public interface ITile {
 	Block getTileBlockType();
 	
 	int getTileBlockMeta();
+	
+	default ItemStack getTileBlockStack() {
+		return new ItemStack(getTileBlockType(), 1, getTileBlockMeta());
+	}
+	
+	default String getTileBlockDisplayName() {
+		return getTileBlockStack().getDisplayName();
+	}
 	
 	default EnumFacing getFacingHorizontal() {
 		return getTileBlockType().getStateFromMeta(getTileBlockMeta()).getValue(BlockProperties.FACING_HORIZONTAL);

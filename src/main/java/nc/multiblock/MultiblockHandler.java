@@ -8,7 +8,7 @@ import nc.multiblock.rtg.RTGMultiblock;
 import nc.multiblock.turbine.Turbine;
 import nc.tile.battery.TileBattery;
 import nc.tile.fission.*;
-import nc.tile.fission.manager.TileFissionShieldManager;
+import nc.tile.fission.manager.*;
 import nc.tile.fission.port.*;
 import nc.tile.hx.*;
 import nc.tile.quantum.*;
@@ -64,6 +64,7 @@ public final class MultiblockHandler {
 		FissionReactor.PART_CLASSES.add(TileFissionCellPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionVesselPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionHeaterPort.class);
+		FissionReactor.PART_CLASSES.add(TileFissionSourceManager.class);
 		FissionReactor.PART_CLASSES.add(TileFissionShieldManager.class);
 		FissionReactor.PART_CLASSES.add(TileFissionIrradiator.class);
 		FissionReactor.PART_CLASSES.add(TileFissionSource.class);

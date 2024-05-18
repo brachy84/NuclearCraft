@@ -196,7 +196,7 @@ public class CraftingRecipeHandler {
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_source, 2, 0), "PRP", "BFB", "PRP", 'P', "plateBasic", 'R', "dustRadium", 'B', "dustBeryllium", 'F', "steelFrame");
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_source, 2, 1), "PLP", "BFB", "PLP", 'P', "plateBasic", 'L', "dustPolonium", 'B', "dustBeryllium", 'F', "steelFrame");
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_source, 2, 2), "PCP", "CFC", "PCP", 'P', "plateBasic", 'C', "ingotCalifornium252All", 'F', "steelFrame");
-		addShapedOreRecipe(new ItemStack(NCBlocks.fission_shield, 4, 0), "PBP", "IFI", "PBP", 'P', "plateBasic", 'B', "ingotBoron", 'I', "ingotSilver", 'F', "steelFrame");
+		addShapedOreRecipe(new ItemStack(NCBlocks.fission_shield, 4, 0), "PBP", "SFS", "PBP", 'P', "plateBasic", 'B', "ingotBoron", 'S', "ingotSilver", 'F', "steelFrame");
 		if (ModCheck.openComputersLoaded()) {
 			addShapedOreRecipe(NCBlocks.fission_computer_port, "PMP", "CFC", "PBP", 'P', "plateBasic", 'M', RegistryHelper.itemStackFromRegistry("opencomputers:material:7"), 'C', RegistryHelper.blockStackFromRegistry("opencomputers:cable:0"), 'B', RegistryHelper.itemStackFromRegistry("opencomputers:material:4"), 'F', "steelFrame");
 		}
@@ -242,6 +242,7 @@ public class CraftingRecipeHandler {
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_heater_port2, 1, 14), " E ", "EPE", " E ", 'P', new ItemStack(NCBlocks.fission_heater_port, 1, 0), 'E', "ingotEnderium");
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_heater_port2, 1, 15), " C ", "CPC", " C ", 'P', new ItemStack(NCBlocks.fission_heater_port, 1, 0), 'C', "dustCryotheum");
 		
+		addShapedOreRecipe(new ItemStack(NCBlocks.fission_source_manager, 4), "PEP", "RFR", "PEP", 'P', "plateBasic", 'E', "dustEnergetic", 'R', Items.REPEATER, 'F', "steelFrame");
 		addShapedOreRecipe(new ItemStack(NCBlocks.fission_shield_manager, 4), "PTP", "RFR", "PTP", 'P', "plateBasic", 'T', "ingotTough", 'R', Items.REPEATER, 'F', "steelFrame");
 		
 		addShapedOreRecipe(NCBlocks.solid_fission_controller, "PTP", "HFH", "PTP", 'P', "plateAdvanced", 'T', "ingotTough", 'H', "ingotHardCarbon", 'F', "steelFrame");

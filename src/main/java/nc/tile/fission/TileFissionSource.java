@@ -4,21 +4,32 @@ import nc.enumm.MetaEnums;
 import nc.multiblock.cuboidal.*;
 import nc.multiblock.fission.*;
 import nc.recipe.*;
+import nc.render.BlockHighlightTracker;
+import nc.tile.fission.manager.*;
+import nc.util.Lang;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
 import static nc.config.NCConfig.fission_max_size;
+import static nc.util.PosHelper.DEFAULT_NON;
 
-public class TileFissionSource extends TileFissionPart {
+public class TileFissionSource extends TileFissionPart implements IFissionManagerListener<TileFissionSourceManager, TileFissionSource> {
 	
 	protected double efficiency;
 	
+	public boolean isActive = false;
 	public EnumFacing facing = EnumFacing.DOWN;
+	
+	protected BlockPos managerPos = DEFAULT_NON;
+	protected TileFissionSourceManager manager = null;
 	
 	/**
 	 * Don't use this constructor!
@@ -98,15 +109,20 @@ public class TileFissionSource extends TileFissionPart {
 	
 	@Override
 	public void onBlockNeighborChanged(IBlockState state, World worldIn, BlockPos posIn, BlockPos fromPos) {
-		boolean wasRedstonePowered = getIsRedstonePowered();
+		boolean wasActive = isActive;
 		super.onBlockNeighborChanged(state, worldIn, posIn, fromPos);
-		setActivity(getIsRedstonePowered());
-		if (!worldIn.isRemote && wasRedstonePowered != getIsRedstonePowered()) {
+		isActive = isSourceActive();
+		setActivity(isActive);
+		if (!worldIn.isRemote && wasActive != isActive) {
 			FissionReactorLogic logic = getLogic();
 			if (logic != null) {
 				logic.onSourceUpdated(this);
 			}
 		}
+	}
+	
+	public boolean isSourceActive() {
+		return (manager != null && manager.isManagerActive()) || getIsRedstonePowered();
 	}
 	
 	public PrimingTargetInfo getPrimingTarget(boolean simulate) {
@@ -154,11 +170,88 @@ public class TileFissionSource extends TileFissionPart {
 		}
 	}
 	
+	// IFissionManagerListener
+	
+	@Override
+	public BlockPos getManagerPos() {
+		return managerPos;
+	}
+	
+	@Override
+	public void setManagerPos(BlockPos pos) {
+		managerPos = pos;
+	}
+	
+	@Override
+	public TileFissionSourceManager getManager() {
+		return manager;
+	}
+	
+	@Override
+	public void setManager(TileFissionSourceManager manager) {
+		this.manager = manager;
+	}
+	
+	@Override
+	public boolean onManagerRefresh(TileFissionSourceManager manager) {
+		this.manager = manager;
+		if (manager != null) {
+			managerPos = manager.getPos();
+			boolean wasActive = isActive;
+			isActive = isSourceActive();
+			if (wasActive != isActive) {
+				setActivity(isActive);
+				return true;
+			}
+		}
+		else {
+			managerPos = DEFAULT_NON;
+		}
+		return false;
+	}
+	
+	@Override
+	public String getManagerType() {
+		return "fissionSourceManager";
+	}
+	
+	@Override
+	public Class<TileFissionSourceManager> getManagerClass() {
+		return TileFissionSourceManager.class;
+	}
+	
+	// IMultitoolLogic
+	
+	@Override
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (IFissionManagerListener.super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ)) {
+			return true;
+		}
+		if (!player.isSneaking()) {
+			PrimingTargetInfo targetInfo = getPrimingTarget(true);
+			if (targetInfo == null) {
+				player.sendMessage(new TextComponentString(Lang.localize("nuclearcraft.multiblock.fission_reactor_source.no_target")));
+			}
+			else {
+				IFissionFuelComponent fuelComponent = targetInfo.fuelComponent;
+				BlockPos pos = fuelComponent.getTilePos();
+				BlockHighlightTracker.sendPacket(player, pos, 5000);
+				player.sendMessage(new TextComponentString(Lang.localize("nuclearcraft.multiblock.fission_reactor_source.target", pos.getX(), pos.getY(), pos.getZ(), fuelComponent.getTileBlockDisplayName())));
+			}
+			return true;
+		}
+		return super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
+	}
+	
+	// NBT
+	
 	@Override
 	public NBTTagCompound writeAll(NBTTagCompound nbt) {
 		super.writeAll(nbt);
 		nbt.setInteger("facing", facing.getIndex());
 		nbt.setDouble("efficiency", efficiency);
+		nbt.setBoolean("isSourceActive", isActive);
+		nbt.setLong("managerPos", managerPos.toLong());
 		return nbt;
 	}
 	
@@ -169,5 +262,7 @@ public class TileFissionSource extends TileFissionPart {
 		if (nbt.hasKey("efficiency")) {
 			efficiency = nbt.getDouble("efficiency");
 		}
+		isActive = nbt.getBoolean("isSourceActive");
+		managerPos = BlockPos.fromLong(nbt.getLong("managerPos"));
 	}
 }

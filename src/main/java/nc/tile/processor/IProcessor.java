@@ -5,14 +5,12 @@ import nc.config.NCConfig;
 import nc.network.tile.processor.ProcessorUpdatePacket;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
-import nc.tile.*;
+import nc.tile.ITileGui;
 import nc.tile.dummy.IInterfaceable;
-import nc.tile.energy.ITileEnergy;
 import nc.tile.fluid.ITileFluid;
-import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.fluid.Tank.TankInfo;
-import nc.tile.internal.inventory.*;
+import nc.tile.internal.inventory.ItemOutputSetting;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.*;
@@ -24,8 +22,8 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.*;
-import net.minecraftforge.items.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.*;
 import java.util.*;
@@ -53,14 +51,6 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 		else {
 			setBaseProcessTime(recipe.getBaseProcessTime(info.defaultProcessTime));
 			setBaseProcessPower(recipe.getBaseProcessPower(info.defaultProcessPower));
-			
-			if (info.consumesInputs && this instanceof ITileEnergy tileEnergy) {
-				EnergyConnection energyConnection = getBaseProcessPower() >= 0D ? EnergyConnection.IN : EnergyConnection.OUT;
-				EnergyConnection[] energyConnections = tileEnergy.getEnergyConnections();
-				for (int i = 0; i < 6; ++i) {
-					energyConnections[i] = energyConnection;
-				}
-			}
 		}
 	}
 	
@@ -76,6 +66,16 @@ public interface IProcessor<TILE extends TileEntity & IProcessor<TILE, PACKET, I
 	
 	default List<Tank> getFluidInputs(boolean consumed) {
 		return consumed ? getConsumedTanks() : getTanks().subList(0, getContainerInfo().fluidInputSize);
+	}
+	
+	default List<ItemStack> getItemOutputs() {
+		int[] slots = getContainerInfo().itemOutputSlots;
+		return slots.length == 0 ? Collections.emptyList() : getInventoryStacks().subList(slots[0], slots[0] + slots.length);
+	}
+	
+	default List<Tank> getFluidOutputs() {
+		int[] tanks = getContainerInfo().fluidOutputTanks;
+		return tanks.length == 0 ? Collections.emptyList() : getTanks().subList(tanks[0], tanks[0] + tanks.length);
 	}
 	
 	default List<IItemIngredient> getItemIngredients() {

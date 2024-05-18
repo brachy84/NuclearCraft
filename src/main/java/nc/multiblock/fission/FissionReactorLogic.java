@@ -9,14 +9,13 @@ import nc.network.multiblock.FissionUpdatePacket;
 import nc.tile.fission.*;
 import nc.tile.fission.IFissionFuelComponent.ModeratorBlockInfo;
 import nc.tile.fission.TileFissionSource.PrimingTargetInfo;
-import nc.tile.fission.manager.TileFissionShieldManager;
+import nc.tile.fission.manager.*;
 import nc.tile.fission.port.TileFissionIrradiatorPort;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.internal.heat.HeatBuffer;
 import nc.tile.multiblock.TilePartAbstract.SyncReason;
 import nc.util.NCMath;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +24,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static nc.block.property.BlockProperties.*;
 import static nc.config.NCConfig.*;
 
 public class FissionReactorLogic extends MultiblockLogic<FissionReactor, FissionReactorLogic, IFissionPart> implements IPacketMultiblockLogic<FissionReactor, FissionReactorLogic, IFissionPart, FissionUpdatePacket> {
@@ -144,6 +142,8 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 	public void onAssimilated(FissionReactor assimilator) {}
 	
 	public void refreshConnections() {
+		refreshManagers(TileFissionSourceManager.class);
+		refreshManagers(TileFissionShieldManager.class);
 		refreshFilteredPorts(TileFissionIrradiatorPort.class, TileFissionIrradiator.class);
 	}
 	
@@ -157,10 +157,6 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		while (getReactor().refreshFlag);
 		
 		refreshReactorStats();
-	}
-	
-	public void refreshManagers() {
-		refreshManagers(TileFissionShieldManager.class);
 	}
 	
 	public void refreshFlux() {
@@ -204,12 +200,10 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 	
 	public void distributeFlux(final ObjectSet<IFissionFuelComponent> primedCache, final Long2ObjectMap<IFissionFuelComponent> primedFailCache) {
 		for (TileFissionSource source : getParts(TileFissionSource.class)) {
-			IBlockState state = getWorld().getBlockState(source.getPos());
-			EnumFacing facing = source.getPartPosition().getFacing();
 			source.refreshIsRedstonePowered(getWorld(), source.getPos());
-			getWorld().setBlockState(source.getPos(), state.withProperty(FACING_ALL, facing != null ? facing : state.getValue(FACING_ALL)).withProperty(ACTIVE, source.getIsRedstonePowered()), 3);
+			source.setActivity(source.isActive = source.isSourceActive());
 			
-			if (!source.getIsRedstonePowered()) {
+			if (!source.isActive) {
 				continue;
 			}
 			PrimingTargetInfo targetInfo = source.getPrimingTarget(false);
@@ -474,7 +468,7 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 	// Component Logic
 	
 	public void onSourceUpdated(TileFissionSource source) {
-		if (source.getIsRedstonePowered()) {
+		if (source.isActive) {
 			PrimingTargetInfo targetInfo = source.getPrimingTarget(false);
 			if (targetInfo != null) {
 				if (!targetInfo.fuelComponent.isFunctional()) {

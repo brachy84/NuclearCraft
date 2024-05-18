@@ -1055,4 +1055,30 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		}
 		return super.getCapability(capability, side);
 	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "vessel";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
+		List<Tank> tanks = getTanks();
+		entry.put("fuel", OCHelper.tankInfo(tanks.get(0)));
+		entry.put("depleted_fuel", OCHelper.tankInfo(tanks.get(1)));
+		entry.put("effective_heating", getEffectiveHeating());
+		entry.put("heat_multiplier", getHeatMultiplier());
+		entry.put("is_processing", getIsProcessing());
+		entry.put("current_time", getCurrentTime());
+		entry.put("base_process_time", getBaseProcessTime());
+		entry.put("base_process_criticality", baseProcessCriticality);
+		entry.put("base_process_efficiency", baseProcessEfficiency);
+		entry.put("is_primed", isPrimed());
+		entry.put("efficiency", getEfficiency());
+		entry.put("flux", getFlux());
+		return entry;
+	}
 }

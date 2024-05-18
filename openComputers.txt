@@ -1,8 +1,33 @@
  NuclearCraft OpenComputers Methods
 #==================================#
 
- Fission Reactor - component.nc_fission_reactor  (KINDA BROKEN!):
->----------------------------------------------------------------<
+ Processor - e.g. component.nc_manufactory:
+>------------------------------------------<
+
+boolean getIsProcessing()
+
+double getCurrentTime()
+
+double getBaseProcessTime()
+double getBaseProcessPower()
+
+Table[] getItemInputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidInputs() -> {{fluidAmount, fluidName}, ...}
+Table[] getItemOutputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidOutputs() -> {{fluidAmount, fluidName}, ...}
+
+void setItemInputSorption(int side, int index, int sorption)
+void setFluidInputSorption(int side, int index, int sorption)
+void setItemOutputSorption(int side, int index, int sorption)
+void setFluidOutputSorption(int side, int index, int sorption)
+
+void haltProcess()
+void resumeProcess()
+
+---------------------------------------------------------------------------------------------------------------------------
+
+ Fission Reactor - component.nc_fission_reactor:
+>-----------------------------------------------<
 
 boolean isComplete()
 boolean isReactorOn()
@@ -14,44 +39,30 @@ int getLengthZ()
 long getHeatStored()
 long getHeatCapacity()
 
+int getTemperature()
+
 double getCoolingRate()
 double getRawHeatingRate()
-double getNetHeatingRate()
-double getRawEfficiency()
-double getHeatMultiplier()
-double getCoolingEfficiency()
+double getMeanEfficiency()
+double getMeanHeatMultiplier()
 
+int getNumberOfIrradiators()
 int getNumberOfCells()
+int getNumberOfSinks()
 int getNumberOfVessels()
 int getNumberOfHeaters()
 int getNumberOfShields()
 
+Table[] getIrradiatorStats()
+Table[] getCellStats()
+Table[] getSinkStats()
+Table[] getVesselStats()
+Table[] getHeaterStats()
+Table[] getShieldStats()
+
 int getNumberOfClusters()
 
-Table[] getCellStats() ->
-{
-	{
-		"fuel": {stackSize, itemID},
-		"effective_heating": effectiveHeating,
-		"heat_multiplier": heatMultiplier,
-		"is_processing": isProcessing,
-		"time": time,
-		"base_process_time": baseProcessTime,
-		"cluster_heat_capacity": clusterHeatCapacity,
-		"cluster_heat_stored": clusterHeatStored,
-		"cluster_cooling": clusterCooling,
-		"base_process_criticality": baseProcessCriticality,
-		"base_process_efficiency": baseProcessEfficiency,
-		"is_primed": isPrimed,
-		"efficiency": efficiency
-	},
-	...
-}
-
-Table[] getClusterComponents(int clusterID)
-
-void activate()
-void deactivate()
+Table[] getClusterInfo(int clusterID)
 
 void clearAllMaterial()
 
@@ -90,19 +101,28 @@ int getLengthY()
 int getLengthZ()
 
 boolean isProcessing()
-int getEnergyStored()
-int getEnergyCapacity()
+
+long getEnergyStored()
+long getEnergyCapacity()
+
 double getPower()
+
 double getCoilConductivity()
+
 String getFlowDirection()
+
 double getTotalExpansionLevel()
 double getIdealTotalExpansionLevel()
+
 double[] getExpansionLevels()
 double[] getIdealExpansionLevels()
 double[] getBladeEfficiencies()
+
 int getInputRate()
 
-int getNumberOfDynamoCoils()
+int getNumberOfDynamoParts()
+
+Table[] getDynamoPartStats()
 
 void activate()
 void deactivate()

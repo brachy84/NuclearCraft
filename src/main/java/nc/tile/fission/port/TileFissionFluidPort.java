@@ -1,7 +1,7 @@
 package nc.tile.fission.port;
 
 import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import nc.ModCheck;
 import nc.config.NCConfig;
 import nc.handler.TileInfoHandler;
@@ -11,14 +11,14 @@ import nc.tile.*;
 import nc.tile.fluid.*;
 import nc.tile.internal.fluid.*;
 import nc.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.*;
@@ -215,7 +215,7 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	// IMultitoolLogic
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World worldIn, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 		
 		}

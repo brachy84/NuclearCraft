@@ -1,7 +1,8 @@
 package nc.tile.processor;
 
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.*;
+import li.cil.oc.api.machine.*;
 import li.cil.oc.api.network.SimpleComponent;
 import nc.ModCheck;
 import nc.handler.TileInfoHandler;
@@ -12,11 +13,11 @@ import nc.tile.energyFluid.TileEnergyFluidSidedInventory;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.fluid.*;
-import nc.tile.internal.inventory.InventoryConnection;
+import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.info.ProcessorContainerInfo;
 import nc.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -49,6 +50,8 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
 	protected final HandlerPair[] adjacentHandlers = new HandlerPair[6];
+	
+	protected boolean fullHalt = false;
 	
 	/**
 	 * Don't use this constructor!
@@ -253,12 +256,12 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	
 	@Override
 	public boolean isHalted() {
-		return getRedstoneControl() && getIsRedstonePowered();
+		return fullHalt || (getRedstoneControl() && getIsRedstonePowered());
 	}
 	
 	@Override
 	public boolean readyToProcess() {
-		return IProcessor.super.readyToProcess() && hasSufficientEnergy();
+		return IProcessor.super.readyToProcess() && (info.isGenerator || hasSufficientEnergy());
 	}
 	
 	// Needed for Galacticraft
@@ -283,7 +286,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	
 	@Override
 	public void process() {
-		getEnergyStorage().changeEnergyStored(-getProcessPower());
+		getEnergyStorage().changeEnergyStored(info.isGenerator ? getProcessPower() : -getProcessPower());
 		getRadiationSource().setRadiationLevel(baseProcessRadiation * getSpeedMultiplier());
 		IProcessor.super.process();
 	}
@@ -342,13 +345,15 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	// IMultitoolLogic
 	
 	@Override
-	public boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
 		if (nbt != null) {
+			String displayName = getTileBlockDisplayName();
 			if (player.isSneaking()) {
 				NBTTagCompound config = new NBTTagCompound();
 				EnumFacing dir = getFacingHorizontal();
 				config.setString("infoName", info.name);
+				config.setString("displayName", displayName);
 				if (hasConfigurableInventoryConnections()) {
 					config.setTag("inventoryConnections", writeInventoryConnectionsDirectional(new NBTTagCompound(), dir));
 					config.setTag("slotSettings", writeSlotSettings(new NBTTagCompound()));
@@ -359,7 +364,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 				}
 				config.setBoolean("alternateComparator", getAlternateComparator());
 				config.setBoolean("redstoneControl", getRedstoneControl());
-				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.save_processor_config", getDisplayName().getUnformattedText())));
+				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.save_processor_config", displayName)));
 				nbt.setTag("processorConfig", config);
 				return true;
 			}
@@ -377,11 +382,11 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 					}
 					setAlternateComparator(config.getBoolean("alternateComparator"));
 					setRedstoneControl(config.getBoolean("redstoneControl"));
-					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.load_processor_config", getDisplayName().getUnformattedText())));
+					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.load_processor_config", displayName)));
 					return true;
 				}
 				else {
-				
+					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.invalid_processor_config", config.getString("displayName"), displayName)));
 				}
 			}
 		}
@@ -395,6 +400,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 		nbt.setString("infoName", info.name);
 		super.writeAll(nbt);
 		writeProcessorNBT(nbt);
+		nbt.setBoolean("fullHalt", fullHalt);
 		return nbt;
 	}
 	
@@ -405,6 +411,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 		}
 		super.readAll(nbt);
 		readProcessorNBT(nbt);
+		fullHalt = nbt.getBoolean("fullHalt");
 	}
 	
 	// OpenComputers
@@ -413,5 +420,99 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	@Optional.Method(modid = "opencomputers")
 	public String getComponentName() {
 		return getContainerInfo().ocComponentName;
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getIsProcessing(Context context, Arguments args) {
+		return new Object[] {getIsProcessing()};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getCurrentTime(Context context, Arguments args) {
+		return new Object[] {getCurrentTime()};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getBaseProcessTime(Context context, Arguments args) {
+		return new Object[] {getBaseProcessTime()};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getBaseProcessPower(Context context, Arguments args) {
+		return new Object[] {getBaseProcessPower()};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getItemInputs(Context context, Arguments args) {
+		return new Object[] {OCHelper.stackInfoArray(getItemInputs(false))};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getFluidInputs(Context context, Arguments args) {
+		return new Object[] {OCHelper.tankInfoArray(getFluidInputs(false))};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getItemOutputs(Context context, Arguments args) {
+		return new Object[] {OCHelper.stackInfoArray(getItemOutputs())};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] getFluidOutputs(Context context, Arguments args) {
+		return new Object[] {OCHelper.tankInfoArray(getFluidOutputs())};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] setItemInputSorption(Context context, Arguments args) {
+		setItemSorption(EnumFacing.VALUES[args.checkInteger(0)], info.itemInputSlots[args.checkInteger(1)], ItemSorption.fromInt(ItemSorption.Type.INPUT, args.checkInteger(2)));
+		markDirtyAndNotify();
+		return new Object[] {};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] setFluidInputSorption(Context context, Arguments args) {
+		setTankSorption(EnumFacing.VALUES[args.checkInteger(0)], info.fluidInputTanks[args.checkInteger(1)], TankSorption.fromInt(TankSorption.Type.INPUT, args.checkInteger(2)));
+		markDirtyAndNotify();
+		return new Object[] {};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] setItemOutputSorption(Context context, Arguments args) {
+		setItemSorption(EnumFacing.VALUES[args.checkInteger(0)], info.itemOutputSlots[args.checkInteger(1)], ItemSorption.fromInt(ItemSorption.Type.OUTPUT, args.checkInteger(2)));
+		markDirtyAndNotify();
+		return new Object[] {};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] setFluidOutputSorption(Context context, Arguments args) {
+		setTankSorption(EnumFacing.VALUES[args.checkInteger(0)], info.fluidOutputTanks[args.checkInteger(1)], TankSorption.fromInt(TankSorption.Type.OUTPUT, args.checkInteger(2)));
+		markDirtyAndNotify();
+		return new Object[] {};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] haltProcess(Context context, Arguments args) {
+		fullHalt = true;
+		return new Object[] {};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
+	public Object[] resumeProcess(Context context, Arguments args) {
+		fullHalt = false;
+		return new Object[] {};
 	}
 }

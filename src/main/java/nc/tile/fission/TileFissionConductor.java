@@ -1,6 +1,7 @@
 package nc.tile.fission;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.objects.*;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.fission.*;
 import net.minecraft.nbt.NBTTagCompound;
@@ -90,5 +91,17 @@ public class TileFissionConductor extends TileFissionPart implements IFissionCom
 	public void readAll(NBTTagCompound nbt) {
 		super.readAll(nbt);
 		heat = nbt.getLong("clusterHeat");
+	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "conductor";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		return new Object2ObjectLinkedOpenHashMap<String, Object>();
 	}
 }

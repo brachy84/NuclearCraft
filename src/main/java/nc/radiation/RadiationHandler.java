@@ -196,7 +196,7 @@ public class RadiationHandler {
 			new PlayerRadsUpdatePacket(playerRads).sendTo(player);
 			
 			if (!player.isCreative() && !player.isSpectator() && !playerRads.isImmune()) {
-				RadiationHelper.applyPotionEffects(player, playerRads, 1, RadPotionEffects.PLAYER_RAD_LEVEL_LIST, RadPotionEffects.PLAYER_DEBUFF_LIST);
+				RadiationHelper.applyEntityEffects(player, playerRads, 1D, RadPotionEffects.PLAYER_RAD_LEVEL_LIST, RadPotionEffects.PLAYER_RAD_EFFECT_LISTS, RadPotionEffects.PLAYER_RAD_ATTRIBUTE_MAP);
 			}
 		}
 		else {
@@ -302,7 +302,7 @@ public class RadiationHandler {
 								entityLiving.attackEntityFrom(DamageSources.FATAL_RADS, Float.MAX_VALUE);
 							}
 							else {
-								RadiationHelper.applyPotionEffects(entityLiving, entityRads, (int) tickMult, RadPotionEffects.MOB_RAD_LEVEL_LIST, RadPotionEffects.MOB_EFFECTS_LIST);
+								RadiationHelper.applyEntityEffects(entityLiving, entityRads, tickMult, RadPotionEffects.MOB_RAD_LEVEL_LIST, RadPotionEffects.MOB_RAD_EFFECT_LISTS, RadPotionEffects.MOB_RAD_ATTRIBUTE_MAP);
 							}
 						}
 						else {
@@ -315,7 +315,7 @@ public class RadiationHandler {
 								}
 							}
 							else {
-								RadiationHelper.applyPotionEffects(entityLiving, entityRads, (int) tickMult, RadPotionEffects.ENTITY_RAD_LEVEL_LIST, RadPotionEffects.ENTITY_DEBUFF_LIST);
+								RadiationHelper.applyEntityEffects(entityLiving, entityRads, tickMult, RadPotionEffects.ENTITY_RAD_LEVEL_LIST, RadPotionEffects.ENTITY_RAD_EFFECT_LISTS, RadPotionEffects.ENTITY_RAD_ATTRIBUTE_MAP);
 							}
 						}
 						entityRads.setRadiationLevel(entityRads.getRadiationLevel() * Math.pow(1D - radiation_decay_rate, tickMult));

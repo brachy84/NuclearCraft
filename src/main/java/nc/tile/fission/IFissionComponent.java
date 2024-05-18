@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import nc.multiblock.fission.FissionCluster;
 import nc.tile.fission.IFissionFuelComponent.*;
 import nc.util.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -125,18 +125,25 @@ public interface IFissionComponent extends IFissionPart {
 	// IMultitoolLogic
 	
 	@Override
-	default boolean onUseMultitool(ItemStack multitool, EntityPlayer player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) {
-			NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
-			if (nbt != null) {
-				nbt.setLong("componentPos", getTilePos().toLong());
-				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.copy_component_info")));
+	default boolean onUseMultitool(ItemStack multitool, EntityPlayerMP player, World world, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		NBTTagCompound nbt = NBTHelper.getStackNBT(multitool, "ncMultitool");
+		if (nbt != null) {
+			if (player.isSneaking()) {
+				NBTTagCompound info = new NBTTagCompound();
+				String displayName = getTileBlockDisplayName();
+				info.setString("displayName", displayName);
+				info.setLong("componentPos", getTilePos().toLong());
+				player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.save_component_info", displayName)));
+				nbt.setTag("fissionComponentInfo", info);
 				return true;
 			}
 		}
-		else {
-		
-		}
 		return IFissionPart.super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
 	}
+	
+	// OpenComputers
+	
+	String getOCKey();
+	
+	Object getOCInfo();
 }

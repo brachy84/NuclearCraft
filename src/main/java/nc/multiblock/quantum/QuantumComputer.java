@@ -224,8 +224,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 					WORLD.setBlockToAir(controller.getPos());
 				}
 				NCUtil.getLogger().fatal("The quantum computer with " + q + " qubits at " + getMiddleCoord().toString() + " has caused the game to run out of heap memory! The controller has been destroyed and so the multiblock has been disabled. It is HIGHLY recommended that the maximum qubit limits are lowered in the configs!");
-				e.printStackTrace();
-				return false;
+				throw new RuntimeException(e);
 			}
 		}
 		

@@ -4,7 +4,7 @@ import nc.*;
 import nc.block.*;
 import nc.block.battery.*;
 import nc.block.fission.*;
-import nc.block.fission.manager.BlockFissionShieldManager;
+import nc.block.fission.manager.*;
 import nc.block.fission.port.*;
 import nc.block.hx.*;
 import nc.block.item.*;
@@ -117,6 +117,7 @@ public class NCBlocks {
 	public static Block fission_heater_port;
 	public static Block fission_heater_port2;
 	
+	public static Block fission_source_manager;
 	public static Block fission_shield_manager;
 	
 	public static Block solid_fission_controller;
@@ -323,6 +324,7 @@ public class NCBlocks {
 		fission_heater_port = addWithNameMeta(Global.MOD_ID, "fission_heater_port", new BlockFissionHeaterPort(), ItemBlockMeta<MetaEnums.CoolantHeaterType>::new, x -> "active=false,axis=z,type=" + x);
 		fission_heater_port2 = addWithNameMeta(Global.MOD_ID, "fission_heater_port2", new BlockFissionHeaterPort2(), ItemBlockMeta<MetaEnums.CoolantHeaterType2>::new, x -> "active=false,axis=z,type=" + x);
 		
+		fission_source_manager = addWithName(Global.MOD_ID, "fission_source_manager", new BlockFissionSourceManager());
 		fission_shield_manager = addWithName(Global.MOD_ID, "fission_shield_manager", new BlockFissionShieldManager());
 		
 		solid_fission_controller = addWithName(Global.MOD_ID, "solid_fission_controller", new BlockSolidFissionController());

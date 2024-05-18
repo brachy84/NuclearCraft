@@ -19,7 +19,7 @@ import nc.tile.internal.inventory.*;
 import nc.tile.inventory.ITileInventory;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
-import nc.util.CapabilityHelper;
+import nc.util.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -936,5 +936,27 @@ public class TileSaltFissionHeater extends TileFissionPart implements IBasicProc
 			return null;
 		}
 		return super.getCapability(capability, side);
+	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "heater";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
+		List<Tank> tanks = getTanks();
+		entry.put("coolant", OCHelper.tankInfo(tanks.get(0)));
+		entry.put("hot_coolant", OCHelper.tankInfo(tanks.get(1)));
+		entry.put("type", heaterType);
+		entry.put("cooling", getCooling());
+		entry.put("speed_multiplier", getSpeedMultiplier());
+		entry.put("is_processing", getIsProcessing());
+		entry.put("current_time", getCurrentTime());
+		entry.put("base_process_time", getBaseProcessTime());
+		return entry;
 	}
 }

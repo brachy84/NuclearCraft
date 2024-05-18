@@ -15,7 +15,7 @@ import nc.tile.internal.inventory.*;
 import nc.tile.inventory.*;
 import nc.tile.processor.IBasicProcessor;
 import nc.tile.processor.info.ProcessorContainerInfoImpl;
-import nc.util.NBTHelper;
+import nc.util.*;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -704,5 +704,28 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		// ITileInventory tile = !DEFAULT_NON.equals(masterPortPos) ? masterPort : this;
 		// return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new PortItemHandler(tile, side));
 		return ITileFilteredInventory.super.getItemHandler(side);
+	}
+	
+	// OpenComputers
+	
+	@Override
+	public String getOCKey() {
+		return "irradiator";
+	}
+	
+	@Override
+	public Object getOCInfo() {
+		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
+		List<ItemStack> stacks = getInventoryStacks();
+		entry.put("input", OCHelper.stackInfo(stacks.get(0)));
+		entry.put("output", OCHelper.stackInfo(stacks.get(1)));
+		entry.put("effective_heating", getEffectiveHeating());
+		entry.put("is_processing", getIsProcessing());
+		entry.put("current_time", getCurrentTime());
+		entry.put("base_process_time", getBaseProcessTime());
+		entry.put("base_process_heat_per_flux", baseProcessHeatPerFlux);
+		entry.put("base_process_efficiency", baseProcessEfficiency);
+		entry.put("flux", getFlux());
+		return entry;
 	}
 }
