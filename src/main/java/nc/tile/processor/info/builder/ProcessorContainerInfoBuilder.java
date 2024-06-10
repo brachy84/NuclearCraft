@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.*;
 import java.util.function.Supplier;
 
+import static nc.NuclearCraft.proxy;
 import static nc.config.NCConfig.*;
 
 public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends ProcessorContainerInfo<TILE, PACKET, INFO>, BUILDER extends ProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER>> extends ContainerInfoBuilder<BUILDER> {
@@ -70,7 +71,7 @@ public abstract class ProcessorContainerInfoBuilder<TILE extends TileEntity & IP
 	}
 	
 	protected ProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
-		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, GuiProcessor.SideConfig::new));
+		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, proxy.clientGet(() -> GuiProcessor.SideConfig::new)));
 	}
 	
 	public ProcessorBlockInfo<TILE> buildBlockInfo() {

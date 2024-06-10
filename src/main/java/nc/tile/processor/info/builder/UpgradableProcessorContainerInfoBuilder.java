@@ -14,6 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.function.Supplier;
 
+import static nc.NuclearCraft.proxy;
+
 public abstract class UpgradableProcessorContainerInfoBuilder<TILE extends TileEntity & IProcessor<TILE, PACKET, INFO>, PACKET extends ProcessorUpdatePacket, INFO extends UpgradableProcessorContainerInfo<TILE, PACKET, INFO>, BUILDER extends UpgradableProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER>> extends ProcessorContainerInfoBuilder<TILE, PACKET, INFO, BUILDER> {
 	
 	protected int[] speedUpgradeGuiXYWH = ContainerInfoHelper.standardSlot(132, 64);
@@ -24,7 +26,7 @@ public abstract class UpgradableProcessorContainerInfoBuilder<TILE extends TileE
 	}
 	
 	protected UpgradableProcessorContainerInfoBuilder(String modId, String name, Class<TILE> tileClass, Supplier<TILE> tileSupplier, Class<? extends Container> containerClass, ContainerFunction<TILE> containerFunction, Class<? extends GuiContainer> guiClass, GuiInfoTileFunction<TILE> guiFunction) {
-		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, GuiUpgradableProcessor.SideConfig::new));
+		this(modId, name, tileClass, tileSupplier, containerClass, containerFunction, guiClass, GuiFunction.of(modId, name, containerFunction, guiFunction), ContainerSideConfig::new, GuiFunction.of(modId, name, ContainerSideConfig::new, proxy.clientGet(() -> GuiUpgradableProcessor.SideConfig::new)));
 	}
 	
 	public BUILDER setSpeedUpgradeSlot(int x, int y, int w, int h) {

@@ -36,6 +36,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import slimeknights.tconstruct.library.materials.Material;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 public class CommonProxy {
 	
@@ -224,7 +225,13 @@ public class CommonProxy {
 		return ctx.getServerHandler().player;
 	}
 	
-	// Fluid Colours
+	// Sided Info
+	
+	public <T> T clientGet(Supplier<T> supplier) {
+		return null;
+	}
+	
+	// Fluid Colors
 	
 	public void registerFluidBlockRendering(Block block, String name) {
 	

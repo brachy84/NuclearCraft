@@ -29,6 +29,7 @@ import slimeknights.tconstruct.library.client.MaterialRenderInfo;
 import slimeknights.tconstruct.library.materials.Material;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class ClientProxy extends CommonProxy {
 	
@@ -79,7 +80,14 @@ public class ClientProxy extends CommonProxy {
 		return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
 	}
 	
-	// Fluid Colours
+	// Sided Info
+	
+	@Override
+	public <T> T clientGet(Supplier<T> supplier) {
+		return supplier.get();
+	}
+	
+	// Fluid Colors
 	
 	static {
 		ModelLoaderRegistry.registerLoader(ModelTexturedFluid.FluidTexturedLoader.INSTANCE);
