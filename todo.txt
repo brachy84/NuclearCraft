@@ -36,8 +36,6 @@ ________________________________________________________________________________
 1.20+: Remove fission clusters
 1.20+: Make reflectors tile entities and conduct heat
 1.20+: Placement rule tweaks (e.g. nerf emerald and liquid helium)
-
-1.20+: Item stack NBT support in NC recipes (also allow for NBT 'wildcards')
 ___________________________________________________________________________________________________________________________
 
 Multiblock Electrolyser

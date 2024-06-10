@@ -1,13 +1,6 @@
 package nc.util;
 
-import java.util.function.*;
-
 public class LambdaHelper {
-	
-	public static <T> T also(T t, Consumer<T> consumer) {
-		consumer.accept(t);
-		return t;
-	}
 	
 	@FunctionalInterface
 	public interface ThrowingRunnable {
@@ -54,6 +47,15 @@ public class LambdaHelper {
 		}
 	}
 	
+	public static <T> T getThrowingOrDefault(ThrowingSupplier<T> supplier, T defaultValue) {
+		try {
+			return supplier.get();
+		}
+		catch (Exception e) {
+			return defaultValue;
+		}
+	}
+	
 	@FunctionalInterface
 	public interface ThrowingFunction<A, B> {
 		
@@ -66,6 +68,15 @@ public class LambdaHelper {
 		}
 		catch (Exception e) {
 			throw new UnsupportedOperationException();
+		}
+	}
+	
+	public static <A, B> B applyThrowingOrDefault(ThrowingFunction<A, B> function, A x, B defaultValue) {
+		try {
+			return function.apply(x);
+		}
+		catch (Exception e) {
+			return defaultValue;
 		}
 	}
 }

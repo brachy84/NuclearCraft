@@ -100,7 +100,64 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		public <T> void add(Class<? extends T> clazz, T defaultValue) {
 			int index = currentIndex++;
 			Object extra;
-			fixed.add(index < extrasCount && clazz.isInstance(extra = extras.get(index)) ? extra : defaultValue);
+			fixed.add(index < extrasCount && (extra = tryCast(clazz, extras.get(index))) != null ? extra : defaultValue);
+		}
+		
+		public static Object tryCast(Class<?> targetClass, Object value) {
+			if (value == null) {
+				return null;
+			}
+			
+			if (value instanceof Byte byteValue) {
+				return castInt(targetClass, byteValue);
+			}
+			else if (value instanceof Short shortValue) {
+				return castInt(targetClass, shortValue);
+			}
+			else if (value instanceof Integer intValue) {
+				return castInt(targetClass, intValue);
+			}
+			else if (value instanceof Long longValue) {
+				return castInt(targetClass, longValue);
+			}
+			else if (value instanceof Float floatValue) {
+				return castFloat(targetClass, floatValue);
+			}
+			else if (value instanceof Double doubleValue) {
+				return castFloat(targetClass, doubleValue);
+			}
+			
+			return targetClass.isInstance(value) ? value : null;
+		}
+		
+		private static <T extends Number> Number castInt(Class<?> targetClass, T value) {
+			if (targetClass.equals(Byte.class)) {
+				return value.byteValue();
+			}
+			else if (targetClass.equals(Short.class)) {
+				return value.shortValue();
+			}
+			else if (targetClass.equals(Integer.class)) {
+				return value.intValue();
+			}
+			else if (targetClass.equals(Long.class)) {
+				return value.longValue();
+			}
+			else {
+				return null;
+			}
+		}
+		
+		private static <T extends Number> Number castFloat(Class<?> targetClass, T value) {
+			if (targetClass.equals(Float.class)) {
+				return value.floatValue();
+			}
+			else if (targetClass.equals(Double.class)) {
+				return value.doubleValue();
+			}
+			else {
+				return null;
+			}
 		}
 	}
 	

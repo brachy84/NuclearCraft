@@ -1,3 +1,11 @@
+v2o.7.5
+
+* Attempted to fix sporadic crashes with radiation enabled
+
+* Fixed breaking of recipes when minor details of extra recipe info are modified
+
++ Added new SI prefixes
+
 v2o.7.4
 
 + Added Neutron Source Manager

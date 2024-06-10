@@ -4,12 +4,12 @@ import net.minecraft.util.math.MathHelper;
 
 public class UnitHelper {
 	
-	public static final String[] SI_PREFIX = new String[] {" y", " z", " a", " f", " p", " n", " u", " m", " ", " k", " M", " G", " T", " P", " E", " Z", " Y"};
+	public static final String[] SI_PREFIX = new String[] {" q", " r", " y", " z", " a", " f", " p", " n", " u", " m", " ", " k", " M", " G", " T", " P", " E", " Z", " Y", " R", " Q"};
 	
 	// Long
 	
 	public static String prefix(long value, long max, int maxLength, String unit, int startingPrefix) {
-		int minPrefixNumber = MathHelper.clamp(startingPrefix + 8, 0, 16);
+		int minPrefixNumber = MathHelper.clamp(startingPrefix + 10, 0, 20);
 		int prefixNumber = minPrefixNumber;
 		
 		boolean hasMax = max != Long.MIN_VALUE;
@@ -66,21 +66,21 @@ public class UnitHelper {
 	}
 	
 	public static String prefix(long value, int maxLength, String unit, int startingPrefix) {
-		return UnitHelper.prefix(value, Long.MIN_VALUE, maxLength, unit, startingPrefix);
+		return prefix(value, Long.MIN_VALUE, maxLength, unit, startingPrefix);
 	}
 	
 	public static String prefix(long value, long max, int maxLength, String unit) {
-		return UnitHelper.prefix(value, max, maxLength, unit, 0);
+		return prefix(value, max, maxLength, unit, 0);
 	}
 	
 	public static String prefix(long value, int maxLength, String unit) {
-		return UnitHelper.prefix(value, maxLength, unit, 0);
+		return prefix(value, maxLength, unit, 0);
 	}
 	
 	// Double
 	
 	public static String prefix(double value, double max, int maxLength, String unit, int startingPrefix) {
-		int minPrefixNumber = MathHelper.clamp(startingPrefix + 8, 0, 16);
+		int minPrefixNumber = MathHelper.clamp(startingPrefix + 10, 0, 20);
 		int prefixNumber = minPrefixNumber;
 		
 		boolean hasMax = max != Double.MIN_VALUE;
@@ -137,15 +137,15 @@ public class UnitHelper {
 	}
 	
 	public static String prefix(double value, int maxLength, String unit, int startingPrefix) {
-		return UnitHelper.prefix(value, Double.MIN_VALUE, maxLength, unit, startingPrefix);
+		return prefix(value, Double.MIN_VALUE, maxLength, unit, startingPrefix);
 	}
 	
 	public static String prefix(double value, double max, int maxLength, String unit) {
-		return UnitHelper.prefix(value, max, maxLength, unit, 0);
+		return prefix(value, max, maxLength, unit, 0);
 	}
 	
 	public static String prefix(double value, int maxLength, String unit) {
-		return UnitHelper.prefix(value, maxLength, unit, 0);
+		return prefix(value, maxLength, unit, 0);
 	}
 	
 	// Time

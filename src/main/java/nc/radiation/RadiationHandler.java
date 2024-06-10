@@ -338,8 +338,9 @@ public class RadiationHandler {
 				RadiationHelper.addToSourceBuffer(chunkSource, RadWorlds.RAD_MAP.get(dimension));
 			}
 			
-			if (!RadBiomes.DIM_BLACKLIST.contains(dimension)) {
-				Double biomeRadiation = RadBiomes.RAD_MAP.get(chunk.getBiome(randomOffsetPos, biomeProvider));
+			Biome biome = LambdaHelper.getThrowingOrDefault(() -> chunk.getBiome(randomOffsetPos, biomeProvider), null);
+			if (biome != null && !RadBiomes.DIM_BLACKLIST.contains(dimension)) {
+				Double biomeRadiation = RadBiomes.RAD_MAP.get(biome);
 				if (biomeRadiation != null) {
 					RadiationHelper.addToSourceBuffer(chunkSource, biomeRadiation);
 				}
@@ -383,8 +384,7 @@ public class RadiationHandler {
 			if (radiation_chunk_limit >= 0D) {
 				newLevel = Math.min(newLevel, radiation_chunk_limit);
 			}
-			Biome biome = chunk.getBiome(randomOffsetPos, biomeProvider);
-			if (RadBiomes.LIMIT_MAP.containsKey(biome)) {
+			if (biome != null && RadBiomes.LIMIT_MAP.containsKey(biome)) {
 				newLevel = Math.min(newLevel, RadBiomes.LIMIT_MAP.get(biome));
 			}
 			if (RadWorlds.LIMIT_MAP.containsKey(dimension)) {
