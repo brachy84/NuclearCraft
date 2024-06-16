@@ -178,12 +178,12 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	
 	@Override
 	public boolean isFluidValidForTank(int tankNumber, FluidStack stack) {
-		if (stack == null || stack.amount <= 0 || tankNumber >= recipeHandler.getFluidInputSize()) {
+		if (stack == null || stack.amount <= 0 || tankNumber >= recipeHandler.fluidInputSize) {
 			return false;
 		}
 		
 		if (NCConfig.smart_processor_input) {
-			return recipeHandler.isValidFluidInput(stack, tankNumber, getTanks().subList(0, recipeHandler.getFluidInputSize()), new ArrayList<>(), null);
+			return recipeHandler.isValidFluidInput(stack, tankNumber, getTanks().subList(0, recipeHandler.fluidInputSize), new ArrayList<>(), null);
 		}
 		else {
 			return recipeHandler.isValidFluidInput(stack, tankNumber);

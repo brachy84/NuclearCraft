@@ -6,6 +6,7 @@ import nc.util.*;
 import net.minecraft.init.*;
 import net.minecraft.item.ItemStack;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_ORE_DICT;
 import static nc.util.FluidStackHelper.*;
 
@@ -17,6 +18,10 @@ public class InfuserRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[5]) {
+			return;
+		}
+		
 		addOxidizingRecipe("ingotThorium", BUCKET_VOLUME);
 		addOxidizingRecipe("dustThorium", BUCKET_VOLUME);
 		addOxidizingRecipe("ingotManganese", BUCKET_VOLUME);

@@ -6,7 +6,7 @@ import nc.multiblock.fission.FissionPlacement;
 import nc.multiblock.turbine.TurbinePlacement;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
-import nc.recipe.BasicRecipeHandler;
+import nc.recipe.NCRecipes;
 import nc.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.*;
@@ -83,6 +83,8 @@ public class NCConfig {
 	public static int[] manufactory_wood;
 	public static boolean rock_crusher_alternate;
 	
+	public static boolean default_processor_recipes_global;
+	public static boolean[] default_processor_recipes;
 	public static boolean gtce_recipe_integration_global;
 	public static boolean[] gtce_recipe_integration;
 	public static boolean gtce_recipe_logging;
@@ -504,6 +506,8 @@ public class NCConfig {
 		manufactory_wood = sync(CATEGORY_PROCESSOR, "manufactory_wood", new int[] {6, 4}, 1, 64, ARRAY);
 		rock_crusher_alternate = sync(CATEGORY_PROCESSOR, "rock_crusher_alternate", false);
 		
+		default_processor_recipes_global = sync(CATEGORY_PROCESSOR, "default_processor_recipes_global", true);
+		default_processor_recipes = sync(CATEGORY_PROCESSOR, "default_processor_recipes", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_integration_global = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration_global", true);
 		gtce_recipe_integration = sync(CATEGORY_PROCESSOR, "gtce_recipe_integration", new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, ARRAY);
 		gtce_recipe_logging = sync(CATEGORY_PROCESSOR, "gtce_recipe_logging", false);
@@ -825,7 +829,7 @@ public class NCConfig {
 		
 		setCategoryPropertyOrders(config);
 		
-		BasicRecipeHandler.initGTCEIntegration();
+		NCRecipes.initGTCEIntegration();
 		
 		radiation_enabled_public = radiation_enabled;
 		radiation_horse_armor_public = radiation_horse_armor;

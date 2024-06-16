@@ -25,13 +25,13 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	
 	protected @Nonnull Long2ObjectMap<ObjectSet<RECIPE>> recipeCache = new Long2ObjectOpenHashMap<>();
 	
-	private static final List<Class<?>> validItemInputs = Lists.newArrayList(IItemIngredient.class, ArrayList.class, String.class, Item.class, Block.class, ItemStack.class, ItemStack[].class);
-	private static final List<Class<?>> validFluidInputs = Lists.newArrayList(IFluidIngredient.class, ArrayList.class, String.class, Fluid.class, FluidStack.class, FluidStack[].class);
-	private static final List<Class<?>> validItemOutputs = Lists.newArrayList(IItemIngredient.class, String.class, Item.class, Block.class, ItemStack.class);
-	private static final List<Class<?>> validFluidOutputs = Lists.newArrayList(IFluidIngredient.class, String.class, Fluid.class, FluidStack.class);
+	protected static final List<Class<?>> validItemInputs = Lists.newArrayList(IItemIngredient.class, ArrayList.class, String.class, Item.class, Block.class, ItemStack.class, ItemStack[].class);
+	protected static final List<Class<?>> validFluidInputs = Lists.newArrayList(IFluidIngredient.class, ArrayList.class, String.class, Fluid.class, FluidStack.class, FluidStack[].class);
+	protected static final List<Class<?>> validItemOutputs = Lists.newArrayList(IItemIngredient.class, String.class, Item.class, Block.class, ItemStack.class);
+	protected static final List<Class<?>> validFluidOutputs = Lists.newArrayList(IFluidIngredient.class, String.class, Fluid.class, FluidStack.class);
 	
-	private static final List<Class<?>> needItemAltering = Lists.newArrayList(Item.class, Block.class);
-	private static final List<Class<?>> needFluidAltering = Lists.newArrayList(Fluid.class);
+	protected static final List<Class<?>> needItemFixing = Lists.newArrayList(Item.class, Block.class);
+	protected static final List<Class<?>> needFluidFixing = Lists.newArrayList(Fluid.class);
 	
 	public static final IntList INVALID = new IntArrayList(new int[] {-1});
 	
@@ -92,24 +92,27 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 		recipeCache.clear();
 	}
 	
-	public void init() {
+	protected void initRecipeIngredients() {
 		for (RECIPE recipe : recipeList) {
-			for (IItemIngredient item : recipe.getItemIngredients()) {
-				item.init();
-			}
-			for (IFluidIngredient fluid : recipe.getFluidIngredients()) {
-				fluid.init();
-			}
-			for (IItemIngredient item : recipe.getItemProducts()) {
-				item.init();
-			}
-			for (IFluidIngredient fluid : recipe.getFluidProducts()) {
-				fluid.init();
-			}
+			recipe.getItemIngredients().forEach(IIngredient::init);
+			recipe.getFluidIngredients().forEach(IIngredient::init);
+			recipe.getItemProducts().forEach(IIngredient::init);
+			recipe.getFluidProducts().forEach(IIngredient::init);
 		}
 	}
 	
-	public void postInit() {}
+	public void init() {
+	
+	}
+	
+	public void postInit() {
+		initRecipeIngredients();
+	}
+	
+	public void onReload() {
+		initRecipeIngredients();
+		refreshCache();
+	}
 	
 	public void refreshCache() {
 		recipeCache.clear();
@@ -119,34 +122,26 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	protected abstract void fillHashCache();
 	
 	protected boolean prepareMaterialListTuples(RECIPE recipe, List<Pair<List<ItemStack>, List<FluidStack>>> materialListTuples) {
-		List<List<ItemStack>> itemInputLists = new ArrayList<>();
-		List<List<FluidStack>> fluidInputLists = new ArrayList<>();
+		List<List<ItemStack>> itemInputLists = StreamHelper.map(recipe.getItemIngredients(), IItemIngredient::getInputStackHashingList);
+		List<List<FluidStack>> fluidInputLists = StreamHelper.map(recipe.getFluidIngredients(), IFluidIngredient::getInputStackHashingList);
 		
-		for (IItemIngredient item : recipe.getItemIngredients()) {
-			itemInputLists.add(item.getInputStackHashingList());
-		}
-		for (IFluidIngredient fluid : recipe.getFluidIngredients()) {
-			fluidInputLists.add(fluid.getInputStackHashingList());
-		}
+		int itemInputCount = itemInputLists.size(), fluidInputCount = fluidInputLists.size(), totalInputCount = itemInputCount + fluidInputCount;
+		int[] inputNumbers = new int[totalInputCount];
 		
-		int arrSize = recipe.getItemIngredients().size() + recipe.getFluidIngredients().size();
-		int[] inputNumbers = new int[arrSize];
-		Arrays.fill(inputNumbers, 0);
-		
-		int[] maxNumbers = new int[arrSize];
-		for (int i = 0; i < itemInputLists.size(); ++i) {
+		int[] maxNumbers = new int[totalInputCount];
+		for (int i = 0; i < itemInputCount; ++i) {
 			int maxNumber = itemInputLists.get(i).size() - 1;
 			if (maxNumber < 0) {
 				return false;
 			}
 			maxNumbers[i] = maxNumber;
 		}
-		for (int i = 0; i < fluidInputLists.size(); ++i) {
+		for (int i = 0; i < fluidInputCount; ++i) {
 			int maxNumber = fluidInputLists.get(i).size() - 1;
 			if (maxNumber < 0) {
 				return false;
 			}
-			maxNumbers[i + itemInputLists.size()] = maxNumber;
+			maxNumbers[i + itemInputCount] = maxNumber;
 		}
 		
 		RecipeTupleGenerator.INSTANCE.generateMaterialListTuples(materialListTuples, maxNumbers, inputNumbers, itemInputLists, fluidInputLists, false);
@@ -221,7 +216,7 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	}
 	
 	public static boolean requiresItemFixing(Object object) {
-		for (Class<?> objectType : needItemAltering) {
+		for (Class<?> objectType : needItemFixing) {
 			if (objectType.isInstance(object)) {
 				return true;
 			}
@@ -230,7 +225,7 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	}
 	
 	public static boolean requiresFluidFixing(Object object) {
-		for (Class<?> objectType : needFluidAltering) {
+		for (Class<?> objectType : needFluidFixing) {
 			if (objectType.isInstance(object)) {
 				return true;
 			}
@@ -301,8 +296,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<OreIngredient> oreStackList(List<String> oreTypes, int stackSize) {
 		List<OreIngredient> oreStackList = new ArrayList<>();
 		for (String oreType : oreTypes) {
-			if (oreStack(oreType, stackSize) != null) {
-				oreStackList.add(oreStack(oreType, stackSize));
+			OreIngredient oreIngredient = oreStack(oreType, stackSize);
+			if (oreIngredient != null) {
+				oreStackList.add(oreIngredient);
 			}
 		}
 		return oreStackList;
@@ -311,8 +307,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<FluidIngredient> fluidStackList(List<String> fluidNames, int stackSize) {
 		List<FluidIngredient> fluidStackList = new ArrayList<>();
 		for (String fluidName : fluidNames) {
-			if (fluidStack(fluidName, stackSize) != null) {
-				fluidStackList.add(fluidStack(fluidName, stackSize));
+			FluidIngredient fluidIngredient = fluidStack(fluidName, stackSize);
+			if (fluidIngredient != null) {
+				fluidStackList.add(fluidIngredient);
 			}
 		}
 		return fluidStackList;
@@ -371,8 +368,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<ChanceItemIngredient> chanceOreStackList(List<String> oreTypes, int stackSize, int chancePercent) {
 		List<ChanceItemIngredient> oreStackList = new ArrayList<>();
 		for (String oreType : oreTypes) {
-			if (chanceOreStack(oreType, stackSize, chancePercent) != null) {
-				oreStackList.add(chanceOreStack(oreType, stackSize, chancePercent));
+			ChanceItemIngredient chanceItemIngredient = chanceOreStack(oreType, stackSize, chancePercent);
+			if (chanceItemIngredient != null) {
+				oreStackList.add(chanceItemIngredient);
 			}
 		}
 		return oreStackList;
@@ -381,8 +379,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<ChanceItemIngredient> chanceOreStackList(List<String> oreTypes, int stackSize, int chancePercent, int minStackSize) {
 		List<ChanceItemIngredient> oreStackList = new ArrayList<>();
 		for (String oreType : oreTypes) {
-			if (chanceOreStack(oreType, stackSize, chancePercent, minStackSize) != null) {
-				oreStackList.add(chanceOreStack(oreType, stackSize, chancePercent, minStackSize));
+			ChanceItemIngredient chanceItemIngredient = chanceOreStack(oreType, stackSize, chancePercent, minStackSize);
+			if (chanceItemIngredient != null) {
+				oreStackList.add(chanceItemIngredient);
 			}
 		}
 		return oreStackList;
@@ -391,8 +390,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<ChanceFluidIngredient> chanceFluidStackList(List<String> fluidNames, int stackSize, int chancePercent, int stackDiff) {
 		List<ChanceFluidIngredient> fluidStackList = new ArrayList<>();
 		for (String fluidName : fluidNames) {
-			if (chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff) != null) {
-				fluidStackList.add(chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff));
+			ChanceFluidIngredient chanceFluidIngredient = chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff);
+			if (chanceFluidIngredient != null) {
+				fluidStackList.add(chanceFluidIngredient);
 			}
 		}
 		return fluidStackList;
@@ -401,8 +401,9 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	public static List<ChanceFluidIngredient> chanceFluidStackList(List<String> fluidNames, int stackSize, int chancePercent, int stackDiff, int minStackSize) {
 		List<ChanceFluidIngredient> fluidStackList = new ArrayList<>();
 		for (String fluidName : fluidNames) {
-			if (chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff, minStackSize) != null) {
-				fluidStackList.add(chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff, minStackSize));
+			ChanceFluidIngredient chanceFluidIngredient = chanceFluidStack(fluidName, stackSize, chancePercent, stackDiff, minStackSize);
+			if (chanceFluidIngredient != null) {
+				fluidStackList.add(chanceFluidIngredient);
 			}
 		}
 		return fluidStackList;

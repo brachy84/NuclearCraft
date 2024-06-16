@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.*;
 
-import static nc.config.NCConfig.ore_processing;
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.*;
 import static nc.util.FluidStackHelper.*;
 
@@ -20,6 +20,10 @@ public class MelterRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[6]) {
+			return;
+		}
+		
 		addRecipe("dustSulfur", fluidStack("sulfur", GEM_VOLUME), 1D, 1D);
 		addRecipe("dustSodiumHydroxide", fluidStack("naoh", GEM_VOLUME), 1D, 1D);
 		addRecipe("dustPotassiumHydroxide", fluidStack("koh", GEM_VOLUME), 1D, 1D);

@@ -8,6 +8,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Set;
 
+import static nc.config.NCConfig.*;
+
 public class PressurizerRecipes extends BasicProcessorRecipeHandler {
 	
 	public PressurizerRecipes() {
@@ -16,6 +18,10 @@ public class PressurizerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[11]) {
+			return;
+		}
+		
 		addRecipe("dustGraphite", "coal", 1D, 1D);
 		addRecipe("ingotGraphite", "ingotPyrolyticCarbon", 1D, 1D);
 		addRecipe("dustDiamond", "gemDiamond", 1D, 1D);

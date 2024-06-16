@@ -5,6 +5,7 @@ import nc.init.NCBlocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FluidStackHelper.*;
 
 public class EnricherRecipes extends BasicProcessorRecipeHandler {
@@ -15,6 +16,11 @@ public class EnricherRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[15]) {
+			return;
+		}
+		
+		
 		addRecipe("dustBoronNitride", fluidStack("water", BUCKET_VOLUME), fluidStack("boron_nitride_solution", GEM_VOLUME), 1D, 1D);
 		addRecipe("dustFluorite", fluidStack("water", BUCKET_VOLUME), fluidStack("fluorite_water", GEM_VOLUME), 1D, 1D);
 		addRecipe("dustCalciumSulfate", fluidStack("water", BUCKET_VOLUME), fluidStack("calcium_sulfate_solution", GEM_VOLUME), 1D, 1D);

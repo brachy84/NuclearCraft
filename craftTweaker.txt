@@ -379,15 +379,6 @@ mods.nuclearcraft.FissionEmergencyCooling.removeRecipeWithInput(ILiquidStack flu
 mods.nuclearcraft.FissionEmergencyCooling.removeRecipeWithOutput(ILiquidStack fluidOutput);
 
 
-Fusion (NOT YET IMPLEMENTED!):
-------------------------------
-
-mods.nuclearcraft.Fusion.addRecipe(ILiquidStack fluidInput1, ILiquidStack fluidInput2, ILiquidStack fluidOutput1, ILiquidStack fluidOutput2, ILiquidStack fluidOutput3, ILiquidStack fluidOutput4, int time, int power, int optimalTemp, double radiation);
-
-mods.nuclearcraft.Fusion.removeRecipeWithInput(ILiquidStack fluidInput1, ILiquidStack fluidInput2);
-mods.nuclearcraft.Fusion.removeRecipeWithOutput(ILiquidStack fluidOutput1, ILiquidStack fluidOutput2, ILiquidStack fluidOutput3, ILiquidStack fluidOutput4);
-
-
 Heat Exchanger (KINDA BROKEN!):
 -------------------------------
 

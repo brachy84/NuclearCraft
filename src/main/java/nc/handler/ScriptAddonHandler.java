@@ -9,6 +9,9 @@ import java.util.Locale;
 
 public class ScriptAddonHandler {
 	
+	private static boolean initialized = false;
+	private static boolean cotCopied = false;
+	
 	public static final ObjectSet<File> SCRIPT_ADDON_DIRS = new ObjectOpenHashSet<>();
 	
 	public static final String[] NC_ASSETS = {"advancements", "blockstates", "loot_tables", "models", "patchouli_books", "textures"};
@@ -16,6 +19,11 @@ public class ScriptAddonHandler {
 	public static final String[] IGNORE_SUFFIX = {".ignore", ".ignored", ".disable", ".disabled"};
 	
 	public static void init() throws IOException {
+		if (initialized) {
+			return;
+		}
+		initialized = true;
+		
 		NCUtil.getLogger().info("Constructing NuclearCraft Script Addons...");
 		
 		for (String s : new String[] {"addons", "advancements", "blockstates", "lang", "loot_tables", "models/block", "models/item", "patchouli_books/guide", "textures/blocks", "textures/items"}) {
@@ -34,11 +42,6 @@ public class ScriptAddonHandler {
 			oldWarning.delete();
 		}
 		
-		File cot = new File("resources/contenttweaker"), cotBackup = new File("resources/.contenttweaker");
-		if (cot.exists()) {
-			FileUtils.copyDirectory(cot, cotBackup);
-		}
-		
 		File temp = new File("resources/nuclearcraft/addons/.temp");
 		temp.mkdirs();
 		
@@ -53,8 +56,9 @@ public class ScriptAddonHandler {
 			NCUtil.getLogger().info("Constructed \"" + f.getName() + "\" Script Addon!");
 		}
 		
-		if (cotBackup.exists()) {
-			FileUtils.copyDirectory(cotBackup, cot);
+		File cotBackup = new File("resources/.contenttweaker");
+		if (cotCopied && cotBackup.exists()) {
+			FileUtils.copyDirectory(cotBackup, new File("resources/contenttweaker"));
 			FileUtils.deleteDirectory(cotBackup);
 		}
 	}
@@ -129,7 +133,12 @@ public class ScriptAddonHandler {
 						SCRIPT_ADDON_DIRS.add(dir);
 					}
 					case "contenttweaker" -> {
-						FileUtils.copyDirectory(f, new File("resources/contenttweaker"));
+						File cot = new File("resources/contenttweaker");
+						if (cot.exists() && !cotCopied) {
+							FileUtils.copyDirectory(cot, new File("resources/.contenttweaker"));
+							cotCopied = true;
+						}
+						FileUtils.copyDirectory(f, cot);
 						SCRIPT_ADDON_DIRS.add(dir);
 					}
 					case "modularmachinery" -> {

@@ -21,11 +21,53 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.*;
 
+import static nc.config.NCConfig.gtce_recipe_integration;
+
 public class NCRecipes {
 	
 	private static boolean initialized = false;
 	
 	private static final Object2ObjectMap<String, BasicRecipeHandler> RECIPE_HANDLER_MAP = new Object2ObjectOpenHashMap<>();
+	
+	private static final Object2BooleanMap<String> GTCE_INTEGRATION = new Object2BooleanOpenHashMap<>();
+	
+	public static final String[] CT_RECIPE_HANDLER_NAME_ARRAY = {
+			"manufactory",
+			"separator",
+			"decay_hastener",
+			"fuel_reprocessor",
+			"alloy_furnace",
+			"infuser",
+			"melter",
+			"supercooler",
+			"electrolyzer",
+			"assembler",
+			"ingot_former",
+			"pressurizer",
+			"chemical_reactor",
+			"salt_mixer",
+			"crystallizer",
+			"enricher",
+			"extractor",
+			"centrifuge",
+			"rock_crusher",
+			"electric_furnace",
+			"decay_generator",
+			"fission_moderator",
+			"fission_reflector",
+			"fission_irradiator",
+			"pebble_fission",
+			"solid_fission",
+			"fission_heating",
+			"salt_fission",
+			"fission_emergency_cooling",
+			"heat_exchanger",
+			"condenser",
+			"turbine",
+			"radiation_scrubber",
+			"radiation_block_mutation",
+			"radiation_block_purification",
+	};
 	
 	public static void putHandler(BasicRecipeHandler handler) {
 		RECIPE_HANDLER_MAP.put(handler.getName(), handler);
@@ -48,11 +90,16 @@ public class NCRecipes {
 		return getHandler(name).validFluids;
 	}
 	
+	public static boolean hasGTCEIntegration(String name) {
+		return GTCE_INTEGRATION.getBoolean(name);
+	}
+	
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		if (initialized) {
 			return;
 		}
+		initialized = true;
 		
 		RadSources.init();
 		
@@ -103,8 +150,6 @@ public class NCRecipes {
 		for (RegistrationInfo info : CTRegistration.INFO_LIST) {
 			info.recipeInit();
 		}
-		
-		initialized = true;
 	}
 	
 	public static ManufactoryRecipes manufactory;
@@ -183,6 +228,12 @@ public class NCRecipes {
 		radiation_scrubber = getHandler("radiation_scrubber");
 		radiation_block_mutation = getHandler("radiation_block_mutation");
 		radiation_block_purification = getHandler("radiation_block_purification");
+	}
+	
+	public static void initGTCEIntegration() {
+		for (int i = 0, len = gtce_recipe_integration.length; i < len; ++i) {
+			GTCE_INTEGRATION.put(CT_RECIPE_HANDLER_NAME_ARRAY[i], gtce_recipe_integration[i]);
+		}
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)

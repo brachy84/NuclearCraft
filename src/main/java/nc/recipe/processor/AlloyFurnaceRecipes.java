@@ -7,6 +7,7 @@ import net.minecraft.init.*;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_ORE_DICT;
 import static nc.util.OreDictHelper.*;
 
@@ -18,6 +19,10 @@ public class AlloyFurnaceRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[4]) {
+			return;
+		}
+		
 		addAlloyIngotIngotRecipes("Copper", 3, "Tin", 1, "Bronze", 4, 1D, 1D);
 		if (OreDictHelper.oreExists("dustCoke") || OreDictHelper.oreExists("fuelCoke")) {
 			addAlloyIngotCoalRecipes("Iron", 1, 4, "Steel", 1, 1D, 1D);

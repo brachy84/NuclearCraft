@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import stanhebben.zenscript.annotations.*;
 
 import javax.annotation.*;
+import java.math.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -25,9 +26,9 @@ import static nc.config.NCConfig.*;
 @ZenRegister
 public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicRecipe> {
 	
-	protected final String name;
-	protected final int itemInputSize, fluidInputSize, itemOutputSize, fluidOutputSize;
-	protected final boolean isShapeless;
+	public final String name;
+	public final int itemInputSize, fluidInputSize, itemOutputSize, fluidOutputSize;
+	public final boolean isShapeless;
 	
 	public List<Set<String>> validFluids = null;
 	
@@ -47,26 +48,7 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	
 	@Override
 	public void addRecipe(Object... objects) {
-		List<Object> itemInputs = new ArrayList<>(), fluidInputs = new ArrayList<>(), itemOutputs = new ArrayList<>(), fluidOutputs = new ArrayList<>(), extras = new ArrayList<>();
-		for (int i = 0; i < objects.length; ++i) {
-			Object object = objects[i];
-			if (i < itemInputSize) {
-				itemInputs.add(object);
-			}
-			else if (i < itemInputSize + fluidInputSize) {
-				fluidInputs.add(object);
-			}
-			else if (i < itemInputSize + fluidInputSize + itemOutputSize) {
-				itemOutputs.add(object);
-			}
-			else if (i < itemInputSize + fluidInputSize + itemOutputSize + fluidOutputSize) {
-				fluidOutputs.add(object);
-			}
-			else {
-				extras.add(object);
-			}
-		}
-		BasicRecipe recipe = buildRecipe(itemInputs, fluidInputs, itemOutputs, fluidOutputs, extras, isShapeless);
+		BasicRecipe recipe = buildRecipe(objects);
 		addRecipe(factor_recipes ? factorRecipe(recipe) : recipe);
 	}
 	
@@ -75,7 +57,7 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	}
 	
 	public void addGTCERecipes() {
-		if (GTCE_INTEGRATION.getBoolean(name)) {
+		if (NCRecipes.hasGTCEIntegration(name)) {
 			for (BasicRecipe recipe : recipeList) {
 				GTCERecipeHelper.addGTCERecipe(name, recipe);
 			}
@@ -86,21 +68,19 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	
 	public static class ExtrasFixer {
 		
-		private final List<Object> extras;
+		protected final List<Object> extras;
 		public final List<Object> fixed = new ArrayList<>();
 		
-		private final int extrasCount;
-		private int currentIndex = 0;
+		protected int currentIndex = 0;
 		
 		public ExtrasFixer(List<Object> extras) {
 			this.extras = extras;
-			extrasCount = extras.size();
 		}
 		
 		public <T> void add(Class<? extends T> clazz, T defaultValue) {
 			int index = currentIndex++;
 			Object extra;
-			fixed.add(index < extrasCount && (extra = tryCast(clazz, extras.get(index))) != null ? extra : defaultValue);
+			fixed.add(index < extras.size() && (extra = tryCast(clazz, extras.get(index))) != null ? extra : defaultValue);
 		}
 		
 		public static Object tryCast(Class<?> targetClass, Object value) {
@@ -120,44 +100,54 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 			else if (value instanceof Long longValue) {
 				return castInt(targetClass, longValue);
 			}
+			else if (value instanceof BigInteger bigIntValue) {
+				return castInt(targetClass, bigIntValue);
+			}
 			else if (value instanceof Float floatValue) {
 				return castFloat(targetClass, floatValue);
 			}
 			else if (value instanceof Double doubleValue) {
 				return castFloat(targetClass, doubleValue);
 			}
+			else if (value instanceof BigDecimal bigDecimalValue) {
+				return castFloat(targetClass, bigDecimalValue);
+			}
 			
-			return targetClass.isInstance(value) ? value : null;
+			return castDefault(targetClass, value);
 		}
 		
 		private static <T extends Number> Number castInt(Class<?> targetClass, T value) {
-			if (targetClass.equals(Byte.class)) {
+			if (targetClass.equals(byte.class) || targetClass.equals(Byte.class)) {
 				return value.byteValue();
 			}
-			else if (targetClass.equals(Short.class)) {
+			else if (targetClass.equals(short.class) || targetClass.equals(Short.class)) {
 				return value.shortValue();
 			}
-			else if (targetClass.equals(Integer.class)) {
+			else if (targetClass.equals(int.class) || targetClass.equals(Integer.class)) {
 				return value.intValue();
 			}
-			else if (targetClass.equals(Long.class)) {
+			else if (targetClass.equals(long.class) || targetClass.equals(Long.class)) {
 				return value.longValue();
 			}
 			else {
-				return null;
+				return castDefault(targetClass, value);
 			}
 		}
 		
 		private static <T extends Number> Number castFloat(Class<?> targetClass, T value) {
-			if (targetClass.equals(Float.class)) {
+			if (targetClass.equals(float.class) || targetClass.equals(Float.class)) {
 				return value.floatValue();
 			}
-			else if (targetClass.equals(Double.class)) {
+			else if (targetClass.equals(double.class) || targetClass.equals(Double.class)) {
 				return value.doubleValue();
 			}
 			else {
-				return null;
+				return castDefault(targetClass, value);
 			}
+		}
+		
+		private static <T> T castDefault(Class<?> targetClass, T value) {
+			return targetClass.isInstance(value) ? value : null;
 		}
 	}
 	
@@ -183,16 +173,9 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 			return recipe;
 		}
 		
-		List<IFluidIngredient> fluidIngredients = new ArrayList<>(), fluidProducts = new ArrayList<>();
+		UnaryOperator<List<IFluidIngredient>> factor = x -> StreamHelper.map(x, y -> y.getFactoredIngredient(hcf));
 		
-		for (IFluidIngredient ingredient : recipe.getFluidIngredients()) {
-			fluidIngredients.add(ingredient.getFactoredIngredient(hcf));
-		}
-		for (IFluidIngredient ingredient : recipe.getFluidProducts()) {
-			fluidProducts.add(ingredient.getFactoredIngredient(hcf));
-		}
-		
-		return newRecipe(recipe.getItemIngredients(), fluidIngredients, recipe.getItemProducts(), fluidProducts, getFactoredExtras(recipe.getExtras(), hcf), recipe.isShapeless());
+		return newRecipe(recipe.getItemIngredients(), factor.apply(recipe.getFluidIngredients()), recipe.getItemProducts(), factor.apply(recipe.getFluidProducts()), getFactoredExtras(recipe.getExtras(), hcf), recipe.isShapeless());
 	}
 	
 	protected IntList getExtraFactors(List<Object> extras) {
@@ -203,29 +186,28 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		return extras;
 	}
 	
-	private static final Object2BooleanMap<String> GTCE_INTEGRATION = new Object2BooleanOpenHashMap<>();
-	
-	public static void initGTCEIntegration() {
-		GTCE_INTEGRATION.put("manufactory", gtce_recipe_integration[0]);
-		GTCE_INTEGRATION.put("separator", gtce_recipe_integration[1]);
-		GTCE_INTEGRATION.put("decay_hastener", gtce_recipe_integration[2]);
-		GTCE_INTEGRATION.put("fuel_reprocessor", gtce_recipe_integration[3]);
-		GTCE_INTEGRATION.put("alloy_furnace", gtce_recipe_integration[4]);
-		GTCE_INTEGRATION.put("infuser", gtce_recipe_integration[5]);
-		GTCE_INTEGRATION.put("melter", gtce_recipe_integration[6]);
-		GTCE_INTEGRATION.put("supercooler", gtce_recipe_integration[7]);
-		GTCE_INTEGRATION.put("electrolyzer", gtce_recipe_integration[8]);
-		GTCE_INTEGRATION.put("assembler", gtce_recipe_integration[9]);
-		GTCE_INTEGRATION.put("ingot_former", gtce_recipe_integration[10]);
-		GTCE_INTEGRATION.put("pressurizer", gtce_recipe_integration[11]);
-		GTCE_INTEGRATION.put("chemical_reactor", gtce_recipe_integration[12]);
-		GTCE_INTEGRATION.put("salt_mixer", gtce_recipe_integration[13]);
-		GTCE_INTEGRATION.put("crystallizer", gtce_recipe_integration[14]);
-		GTCE_INTEGRATION.put("enricher", gtce_recipe_integration[15]);
-		GTCE_INTEGRATION.put("extractor", gtce_recipe_integration[16]);
-		GTCE_INTEGRATION.put("centrifuge", gtce_recipe_integration[17]);
-		GTCE_INTEGRATION.put("rock_crusher", gtce_recipe_integration[18]);
-		GTCE_INTEGRATION.put("electric_furnace", gtce_recipe_integration[19]);
+	@Nullable
+	public BasicRecipe buildRecipe(Object... objects) {
+		List<Object> itemInputs = new ArrayList<>(), fluidInputs = new ArrayList<>(), itemOutputs = new ArrayList<>(), fluidOutputs = new ArrayList<>(), extras = new ArrayList<>();
+		for (int i = 0; i < objects.length; ++i) {
+			Object object = objects[i];
+			if (i < itemInputSize) {
+				itemInputs.add(object);
+			}
+			else if (i < itemInputSize + fluidInputSize) {
+				fluidInputs.add(object);
+			}
+			else if (i < itemInputSize + fluidInputSize + itemOutputSize) {
+				itemOutputs.add(object);
+			}
+			else if (i < itemInputSize + fluidInputSize + itemOutputSize + fluidOutputSize) {
+				fluidOutputs.add(object);
+			}
+			else {
+				extras.add(object);
+			}
+		}
+		return buildRecipe(itemInputs, fluidInputs, itemOutputs, fluidOutputs, extras, isShapeless);
 	}
 	
 	@Nullable
@@ -355,10 +337,18 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		CraftTweakerAPI.apply(new CTRemoveAllRecipes(this));
 	}
 	
-	@Override
-	public void init() {
-		super.init();
+	protected void setValidFluids() {
 		validFluids = RecipeHelper.validFluids(this);
+	}
+	
+	public void postInit() {
+		super.postInit();
+		setValidFluids();
+	}
+	
+	public void onReload() {
+		super.onReload();
+		setValidFluids();
 	}
 	
 	@Override

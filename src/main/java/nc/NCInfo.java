@@ -29,7 +29,7 @@ public class NCInfo {
 	
 	// Fission Cooling
 	
-	public static <T extends Enum<T> & IStringSerializable & ICoolingComponentEnum> String[][] coolingFixedInfo(T[] values, String name) {
+	public static <T extends Enum<T> & IStringSerializable & ICoolingComponentEnum<?>> String[][] coolingFixedInfo(T[] values, String name) {
 		String[][] info = new String[values.length][];
 		for (int i = 0; i < values.length; ++i) {
 			info[i] = coolingRateInfo(values[i], name);
@@ -37,7 +37,7 @@ public class NCInfo {
 		return info;
 	}
 	
-	public static <T extends Enum<T> & ICoolingComponentEnum> String[] coolingRateInfo(T type, String name) {
+	public static <T extends Enum<T> & ICoolingComponentEnum<?>> String[] coolingRateInfo(T type, String name) {
 		return coolingRateInfo(type.getCooling(), name);
 	}
 	

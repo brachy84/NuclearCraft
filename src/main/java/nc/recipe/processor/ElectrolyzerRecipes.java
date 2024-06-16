@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_FLUID;
 import static nc.util.FluidStackHelper.*;
 
@@ -13,6 +14,10 @@ public class ElectrolyzerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[8]) {
+			return;
+		}
+		
 		addRecipe(fluidStack("water", BUCKET_VOLUME / 2), fluidStack("hydrogen", BUCKET_VOLUME / 2), fluidStack("oxygen", BUCKET_VOLUME / 4), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
 		addRecipe(fluidStack("heavy_water", BUCKET_VOLUME / 2), fluidStack("deuterium", BUCKET_VOLUME / 2), fluidStack("oxygen", BUCKET_VOLUME / 4), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
 		addRecipe(fluidStack("hydrofluoric_acid", BUCKET_VOLUME / 4), fluidStack("hydrogen", BUCKET_VOLUME / 4), fluidStack("fluorine", BUCKET_VOLUME / 4), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);

@@ -1,3 +1,17 @@
+v2o.8.0
+
++ Added initial GroovyScript support
+
+* Fixed broken custom placement rules
+
++ Added configs to disable default processor recipe registration
+
+- Removed Paulobrine and Herobrian
+
+v2o.7.6
+
+* Fixed crash on servers
+
 v2o.7.5
 
 * Attempted to fix sporadic crashes with radiation enabled

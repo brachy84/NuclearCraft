@@ -295,8 +295,8 @@ fluid.deuterium=Deuterium
 tile.nuclearcraft.fluid_tritium.name=Tritium
 fluid.tritium=Tritium
 
-tile.nuclearcraft.fluid_helium3.name=Helium-3
-fluid.helium3=Helium-3
+tile.nuclearcraft.fluid_helium_3.name=Helium-3
+fluid.helium_3=Helium-3
 
 tile.nuclearcraft.fluid_helium.name=Helium
 fluid.helium=Helium

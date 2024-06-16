@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import com.google.common.collect.Lists;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_ORE_DICT;
 
 public class SeparatorRecipes extends BasicProcessorRecipeHandler {
@@ -12,6 +13,10 @@ public class SeparatorRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[1]) {
+			return;
+		}
+		
 		for (String type : new String[] {"", "Carbide", "Oxide", "Nitride", "ZA"}) {
 			addRecipe(oreStackList(Lists.newArrayList("ingotUranium" + type, "dustUranium" + type), 10), oreStack("ingotUranium238" + type, 9), oreStack("ingotUranium235" + type, 1), 5D, 1D);
 		}

@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_FLUID;
 import static nc.util.FluidStackHelper.*;
 
@@ -13,6 +14,11 @@ public class ChemicalReactorRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[12]) {
+			return;
+		}
+		
+		
 		addRecipe(fluidStack("boron", INGOT_VOLUME), fluidStack("hydrogen", BUCKET_VOLUME * 3 / 2), fluidStack("diborane", BUCKET_VOLUME / 2), emptyFluidStack(), 0.5D, 1D);
 		
 		addRecipe(fluidStack("diborane", BUCKET_VOLUME / 4), fluidStack("water", BUCKET_VOLUME * 3 / 2), fluidStack("boric_acid", BUCKET_VOLUME / 2), fluidStack("hydrogen", BUCKET_VOLUME * 3 / 2), 0.5D, 0.5D);

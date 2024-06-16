@@ -26,7 +26,6 @@ import nc.multiblock.turbine.TurbinePlacement;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.*;
 import nc.radiation.RadSources;
 import nc.recipe.*;
-import nc.recipe.ingredient.EmptyFluidIngredient;
 import nc.recipe.processor.BasicProcessorRecipeHandler;
 import nc.tab.NCTabs;
 import nc.tile.battery.TileBattery;
@@ -55,6 +54,7 @@ import java.util.*;
 import java.util.function.Function;
 
 import static nc.config.NCConfig.turbine_mb_per_blade;
+import static nc.recipe.AbstractRecipeHandler.*;
 import static nc.util.FluidStackHelper.*;
 
 @ZenClass("mods.nuclearcraft.Registration")
@@ -511,7 +511,7 @@ public class CTRegistration {
 		@Override
 		public void init() {
 			super.init();
-			FissionPlacement.addRule(sinkID + "_sink", rule, block);
+			FissionPlacement.addRule(sinkID + "_sink", rule, block.get());
 		}
 	}
 	
@@ -538,13 +538,13 @@ public class CTRegistration {
 		
 		@Override
 		public void recipeInit() {
-			NCRecipes.coolant_heater.addRecipe(block, AbstractRecipeHandler.fluidStack(fluidInput, inputAmount), AbstractRecipeHandler.fluidStack(fluidOutput, outputAmount), cooling, heaterID + "_heater");
+			NCRecipes.coolant_heater.addRecipe(block.get(), fluidStack(fluidInput, inputAmount), fluidStack(fluidOutput, outputAmount), cooling, heaterID + "_heater");
 		}
 		
 		@Override
 		public void init() {
 			super.init();
-			FissionPlacement.addRule(heaterID + "_heater", rule, block);
+			FissionPlacement.addRule(heaterID + "_heater", rule, block.get());
 		}
 	}
 	
@@ -606,7 +606,7 @@ public class CTRegistration {
 		@Override
 		public void init() {
 			super.init();
-			TurbinePlacement.addRule(coilID + "_coil", rule, block);
+			TurbinePlacement.addRule(coilID + "_coil", rule, block.get());
 		}
 	}
 	
@@ -877,15 +877,15 @@ public class CTRegistration {
 					
 					NCRecipes.alloy_furnace.addAlloyIngotIngotRecipes(rawOre, 1, "Zirconium", 1, rawOre + "ZA", 1, 1D, 1D);
 					NCRecipes.alloy_furnace.addAlloyIngotIngotRecipes(rawOre, 1, "Graphite", 1, rawOre + "Carbide", 1, 1D, 1D);
-					NCRecipes.infuser.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack("oxygen", BUCKET_VOLUME), "ingot" + rawOre + "Oxide", 1D, 1D);
-					NCRecipes.infuser.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack("nitrogen", BUCKET_VOLUME), "ingot" + rawOre + "Nitride", 1D, 1D);
+					NCRecipes.infuser.addRecipe("ingot" + rawOre, fluidStack("oxygen", BUCKET_VOLUME), "ingot" + rawOre + "Oxide", 1D, 1D);
+					NCRecipes.infuser.addRecipe("ingot" + rawOre, fluidStack("nitrogen", BUCKET_VOLUME), "ingot" + rawOre + "Nitride", 1D, 1D);
 					NCRecipes.separator.addRecipe("ingot" + rawOre + "ZA", "ingot" + rawOre, "dustZirconium", 1D, 1D);
 					NCRecipes.separator.addRecipe("ingot" + rawOre + "Carbide", "ingot" + rawOre, "dustGraphite", 1D, 1D);
 				}
 				
 				if (rawOre != null && rawFluid != null) {
-					NCRecipes.ingot_former.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME), "ingot" + rawOre, 1D, 1D);
-					NCRecipes.melter.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME), 1D, 1D);
+					NCRecipes.ingot_former.addRecipe(fluidStack(rawFluid, INGOT_VOLUME), "ingot" + rawOre, 1D, 1D);
+					NCRecipes.melter.addRecipe("ingot" + rawOre, fluidStack(rawFluid, INGOT_VOLUME), 1D, 1D);
 				}
 			}
 		}
@@ -958,11 +958,11 @@ public class CTRegistration {
 					
 					NCRecipes.alloy_furnace.addAlloyIngotIngotRecipes(rawOre, 1, "Zirconium", 1, rawOre + "ZA", 1, 1D, 1D);
 					NCRecipes.alloy_furnace.addAlloyIngotIngotRecipes(rawOre, 1, "Graphite", 1, rawOre + "Carbide", 1, 1D, 1D);
-					NCRecipes.infuser.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack("oxygen", BUCKET_VOLUME), "ingot" + rawOre + "Oxide", 1D, 1D);
-					NCRecipes.infuser.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack("nitrogen", BUCKET_VOLUME), "ingot" + rawOre + "Nitride", 1D, 1D);
+					NCRecipes.infuser.addRecipe("ingot" + rawOre, fluidStack("oxygen", BUCKET_VOLUME), "ingot" + rawOre + "Oxide", 1D, 1D);
+					NCRecipes.infuser.addRecipe("ingot" + rawOre, fluidStack("nitrogen", BUCKET_VOLUME), "ingot" + rawOre + "Nitride", 1D, 1D);
 					NCRecipes.separator.addRecipe("ingot" + rawOre + "ZA", "ingot" + rawOre, "dustZirconium", 1D, 1D);
 					NCRecipes.separator.addRecipe("ingot" + rawOre + "Carbide", "ingot" + rawOre, "dustGraphite", 1D, 1D);
-					NCRecipes.assembler.addRecipe(AbstractRecipeHandler.oreStack("ingot" + rawOre + "Carbide", 9), "dustGraphite", "ingotPyrolyticCarbon", "ingotSiliconCarbide", AbstractRecipeHandler.oreStack("ingot" + rawOre + "TRISO", 9), 1D, 1D);
+					NCRecipes.assembler.addRecipe(oreStack("ingot" + rawOre + "Carbide", 9), "dustGraphite", "ingotPyrolyticCarbon", "ingotSiliconCarbide", oreStack("ingot" + rawOre + "TRISO", 9), 1D, 1D);
 					
 					NCRecipes.pebble_fission.addRecipe("ingot" + rawOre + "TRISO", "ingotDepleted" + rawOre + "TRISO", (int) (TRISO_TIME_MULT * stats.time), (int) (TRISO_HEAT_MULT * stats.heat), stats.efficiency, (int) (TRISO_CRIT_MULT * stats.crit), stats.decay, stats.prime, stats.radiation);
 					NCRecipes.solid_fission.addRecipe("ingot" + rawOre + "Oxide", "ingotDepleted" + rawOre + "Oxide", (int) (SFR_TIME_MULT[0] * stats.time), (int) (SFR_HEAT_MULT[0] * stats.heat), stats.efficiency, (int) (SFR_CRIT_MULT[0] * stats.crit), stats.decay, stats.prime, stats.radiation);
@@ -971,20 +971,19 @@ public class CTRegistration {
 				}
 				
 				if (rawFluid != null) {
-					EmptyFluidIngredient empty = AbstractRecipeHandler.emptyFluidStack();
-					NCRecipes.chemical_reactor.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("fluorine", BUCKET_VOLUME / 2), AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), empty, 0.5D, 0.5D);
-					NCRecipes.electrolyzer.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("fluorine", BUCKET_VOLUME / 2), empty, empty, 0.5D, 1D);
-					NCRecipes.electrolyzer.addRecipe(AbstractRecipeHandler.fluidStack("depleted_" + rawFluid + "_fluoride", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("depleted_" + rawFluid, INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("fluorine", BUCKET_VOLUME / 2), empty, empty, 0.5D, 1D);
-					NCRecipes.salt_mixer.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("flibe", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), 0.5D, 1D);
-					NCRecipes.centrifuge.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("flibe", INGOT_VOLUME / 2), empty, empty, empty, empty, 0.5D, 1D);
-					NCRecipes.centrifuge.addRecipe(AbstractRecipeHandler.fluidStack("depleted_" + rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("depleted_" + rawFluid + "_fluoride", INGOT_VOLUME / 2), AbstractRecipeHandler.fluidStack("flibe", INGOT_VOLUME / 2), empty, empty, empty, empty, 0.5D, 1D);
+					NCRecipes.chemical_reactor.addRecipe(fluidStack(rawFluid, INGOT_VOLUME / 2), fluidStack("fluorine", BUCKET_VOLUME / 2), fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), emptyFluidStack(), 0.5D, 0.5D);
+					NCRecipes.electrolyzer.addRecipe(fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), fluidStack(rawFluid, INGOT_VOLUME / 2), fluidStack("fluorine", BUCKET_VOLUME / 2), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
+					NCRecipes.electrolyzer.addRecipe(fluidStack("depleted_" + rawFluid + "_fluoride", INGOT_VOLUME / 2), fluidStack("depleted_" + rawFluid, INGOT_VOLUME / 2), fluidStack("fluorine", BUCKET_VOLUME / 2), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
+					NCRecipes.salt_mixer.addRecipe(fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), fluidStack("flibe", INGOT_VOLUME / 2), fluidStack(rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), 0.5D, 1D);
+					NCRecipes.centrifuge.addRecipe(fluidStack(rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), fluidStack(rawFluid + "_fluoride", INGOT_VOLUME / 2), fluidStack("flibe", INGOT_VOLUME / 2), emptyFluidStack(), emptyFluidStack(), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
+					NCRecipes.centrifuge.addRecipe(fluidStack("depleted_" + rawFluid + "_fluoride_flibe", INGOT_VOLUME / 2), fluidStack("depleted_" + rawFluid + "_fluoride", INGOT_VOLUME / 2), fluidStack("flibe", INGOT_VOLUME / 2), emptyFluidStack(), emptyFluidStack(), emptyFluidStack(), emptyFluidStack(), 0.5D, 1D);
 					
-					NCRecipes.salt_fission.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid + "_fluoride_flibe", 1), AbstractRecipeHandler.fluidStack("depleted_" + rawFluid + "_fluoride_flibe", 1), MSR_TIME_MULT * stats.time / INGOT_VOLUME, (int) (MSR_HEAT_MULT * stats.heat), stats.efficiency, MSR_CRIT_MULT * stats.crit, stats.decay, stats.prime, stats.radiation);
+					NCRecipes.salt_fission.addRecipe(fluidStack(rawFluid + "_fluoride_flibe", 1), fluidStack("depleted_" + rawFluid + "_fluoride_flibe", 1), MSR_TIME_MULT * stats.time / INGOT_VOLUME, (int) (MSR_HEAT_MULT * stats.heat), stats.efficiency, MSR_CRIT_MULT * stats.crit, stats.decay, stats.prime, stats.radiation);
 				}
 				
 				if (rawOre != null && rawFluid != null) {
-					NCRecipes.ingot_former.addRecipe(AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME), "ingot" + rawOre, 1D, 1D);
-					NCRecipes.melter.addRecipe("ingot" + rawOre, AbstractRecipeHandler.fluidStack(rawFluid, INGOT_VOLUME), 1D, 1D);
+					NCRecipes.ingot_former.addRecipe(fluidStack(rawFluid, INGOT_VOLUME), "ingot" + rawOre, 1D, 1D);
+					NCRecipes.melter.addRecipe("ingot" + rawOre, fluidStack(rawFluid, INGOT_VOLUME), 1D, 1D);
 				}
 			}
 		}

@@ -68,8 +68,8 @@ public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGO
 		List<IFluidIngredient> fluidProducts = recipe.getFluidProducts();
 		
 		items.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
-			int outputIndex = slotIndex - recipeHandler.getItemInputSize();
-			if (outputIndex >= 0 && outputIndex <= recipeHandler.getItemOutputSize()) {
+			int outputIndex = slotIndex - recipeHandler.itemInputSize;
+			if (outputIndex >= 0 && outputIndex <= recipeHandler.itemOutputSize) {
 				IItemIngredient product = itemProducts.get(outputIndex);
 				if (product instanceof IChanceItemIngredient chanceProduct) {
 					tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));
@@ -78,8 +78,8 @@ public abstract class JEIRecipeCategory<WRAPPER extends JEIRecipeWrapper, CATEGO
 		});
 		
 		fluids.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
-			int outputIndex = slotIndex - recipeHandler.getFluidInputSize();
-			if (outputIndex >= 0 && outputIndex <= recipeHandler.getFluidOutputSize()) {
+			int outputIndex = slotIndex - recipeHandler.fluidInputSize;
+			if (outputIndex >= 0 && outputIndex <= recipeHandler.fluidOutputSize) {
 				IFluidIngredient product = fluidProducts.get(outputIndex);
 				if (product instanceof IChanceFluidIngredient chanceProduct) {
 					tooltip.add(TextFormatting.WHITE + Lang.localize("jei.nuclearcraft.chance_output", chanceProduct.getMinStackSize(), chanceProduct.getMaxStackSize(0), NCMath.decimalPlaces(chanceProduct.getMeanStackSize(), 2)));

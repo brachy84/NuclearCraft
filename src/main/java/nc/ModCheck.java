@@ -32,6 +32,7 @@ public class ModCheck {
 		if (initialized) {
 			return;
 		}
+		initialized = true;
 		
 		cofhCoreLoaded = Loader.isModLoaded("cofhcore");
 		ic2Loaded = Loader.isModLoaded("ic2");
@@ -54,8 +55,6 @@ public class ModCheck {
 		cubicChunksLoaded = Loader.isModLoaded("cubicchunks");
 		hwylaLoaded = Loader.isModLoaded("waila");
 		patchouliLoaded = Loader.isModLoaded("patchouli");
-		
-		initialized = true;
 	}
 	
 	public static boolean cofhCoreLoaded() {

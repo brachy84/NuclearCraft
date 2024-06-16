@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import nc.radiation.RadSources;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FluidStackHelper.GEM_VOLUME;
 
 public class CrystallizerRecipes extends BasicProcessorRecipeHandler {
@@ -12,6 +13,11 @@ public class CrystallizerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[14]) {
+			return;
+		}
+		
+		
 		addRecipe(fluidStack("boron_nitride_solution", GEM_VOLUME), "dustBoronNitride", 1D, 1D);
 		addRecipe(fluidStack("fluorite_water", GEM_VOLUME), "dustFluorite", 1D, 1D);
 		addRecipe(fluidStack("calcium_sulfate_solution", GEM_VOLUME), "dustCalciumSulfate", 1D, 1D);

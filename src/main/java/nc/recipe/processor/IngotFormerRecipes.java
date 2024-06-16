@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.*;
 import static nc.util.FluidStackHelper.*;
 
@@ -19,6 +20,10 @@ public class IngotFormerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[10]) {
+			return;
+		}
+		
 		addIngotFormingRecipes();
 		
 		addIngotFormingRecipe("boron_10", "Boron10");

@@ -6,6 +6,7 @@ import nc.recipe.*;
 import nc.recipe.ingredient.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class CTAddRecipe implements IAction {
 	
@@ -25,82 +26,61 @@ public class CTAddRecipe implements IAction {
 	public CTAddRecipe(BasicRecipeHandler recipeHandler, List<Object> objects) {
 		this.recipeHandler = recipeHandler;
 		
-		int count = 0;
-		while (count < objects.size()) {
-			Object object = objects.get(count);
-			if (count < recipeHandler.getItemInputSize()) {
-				if (object != null) {
-					if (!(object instanceof IIngredient)) {
-						nullIngredient = true;
-						return;
-					}
-					nullInputs = false;
-				}
-				IItemIngredient ingredient = CTHelper.buildAdditionItemIngredient((IIngredient) object);
-				if (ingredient == null) {
-					nullIngredient = true;
+		for (int i = 0, len = objects.size(); i < len; ++i) {
+			Object object = objects.get(i);
+			if (i < recipeHandler.itemInputSize) {
+				if (!addIngredient(itemIngredients, object, CTHelper::buildAdditionItemIngredient)) {
 					return;
 				}
-				itemIngredients.add(ingredient);
 			}
-			else if (count < recipeHandler.getItemInputSize() + recipeHandler.getFluidInputSize()) {
-				if (object != null) {
-					if (!(object instanceof IIngredient)) {
-						nullIngredient = true;
-						return;
-					}
-					nullInputs = false;
-				}
-				IFluidIngredient ingredient = CTHelper.buildAdditionFluidIngredient((IIngredient) object);
-				if (ingredient == null) {
-					nullIngredient = true;
+			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize) {
+				if (!addIngredient(fluidIngredients, object, CTHelper::buildAdditionFluidIngredient)) {
 					return;
 				}
-				fluidIngredients.add(ingredient);
 			}
-			else if (count < recipeHandler.getItemInputSize() + recipeHandler.getFluidInputSize() + recipeHandler.getItemOutputSize()) {
-				if (object != null) {
-					if (!(object instanceof IIngredient)) {
-						nullIngredient = true;
-						return;
-					}
-				}
-				IItemIngredient ingredient = CTHelper.buildAdditionItemIngredient((IIngredient) object);
-				if (ingredient == null) {
-					nullIngredient = true;
+			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize + recipeHandler.itemOutputSize) {
+				if (!addIngredient(itemProducts, object, CTHelper::buildAdditionItemIngredient)) {
 					return;
 				}
-				itemProducts.add(ingredient);
 			}
-			else if (count < recipeHandler.getItemInputSize() + recipeHandler.getFluidInputSize() + recipeHandler.getItemOutputSize() + recipeHandler.getFluidOutputSize()) {
-				if (object != null) {
-					if (!(object instanceof IIngredient)) {
-						nullIngredient = true;
-						return;
-					}
-				}
-				IFluidIngredient ingredient = CTHelper.buildAdditionFluidIngredient((IIngredient) object);
-				if (ingredient == null) {
-					nullIngredient = true;
+			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize + recipeHandler.itemOutputSize + recipeHandler.fluidOutputSize) {
+				if (!addIngredient(fluidProducts, object, CTHelper::buildAdditionFluidIngredient)) {
 					return;
 				}
-				fluidProducts.add(ingredient);
 			}
 			else {
 				extras.add(object);
 			}
-			++count;
 		}
 		
-		if (itemIngredients.size() != recipeHandler.getItemInputSize() || fluidIngredients.size() != recipeHandler.getFluidInputSize() || itemProducts.size() != recipeHandler.getItemOutputSize() || fluidProducts.size() != recipeHandler.getFluidOutputSize()) {
+		if (itemIngredients.size() != recipeHandler.itemInputSize || fluidIngredients.size() != recipeHandler.fluidInputSize || itemProducts.size() != recipeHandler.itemOutputSize || fluidProducts.size() != recipeHandler.fluidOutputSize) {
 			CraftTweakerAPI.logError("A " + recipeHandler.getName() + " recipe addition had the wrong size: " + RecipeHelper.getRecipeString(itemIngredients, fluidIngredients, itemProducts, fluidProducts));
 			wrongSize = true;
 			return;
 		}
 		
-		recipe = recipeHandler.buildRecipe(itemIngredients, fluidIngredients, itemProducts, fluidProducts, extras, recipeHandler.isShapeless());
+		recipe = recipeHandler.buildRecipe(itemIngredients, fluidIngredients, itemProducts, fluidProducts, extras, recipeHandler.isShapeless);
 		if (recipe == null) {
 			nullRecipe = true;
+		}
+	}
+	
+	protected <T, V extends nc.recipe.ingredient.IIngredient<T>> boolean addIngredient(List<V> ingredientList, Object object, Function<IIngredient, V> function) {
+		if (object != null) {
+			if (!(object instanceof IIngredient)) {
+				nullIngredient = true;
+				return false;
+			}
+			nullInputs = false;
+		}
+		V ingredient = function.apply((IIngredient) object);
+		if (ingredient == null) {
+			nullIngredient = true;
+			return false;
+		}
+		else {
+			ingredientList.add(ingredient);
+			return true;
 		}
 	}
 	
@@ -119,9 +99,7 @@ public class CTAddRecipe implements IAction {
 		}
 		else {
 			callError();
-			
 			String out = "Failed to add " + recipeHandler.getName() + " recipe " + recipeString;
-			
 			if (nullInputs) {
 				return out + " as all ingredients were null";
 			}
@@ -141,7 +119,7 @@ public class CTAddRecipe implements IAction {
 	protected static void callError() {
 		if (!errored) {
 			errored = true;
-			CraftTweakerAPI.logError("At least one NuclearCraft recipe addition method has errored. Check the log for more details");
+			CraftTweakerAPI.logError("At least one NuclearCraft recipe addition method has errored - check the log for more details");
 		}
 	}
 }

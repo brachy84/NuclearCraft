@@ -17,6 +17,10 @@ public class DecayHastenerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[2]) {
+			return;
+		}
+		
 		addDecayRecipes("Thorium", "Lead", RadSources.THORIUM);
 		addDecayRecipes("Bismuth", "Thallium", RadSources.BISMUTH);
 		

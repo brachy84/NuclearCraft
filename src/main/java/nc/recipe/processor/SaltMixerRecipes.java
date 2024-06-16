@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FissionHelper.FISSION_FLUID;
 import static nc.util.FluidStackHelper.*;
 
@@ -13,6 +14,11 @@ public class SaltMixerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[13]) {
+			return;
+		}
+		
+		
 		addRecipe(fluidStack("lif", INGOT_VOLUME), fluidStack("bef2", INGOT_VOLUME / 2), fluidStack("flibe", INGOT_VOLUME / 2), 0.5D, 1D);
 		addRecipe(fluidStack("sodium", INGOT_VOLUME / 2), fluidStack("potassium", INGOT_VOLUME * 2), fluidStack("nak", INGOT_VOLUME), 1D, 1D);
 		

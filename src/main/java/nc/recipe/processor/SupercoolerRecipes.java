@@ -2,6 +2,7 @@ package nc.recipe.processor;
 
 import java.util.*;
 
+import static nc.config.NCConfig.*;
 import static nc.util.FluidStackHelper.BUCKET_VOLUME;
 
 public class SupercoolerRecipes extends BasicProcessorRecipeHandler {
@@ -12,6 +13,10 @@ public class SupercoolerRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[7]) {
+			return;
+		}
+		
 		addRecipe(fluidStack("helium", BUCKET_VOLUME * 8), fluidStack("liquid_helium", 25), 1D, 1D);
 		addRecipe(fluidStack("nitrogen", BUCKET_VOLUME * 8), fluidStack("liquid_nitrogen", 25), 0.5D, 0.5D);
 		addRecipe(fluidStack("water", BUCKET_VOLUME / 4), fluidStack("ice", BUCKET_VOLUME / 4), 0.25D, 0.5D);

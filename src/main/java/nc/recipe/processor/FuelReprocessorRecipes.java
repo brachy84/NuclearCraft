@@ -2,6 +2,8 @@ package nc.recipe.processor;
 
 import nc.util.*;
 
+import static nc.config.NCConfig.*;
+
 public class FuelReprocessorRecipes extends BasicProcessorRecipeHandler {
 	
 	public FuelReprocessorRecipes() {
@@ -10,6 +12,10 @@ public class FuelReprocessorRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[3]) {
+			return;
+		}
+		
 		addReprocessingRecipes("TBU", "Uranium233", 1, "Uranium238", 5, "Neptunium236", 1, "Neptunium237", 1, "Strontium90", "Caesium137", 0.5D, 50);
 		
 		addReprocessingRecipes("LEU233", "Uranium238", 5, "Plutonium241", 1, "Plutonium242", 1, "Americium243", 1, "Strontium90", "Caesium137", 0.5D, 50);

@@ -24,6 +24,10 @@ public class ManufactoryRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
+		if (!default_processor_recipes_global || !default_processor_recipes[0]) {
+			return;
+		}
+		
 		addRecipe("coal", "dustCoal", 0.5D, 1D);
 		addRecipe("dustCoal", "dustGraphite", 0.25D, 0.5D);
 		addRecipe("charcoal", "dustCharcoal", 0.5D, 0.5D);

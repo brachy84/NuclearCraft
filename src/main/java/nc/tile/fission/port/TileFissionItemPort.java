@@ -132,10 +132,10 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	public ItemStack decrStackSize(int slot, int amount) {
 		ItemStack stack = ITileFilteredInventory.super.decrStackSize(slot, amount);
 		if (!world.isRemote) {
-			if (slot < recipeHandler.getItemInputSize()) {
+			if (slot < recipeHandler.itemInputSize) {
 				refreshTargetsFlag = true;
 			}
-			else if (slot < recipeHandler.getItemInputSize() + recipeHandler.getItemOutputSize()) {
+			else if (slot < recipeHandler.itemInputSize + recipeHandler.itemOutputSize) {
 				refreshTargetsFlag = true;
 			}
 		}
@@ -146,10 +146,10 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		ITileFilteredInventory.super.setInventorySlotContents(slot, stack);
 		if (!world.isRemote) {
-			if (slot < recipeHandler.getItemInputSize()) {
+			if (slot < recipeHandler.itemInputSize) {
 				refreshTargetsFlag = true;
 			}
-			else if (slot < recipeHandler.getItemInputSize() + recipeHandler.getItemOutputSize()) {
+			else if (slot < recipeHandler.itemInputSize + recipeHandler.itemOutputSize) {
 				refreshTargetsFlag = true;
 			}
 		}
@@ -157,7 +157,7 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (stack.isEmpty() || slot >= recipeHandler.getItemInputSize()) {
+		if (stack.isEmpty() || slot >= recipeHandler.itemInputSize) {
 			return false;
 		}
 		ItemStack filter = getFilterStacks().get(slot);
@@ -169,12 +169,12 @@ public abstract class TileFissionItemPort<PORT extends TileFissionItemPort<PORT,
 	
 	@Override
 	public boolean isItemValidForSlotInternal(int slot, ItemStack stack) {
-		if (stack.isEmpty() || slot >= recipeHandler.getItemInputSize()) {
+		if (stack.isEmpty() || slot >= recipeHandler.itemInputSize) {
 			return false;
 		}
 		
 		if (NCConfig.smart_processor_input) {
-			return recipeHandler.isValidItemInput(stack, slot, getInventoryStacks().subList(0, recipeHandler.getItemInputSize()), new ArrayList<>(), null);
+			return recipeHandler.isValidItemInput(stack, slot, getInventoryStacks().subList(0, recipeHandler.itemInputSize), new ArrayList<>(), null);
 		}
 		else {
 			return recipeHandler.isValidItemInput(stack, slot);

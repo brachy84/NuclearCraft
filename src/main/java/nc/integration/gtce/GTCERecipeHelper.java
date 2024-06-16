@@ -112,34 +112,26 @@ public class GTCERecipeHelper {
 			return;
 		}
 		
-		List<List<ItemStack>> itemInputLists = new ArrayList<>();
-		List<List<FluidStack>> fluidInputLists = new ArrayList<>();
+		List<List<ItemStack>> itemInputLists = StreamHelper.map(recipe.getItemIngredients(), IItemIngredient::getInputStackList);
+		List<List<FluidStack>> fluidInputLists = StreamHelper.map(recipe.getFluidIngredients(), IFluidIngredient::getInputStackList);
 		
-		for (IItemIngredient item : recipe.getItemIngredients()) {
-			itemInputLists.add(item.getInputStackList());
-		}
-		for (IFluidIngredient fluid : recipe.getFluidIngredients()) {
-			fluidInputLists.add(fluid.getInputStackList());
-		}
+		int itemInputCount = itemInputLists.size(), fluidInputCount = fluidInputLists.size(), totalInputCount = itemInputCount + fluidInputCount;
+		int[] inputNumbers = new int[totalInputCount];
 		
-		int arrSize = recipe.getItemIngredients().size() + recipe.getFluidIngredients().size();
-		int[] inputNumbers = new int[arrSize];
-		Arrays.fill(inputNumbers, 0);
-		
-		int[] maxNumbers = new int[arrSize];
-		for (int i = 0; i < itemInputLists.size(); ++i) {
+		int[] maxNumbers = new int[totalInputCount];
+		for (int i = 0; i < itemInputCount; ++i) {
 			int maxNumber = itemInputLists.get(i).size() - 1;
 			if (maxNumber < 0) {
 				return;
 			}
 			maxNumbers[i] = maxNumber;
 		}
-		for (int i = 0; i < fluidInputLists.size(); ++i) {
+		for (int i = 0; i < fluidInputCount; ++i) {
 			int maxNumber = fluidInputLists.get(i).size() - 1;
 			if (maxNumber < 0) {
 				return;
 			}
-			maxNumbers[i + itemInputLists.size()] = maxNumber;
+			maxNumbers[i + itemInputCount] = maxNumber;
 		}
 		
 		List<Pair<List<ItemStack>, List<FluidStack>>> materialListTuples = new ArrayList<>();
@@ -157,9 +149,9 @@ public class GTCERecipeHelper {
 		builders.add(builder);
 		
 		for (IItemIngredient input : recipe.getItemIngredients()) {
-			if (input instanceof OreIngredient) {
+			if (input instanceof OreIngredient oreInput) {
 				for (RecipeBuilder<?> builderVariant : builders) {
-					builderVariant.input(((OreIngredient) input).oreName, ((OreIngredient) input).stackSize);
+					builderVariant.input(oreInput.oreName, oreInput.stackSize);
 				}
 			}
 			else {
