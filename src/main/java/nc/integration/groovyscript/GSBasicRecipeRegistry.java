@@ -1,8 +1,11 @@
 package nc.integration.groovyscript;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription.Type;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.google.common.base.CaseFormat;
 import nc.recipe.*;
 import nc.recipe.ingredient.*;
 import nc.util.*;
@@ -15,7 +18,7 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 	protected final Lazy<BasicRecipeHandler> recipeHandler;
 	
 	public GSBasicRecipeRegistry(String name) {
-		super(Alias.generateOf(name));
+		super(Alias.generateOf(name, CaseFormat.LOWER_UNDERSCORE));
 		this.recipeHandler = new Lazy<>(() -> NCRecipes.getHandler(name));
 	}
 	
@@ -35,6 +38,7 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 		BasicRecipeHandler recipeHandler = getRecipeHandler();
 		removeScripted().forEach(recipeHandler::removeRecipe);
 		restoreFromBackup().forEach(recipeHandler::addRecipe);
+		recipeHandler.onReload();
 	}
 	
 	@GroovyBlacklist
@@ -78,30 +82,38 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 		recipeHandler.removeAllRecipes();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
+	@Override
 	public String getName() {
 		return super.getName();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public List<BasicRecipe> getRecipeList() {
 		return getRecipeHandler().getRecipeList();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public int getItemInputSize() {
 		return getRecipeHandler().getItemInputSize();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public int getFluidInputSize() {
 		return getRecipeHandler().getFluidInputSize();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public int getItemOutputSize() {
 		return getRecipeHandler().getItemOutputSize();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public int getFluidOutputSize() {
 		return getRecipeHandler().getFluidOutputSize();
 	}
 	
+	@MethodDescription(type = Type.QUERY)
 	public boolean isShapeless() {
 		return getRecipeHandler().isShapeless();
 	}
