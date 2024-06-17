@@ -13,7 +13,7 @@ import java.util.*;
 
 public class OreIngredient implements IItemIngredient {
 	
-	public String oreName;
+	public final String oreName;
 	public List<ItemStack> cachedStackList = null;
 	public int stackSize;
 	

@@ -28,22 +28,22 @@ public class CTAddRecipe implements IAction {
 		
 		for (int i = 0, len = objects.size(); i < len; ++i) {
 			Object object = objects.get(i);
-			if (i < recipeHandler.itemInputSize) {
+			if (i < recipeHandler.itemInputLastIndex) {
 				if (!addIngredient(itemIngredients, object, CTHelper::buildAdditionItemIngredient)) {
 					return;
 				}
 			}
-			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize) {
+			else if (i < recipeHandler.fluidInputLastIndex) {
 				if (!addIngredient(fluidIngredients, object, CTHelper::buildAdditionFluidIngredient)) {
 					return;
 				}
 			}
-			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize + recipeHandler.itemOutputSize) {
+			else if (i < recipeHandler.itemOutputLastIndex) {
 				if (!addIngredient(itemProducts, object, CTHelper::buildAdditionItemIngredient)) {
 					return;
 				}
 			}
-			else if (i < recipeHandler.itemInputSize + recipeHandler.fluidInputSize + recipeHandler.itemOutputSize + recipeHandler.fluidOutputSize) {
+			else if (i < recipeHandler.fluidOutputLastIndex) {
 				if (!addIngredient(fluidProducts, object, CTHelper::buildAdditionFluidIngredient)) {
 					return;
 				}

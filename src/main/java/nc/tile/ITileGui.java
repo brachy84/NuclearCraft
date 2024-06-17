@@ -15,7 +15,7 @@ public interface ITileGui<TILE extends TileEntity & ITileGui<TILE, PACKET, INFO>
 	INFO getContainerInfo();
 	
 	default void openGui(World world, BlockPos pos, EntityPlayer player) {
-		FMLNetworkHandler.openGui(player, NuclearCraft.instance, getContainerInfo().getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
+		FMLNetworkHandler.openGui(player, NuclearCraft.instance, getContainerInfo().guiId, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	Set<EntityPlayer> getTileUpdatePacketListeners();

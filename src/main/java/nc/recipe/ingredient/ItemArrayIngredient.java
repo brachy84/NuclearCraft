@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import crafttweaker.api.item.IngredientOr;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
+import nc.util.StreamHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
 
@@ -11,8 +12,8 @@ import java.util.*;
 
 public class ItemArrayIngredient implements IItemIngredient {
 	
-	public List<IItemIngredient> ingredientList;
-	public List<ItemStack> cachedStackList = new ArrayList<>();
+	public final List<IItemIngredient> ingredientList;
+	public final List<ItemStack> cachedStackList;
 	
 	public ItemArrayIngredient(IItemIngredient... ingredients) {
 		this(Lists.newArrayList(ingredients));
@@ -20,7 +21,7 @@ public class ItemArrayIngredient implements IItemIngredient {
 	
 	public ItemArrayIngredient(List<IItemIngredient> ingredientList) {
 		this.ingredientList = ingredientList;
-		ingredientList.forEach(input -> cachedStackList.add(input.getStack()));
+		cachedStackList = StreamHelper.map(ingredientList, IItemIngredient::getStack);
 	}
 	
 	@Override
@@ -30,9 +31,7 @@ public class ItemArrayIngredient implements IItemIngredient {
 	
 	@Override
 	public List<ItemStack> getInputStackList() {
-		List<ItemStack> stacks = new ArrayList<>();
-		ingredientList.forEach(ingredient -> stacks.addAll(ingredient.getInputStackList()));
-		return stacks;
+		return StreamHelper.flatMap(ingredientList, IItemIngredient::getInputStackList);
 	}
 	
 	@Override

@@ -30,11 +30,6 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 	@GroovyBlacklist
 	@Override
 	public void onReload() {
-	
-	}
-	
-	@GroovyBlacklist
-	public void onReloadSynchronized() {
 		BasicRecipeHandler recipeHandler = getRecipeHandler();
 		removeScripted().forEach(recipeHandler::removeRecipe);
 		restoreFromBackup().forEach(recipeHandler::addRecipe);
@@ -44,17 +39,25 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 	@GroovyBlacklist
 	protected void addRecipeInternal(Object... objects) {
 		BasicRecipeHandler recipeHandler = getRecipeHandler();
-		BasicRecipe recipe = recipeHandler.buildRecipe(objects);
+		List<Object> objectList = Arrays.asList(objects);
+		BasicRecipe recipe = recipeHandler.buildRecipe(
+				StreamHelper.map(objectList.subList(0, recipeHandler.itemInputLastIndex), GSHelper::buildAdditionItemIngredient),
+				StreamHelper.map(objectList.subList(recipeHandler.itemInputLastIndex, recipeHandler.fluidInputLastIndex), GSHelper::buildAdditionFluidIngredient),
+				StreamHelper.map(objectList.subList(recipeHandler.fluidInputLastIndex, recipeHandler.itemOutputLastIndex), GSHelper::buildAdditionItemIngredient),
+				StreamHelper.map(objectList.subList(recipeHandler.itemOutputLastIndex, recipeHandler.fluidOutputLastIndex), GSHelper::buildAdditionFluidIngredient),
+				objectList.subList(recipeHandler.fluidOutputLastIndex, objects.length),
+				recipeHandler.isShapeless
+		);
 		addScripted(recipe);
 		recipeHandler.addRecipe(recipe);
 	}
 	
 	@GroovyBlacklist
 	protected void removeRecipeWithInputInternal(Object... inputs) {
-		List<Object> inputList = Arrays.asList(inputs);
 		BasicRecipeHandler recipeHandler = getRecipeHandler();
-		List<IItemIngredient> itemIngredients = StreamHelper.map(inputList.subList(0, recipeHandler.itemInputSize), RecipeHelper::buildItemIngredient);
-		List<IFluidIngredient> fluidIngredients = StreamHelper.map(inputList.subList(recipeHandler.itemInputSize, recipeHandler.itemInputSize + recipeHandler.fluidInputSize), RecipeHelper::buildFluidIngredient);
+		List<Object> inputList = Arrays.asList(inputs);
+		List<IItemIngredient> itemIngredients = StreamHelper.map(inputList.subList(0, recipeHandler.itemInputLastIndex), GSHelper::buildRemovalItemIngredient);
+		List<IFluidIngredient> fluidIngredients = StreamHelper.map(inputList.subList(recipeHandler.itemInputLastIndex, recipeHandler.fluidInputLastIndex), GSHelper::buildRemovalFluidIngredient);
 		BasicRecipe recipe = recipeHandler.getRecipeFromIngredients(itemIngredients, fluidIngredients);
 		while (recipeHandler.removeRecipe(recipe)) {
 			addBackup(recipe);
@@ -64,10 +67,10 @@ public abstract class GSBasicRecipeRegistry extends VirtualizedRegistry<BasicRec
 	
 	@GroovyBlacklist
 	protected void removeRecipeWithOutputInternal(Object... outputs) {
-		List<Object> outputList = Arrays.asList(outputs);
 		BasicRecipeHandler recipeHandler = getRecipeHandler();
-		List<IItemIngredient> itemProducts = StreamHelper.map(outputList.subList(0, recipeHandler.itemOutputSize), RecipeHelper::buildItemIngredient);
-		List<IFluidIngredient> fluidProducts = StreamHelper.map(outputList.subList(recipeHandler.itemOutputSize, recipeHandler.itemOutputSize + recipeHandler.fluidOutputSize), RecipeHelper::buildFluidIngredient);
+		List<Object> outputList = Arrays.asList(outputs);
+		List<IItemIngredient> itemProducts = StreamHelper.map(outputList.subList(0, recipeHandler.itemOutputLastIndex), GSHelper::buildRemovalItemIngredient);
+		List<IFluidIngredient> fluidProducts = StreamHelper.map(outputList.subList(recipeHandler.itemOutputLastIndex, recipeHandler.fluidOutputLastIndex), GSHelper::buildRemovalFluidIngredient);
 		BasicRecipe recipe = recipeHandler.getRecipeFromProducts(itemProducts, fluidProducts);
 		while (recipeHandler.removeRecipe(recipe)) {
 			addBackup(recipe);

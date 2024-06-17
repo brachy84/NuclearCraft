@@ -43,18 +43,18 @@ public class FluidStackHelper {
 	public static final int EUM_DUST_VOLUME = 250;
 	
 	public static FluidStack fixFluidStack(Object object) {
-		if (object instanceof FluidStack) {
-			FluidStack fluidstack = ((FluidStack) object).copy();
+		if (object instanceof FluidStack stack) {
+			FluidStack fluidstack = stack.copy();
 			if (fluidstack.amount == 0) {
 				fluidstack.amount = 1000;
 			}
 			return fluidstack;
 		}
 		else {
-			if (!(object instanceof Fluid)) {
+			if (!(object instanceof Fluid fluid)) {
 				throw new RuntimeException(String.format("Invalid FluidStack: %s", object));
 			}
-			return new FluidStack((Fluid) object, 1000);
+			return new FluidStack(fluid, 1000);
 		}
 	}
 	

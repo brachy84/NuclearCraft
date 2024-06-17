@@ -243,10 +243,10 @@ public class TileRadiationScrubber extends TileBasicEnergyProcessor<TileRadiatio
 		if (obj == this) {
 			return true;
 		}
-		if (!(obj instanceof TileRadiationScrubber)) {
+		if (!(obj instanceof TileRadiationScrubber other)) {
 			return false;
 		}
-		return getFourPos().equals(((TileRadiationScrubber) obj).getFourPos());
+		return getFourPos().equals(other.getFourPos());
 	}
 	
 	// NBT

@@ -9,7 +9,7 @@ public class GSPlugin implements GroovyPlugin {
 	
 	@Override
 	public ModPropertyContainer createModPropertyContainer() {
-		return new GSContainer();
+		return GSContainer.instance = new GSContainer();
 	}
 	
 	@Override

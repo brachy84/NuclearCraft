@@ -17,11 +17,11 @@ public class GSStaticRecipeHandler extends VirtualizedRegistry<Object> {
 	@GroovyBlacklist
 	@Override
 	public void onReload() {
-		GSContainer.onReload();
+	
 	}
 	
 	@MethodDescription(type = Type.QUERY)
 	public GSBasicRecipeRegistry get(String name) {
-		return GSContainer.getRecipeRegistry(name);
+		return GSContainer.instance.getRecipeRegistry(name);
 	}
 }

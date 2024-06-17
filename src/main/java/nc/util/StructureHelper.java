@@ -98,21 +98,21 @@ public class StructureHelper {
 		}
 		
 		@Override
-		public boolean equals(Object o) {
-			if (this == o) {
+		public boolean equals(Object obj) {
+			if (this == obj) {
 				return true;
 			}
-			if (!(o instanceof StructureCacheEntry that)) {
+			if (!(obj instanceof StructureCacheEntry other)) {
 				return false;
 			}
 			
-			if (dimension != that.dimension) {
+			if (dimension != other.dimension) {
 				return false;
 			}
-			if (chunkpos != that.chunkpos) {
+			if (chunkpos != other.chunkpos) {
 				return false;
 			}
-			if (!structure.equals(that.structure)) {
+			if (!structure.equals(other.structure)) {
 				return false;
 			}
 			

@@ -1,6 +1,6 @@
 v2o.8.0
 
-+ Added initial GroovyScript support
++ Added initial GroovyScript support mirroring CraftTweaker recipe integration
 
 * Fixed broken custom placement rules
 

@@ -223,12 +223,12 @@ public abstract class ProcessorContainerInfo<TILE extends TileEntity & IProcesso
 	
 	@Override
 	public Object getNewContainer(int id, EntityPlayer player, TILE tile) {
-		return (id == getGuiId() ? containerFunction : configContainerFunction).apply(player, tile);
+		return (id == guiId ? containerFunction : configContainerFunction).apply(player, tile);
 	}
 	
 	@Override
 	public Object getNewGui(int id, EntityPlayer player, TILE tile) {
-		return (id == getGuiId() ? guiFunction : configGuiFunction).apply(player, tile);
+		return (id == guiId ? guiFunction : configGuiFunction).apply(player, tile);
 	}
 	
 	public int getInventorySize() {

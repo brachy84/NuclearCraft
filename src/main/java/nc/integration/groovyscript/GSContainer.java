@@ -5,32 +5,44 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription.Type;
 import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import it.unimi.dsi.fastutil.objects.*;
+import nc.integration.groovyscript.ingredient.*;
 import nc.recipe.NCRecipes;
 
 public class GSContainer extends ModPropertyContainer {
 	
 	@GroovyBlacklist
-	public static final Object2ObjectMap<String, GSBasicRecipeRegistry> GS_RECIPE_REGISTRY_CACHE = new Object2ObjectOpenHashMap<>();
+	protected static GSContainer instance;
 	
-	public GSContainer() {
+	@GroovyBlacklist
+	protected final Object2ObjectMap<String, GSBasicRecipeRegistry> registryCache = new Object2ObjectOpenHashMap<>();
+	
+	protected GSContainer() {
 		super();
 		for (String name : NCRecipes.CT_RECIPE_HANDLER_NAME_ARRAY) {
-			addRegistry(getRecipeRegistry(name));
+			addRegistry(getRecipeRegistryInternal(name));
 		}
 		addRegistry(new GSStaticRecipeHandler());
+		addRegistry(new GSChanceItemIngredient());
+		addRegistry(new GSChanceFluidIngredient());
 	}
 	
 	@GroovyBlacklist
-	protected static GSBasicRecipeRegistry getRecipeRegistry(String name) {
-		GSBasicRecipeRegistry registry = GS_RECIPE_REGISTRY_CACHE.get(name);
+	protected GSBasicRecipeRegistry getRecipeRegistry(String name) {
+		GSBasicRecipeRegistry registry = registryCache.get(name);
 		if (registry == null) {
-			registry = switch (name) {
-				case "fission_moderator", "fission_reflector" -> new GSInfoRecipeRegistry(name);
-				default -> new GSStandardRecipeRegistry(name);
-			};
-			GS_RECIPE_REGISTRY_CACHE.put(name, registry);
+			registry = getRecipeRegistryInternal(name);
+			addRegistry(registry);
+			registryCache.put(name, registry);
 		}
 		return registry;
+	}
+	
+	@GroovyBlacklist
+	protected GSBasicRecipeRegistry getRecipeRegistryInternal(String name) {
+		return switch (name) {
+			case "fission_moderator", "fission_reflector" -> new GSInfoRecipeRegistry(name);
+			default -> new GSStandardRecipeRegistry(name);
+		};
 	}
 	
 	@RegistryDescription
@@ -81,13 +93,6 @@ public class GSContainer extends ModPropertyContainer {
 		@MethodDescription(type = Type.REMOVAL)
 		public void removeAllRecipes() {
 			removeAllRecipesInternal();
-		}
-	}
-	
-	@GroovyBlacklist
-	public static void onReload() {
-		for (GSBasicRecipeRegistry registry : GS_RECIPE_REGISTRY_CACHE.values()) {
-			registry.onReloadSynchronized();
 		}
 	}
 }

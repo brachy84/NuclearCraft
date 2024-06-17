@@ -94,10 +94,10 @@ public abstract class AbstractRecipeHandler<RECIPE extends IRecipe> {
 	
 	protected void initRecipeIngredients() {
 		for (RECIPE recipe : recipeList) {
-			recipe.getItemIngredients().forEach(IIngredient::init);
-			recipe.getFluidIngredients().forEach(IIngredient::init);
-			recipe.getItemProducts().forEach(IIngredient::init);
-			recipe.getFluidProducts().forEach(IIngredient::init);
+			recipe.getItemIngredients().forEach(IItemIngredient::init);
+			recipe.getFluidIngredients().forEach(IFluidIngredient::init);
+			recipe.getItemProducts().forEach(IItemIngredient::init);
+			recipe.getFluidProducts().forEach(IFluidIngredient::init);
 		}
 	}
 	

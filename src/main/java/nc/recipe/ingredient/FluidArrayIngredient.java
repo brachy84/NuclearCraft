@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import crafttweaker.api.item.IngredientOr;
 import it.unimi.dsi.fastutil.ints.*;
 import nc.recipe.*;
+import nc.util.StreamHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 
@@ -11,8 +12,8 @@ import java.util.*;
 
 public class FluidArrayIngredient implements IFluidIngredient {
 	
-	public List<IFluidIngredient> ingredientList;
-	public List<FluidStack> cachedStackList = new ArrayList<>();
+	public final List<IFluidIngredient> ingredientList;
+	public final List<FluidStack> cachedStackList;
 	
 	public FluidArrayIngredient(IFluidIngredient... ingredients) {
 		this(Lists.newArrayList(ingredients));
@@ -20,7 +21,7 @@ public class FluidArrayIngredient implements IFluidIngredient {
 	
 	public FluidArrayIngredient(List<IFluidIngredient> ingredientList) {
 		this.ingredientList = ingredientList;
-		ingredientList.forEach(input -> cachedStackList.add(input.getStack()));
+		cachedStackList = StreamHelper.map(ingredientList, IFluidIngredient::getStack);
 	}
 	
 	@Override
@@ -30,9 +31,7 @@ public class FluidArrayIngredient implements IFluidIngredient {
 	
 	@Override
 	public List<FluidStack> getInputStackList() {
-		List<FluidStack> stacks = new ArrayList<>();
-		ingredientList.forEach(ingredient -> stacks.addAll(ingredient.getInputStackList()));
-		return stacks;
+		return StreamHelper.flatMap(ingredientList, IFluidIngredient::getInputStackList);
 	}
 	
 	@Override

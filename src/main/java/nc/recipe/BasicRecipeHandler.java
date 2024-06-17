@@ -30,6 +30,8 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 	public final int itemInputSize, fluidInputSize, itemOutputSize, fluidOutputSize;
 	public final boolean isShapeless;
 	
+	public final int itemInputLastIndex, fluidInputLastIndex, itemOutputLastIndex, fluidOutputLastIndex;
+	
 	public List<Set<String>> validFluids = null;
 	
 	public BasicRecipeHandler(@Nonnull String name, int itemInputSize, int fluidInputSize, int itemOutputSize, int fluidOutputSize) {
@@ -43,6 +45,10 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		this.itemOutputSize = itemOutputSize;
 		this.fluidOutputSize = fluidOutputSize;
 		this.isShapeless = isShapeless;
+		itemInputLastIndex = itemInputSize;
+		fluidInputLastIndex = itemInputSize + fluidInputSize;
+		itemOutputLastIndex = itemInputSize + fluidInputSize + itemOutputSize;
+		fluidOutputLastIndex = itemInputSize + fluidInputSize + itemOutputSize + fluidOutputSize;
 		addRecipes();
 	}
 	
@@ -191,16 +197,16 @@ public abstract class BasicRecipeHandler extends AbstractRecipeHandler<BasicReci
 		List<Object> itemInputs = new ArrayList<>(), fluidInputs = new ArrayList<>(), itemOutputs = new ArrayList<>(), fluidOutputs = new ArrayList<>(), extras = new ArrayList<>();
 		for (int i = 0; i < objects.length; ++i) {
 			Object object = objects[i];
-			if (i < itemInputSize) {
+			if (i < itemInputLastIndex) {
 				itemInputs.add(object);
 			}
-			else if (i < itemInputSize + fluidInputSize) {
+			else if (i < fluidInputLastIndex) {
 				fluidInputs.add(object);
 			}
-			else if (i < itemInputSize + fluidInputSize + itemOutputSize) {
+			else if (i < itemOutputLastIndex) {
 				itemOutputs.add(object);
 			}
-			else if (i < itemInputSize + fluidInputSize + itemOutputSize + fluidOutputSize) {
+			else if (i < fluidOutputLastIndex) {
 				fluidOutputs.add(object);
 			}
 			else {

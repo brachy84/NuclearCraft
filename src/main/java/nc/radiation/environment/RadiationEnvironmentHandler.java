@@ -24,10 +24,10 @@ public class RadiationEnvironmentHandler {
 			return;
 		}
 		
-		if (event.phase != TickEvent.Phase.END || event.side == Side.CLIENT || !(event.world instanceof WorldServer)) {
+		if (event.phase != TickEvent.Phase.END || event.side == Side.CLIENT || !(event.world instanceof WorldServer world)) {
 			return;
 		}
-		int dim = event.world.provider.getDimension();
+		int dim = world.provider.getDimension();
 		
 		int count = Math.min((1 + radiation_world_chunks_per_tick) / 2, ENVIRONMENT.size());
 		Iterator<Entry<FourPos, RadiationEnvironmentInfo>> environmentIter = ENVIRONMENT.entrySet().iterator();
