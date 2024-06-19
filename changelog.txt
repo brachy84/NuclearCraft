@@ -1,6 +1,8 @@
-v2o.8.0
+v2o.7.7
 
 + Added initial GroovyScript support mirroring CraftTweaker recipe integration
+
+* Fixed occasional crash when opening GUIs on servers
 
 * Fixed broken custom placement rules
 

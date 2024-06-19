@@ -11,6 +11,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
+import static nc.config.NCConfig.*;
+
 public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExchangerLogic, IHeatExchangerPart> implements IPacketMultiblockLogic<HeatExchanger, HeatExchangerLogic, IHeatExchangerPart, HeatExchangerUpdatePacket> {
 	
 	public HeatExchangerLogic(HeatExchanger exchanger) {
@@ -34,14 +36,12 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	
 	@Override
 	public int getMinimumInteriorLength() {
-		// TODO Auto-generated method stub
-		return 0;
+		return heat_exchanger_min_size;
 	}
 	
 	@Override
 	public int getMaximumInteriorLength() {
-		// TODO Auto-generated method stub
-		return 0;
+		return heat_exchanger_max_size;
 	}
 	
 	// Multiblock Methods
@@ -57,8 +57,18 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	}
 	
 	protected void onExchangerFormed() {
-		// TODO Auto-generated method stub
+		getExchanger().setIsHeatExchangerOn();
 		
+		if (!getWorld().isRemote) {
+			/*for (TileHeatExchangerTube tube : tubes) {
+				tube.updateFlowDir();
+			}
+			for (TileCondenserTube condenserTube : condenserTubes) {
+				condenserTube.updateAdjacentTemperatures();
+			}*/
+			
+			getExchanger().updateHeatExchangerStats();
+		}
 	}
 	
 	@Override
@@ -72,8 +82,11 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	}
 	
 	public void onExchangerBroken() {
-		// TODO Auto-generated method stub
-		
+		getExchanger().isHeatExchangerOn = false;
+		if (getExchanger().controller != null) {
+			getExchanger().controller.setActivity(false);
+		}
+		getExchanger().fractionOfTubesActive = getExchanger().efficiency = getExchanger().maxEfficiency = 0D;
 	}
 	
 	@Override

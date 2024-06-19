@@ -73,6 +73,9 @@ public class NCBlocks {
 	
 	public static Block machine_interface;
 	
+	public static Block machine_frame;
+	public static Block machine_port;
+	
 	public static Block rtg_uranium;
 	public static Block rtg_plutonium;
 	public static Block rtg_americium;
