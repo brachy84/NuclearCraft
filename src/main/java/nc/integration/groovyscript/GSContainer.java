@@ -3,12 +3,12 @@ package nc.integration.groovyscript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription.Type;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import it.unimi.dsi.fastutil.objects.*;
 import nc.integration.groovyscript.ingredient.*;
 import nc.recipe.NCRecipes;
 
-public class GSContainer extends ModPropertyContainer {
+public class GSContainer extends GroovyPropertyContainer {
 	
 	@GroovyBlacklist
 	protected static GSContainer instance;
@@ -19,11 +19,11 @@ public class GSContainer extends ModPropertyContainer {
 	protected GSContainer() {
 		super();
 		for (String name : NCRecipes.CT_RECIPE_HANDLER_NAME_ARRAY) {
-			addRegistry(getRecipeRegistryInternal(name));
+			addProperty(getRecipeRegistryInternal(name));
 		}
-		addRegistry(new GSStaticRecipeHandler());
-		addRegistry(new GSChanceItemIngredient());
-		addRegistry(new GSChanceFluidIngredient());
+		addProperty(new GSStaticRecipeHandler());
+		addProperty(new GSChanceItemIngredient());
+		addProperty(new GSChanceFluidIngredient());
 	}
 	
 	@GroovyBlacklist
@@ -31,7 +31,7 @@ public class GSContainer extends ModPropertyContainer {
 		GSBasicRecipeRegistry registry = registryCache.get(name);
 		if (registry == null) {
 			registry = getRecipeRegistryInternal(name);
-			addRegistry(registry);
+			addProperty(registry);
 			registryCache.put(name, registry);
 		}
 		return registry;
